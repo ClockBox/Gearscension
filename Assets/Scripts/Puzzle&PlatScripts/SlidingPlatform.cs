@@ -4,57 +4,57 @@ using System.Collections;
 public class SlidingPlatform : MonoBehaviour
 {
     float counter = 0;
-    float speed, width, height;
+    float speed;
 
-    void Start()
+    public float distance;
+    public bool move;
+
+    Vector3 platformStartPos;
+
+    private void Start()
     {
-        speed = 1;
-        width = .01f;
-        height = 15;
+        platformStartPos = transform.position;
+        speed = 0.4f;
+        move = true;
+        StartCoroutine(StopMoving());
     }
 
     void Update()
     {
-        counter += Time.deltaTime * speed;
-        /*              Diagonal Sliding
-        float x = Mathf.Cos(counter) * width;
-        float y = 0;
-        float z = Mathf.Cos(counter) * height;
-        */
+        if (move)
+        {
+            counter += Time.deltaTime * speed;
 
-        /*              Zig-Zag Sliding (Across World)
-        float x = Mathf.Cos(counter) * width;
-        float y = 0;
-        float z = Mathf.Tan(counter) * height;
-        */
+            float movementDir = Mathf.Sin(counter) * distance;
 
-        /*              Oscilating/Back & Forth
-        float x = Mathf.Cos(counter) * width;
-        float y = Mathf.Cos(counter) * height + 20;
-        float z = Mathf.Sin(counter) * height + 2;
-        */
-
-        //              Elevator 
-        float x = Mathf.Cos(counter) * width;
-        float y = Mathf.Sin(counter) * height + 20;
-        float z = Mathf.Sin(counter) * height;
-
-        transform.position = new Vector3(x, y, z);
+            transform.position = ((transform.forward * movementDir) + platformStartPos);
+        }
+        else
+        {
+            return;
+        }
     }
 
-    void OnTriggerEnter(Collider c)
+    void OnTriggerStay(Collider c)
     {
-        if (c.tag == "Player")
+        if (c.gameObject.tag == "Player")
         {
-            c.transform.parent = transform;
+            c.gameObject.transform.parent = GetComponentInChildren<Transform>();
         }
     }
 
     void OnTriggerExit(Collider c)
     {
-        if (c.tag == "Player")
+        if (c.gameObject.tag == "Player")
         {
-            c.transform.parent = null;
+            c.gameObject.transform.parent = null;
         }
     }
+
+    IEnumerator StopMoving()
+    {
+        yield return new WaitForSeconds(0.5f);
+        move = false;
+    }
 }
+    
