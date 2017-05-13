@@ -15,17 +15,18 @@ public class CarryNode : MonoBehaviour {
         if (!rightHand || !leftHand)
             Debug.LogError("Carry Node: " + gameObject.name + " cannot find hand positions");
 
-        rb = transform.root.GetComponent<Rigidbody>();
+        rb = transform.parent.GetComponent<Rigidbody>();
         if (!rb)
             Debug.LogError("Carry Node: " + gameObject.name + " Cannot find ridigbody in root");
 
-        col = transform.root.GetComponent<Collider>();
+        col = transform.parent.GetComponent<Collider>();
         if (!col)
-            Debug.LogError("Carry Node: " + gameObject.name + " Cannot find ridigbody in root");
+            Debug.LogError("Carry Node: " + gameObject.name + " Cannot find Collider in root");
     }
 
     public void delayPickup(float delay)
     {
+        active = false;
         StartCoroutine(PickupDelayed(delay));
     }
 
@@ -56,7 +57,7 @@ public class CarryNode : MonoBehaviour {
         get {return rb; }
     }
 
-    public Collider rootCollider
+    public Collider Collider
     {
         get { return col; }
     }
