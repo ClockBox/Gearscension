@@ -5,7 +5,7 @@ using UnityEngine;
 public class RotatingPuzzle : MonoBehaviour
 {
     private float rotateSpeed;
-    public bool allowRotate;
+    private bool allowRotate;
     private Vector3 right;
 
 
@@ -16,16 +16,15 @@ public class RotatingPuzzle : MonoBehaviour
 
     void Update()
     {
-        if (allowRotate)
+        if(allowRotate)
         {
             Quaternion rotateNinety = Quaternion.LookRotation(right);
             Vector3 rotation = Quaternion.RotateTowards(transform.rotation, rotateNinety, Time.deltaTime * rotateSpeed).eulerAngles;
             transform.rotation = Quaternion.Euler(0f, rotation.y, 0f);
-            Debug.Log("HERERERERERERERE");
         }
     }
 
-    public void Rotate()
+    void Rotate()
     {
         allowRotate = true;
 
@@ -37,20 +36,25 @@ public class RotatingPuzzle : MonoBehaviour
             right = Vector3.right;
     }
 
+    IEnumerator stopRotate()
+    {
+        yield return new WaitForSeconds(0.5f);
+        allowRotate = false;
+    }
 
     void OnTriggerEnter(Collider c)
     {
-        if (c.gameObject.tag == "Player")
+        if (c.tag == "Player")
         {
-            c.gameObject.transform.parent = transform;
+            c.transform.parent = transform;
         }
     }
 
     void OnTriggerExit(Collider c)
     {
-        if (c.gameObject.tag == "Player")
+        if (c.tag == "Player")
         {
-            c.gameObject.transform.parent = null;
+            c.transform.parent = null;
         }
     }
 }

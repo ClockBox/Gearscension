@@ -11,7 +11,7 @@ public class AiStateManager : MonoBehaviour {
 
 
     void Start () {
-        enemies = GameObject.FindGameObjectsWithTag("enemy");
+        enemies = GameObject.FindGameObjectsWithTag("Enemy");
         enemyState = "Idle";
 	}
     GameObject GetClosest(GameObject[] arrayObjects)
