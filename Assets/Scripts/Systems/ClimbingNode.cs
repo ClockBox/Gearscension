@@ -1,25 +1,50 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ClimbingNode : MonoBehaviour {
+[RequireComponent(typeof(Collider))]
+public class ClimbingNode : IKPositionNode
+{
+    public bool test;
 
-    public Transform rightHand;
-    public Transform leftHand;
-    public Transform rightFoot;
-    public Transform leftFoot;
+    bool _FreeHang;
+    int _rotation;
 
-    public ClimbingNode[] neighbours = new ClimbingNode[8];
+    protected override void Start ()
+    {
+        base.Start();
+        neighbours = new IKPositionNode[8];
 
-    public bool Edge;
-    public bool FreeHang;
-
-    void Start () {
         if (!rightHand || !leftHand || !rightFoot || !leftFoot)
-            Debug.LogError("Climbing Node: "+ gameObject.name +" is not set up properly");
+        {
+            Debug.LogError("Climbing Node: " + gameObject.name + " is not set up properly");
+            return;
+        }
+    }
 
-        if (neighbours.Length == 0)
-            Debug.LogWarning("Climbing Node: " + gameObject.name + " has no Neighbors");
-	}
+    private void Update()
+    {
+        if (!transform.gameObject.isStatic)
+        {
+            _FreeHang = Vector3.Dot(-transform.forward, Vector3.up) < -0.5f;
+            _active = Vector3.Dot(-transform.forward, Vector3.up) < 0.9f;
+            col.enabled = _active;
+            
+            if (Vector3.Dot(transform.up, Vector3.up) < 0)
+            {
+                _rotation = (_rotation + 4) % 8;
+                transform.rotation = Quaternion.AngleAxis(180, transform.forward) * transform.rotation;
+            }
+
+            if (transform.rotation.eulerAngles.z > 0.5f && transform.rotation.eulerAngles.z < 359.5f)
+            {
+                _rotation = Mathf.RoundToInt((360 - transform.localEulerAngles.z) / 45);
+                transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, 0);
+
+                //rightHand.rotation = Quaternion.Euler(-transform.localEulerAngles);
+                //leftHand.rotation = Quaternion.Euler(-transform.localEulerAngles);
+            }
+        }
+    }
 
     private void OnDrawGizmos()
     {
@@ -28,5 +53,15 @@ public class ClimbingNode : MonoBehaviour {
         Gizmos.DrawLine(transform.position, leftHand.transform.position);
         Gizmos.DrawLine(transform.position, rightFoot.transform.position);
         Gizmos.DrawLine(transform.position, leftFoot.transform.position);
+    }
+
+    public int Rotation
+    {
+        get { return _rotation; }
+    }
+
+    public bool FreeHang
+    {
+        get { return _FreeHang; }
     }
 }
