@@ -40,7 +40,7 @@ public class CalculateNodeNeighbors : MonoBehaviour
                 if (checkNode != climbNodes[i])
                     edgeNodes[i] = checkNode;
         }
-
+        
         CompareDirection[0] = transform.up;
         CompareDirection[1] = (transform.up + transform.right).normalized;
         CompareDirection[2] = transform.right;
