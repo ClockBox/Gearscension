@@ -6,32 +6,41 @@ public class CameraController : MonoBehaviour
 
     GameObject Player;
     Vector3 Offset;
+    Vector3 AimOffset;
 
     void Start()
     {
         Player = GameObject.FindGameObjectWithTag("Player");
-        Offset = transform.position - Player.transform.position - Player.transform.up;
+        Offset = transform.position - Player.transform.position - (Player.transform.up * 1.8f);
     }
 
-    void FixedUpdate()
+    void Update()
     {
-        Offset -= transform.up * Input.GetAxis("Mouse Y") + transform.right * Input.GetAxis("Mouse X");
-        Offset = Offset.normalized * m_cameraDistance;
-        transform.position = Vector3.MoveTowards(transform.position, Player.transform.position + Offset, 1);
-        transform.rotation = Quaternion.LookRotation(Player.transform.position + (Player.transform.up * 1.5f) - transform.position, Vector3.up);
+        m_cameraDistance += Input.GetAxis("Zoom") * 2;
+        m_cameraDistance = Mathf.Clamp(m_cameraDistance, 2, 8);
+
+        Offset -= transform.up * -Input.GetAxis("Mouse Y") + transform.right * Input.GetAxis("Mouse X");
+
+        if (Input.GetButton("Aim"))
+        {
+            AimOffset = -Player.transform.right * 0.2f;
+            Offset = Offset.normalized;
+        }
+        else
+        {
+            AimOffset = Vector3.zero;
+            Offset = Offset.normalized * m_cameraDistance;
+        }
+
+        transform.position = Vector3.MoveTowards(transform.position, Player.transform.position + Offset + AimOffset, 1);
 
         RaycastHit hit;
-        Debug.DrawLine(Player.transform.position + Player.transform.up, Player.transform.position + Player.transform.up + Offset);
-        if (Physics.SphereCast(Player.transform.position + Player.transform.up, 0.1f, Offset, out hit, m_cameraDistance))
+        if (Physics.SphereCast(Player.transform.position + Player.transform.up, 0.2f, Offset, out hit, m_cameraDistance))
         {
             if (hit.collider.gameObject != Player)
-                transform.position = hit.point + hit.normal * 0.5f;
+                transform.position = hit.point + hit.normal * 0.2f;
         }
 
-        if ((transform.position - Player.transform.position).magnitude < 2)
-        {
-            Offset += transform.up * (2.5f - (transform.position - Player.transform.position).magnitude);
-            Offset += transform.right * 0.2f;
-        }
+        transform.rotation = Quaternion.LookRotation(-Offset + AimOffset, Vector3.up);
     }
 }
