@@ -4,8 +4,14 @@ using UnityEngine;
 
 public class AIBreakable : MonoBehaviour {
 	public bool broken = false;
+    public GameObject crystal;
 	// Use this for initialization
 	void Start () {
+        if (crystal==null)
+        {
+            Debug.Log("corresponding crystal not set");
+
+        }
 		
 	}
 
@@ -14,8 +20,8 @@ public class AIBreakable : MonoBehaviour {
 	{
 		if (broken)
 		{
+            crystal.GetComponent<AiCrystal>().exposed = true;
 			transform.parent = null;
-			gameObject.AddComponent<Rigidbody>();
 		}
 	}
 

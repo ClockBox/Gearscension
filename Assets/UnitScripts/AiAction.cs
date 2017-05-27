@@ -117,8 +117,20 @@ public class AiAction : MonoBehaviour
         }
 
         else if (currentTask == "Melee")
+			
         {
+			if (meleeCD <=0f)
+			{
+				meleeCD += Time.deltaTime;
+			}
 
+			if ((Vector3.Distance(searchPos, transform.position)) <= meleeRange&&meleeCD>=2f)
+			{
+				Debug.Log("MELEE");
+				meleeCD = 0f;
+			}
+
+				pathAgent.travel(player.transform.position);
 
 
         }
@@ -133,9 +145,8 @@ public class AiAction : MonoBehaviour
             float step = rotateSpeed * Time.deltaTime;
             Vector3 direction = player.transform.position - transform.position;
             Vector3 newDir = Vector3.RotateTowards(transform.forward, direction, step, 0.0F);
-            Debug.DrawRay(transform.position, newDir, Color.red);
             transform.rotation = Quaternion.LookRotation(newDir);
-            /*
+           
             RaycastHit hit;
             if (Physics.Raycast(transform.position, direction.normalized, out hit))
             {
@@ -143,7 +154,7 @@ public class AiAction : MonoBehaviour
                 {
                     if (fireRate >=3.9f)
                     {
-                        nmAgent.SetDestination(transform.position);
+                        pathAgent.travel(GetClosest(covers).transform.position);
 
                         GetComponent<EnemyShoot>().rayShot();
                         fireRate = 0;
@@ -152,20 +163,14 @@ public class AiAction : MonoBehaviour
                 }
                 else
                 {
-                    nmAgent.SetDestination(player.transform.position);
+                    pathAgent.travel(player.transform.position);
 
                 }
                
 
             }
-            */
-            if (fireRate >= 3.9f)
-            {
-                pathAgent.travel(transform.position);
-
-                GetComponent<EnemyShoot>().launchShot(player.transform);
-                fireRate = 0;
-            }
+           
+        
             if (Vector3.Distance(player.transform.position, transform.position) < 3f)
             {
                 currentTask = "Melee";
