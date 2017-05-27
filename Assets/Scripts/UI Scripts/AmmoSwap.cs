@@ -1,17 +1,32 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
+using System.Collections.Generic;
 
 public class AmmoSwap : MonoBehaviour
 {
-    GameManager gamemanager;
 
-    // Bool
-    // public bool isPlaying;
+    CharacterStateManager CSM;
+
+    [Header("Health")]
+    public Image healthBar;
+    public float maxHealth;
+    private float currentHealth;
+
+    [Header("Armor")]
+    public Image armorBar;
+    public float maxArmor;
+    private float currentArmor;
+
+
+    // Int
+
+
+    // Float
 
 
     // Other
+    [Header("Weapons")]
     public Image current;
     public Image pos1;
     public Image pos2;
@@ -27,12 +42,20 @@ public class AmmoSwap : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        // Set AmmoType
+        // CSM.AmmoType = Fire();
+
+        Fire();
+
+
+        currentHealth = maxHealth;
+        currentArmor = maxArmor;
+
         // change later when get another bullet.
         magno = mask;
 
         lightprefab.GetComponent<Animator>();
         lightprefab.GetComponent<Animation>();
-        Fire();
         
     }
 
@@ -40,6 +63,24 @@ public class AmmoSwap : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        /*
+        if(CSM.AmmoType == 0)
+        {
+            Lighting();
+        }
+        else if (CSM.AmmoType == 1)
+        {
+            Ice();
+        }
+        else if (CSM.AmmoType == 2)
+        {
+            Fire();
+        }
+        else if (CSM.AmmoType == 3)
+        {
+            Magno();
+        }
+        */
 
         if (Input.GetButtonDown("1"))
         {
@@ -61,46 +102,25 @@ public class AmmoSwap : MonoBehaviour
 
     }
 
-    /* void Swap()
+    private void HealthBar()
     {
-        if(Input.GetButtonDown("1"))
+        if (CSM.Health != healthBar.fillAmount)
         {
-            current = fire;
-            pos1 = ice;
-            pos2 = lighting;
-            pos3 = magno;
-        }
-        else if(Input.GetButtonDown("2"))
-        {
-            current = ice;
-            pos1 = lighting;
-            pos2 = magno;
-            pos3 = fire;
-        }
-        else if (Input.GetButtonDown("3"))
-        {
-            current = lighting;
-            pos1 = magno;
-            pos2 = fire;
-            pos3 = ice;
-        }
-        else if(Input.GetButtonDown("4"))
-        {
-            current = magno;
-            pos1 = fire;
-            pos2 = ice;
-            pos3 = lighting;
+            healthBar.fillAmount = CSM.Health;
         }
         else
+            return;
+    }
+
+    private void ArmorBar()
+    {
+        if (CSM.Health != armorBar.fillAmount)
         {
-            current = fire;
-            pos1 = ice;
-            pos2 = magno;
-            pos3 = lighting;
+            armorBar.fillAmount = CSM.Armor;
         }
-
-    }*/
-
+        else
+        return;
+    }
 
     void Fire()
     {
@@ -109,7 +129,6 @@ public class AmmoSwap : MonoBehaviour
         pos2.sprite = mask;
         lightprefab.transform.position = pos2.transform.position;
         pos3.sprite = magno;
-
     }
 
     void Ice()
@@ -119,7 +138,6 @@ public class AmmoSwap : MonoBehaviour
         lightprefab.transform.position = pos1.transform.position;
         pos2.sprite = magno;
         pos3.sprite = fire;
-
     }
 
     void Lighting()
@@ -129,7 +147,6 @@ public class AmmoSwap : MonoBehaviour
         pos1.sprite = magno;
         pos2.sprite = fire;
         pos3.sprite = ice;
-
     }
 
     void Magno()
@@ -140,4 +157,5 @@ public class AmmoSwap : MonoBehaviour
         pos3.sprite = mask;
         lightprefab.transform.position = pos3.transform.position;
     }
+
 }

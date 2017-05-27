@@ -12,6 +12,11 @@ public class SelectInput : MonoBehaviour
     public EventSystem eventSystem;
     public GameObject selectedObject;
 	
+    void Awake()
+    {
+
+    }
+
 	// Update is called once per frame
 	void Update () 
     {
