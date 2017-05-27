@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class EquipmentState : CharacterState
 {
@@ -32,14 +30,14 @@ public class EquipmentState : CharacterState
 
     protected override CharacterState HandleStateChange()
     {
-        if (anim.GetBool("climbing"))
-            return null;
-
         if (Input.GetButtonDown("Attack") || rightTriggerState == DOWN)
             return new CombatState();
 
         if (Input.GetButtonDown("Equip"))
             return new CombatState();
+
+        if (anim.GetBool("climbing"))
+            return null;
 
         if (Input.GetButtonDown("Aim") || leftTriggerState == DOWN)
         {
@@ -51,16 +49,16 @@ public class EquipmentState : CharacterState
 
     public override CharacterState OnTriggerStay(Collider other)
     {
-        if (Input.GetAxis("Vertical") > Mathf.Epsilon)
+        if (other.gameObject.CompareTag("Pushable"))
         {
-            if (other.gameObject.CompareTag("Pushable"))
+            if (Input.GetAxis("Vertical") > Mathf.Epsilon && Input.GetAxis("Horizontal") == 0)
                 return new PushState(other.gameObject);
         }
-        if (other.gameObject.CompareTag("CarryNode") && Input.GetButtonDown("Action"))
+        else if (other.gameObject.CompareTag("CarryNode") && Input.GetButtonDown("Action"))
         {
-            CarryNode temp = other.gameObject.GetComponent<CarryNode>();
-            if (temp && temp.Active)
-                return new CarryState(temp);
+            CarryNode node = other.gameObject.GetComponent<CarryNode>();
+            if (node && node.Active)
+                return new CarryState(node);
         }
         return null;
     }
@@ -72,10 +70,8 @@ public class EquipmentState : CharacterState
         {
             if (WeaponType == SWORD)
                 weapon.parent = SwordSheath;
-                //weapon.parent = Player.transform.FindChild("char_ethan_skeleton/char_ethan_Hips/char_ethan_Spine/char_ethan_Spine1/Player_Sheath");
             else if (WeaponType == GUN)
                 weapon.parent = GunHolster;
-                //weapon.parent = Player.transform.FindChild("char_ethan_skeleton/char_ethan_Hips/char_ethan_Spine/char_ethan_LeftUpLeg/Player_Holster");
         }
         else
         {
@@ -94,6 +90,16 @@ public class EquipmentState : CharacterState
         }
         hasWeapon[WeaponType] = !hasWeapon[WeaponType];
         anim.SetBool("hasSword", hasWeapon[SWORD]);
+    }
+
+    public static void DropWeapons()
+    {
+        for (int i = 0; i < weapons.Length; i++)
+        {
+            weapons[i].gameObject.GetComponent<BoxCollider>().enabled = true;
+            weapons[i].gameObject.AddComponent<Rigidbody>();
+            weapons[i].transform.parent = null;
+        }
     }
 
     public static void RightTriggerState()

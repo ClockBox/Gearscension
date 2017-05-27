@@ -16,8 +16,8 @@ public class Sword : Weapon
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Enemy/Vulnerable"))
-            other.gameObject.SendMessage("TakeDamage");
+        if (other.CompareTag("Enemy"))
+            other.gameObject.SendMessage("TakeDamage", SendMessageOptions.DontRequireReceiver);
     }
 
     public Collider Blade

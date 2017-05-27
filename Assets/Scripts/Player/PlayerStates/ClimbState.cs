@@ -10,7 +10,6 @@ public class ClimbState : PlayerState
     ClimbingEdge climbEdge;
 
     Vector3 Offset;
-    Vector3 nodePosition;
 
     const int NONE = -1;
     const int RIGHT = 1;
@@ -26,8 +25,7 @@ public class ClimbState : PlayerState
     {
         MovementSpeed = 2.5f;
         canClimb = false;
-
-        nodePosition = (IK.RightHand.position + IK.RightFoot.position + IK.LeftHand.position + IK.LeftFoot.position) / 4;
+        
         currentRight = node;
         currentLeft = node;
         nextNode = node;
@@ -277,8 +275,7 @@ public class ClimbState : PlayerState
         Vector3 averagePos = (IK.RightHand.position + IK.RightFoot.position + IK.LeftHand.position + IK.LeftFoot.position) / 4;
         Vector3 averagehandPos = (IK.RightHand.position + IK.LeftHand.position) / 2;
 
-        float speedOffset = averagePos.magnitude;
-        nodePosition = averagePos;
+        //float speedOffset = averagePos.magnitude;
 
         if (Offset == Vector3.zero)
         {
@@ -290,9 +287,11 @@ public class ClimbState : PlayerState
         else
         {
             if (braced)
-                Offset = Vector3.MoveTowards(Offset, averagePos - (Player.transform.up * 1.2f + Player.transform.forward * 0.3f), Time.deltaTime * 2 + speedOffset);
+                //Offset = Vector3.MoveTowards(Offset, averagePos - (Player.transform.up * 1.2f + Player.transform.forward * 0.3f), Time.deltaTime * 2 + speedOffset);
+                Offset = averagePos - (Player.transform.up * 1.2f + Player.transform.forward * 0.3f);
             else
-                Offset = Vector3.MoveTowards(Offset, averagehandPos - Vector3.up * 1.9f, Time.deltaTime * 2 + speedOffset);
+                //Offset = Vector3.MoveTowards(Offset, averagehandPos - Vector3.up * 1.9f, Time.deltaTime * 2 + speedOffset);
+                Offset = averagehandPos - Vector3.up * 1.9f;
         }
         Player.transform.transform.position = Offset;
 

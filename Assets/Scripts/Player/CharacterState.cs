@@ -9,7 +9,8 @@ public class CharacterState
     protected static Animator anim;
     protected static IKController IK;
 
-    protected Vector3 lookDirection;
+    protected static Vector3 moveDirection = Vector3.zero;
+    protected static Vector3 lookDirection;
 
     public CharacterState(GameObject player)
     {

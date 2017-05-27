@@ -5,8 +5,8 @@ using System.Collections;
 public class ClimbingNode : IKPositionNode
 {
     public bool test;
+    public bool FreeHang;
 
-    bool _FreeHang;
     int _rotation;
 
     protected override void Start ()
@@ -25,7 +25,7 @@ public class ClimbingNode : IKPositionNode
     {
         if (!transform.gameObject.isStatic)
         {
-            _FreeHang = Vector3.Dot(-transform.forward, Vector3.up) < -0.5f;
+            FreeHang = Vector3.Dot(-transform.forward, Vector3.up) < -0.5f;
             _active = Vector3.Dot(-transform.forward, Vector3.up) < 0.9f;
             col.enabled = _active;
             
@@ -58,10 +58,5 @@ public class ClimbingNode : IKPositionNode
     public int Rotation
     {
         get { return _rotation; }
-    }
-
-    public bool FreeHang
-    {
-        get { return _FreeHang; }
     }
 }

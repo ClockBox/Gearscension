@@ -18,7 +18,8 @@ public class CharacterStateManager : MonoBehaviour
     static float _currentHealth = _maxHealth;
     static float _maxArmor = 2;
     static float _currentArmor = _maxArmor;
-    public float ArmorRecharge = 5.0f;
+    static float _damageImmune = 0.5f;
+    public float armorRecharge = 5.0f;
 
     //Gun Data
     const int Electric = 0;
@@ -42,8 +43,14 @@ public class CharacterStateManager : MonoBehaviour
 
     private void Update()
     {
+        EquipmentState.RightTriggerState();
+        EquipmentState.LeftTriggerState();
+
         if (Input.GetKeyDown(KeyCode.Escape))
             Application.Quit();
+
+        if (_damageImmune > 0)
+            _damageImmune -= Time.deltaTime;
 
         //testing armor and health
         if (Input.GetKeyDown(KeyCode.Alpha0))
@@ -52,16 +59,26 @@ public class CharacterStateManager : MonoBehaviour
 
         //Switching Ammo Types
         if (Input.GetButtonDown("Ammo 1") || Input.GetAxis("AmmoAxis Vertical") > 0)
-            _currentAmmo = Electric;
+        {
+            if (_gunUpgrades[0])
+                _currentAmmo = Electric;
+        }
         else if (Input.GetButtonDown("Ammo 2") || Input.GetAxis("AmmoAxis Horizontal") > 0)
-            _currentAmmo = Freezing;
-        else if(Input.GetButtonDown("Ammo 3") || Input.GetAxis("AmmoAxis Vertical") < 0)
-            _currentAmmo = Exposive;
-        else if (Input.GetButtonDown("Ammo 4") || Input.GetAxis("AmmoAxis Horizontal") < 0)
-            _currentAmmo = mangetic;
+        {
+            if (_gunUpgrades[1])
+                _currentAmmo = Freezing;
+        }
+        else if (Input.GetButtonDown("Ammo 3") || Input.GetAxis("AmmoAxis Vertical") < 0)
+        {
+            if (_gunUpgrades[2])
+                _currentAmmo = Exposive;
+        }
 
-        EquipmentState.RightTriggerState();
-        EquipmentState.LeftTriggerState();
+        else if (Input.GetButtonDown("Ammo 4") || Input.GetAxis("AmmoAxis Horizontal") < 0)
+        {
+            if (_gunUpgrades[3])
+                _currentAmmo = mangetic;
+        }
     }
 
     private void FixedUpdate()
@@ -104,22 +121,28 @@ public class CharacterStateManager : MonoBehaviour
         EquipmentState.ToggleWeapon(weaponIndex);
     }
 
-    public void TakeDamage(float damage)
-    {
-        if (_currentArmor > 0)
-            _currentArmor--;
-        else
-            _currentHealth -= damage;
-
-        Debug.Log("Health: " + _currentHealth + "\tArmor: " + _currentArmor);
-
-        if (Health <= 0)
-            Die();
-    }
-
     private void UpgradeGun(int index)
     {
         _gunUpgrades[index] = true;
+        //hud.SendMessage(GunUpgrade(index));
+    }
+
+    public void TakeDamage(float damage)
+    {
+        if (_damageImmune <= 0)
+        {
+            _damageImmune = 0.5f;
+
+            if (_currentArmor > 0)
+                _currentArmor--;
+            else
+                _currentHealth -= damage;
+
+            Debug.Log("Health: " + _currentHealth + ",  \tArmor: " + _currentArmor);
+
+            if (Health <= 0)
+                Die();
+        }
     }
 
     private void RechargeArmor(int amount = 0)
@@ -131,11 +154,11 @@ public class CharacterStateManager : MonoBehaviour
             if (_currentArmor < _maxArmor)
             {
                 elapsedTime += Time.deltaTime;
-                if (elapsedTime >= ArmorRecharge)
+                if (elapsedTime >= armorRecharge)
                 {
                     _currentArmor++;
                     elapsedTime = 0;
-                    Debug.Log("Health: " + _currentHealth + "\tArmor: " + _currentArmor);
+                    Debug.Log("Health: " + _currentHealth + ",  \tArmor: " + _currentArmor);
                 }
             }
         }
@@ -143,6 +166,7 @@ public class CharacterStateManager : MonoBehaviour
 
     void Die()
     {
+        EquipmentState.DropWeapons();
         Instantiate(Ragdoll, transform.position, transform.rotation);
         //GameManager.SendMessage.playerDead;
         Destroy(transform.gameObject);

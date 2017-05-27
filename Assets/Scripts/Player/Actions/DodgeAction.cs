@@ -16,7 +16,6 @@ public class DodgeAction : PlayerState
         startTime = Time.deltaTime;
 
         IK.headWeight = 0;
-        IK.GlobalWeight = 0f;
 
         desiredDirection = direction;
     }
@@ -24,7 +23,6 @@ public class DodgeAction : PlayerState
     public override CharacterState UpdateState()
     {
         HandleInput();
-        
         return HandleStateChange();
     }
 
@@ -33,7 +31,7 @@ public class DodgeAction : PlayerState
         elapsedtime += Time.deltaTime;
         if (elapsedtime - startTime >= 1.3f)
             return new GroundedState();
-        else return null;
+        return null;
     }
 
     protected override void HandleInput()
@@ -48,6 +46,7 @@ public class DodgeAction : PlayerState
 
     public override void UpdateIK()
     {
+        base.UpdateIK();
         anim.SetFloat("Speed", 0);
     }
 }

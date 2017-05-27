@@ -11,7 +11,7 @@ public class PushState : EquipmentState
         IK.LeftHand.weight = 0.9f;
 
         PushObject = pushObject.GetComponent<Rigidbody>();
-        PushObject.isKinematic = false;
+        PushObject.constraints = RigidbodyConstraints.FreezeRotation;
 
         anim.SetBool("hasSword", false);
         anim.SetBool("aiming", false);
@@ -20,7 +20,6 @@ public class PushState : EquipmentState
 	
     public override CharacterState UpdateState()
     {
-        
         return HandleStateChange();
     }
 
@@ -29,7 +28,7 @@ public class PushState : EquipmentState
         if (anim.GetBool("climbing"))
             return new EquipmentState();
 
-        if (Input.GetAxis("Vertical") <= Mathf.Epsilon)
+        if (Input.GetAxis("Vertical") <= Mathf.Epsilon || Input.GetAxis("Horizontal") != 0)
             return new EquipmentState();
 
         if (IK.RightHand.weight == 0 && IK.LeftHand.weight == 0)
@@ -42,9 +41,11 @@ public class PushState : EquipmentState
     {
         if (PushObject)
         {
+            PushObject.AddForce(moveDirection * rb.mass / PushObject.mass * 2);
+
             //RayCast- Right Hand
             Vector3 rightRayStart = Player.transform.up * 1.4f + Player.transform.right * 0.5f;
-            rightRayStart.y = Mathf.Clamp(rightRayStart.y, 1, (PushObject.transform.position.y-Player.transform.position.y) + PushObject.transform.localScale.y/2);
+            rightRayStart.y = Mathf.Clamp(rightRayStart.y, 0.5f, (PushObject.transform.position.y-Player.transform.position.y) + PushObject.transform.localScale.y/2);
             Vector3 rightRayDirection = Player.transform.forward - Player.transform.right * 0.5f;
             RaycastHit rightHit;
 
@@ -75,8 +76,8 @@ public class PushState : EquipmentState
     public override void ExitState()
     {
         anim.SetBool("pushing", false);
+        PushObject.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ;
         PushObject.velocity = Vector3.zero;
-        PushObject.isKinematic = true;
         IK.RightHand.weight = 0;
         IK.LeftHand.weight = 0;
     }

@@ -37,7 +37,6 @@ public class GroundedState : PlayerState
 
         if (Input.GetButtonDown("Roll") && moveDirection.magnitude > Mathf.Epsilon)
             return new DodgeAction(desiredDirection);
-
         return null;
     }
 
@@ -58,13 +57,13 @@ public class GroundedState : PlayerState
         Debug.DrawLine(Player.transform.position, moveDirection + Player.transform.position, Color.red, 0.05f);
         Player.transform.LookAt(Player.transform.position + moveDirection, Player.transform.up);
 
-        if (moveDirection.magnitude == 0)
+        if (desiredDirection.magnitude == 0)
             anim.SetFloat("turnAngle", SignedAngle(Player.transform.forward, lookDirection,Player.transform.up));
         
         if (moveDirection.magnitude > MovementSpeed)
             moveDirection = moveDirection.normalized * MovementSpeed;
 
-        anim.SetFloat("Speed", moveDirection.magnitude);
+        anim.SetFloat("Speed", rb.velocity.magnitude);
         rb.velocity = new Vector3(moveDirection.x, rb.velocity.y, moveDirection.z);
         rb.AddForce(Player.transform.up * -20f * rb.mass);
     }

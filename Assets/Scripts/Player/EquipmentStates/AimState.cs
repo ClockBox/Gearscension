@@ -8,6 +8,8 @@ public class AimState : EquipmentState
 
     public AimState() : base()
     {
+        Player.transform.GetChild(0).position -= Player.transform.right * 0.2f;
+        CameraController.Zoomed = true;
         anim.SetBool("aiming", true);
     }
 
@@ -22,12 +24,12 @@ public class AimState : EquipmentState
 
     protected override void HandleInput()
     {
-        Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit))
-        {
-            //Debug.Log(hit.collider.gameObject.name);
-        }
+        //Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+        //RaycastHit hit;
+        //if (Physics.Raycast(ray, out hit))
+        //{
+        //    Debug.Log(hit.collider.gameObject.name);
+        //}
 
         if (Input.GetButtonUp("Aim") || leftTriggerState == UP || Input.GetButtonDown("Roll"))
             anim.SetBool("aiming", false);
@@ -56,7 +58,7 @@ public class AimState : EquipmentState
         IK.RightFoot.weight = 0;
         IK.LeftFoot.weight = 0;
 
-        Vector3 DesiredPosition = Player.transform.position + Player.transform.up * 1.5f + Player.transform.right * -0.2f + Camera.main.transform.forward * 0.48f;
+        Vector3 DesiredPosition = Player.transform.GetChild(0).position - Player.transform.up * 0.2f + Camera.main.transform.forward * 0.5f;
         if (IK.LeftHand.weight == 1)
         {
             canShoot = true;
@@ -76,6 +78,12 @@ public class AimState : EquipmentState
 
         IK.RightHand.position = weapons[GUN].Grip(1).position;
         IK.RightHand.rotation = weapons[GUN].Grip(1).rotation;
+    }
+
+    public override void ExitState()
+    {
+        Player.transform.GetChild(0).position += Player.transform.right * 0.2f;
+        CameraController.Zoomed = false;
     }
 
     void ChargeShot()
