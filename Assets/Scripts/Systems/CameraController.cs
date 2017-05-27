@@ -12,8 +12,8 @@ public class CameraController : MonoBehaviour
     private float zoom = 35;
     private float normal = 75;
     private float smooth = 4;
-    private float currentX = 0.0f;
-    private float currentY = 0.0f;
+    private float currentX;
+    private float currentY;
     private float sensitivity = 3.0f;
 
     private static bool m_zoomed = false;
@@ -55,10 +55,7 @@ public class CameraController : MonoBehaviour
             if (Physics.SphereCast(camPivot.position, 0.2f, transform.position - camPivot.position, out hit, distance))
             {
                 if (hit.transform.root.gameObject != camPivot.parent.gameObject)
-                {
-                    Debug.Log(hit.collider.gameObject.name);
                     transform.position = hit.point + hit.normal * 0.2f;
-                }
             }
 
             //Check distance to player, move camera if to close

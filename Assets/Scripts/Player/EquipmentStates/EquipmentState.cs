@@ -28,6 +28,11 @@ public class EquipmentState : CharacterState
 
     public override CharacterState UpdateState() { return HandleStateChange(); }
 
+    protected virtual void FindHookTarget()
+    {
+
+    }
+
     protected override CharacterState HandleStateChange()
     {
         if (Input.GetButtonDown("Attack") || rightTriggerState == DOWN)
