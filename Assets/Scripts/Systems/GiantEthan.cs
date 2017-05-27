@@ -13,7 +13,7 @@ public class GiantEthan : MonoBehaviour
         anim = GetComponent<Animator>();
 	}
 	
-	void Update ()
+	void FixedUpdate ()
     {
         rb.velocity = transform.forward * 100;
         transform.Rotate(-Vector3.up * 4.5f * Time.deltaTime);
