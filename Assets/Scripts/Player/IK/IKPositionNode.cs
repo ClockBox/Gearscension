@@ -1,22 +1,19 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
+[RequireComponent(typeof(Collider))]
+[RequireComponent(typeof(Renderer))]
 public class IKPositionNode : MonoBehaviour
 {
     protected Collider col;
+    protected Renderer rend;
     protected bool _active = true;
-
-    public Transform rightHand;
-    public Transform leftHand;
-    public Transform rightFoot;
-    public Transform leftFoot;
 
     public IKPositionNode[] neighbours;
     
     protected virtual void Start()
     {
         col = GetComponent<Collider>();
+        rend = GetComponent<Renderer>();
     }
 
     public bool Active

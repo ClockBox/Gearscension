@@ -16,6 +16,10 @@ public class EquipmentState : CharacterState
     public static int rightTriggerState = -1;
     public static int leftTriggerState = -1;
 
+    protected static HookNode[] Hooks;
+    protected Vector3 ClosestHook = Vector3.zero;
+    protected float HookRange = 15;
+
     public EquipmentState() : base(Player)
     {
         if (weapons == null) weapons = Player.transform.GetComponentsInChildren<Weapon>();
@@ -27,14 +31,13 @@ public class EquipmentState : CharacterState
     }
 
     public override CharacterState UpdateState() { return HandleStateChange(); }
-
-    protected virtual void FindHookTarget()
-    {
-
-    }
+    
 
     protected override CharacterState HandleStateChange()
     {
+        if (Input.GetKeyDown(KeyCode.X) && FindHookTarget() != Vector3.zero)
+            return new HookState(ClosestHook);
+
         if (Input.GetButtonDown("Attack") || rightTriggerState == DOWN)
             return new CombatState();
 
@@ -45,11 +48,31 @@ public class EquipmentState : CharacterState
             return null;
 
         if (Input.GetButtonDown("Aim") || leftTriggerState == DOWN)
-        {
             return new AimState();
-        }
 
         return null;
+    }
+    protected virtual Vector3 FindHookTarget()
+    {
+        Hooks = Object.FindObjectsOfType<HookNode>();
+        ClosestHook = Vector3.zero;
+
+        float closestDistance = 0;
+        for (int i = 0; i < Hooks.Length; i++)
+        {
+            Vector3 checkDistance = Hooks[i].transform.position - Player.transform.position;
+            if (checkDistance.magnitude < HookRange)
+            {
+                float checkAngle = (Vector3.Dot(Hooks[i].transform.position - Player.transform.position, Camera.main.transform.forward));
+                if (checkAngle > closestDistance)                   
+                {
+                    Debug.Log(Hooks[i].gameObject.name + ":" + checkAngle);
+                    closestDistance = checkAngle;
+                    ClosestHook = Hooks[i].transform.position - Vector3.up;
+                }
+            }
+        }
+        return ClosestHook;
     }
 
     public override CharacterState OnTriggerStay(Collider other)

@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
-using System.Collections;
 
-[RequireComponent(typeof(Collider))]
 public class ClimbingNode : IKPositionNode
 {
+    public Transform rightHand;
+    public Transform leftHand;
+    public Transform rightFoot;
+    public Transform leftFoot;
+
     public bool test;
     public bool FreeHang;
 

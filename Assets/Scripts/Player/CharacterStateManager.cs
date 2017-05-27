@@ -109,7 +109,6 @@ public class CharacterStateManager : MonoBehaviour
     {
         if (newState != null)
         {
-            //Debug.Log(newState);
             currentState.ExitState();
             return newState;
         }
