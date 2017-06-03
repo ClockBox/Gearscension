@@ -28,7 +28,7 @@ public class ClimbDownAction : PlayerState
         col.enabled = false;
 
         anim.SetTrigger("climbDown");
-        anim.SetBool("braced", !(edge.neighbours[0] as ClimbingNode).FreeHang);
+        anim.SetBool("braced", !(node).FreeHang);
 
         IK.SetInitialIKPositions(node.rightHand, node.leftHand, node.rightFoot, node.leftFoot);
         IK.headWeight = 0;

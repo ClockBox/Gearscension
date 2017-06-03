@@ -1,14 +1,14 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using UnityEngine;
 
 public class AimState : EquipmentState
 {
     float BulletScale = 1;
     bool canShoot;
 
-    public AimState() : base()
+    public AimState()
     {
-        Player.transform.GetChild(0).position -= Player.transform.right * 0.2f;
+        Player.transform.GetChild(0).position -= Player.transform.right * 0.2f + Player.transform.up * 0.2f;
         CameraController.Zoomed = true;
         anim.SetBool("aiming", true);
     }
@@ -24,13 +24,6 @@ public class AimState : EquipmentState
 
     protected override void HandleInput()
     {
-        //Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-        //RaycastHit hit;
-        //if (Physics.Raycast(ray, out hit))
-        //{
-        //    Debug.Log(hit.collider.gameObject.name);
-        //}
-
         if (Input.GetButtonUp("Aim") || leftTriggerState == UP || Input.GetButtonDown("Roll"))
             anim.SetBool("aiming", false);
 
@@ -46,8 +39,9 @@ public class AimState : EquipmentState
         if (anim.GetBool("climbing"))
             return new EquipmentState();
 
-        if (IK.RightHand.weight == 0 && !Input.GetButton("Aim") && leftTriggerState != STAY)
+        if (IK.LeftHand.weight == 0 && !Input.GetButton("Aim") && leftTriggerState != STAY)
             return new EquipmentState();
+
         return null;
     }
 
@@ -59,31 +53,30 @@ public class AimState : EquipmentState
         IK.LeftFoot.weight = 0;
 
         Vector3 DesiredPosition = Player.transform.GetChild(0).position - Player.transform.up * 0.2f + Camera.main.transform.forward * 0.5f;
+        Weapon Gun = StateManager.weapons[0];
         if (IK.LeftHand.weight == 1)
         {
             canShoot = true;
-            weapons[GUN].transform.position = DesiredPosition;
-            weapons[GUN].transform.rotation = Camera.main.transform.rotation;
+            Gun.transform.position = DesiredPosition;
+            Gun.transform.rotation = Camera.main.transform.rotation;
         }
         else if(IK.LeftHand.weight != 0)
         {
             canShoot = false;
-            weapons[GUN].transform.parent = null;
-            weapons[GUN].transform.position = Vector3.Lerp(GunHolster.position, DesiredPosition, IK.LeftHand.weight);
-            weapons[GUN].transform.rotation = Quaternion.Lerp(GunHolster.rotation, Camera.main.transform.rotation, IK.LeftHand.weight);
+            Gun.transform.parent = null;
+            Gun.transform.position = Vector3.Lerp(StateManager.GunHolster.position, DesiredPosition, IK.LeftHand.weight);
+            Gun.transform.rotation = Quaternion.Lerp(StateManager.GunHolster.rotation, Camera.main.transform.rotation, IK.LeftHand.weight);
         }
 
-        IK.LeftHand.position = weapons[GUN].Grip(0).position;
-        IK.LeftHand.rotation = weapons[GUN].Grip(0).rotation;
-
-        IK.RightHand.position = weapons[GUN].Grip(1).position;
-        IK.RightHand.rotation = weapons[GUN].Grip(1).rotation;
+        IK.LeftHand.position = StateManager.weapons[0].Grip(0).position;
+        IK.LeftHand.rotation = StateManager.weapons[0].Grip(0).rotation;
     }
 
-    public override void ExitState()
+    public override IEnumerator ExitState()
     {
-        Player.transform.GetChild(0).position += Player.transform.right * 0.2f;
+        Player.transform.GetChild(0).position += Player.transform.right * 0.2f + Player.transform.up * 0.2f;
         CameraController.Zoomed = false;
+        yield return null; 
     }
 
     void ChargeShot()
@@ -96,7 +89,7 @@ public class AimState : EquipmentState
     {
         if (canShoot)
         {
-            weapons[GUN].SendMessage("Shoot", BulletScale);
+            StateManager.weapons[0].SendMessage("Shoot", BulletScale);
             BulletScale = 1;
         }
     }

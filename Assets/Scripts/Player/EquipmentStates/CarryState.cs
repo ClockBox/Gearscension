@@ -60,7 +60,7 @@ public class CarryState : EquipmentState
         carryObject.position =  OffsetPosition;
     }
 
-    public override void ExitState()
+    public override IEnumerator ExitState()
     {
         IK.RightHand.weight = 0;
         IK.LeftHand.weight = 0;
@@ -68,6 +68,7 @@ public class CarryState : EquipmentState
         carryNode.rigidBody.isKinematic = false;
         carryNode.Collider.enabled = true;
         carryNode.delayPickup(0.5f);
+        yield return null;
     }
 
     public override CharacterState OnTriggerEnter(Collider other)

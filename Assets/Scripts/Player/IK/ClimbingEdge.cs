@@ -4,13 +4,13 @@ public class ClimbingEdge : IKPositionNode
 {
     protected override void Start()
     {
-        base.Start();
         neighbours = new IKPositionNode[1];
+        base.Start();
     }
 
     private void Update()
     {
-        _active = Vector3.Dot(transform.up, Vector3.up) > 0.8f;
-        col.enabled = _active;
+        m_active = Vector3.Dot(transform.up, Vector3.up) > 0.8f;
+        col.enabled = m_active;
     }
 }

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class CombatState : EquipmentState
 {
@@ -8,7 +9,6 @@ public class CombatState : EquipmentState
     public CombatState() : base()
     {
         anim.SetBool("hasSword", true);
-        anim.SetBool("aiming", false);
     }
 
     public override CharacterState UpdateState()
@@ -25,6 +25,9 @@ public class CombatState : EquipmentState
 
     protected override CharacterState HandleStateChange()
     {
+        if (Input.GetKeyDown(KeyCode.X) && FindHookTarget() != Vector3.zero)
+            return new HookState(ClosestHook);
+
         if (Input.GetButtonDown("Aim") || leftTriggerState == DOWN)
             return new AimState();
 
@@ -38,7 +41,7 @@ public class CombatState : EquipmentState
     {
         anim.SetTrigger("attack");
 
-        sword = weapons[SWORD] as Sword;
+        sword = StateManager.weapons[1] as Sword;
         sword.Blade.enabled = true;
     }
 

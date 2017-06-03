@@ -24,18 +24,16 @@ public class ClimbState : PlayerState
     public ClimbState(ClimbingNode node) : base()
     {
         MovementSpeed = 2.5f;
-        canClimb = false;
+        canClimb = true;
         
         currentRight = node;
         currentLeft = node;
         nextNode = node;
 
-        Player.transform.parent = node.transform.parent;
-
         UpdateAnimator();
         anim.SetBool("climbing", true);
         anim.SetFloat("turnAngle", 0);
-
+        Debug.Log(rb.velocity);
         rb.velocity = Vector3.zero;
     }
 	
@@ -51,10 +49,7 @@ public class ClimbState : PlayerState
             return new ClimbUpAction(climbEdge);
 
         if (!currentLeft.Active && !currentRight.Active)
-        {
-            canClimb = false;
             return new FallState();
-        }
 
         if (Input.GetButtonDown("Jump"))
         {
@@ -73,13 +68,6 @@ public class ClimbState : PlayerState
         Z = Input.GetAxisRaw("Vertical");
 
         moveDirection = new Vector3(X, Z, 0);
-
-        if (!canClimb)
-        {
-            IK.SetInitialIKPositions(nextNode.rightHand, nextNode.leftHand, nextNode.rightFoot, nextNode.leftFoot);
-            if (waitTimer >= 1)
-                canClimb = true;
-        }
         
         UpdateRoot();
         UpdateAnimator();
@@ -131,7 +119,7 @@ public class ClimbState : PlayerState
         }
     }
 
-    public override void ExitState()
+    public override IEnumerator ExitState()
     {
         anim.SetBool("climbing", false);
         anim.SetFloat("Speed", Z);
@@ -140,13 +128,14 @@ public class ClimbState : PlayerState
         Player.transform.parent = null;
         
         Player.transform.LookAt(Player.transform.position + Vector3.ProjectOnPlane(Player.transform.forward, Vector3.up));
+        yield return null;
     }
 
     public override void UpdateIK()
     {
         base.UpdateIK();
         
-        if (NextMove == RIGHT || !canClimb)
+        if (NextMove == RIGHT)
         {
             IKController.LerpIKTarget(IK.RightHand, IKTarget.FromTransform(currentRight.rightHand.transform), IKTarget.FromTransform(nextNode.rightHand.transform), waitTimer);
             if (braced)
@@ -160,7 +149,7 @@ public class ClimbState : PlayerState
             IKController.MoveIKTarget(IK.RightFoot, currentRight.rightFoot.transform, 10);
         }
         
-        if (NextMove == LEFT || !canClimb)
+        if (NextMove == LEFT)
         {
             IKController.LerpIKTarget(IK.LeftHand, IKTarget.FromTransform(currentLeft.leftHand.transform), IKTarget.FromTransform(nextNode.leftHand.transform), waitTimer);
             if (braced)
@@ -262,7 +251,7 @@ public class ClimbState : PlayerState
             {
                 if (currentNode.neighbours[nodeIndex].Active)
                     climbEdge = currentNode.neighbours[nodeIndex] as ClimbingEdge;
-                return currentNode;
+                return currentRight;
             }
             return currentNode.neighbours[nodeIndex] as ClimbingNode;
         }
