@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class ClimbUpAction : PlayerState
 {
@@ -7,7 +8,6 @@ public class ClimbUpAction : PlayerState
     float waitTime;
     
     ClimbingEdge edge;
-    ClimbingNode node;
 
     Collider col;
 
@@ -16,7 +16,6 @@ public class ClimbUpAction : PlayerState
         startTime = Time.deltaTime;
 
         edge = Edge;
-        node = edge.neighbours[0] as ClimbingNode;
 
         Player.transform.parent = edge.transform;
 
@@ -24,8 +23,6 @@ public class ClimbUpAction : PlayerState
         col.enabled = false;
 
         anim.SetTrigger("climbUp");
-
-        IK.SetInitialIKPositions(node.rightHand, node.leftHand, node.rightFoot, node.leftFoot);
         IK.headWeight = 0;
 
         if (anim.GetBool("braced"))
@@ -57,11 +54,13 @@ public class ClimbUpAction : PlayerState
         else return null;
     }
 
-    public override void ExitState()
+    public override IEnumerator ExitState()
     {
         moveDirection = Vector3.zero;
         Player.transform.parent = null;
 
         Player.transform.LookAt(Player.transform.position + Vector3.ProjectOnPlane(Player.transform.forward, Vector3.up));
+
+        yield return null;
     }
 }

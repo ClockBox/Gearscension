@@ -1,9 +1,9 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CharacterState
 {
+    protected static CharacterStateManager StateManager;
     protected static GameObject Player;
     protected static Rigidbody rb;
     protected static Animator anim;
@@ -15,6 +15,7 @@ public class CharacterState
     public CharacterState(GameObject player)
     {
         if (!Player) Player = player;
+        if (!StateManager) StateManager = player.GetComponent<CharacterStateManager>();
         if (!rb) rb = Player.GetComponent<Rigidbody>();
         if (!anim) anim = Player.GetComponent<Animator>();
         if (!IK) IK = Player.GetComponent<IKController>();
@@ -34,7 +35,9 @@ public class CharacterState
     public virtual CharacterState OnTriggerStay(Collider other) { return null; }
     public virtual CharacterState OnTriggerExit(Collider other) { return null; }
 
-    public virtual void ExitState() { }
+    public virtual IEnumerator EnterState() { yield return null; }
+    public virtual IEnumerator ExitState() { yield return null; }
+
     protected virtual void HandleInput()
     {
         lookDirection = Camera.main.transform.forward.normalized;
@@ -43,7 +46,6 @@ public class CharacterState
         if (Vector3.Dot(Player.transform.forward, lookDirection) < 0)
             IK.headWeight = Mathf.MoveTowards(IK.headWeight, 0, 0.05f);
         else
-
             IK.headWeight = Mathf.MoveTowards(IK.headWeight, 1, 0.05f);
     }
     public virtual void UpdateIK()

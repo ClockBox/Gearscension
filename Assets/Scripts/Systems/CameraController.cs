@@ -30,17 +30,17 @@ public class CameraController : MonoBehaviour
             currentY = Mathf.Clamp(currentY, Y_ANGLE_MIN, Y_ANGLE_MAX);
 
             userDistance -= Input.GetAxis("Zoom") * 2;
-            userDistance = Mathf.Clamp(userDistance, 2, 5);
+            userDistance = Mathf.Clamp(userDistance, 2.5f, 6);
 
             //Zoom
             if (m_zoomed)
             {
-                distance = Mathf.Lerp(1f, userDistance, Time.deltaTime * smooth);
+                distance = Mathf.MoveTowards(1.5f, userDistance, Time.deltaTime * 0.5f);
                 GetComponent<Camera>().fieldOfView = zoom;
             }
             else
             {
-                distance = Mathf.Lerp(userDistance, 1f, Time.deltaTime * smooth);
+                distance = Mathf.MoveTowards(userDistance, 1.5f, Time.deltaTime * 0.5f);
                 GetComponent<Camera>().fieldOfView = normal;
             }
 

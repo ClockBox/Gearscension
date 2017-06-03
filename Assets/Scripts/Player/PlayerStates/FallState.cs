@@ -57,7 +57,7 @@ public class FallState : PlayerState
 
     public override CharacterState OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("ClimbingNode") && canClimb)
+        if ((other.gameObject.CompareTag("ClimbingNode") || other.gameObject.CompareTag("HookNode")) && canClimb)
         {
             return new ClimbState(other.gameObject.GetComponent<ClimbingNode>());
         }
