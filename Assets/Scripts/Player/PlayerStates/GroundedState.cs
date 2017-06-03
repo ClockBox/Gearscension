@@ -105,7 +105,7 @@ public class GroundedState : PlayerState
     {
         if (canClimb)
         {
-            if (other.gameObject.CompareTag("ClimbingNode"))
+            if (other.gameObject.CompareTag("ClimbingNode") || other.gameObject.CompareTag("HookNode"))
                 return new ClimbState(other.gameObject.GetComponent<ClimbingNode>());
             if (other.gameObject.CompareTag("ClimbingEdge"))
                 return new ClimbDownAction(other.gameObject.GetComponent<ClimbingEdge>());

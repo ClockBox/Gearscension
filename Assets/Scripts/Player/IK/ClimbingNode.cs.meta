@@ -1,10 +1,15 @@
 fileFormatVersion: 2
 guid: 26f10d2d59c168b448f2590ce42c76d6
-timeCreated: 1487527208
+timeCreated: 1496091477
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - EdgeNode: {fileID: 1738289743135920, guid: 99063997ff68e634fa9bb1ba989d4d89, type: 2}
+  - rightHand: {instanceID: 0}
+  - leftHand: {instanceID: 0}
+  - rightFoot: {instanceID: 0}
+  - leftFoot: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

@@ -2,20 +2,26 @@
 
 public class ClimbingNode : IKPositionNode
 {
+    static GameObject EdgeNode;
+
+    [Space(10)]
     public Transform rightHand;
     public Transform leftHand;
     public Transform rightFoot;
     public Transform leftFoot;
 
-    public bool test;
+    [Space(10)]
     public bool FreeHang;
-
-    int _rotation;
+    public bool IsEdge;
 
     protected override void Start ()
     {
-        base.Start();
         neighbours = new IKPositionNode[8];
+        base.Start();
+
+        if(!EdgeNode) EdgeNode = GameObject.FindGameObjectWithTag("ClimbingEdge");
+
+        if (IsEdge) SpawnEdge();
 
         if (!rightHand || !leftHand || !rightFoot || !leftFoot)
         {
@@ -29,24 +35,20 @@ public class ClimbingNode : IKPositionNode
         if (!transform.gameObject.isStatic)
         {
             FreeHang = Vector3.Dot(-transform.forward, Vector3.up) < -0.5f;
-            _active = Vector3.Dot(-transform.forward, Vector3.up) < 0.9f;
-            col.enabled = _active;
-            
-            if (Vector3.Dot(transform.up, Vector3.up) < 0)
-            {
-                _rotation = (_rotation + 4) % 8;
-                transform.rotation = Quaternion.AngleAxis(180, transform.forward) * transform.rotation;
-            }
+            m_active = Vector3.Dot(-transform.forward, Vector3.up) < 0.9f;
+            col.enabled = m_active;
 
-            if (transform.rotation.eulerAngles.z > 0.5f && transform.rotation.eulerAngles.z < 359.5f)
-            {
-                _rotation = Mathf.RoundToInt((360 - transform.localEulerAngles.z) / 45);
-                transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, 0);
-
-                //rightHand.rotation = Quaternion.Euler(-transform.localEulerAngles);
-                //leftHand.rotation = Quaternion.Euler(-transform.localEulerAngles);
-            }
+            Rotate();
         }
+    }
+
+    private void SpawnEdge()
+    {
+        ClimbingEdge edge = Instantiate(EdgeNode, transform.position + transform.up * 0.2f, transform.rotation, transform).GetComponent<ClimbingEdge>();
+        edge.transform.SetAsFirstSibling();
+        edge.neighbours[0] = this;
+
+        neighbours[0] = edge;
     }
 
     private void OnDrawGizmos()
@@ -56,10 +58,12 @@ public class ClimbingNode : IKPositionNode
         Gizmos.DrawLine(transform.position, leftHand.transform.position);
         Gizmos.DrawLine(transform.position, rightFoot.transform.position);
         Gizmos.DrawLine(transform.position, leftFoot.transform.position);
-    }
 
-    public int Rotation
-    {
-        get { return _rotation; }
+        Gizmos.color = Color.red;
+        for (int i = 0; i < neighbours.Length; i++)
+        {
+            if (neighbours[i])
+                Gizmos.DrawLine(transform.position, neighbours[i].transform.position);
+        }    
     }
 }

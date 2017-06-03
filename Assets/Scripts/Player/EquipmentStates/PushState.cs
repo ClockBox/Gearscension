@@ -73,13 +73,14 @@ public class PushState : EquipmentState
         }
     }
 
-    public override void ExitState()
+    public override IEnumerator ExitState()
     {
         anim.SetBool("pushing", false);
         PushObject.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ;
         PushObject.velocity = Vector3.zero;
         IK.RightHand.weight = 0;
         IK.LeftHand.weight = 0;
+        yield return null;
     }
 
     public override CharacterState OnTriggerEnter(Collider other) { return null; }

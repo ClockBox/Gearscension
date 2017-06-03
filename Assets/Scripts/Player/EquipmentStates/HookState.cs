@@ -1,4 +1,5 @@
-﻿ using UnityEngine;
+﻿using System.Collections; 
+using UnityEngine;
 
 public class HookState : EquipmentState
 {
@@ -9,9 +10,15 @@ public class HookState : EquipmentState
 
     Vector3 desiredDirection;
 
-    public HookState(Vector3 hookPos)
+    public HookState(Vector3 hookPos) : base()
     {
         desiredDirection = hookPos - Player.transform.position;
+        Vector3 temp = desiredDirection;
+        temp.y = 0;
+        Player.transform.LookAt(Player.transform.position + temp);
+
+        anim.SetBool("hook",true);
+        anim.SetBool("hasSword", true);
     }
 
     public override CharacterState UpdateState()
@@ -26,14 +33,24 @@ public class HookState : EquipmentState
             return new EquipmentState();
 
         elapsedtime += Time.deltaTime;
-        if (elapsedtime - startTime >= desiredDirection.magnitude/speed)
+        if (elapsedtime - startTime >= 1.5f + desiredDirection.magnitude/speed)
             return new EquipmentState();
         return null;
+    }
+
+    public override IEnumerator ExitState()
+    {
+        anim.SetBool("hook",false);
+        rb.velocity = Vector3.zero;
+        yield return null;
     }
 
     protected override void HandleInput()
     {
         base.HandleInput();
-        rb.velocity = (desiredDirection.normalized * speed);
+        if (elapsedtime > 1.5f)
+        {
+            rb.velocity = (desiredDirection.normalized * speed);
+        }
     }
 }
