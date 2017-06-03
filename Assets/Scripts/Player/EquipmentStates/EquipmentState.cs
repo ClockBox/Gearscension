@@ -10,7 +10,7 @@ public class EquipmentState : CharacterState
     public static int leftTriggerState = -1;
 
     protected static GameObject[] Hooks;
-    protected Vector3 ClosestHook = Vector3.zero;
+    protected ClimbingNode ClosestHook;
     protected float HookRange = 15;
 
     public EquipmentState() : base(Player)
@@ -38,10 +38,9 @@ public class EquipmentState : CharacterState
 
         return null;
     }
-    protected virtual Vector3 FindHookTarget()
+    protected virtual IKPositionNode FindHookTarget()
     {
         Hooks = GameObject.FindGameObjectsWithTag("HookNode");
-        ClosestHook = Vector3.zero;
 
         float closestDistance = 0;
         for (int i = 0; i < Hooks.Length; i++)
@@ -53,8 +52,7 @@ public class EquipmentState : CharacterState
                 if (checkAngle > closestDistance)                   
                 {
                     closestDistance = checkAngle;
-                    Debug.Log(Hooks[i].gameObject.name);
-                    ClosestHook = Hooks[i].transform.position - Vector3.up;
+                    ClosestHook = Hooks[i].GetComponent<ClimbingNode>();
                 }
             }
         }

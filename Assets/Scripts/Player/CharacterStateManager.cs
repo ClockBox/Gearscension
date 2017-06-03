@@ -122,7 +122,7 @@ public class CharacterStateManager : MonoBehaviour
     {
         if (newState != null)
         {
-            //Debug.Log(newState);
+            Debug.Log(newState);
             StartCoroutine(currentState.ExitState());
             return newState;
         }
@@ -248,5 +248,10 @@ public class CharacterStateManager : MonoBehaviour
     public float Armor
     {
         get { return _currentArmor; }
+    }
+
+    public bool HasWeapon(int index)
+    {
+        return _hasWeapon[index];
     }
 }

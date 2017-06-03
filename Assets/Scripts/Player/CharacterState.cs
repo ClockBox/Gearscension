@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class CharacterState
 {
-    protected static CharacterStateManager StateManager;
+    protected static CharacterStateManager Manager;
     protected static GameObject Player;
     protected static Rigidbody rb;
     protected static Animator anim;
@@ -15,7 +15,7 @@ public class CharacterState
     public CharacterState(GameObject player)
     {
         if (!Player) Player = player;
-        if (!StateManager) StateManager = player.GetComponent<CharacterStateManager>();
+        if (!Manager) Manager = player.GetComponent<CharacterStateManager>();
         if (!rb) rb = Player.GetComponent<Rigidbody>();
         if (!anim) anim = Player.GetComponent<Animator>();
         if (!IK) IK = Player.GetComponent<IKController>();

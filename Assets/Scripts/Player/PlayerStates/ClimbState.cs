@@ -14,7 +14,7 @@ public class ClimbState : PlayerState
     const int NONE = -1;
     const int RIGHT = 1;
     const int LEFT = 2;
-    int NextMove = RIGHT;
+    int NextMove = LEFT;
     int nodeIndex = NONE;
 
     bool braced;
@@ -30,10 +30,13 @@ public class ClimbState : PlayerState
         currentLeft = node;
         nextNode = node;
 
+        IK.SetInitialIKPositions(node.rightHand, node.leftHand, node.rightFoot, node.leftFoot);
+        if (Manager.HasWeapon(1))
+            IK.RightHand.Set(Manager.weapons[1].Grip(1));
+
         UpdateAnimator();
         anim.SetBool("climbing", true);
         anim.SetFloat("turnAngle", 0);
-        Debug.Log(rb.velocity);
         rb.velocity = Vector3.zero;
     }
 	
@@ -68,7 +71,7 @@ public class ClimbState : PlayerState
         Z = Input.GetAxisRaw("Vertical");
 
         moveDirection = new Vector3(X, Z, 0);
-        
+
         UpdateRoot();
         UpdateAnimator();
         braced = anim.GetBool("braced");
