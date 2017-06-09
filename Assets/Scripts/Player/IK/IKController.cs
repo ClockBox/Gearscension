@@ -164,7 +164,7 @@ public class IKController : MonoBehaviour
     //Get Hand & Foot
     public IKTarget RightHand
     {
-        get { return _RightHand; }
+        get {return _RightHand; }
     }
     public IKTarget LeftHand
     {

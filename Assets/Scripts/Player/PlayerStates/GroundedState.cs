@@ -74,16 +74,16 @@ public class GroundedState : PlayerState
 
         RaycastHit RightHit;
         Transform RightFoot = anim.GetBoneTransform(HumanBodyBones.RightFoot);
-        if (Physics.Raycast(RightFoot.position + Player.transform.up * 0.1f, -Player.transform.up, out RightHit, 0.5f))
+        if (Physics.Raycast(RightFoot.position + Player.transform.up * 0.1f, -Player.transform.up, out RightHit, 0.55f))
         {
             IK.RightFoot.position = RightHit.point + Player.transform.up * 0.12f;
             IK.RightFoot.rotation = Quaternion.FromToRotation(Player.transform.up, RightHit.normal) * Player.transform.rotation;
         }
-        else IK.RightFoot.weight = 0;
+        else IK.RightFoot.weight = 0; 
 
         RaycastHit LeftHit;
         Transform LeftFoot = anim.GetBoneTransform(HumanBodyBones.LeftFoot);
-        if (Physics.Raycast(LeftFoot.position + Player.transform.up * 0.1f, -Player.transform.up, out LeftHit, 0.5f))
+        if (Physics.Raycast(LeftFoot.position + Player.transform.up * 0.1f, -Player.transform.up, out LeftHit, 0.55f))
         {
             IK.LeftFoot.position = LeftHit.point + Player.transform.up * 0.12f;
             IK.LeftFoot.rotation = Quaternion.FromToRotation(Player.transform.up, LeftHit.normal) * Player.transform.rotation;
@@ -107,7 +107,7 @@ public class GroundedState : PlayerState
         {
             if (other.gameObject.CompareTag("ClimbingNode") || other.gameObject.CompareTag("HookNode"))
                 return new ClimbState(other.gameObject.GetComponent<ClimbingNode>());
-            if (other.gameObject.CompareTag("ClimbingEdge"))
+            if (other.gameObject.CompareTag("ClimbingEdge") && MovementSpeed <= 5)
                 return new ClimbDownAction(other.gameObject.GetComponent<ClimbingEdge>());
         }
         return null;

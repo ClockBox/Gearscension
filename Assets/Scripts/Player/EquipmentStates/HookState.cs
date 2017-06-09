@@ -58,9 +58,6 @@ public class HookState : EquipmentState
         {
             sword.position = Vector3.Lerp(sword.position, Hook.rightHand.position - Hook.transform.forward * 0.5f, elapsedtime);
             sword.rotation = Quaternion.Lerp(sword.rotation, Quaternion.FromToRotation(Vector3.up, Hook.transform.forward), elapsedtime);
-
-            IK.RightHand.position = Manager.weapons[1].Grip(1).position;
-            IK.RightHand.weight = Mathf.Lerp(0, 1, elapsedtime);
         }
         else if (elapsedtime > 1f)
         {
@@ -68,6 +65,23 @@ public class HookState : EquipmentState
             temp.y = 0;
             Player.transform.LookAt(Player.transform.position + temp);
             Player.transform.position = Vector3.Lerp(Player.transform.position, Hook.transform.position - Vector3.up * 1f, elapsedtime - 1);
+
+            IK.SetInitialIKPositions(Manager.weapons[1].Grip(1), Hook.leftHand, Hook.rightFoot, Hook.leftFoot);  
         }
+    }
+
+    public override void UpdateIK()
+    {
+        IK.RightHand.weight = Mathf.Lerp(0, 1, Mathf.Pow(elapsedtime - 1, 4));
+        IK.LeftHand.weight = Mathf.Lerp(0, 1, Mathf.Pow(elapsedtime - 1, 4));
+        IK.RightFoot.weight = Mathf.Lerp(0, 1, Mathf.Pow(elapsedtime - 1, 4));
+        IK.LeftFoot.weight = Mathf.Lerp(0, 1, Mathf.Pow(elapsedtime - 1, 4));
+    }
+
+    public override CharacterState OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject == Hook.gameObject)
+            return new EquipmentState();
+        return null;
     }
 }

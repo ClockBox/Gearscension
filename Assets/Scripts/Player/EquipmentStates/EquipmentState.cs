@@ -20,7 +20,6 @@ public class EquipmentState : CharacterState
     }
 
     public override CharacterState UpdateState() { return HandleStateChange(); }
-    
 
     protected override CharacterState HandleStateChange()
     {
@@ -59,18 +58,23 @@ public class EquipmentState : CharacterState
         return ClosestHook;
     }
 
+    public override CharacterState OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("ClimbingNode"))
+            return new EquipmentState();
+        return null;
+    }
+
     public override CharacterState OnTriggerStay(Collider other)
     {
-        if (other.gameObject.CompareTag("Pushable"))
+        if (Input.GetButtonDown("Action"))
         {
-            if (Input.GetAxis("Vertical") > Mathf.Epsilon && Input.GetAxis("Horizontal") == 0)
-                return new PushState(other.gameObject);
-        }
-        else if (other.gameObject.CompareTag("CarryNode") && Input.GetButtonDown("Action"))
-        {
-            CarryNode node = other.gameObject.GetComponent<CarryNode>();
-            if (node && node.Active)
-                return new CarryState(node);
+            if (other.gameObject.CompareTag("CarryNode"))
+            {
+                CarryNode node = other.gameObject.GetComponent<CarryNode>();
+                if (node && node.Active)
+                    return new CarryState(node);
+            }
         }
         return null;
     }

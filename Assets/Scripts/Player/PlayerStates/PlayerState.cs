@@ -22,4 +22,17 @@ public class PlayerState : CharacterState
         X = Input.GetAxis("Horizontal");
         Z = Input.GetAxis("Vertical");
     }
+
+    public override CharacterState OnTriggerStay(Collider other)
+    {
+        if (Input.GetButton("Action"))
+        {
+            if (other.gameObject.CompareTag("Pushable"))
+            {
+                if (Input.GetAxis("Vertical") > Mathf.Epsilon && Input.GetAxis("Horizontal") == 0)
+                    return new PushState(other.gameObject);
+            }
+        }
+        return null;
+    }
 }

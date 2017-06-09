@@ -44,11 +44,5 @@ public class CombatState : EquipmentState
         sword.Blade.enabled = true;
     }
 
-    public override CharacterState OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.CompareTag("ClimbingNode"))
-            return new EquipmentState();
-        return null;
-    }
     public override CharacterState OnTriggerStay(Collider other) { return null; }
 }

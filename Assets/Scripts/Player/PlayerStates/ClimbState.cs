@@ -30,9 +30,7 @@ public class ClimbState : PlayerState
         currentLeft = node;
         nextNode = node;
 
-        IK.SetInitialIKPositions(node.rightHand, node.leftHand, node.rightFoot, node.leftFoot);
-        if (Manager.HasWeapon(1))
-            IK.RightHand.Set(Manager.weapons[1].Grip(1));
+        //IK.SetInitialIKPositions(node.rightHand, node.leftHand, node.rightFoot, node.leftFoot);
 
         UpdateAnimator();
         anim.SetBool("climbing", true);

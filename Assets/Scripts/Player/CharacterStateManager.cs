@@ -91,11 +91,11 @@ public class CharacterStateManager : MonoBehaviour
             if (_gunUpgrades[mangetic])
                 _currentAmmo = mangetic;
         }
-    //}
+    }
 
-    ////State Functions
-    //private void FixedUpdate()
-    //{
+    //State Functions
+    private void FixedUpdate()
+    {
         _PlayerState = HandleStateChange(_PlayerState, _PlayerState.UpdateState());
         _EquipmentState = HandleStateChange(_EquipmentState, _EquipmentState.UpdateState());
     }
@@ -122,7 +122,7 @@ public class CharacterStateManager : MonoBehaviour
     {
         if (newState != null)
         {
-            Debug.Log(newState);
+            //Debug.Log(newState);
             StartCoroutine(currentState.ExitState());
             return newState;
         }
