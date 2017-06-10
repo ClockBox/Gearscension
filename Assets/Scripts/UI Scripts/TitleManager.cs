@@ -3,8 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour
+public class TitleManager : MonoBehaviour
 {
+
     // Public
     public AudioClip listen;
     public AudioClip niceThousand;
@@ -33,7 +34,7 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
         Debug.Log("Main menu called.");
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene("Main Menu");
     }
 
 }

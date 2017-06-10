@@ -19,7 +19,7 @@ public class GameController : MonoBehaviour
     CanvasGroup canvasGroup;
 
     // Bool
-    private bool gameStart;
+    // private bool gameStart;
     private bool buttonSelected;
 
     // Other
@@ -40,9 +40,9 @@ public class GameController : MonoBehaviour
             Destroy(gameObject);
         }
 
-        SceneManager.LoadSceneAsync(1, LoadSceneMode.Additive);
+        SceneManager.LoadSceneAsync(Hud, LoadSceneMode.Additive);
 
-        gameStart = true;
+        // gameStart = true;
     }
 	
 	// Update is called once per frame

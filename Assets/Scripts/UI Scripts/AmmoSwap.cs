@@ -10,20 +10,13 @@ public class AmmoSwap : MonoBehaviour
 
     [Header("Health")]
     public Image healthBar;
-    public float maxHealth;
-    private float currentHealth;
+    // public float maxHealth;
+    // private float currentHealth;
 
     [Header("Armor")]
     public Image armorBar;
-    public float maxArmor;
-    private float currentArmor;
-
-
-    // Int
-
-
-    // Float
-
+    // public float maxArmor;
+    // private float currentArmor;
 
     // Other
     [Header("Weapons")]
@@ -31,25 +24,23 @@ public class AmmoSwap : MonoBehaviour
     public Image pos1;
     public Image pos2;
     public Image pos3;
+    public Image[] images = new Image[4];
 
     public Sprite fire;
     public Sprite ice;
     public Sprite mask;
     public Sprite magno;
+    public Sprite[] sprites = new Sprite[4];
+
 
     public GameObject lightprefab;
 
     // Use this for initialization
     void Start()
     {
-        // Set AmmoType
-        // CSM.AmmoType = Fire();
-
-        Fire();
-
-
-        currentHealth = maxHealth;
-        currentArmor = maxArmor;
+        CSM = GetComponent<CharacterStateManager>();
+        // currentHealth = maxHealth;
+        // currentArmor = maxArmor;
 
         // change later when get another bullet.
         magno = mask;
@@ -63,42 +54,6 @@ public class AmmoSwap : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        /*
-        if(CSM.AmmoType == 0)
-        {
-            Lighting();
-        }
-        else if (CSM.AmmoType == 1)
-        {
-            Ice();
-        }
-        else if (CSM.AmmoType == 2)
-        {
-            Fire();
-        }
-        else if (CSM.AmmoType == 3)
-        {
-            Magno();
-        }
-        */
-
-        if (Input.GetButtonDown("1"))
-        {
-            Fire();
-        }
-        else if (Input.GetButtonDown("2"))
-        {
-            Ice();
-        }
-        else if (Input.GetButtonDown("3"))
-        {
-            Lighting();
-        }
-        else if (Input.GetButtonDown("4"))
-        {
-            Magno();
-        }
-        else { return; }
 
     }
 
@@ -107,6 +62,7 @@ public class AmmoSwap : MonoBehaviour
         if (CSM.Health != healthBar.fillAmount)
         {
             healthBar.fillAmount = CSM.Health;
+            Debug.Log("Health Bar Filled.");
         }
         else
             return;
@@ -114,15 +70,16 @@ public class AmmoSwap : MonoBehaviour
 
     private void ArmorBar()
     {
-        if (CSM.Health != armorBar.fillAmount)
+        if (CSM.Armor != armorBar.fillAmount)
         {
             armorBar.fillAmount = CSM.Armor;
+            Debug.Log("Armor Bar Filled.");
         }
         else
         return;
     }
 
-    void Fire()
+    public void Fire()
     {
         current.sprite = fire;
         pos1.sprite = ice;
@@ -131,7 +88,7 @@ public class AmmoSwap : MonoBehaviour
         pos3.sprite = magno;
     }
 
-    void Ice()
+    public void Ice()
     {
         current.sprite = ice;
         pos1.sprite = mask;
@@ -140,7 +97,7 @@ public class AmmoSwap : MonoBehaviour
         pos3.sprite = fire;
     }
 
-    void Lighting()
+    public void Lighting()
     {
         current.sprite = mask;
         lightprefab.transform.position = current.transform.position;
@@ -149,7 +106,7 @@ public class AmmoSwap : MonoBehaviour
         pos3.sprite = ice;
     }
 
-    void Magno()
+    public void Magno()
     {
         current.sprite = magno;
         pos1.sprite = fire;
@@ -158,4 +115,12 @@ public class AmmoSwap : MonoBehaviour
         lightprefab.transform.position = pos3.transform.position;
     }
 
+    public void setAmmo(int currentType)
+    {
+        current.sprite = sprites[currentType];
+        pos1.sprite = sprites[(currentType + 1) % 4];
+        pos2.sprite = sprites[(currentType + 2) % 4];
+        pos3.sprite = sprites[(currentType + 3) % 4];
+        lightprefab.transform.position = pos3.transform.position;
+    }
 }

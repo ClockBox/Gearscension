@@ -17,7 +17,7 @@ public class LoadOnClick : MonoBehaviour
 
     public void LoadAdd(int Scene)
     {
-        SceneManager.LoadSceneAsync(7, LoadSceneMode.Additive);
+        // SceneManager.LoadSceneAsync(4, LoadSceneMode.Additive);
     }
 
 }
