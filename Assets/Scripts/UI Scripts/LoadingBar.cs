@@ -82,7 +82,7 @@ public class LoadingBar : MonoBehaviour
             LoadingText.text = "Press 'Space Bar' to continue.";
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                SceneManager.LoadScene(1);
+                SceneManager.LoadScene(5);
             }
             yield return null;
 
