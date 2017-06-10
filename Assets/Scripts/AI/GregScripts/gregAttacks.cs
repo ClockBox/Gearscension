@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class gregAttacks : MonoBehaviour {
-
 	public Collider[] attackHitBoxes;
 	Animator anim;
 	public GameObject magnet;
@@ -13,6 +12,7 @@ public class gregAttacks : MonoBehaviour {
 	public GameObject killFloor;
 	public Transform killFloorPos;
 	GameObject player;
+	public int frozen = 0;
 	
 	void Start () {
 		anim = GetComponent<Animator>();
@@ -38,6 +38,33 @@ public class gregAttacks : MonoBehaviour {
 
 	public void chooseAttack2()
 	{
+		if (Vector3.Distance(transform.position, player.transform.position) < 2f)
+		{
+			if (frozen == 0)
+			{
+				lStomp();
+			}
+			else
+			{
+				rStomp();
+			}
+
+		}
+		else
+		{
+
+			int num = Random.Range(0, 2);
+			if (num == 0)
+			{
+				hSlam();
+			}
+			else
+				sweep();
+		}
+
+
+	
+
 	}
 	public void chooseAttack3()
 	{
@@ -91,6 +118,12 @@ public class gregAttacks : MonoBehaviour {
 		anim.SetTrigger("Slam");
 		LaunchAttack(attackHitBoxes[3]);
 		LaunchAttack(attackHitBoxes[4]);
+		int num = Random.Range(0, 2);
+		if (num == 0)
+		{
+			Invoke("hSlam", 0.5f);
+		}
+
 	}
 	void sweep()
 	{
