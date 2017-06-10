@@ -15,10 +15,7 @@ public class CalculateNodeNeighbors : MonoBehaviour
     {
         currentNode = GetComponent<IKPositionNode>();
 
-        LayerMask mechanics = 8;
-        mechanics = ~mechanics;
-
-        NodeTriggers = Physics.OverlapSphere(transform.position + transform.up * transform.localScale.y * 0.25f, DetectionRadius);
+        NodeTriggers = Physics.OverlapSphere(transform.position, DetectionRadius);
 
         detectedNodes = new IKPositionNode[NodeTriggers.Length];
         for (int i = 0; i < NodeTriggers.Length; i++)
@@ -40,7 +37,6 @@ public class CalculateNodeNeighbors : MonoBehaviour
 
         currentNode.Rotate();
         ResetNodes();
-
         //Check for Climbing Nodes
         foreach (IKPositionNode checkNode in detectedNodes)
         {

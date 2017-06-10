@@ -11,7 +11,6 @@ public class CameraController : MonoBehaviour
     private float userDistance = 3.0f;
     private float zoom = 35;
     private float normal = 75;
-    private float smooth = 4;
     private float currentX;
     private float currentY;
     private float sensitivity = 3.0f;

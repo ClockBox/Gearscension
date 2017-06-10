@@ -91,11 +91,11 @@ public class CharacterStateManager : MonoBehaviour
             if (_gunUpgrades[mangetic])
                 _currentAmmo = mangetic;
         }
-    //}
+    }
 
-    ////State Functions
-    //private void FixedUpdate()
-    //{
+    //State Functions
+    private void FixedUpdate()
+    {
         _PlayerState = HandleStateChange(_PlayerState, _PlayerState.UpdateState());
         _EquipmentState = HandleStateChange(_EquipmentState, _EquipmentState.UpdateState());
     }
@@ -248,5 +248,10 @@ public class CharacterStateManager : MonoBehaviour
     public float Armor
     {
         get { return _currentArmor; }
+    }
+
+    public bool HasWeapon(int index)
+    {
+        return _hasWeapon[index];
     }
 }

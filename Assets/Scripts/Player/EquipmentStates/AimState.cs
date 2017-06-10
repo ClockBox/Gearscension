@@ -53,7 +53,7 @@ public class AimState : EquipmentState
         IK.LeftFoot.weight = 0;
 
         Vector3 DesiredPosition = Player.transform.GetChild(0).position - Player.transform.up * 0.2f + Camera.main.transform.forward * 0.5f;
-        Weapon Gun = StateManager.weapons[0];
+        Weapon Gun = Manager.weapons[0];
         if (IK.LeftHand.weight == 1)
         {
             canShoot = true;
@@ -64,12 +64,12 @@ public class AimState : EquipmentState
         {
             canShoot = false;
             Gun.transform.parent = null;
-            Gun.transform.position = Vector3.Lerp(StateManager.GunHolster.position, DesiredPosition, IK.LeftHand.weight);
-            Gun.transform.rotation = Quaternion.Lerp(StateManager.GunHolster.rotation, Camera.main.transform.rotation, IK.LeftHand.weight);
+            Gun.transform.position = Vector3.Lerp(Manager.GunHolster.position, DesiredPosition, IK.LeftHand.weight);
+            Gun.transform.rotation = Quaternion.Lerp(Manager.GunHolster.rotation, Camera.main.transform.rotation, IK.LeftHand.weight);
         }
 
-        IK.LeftHand.position = StateManager.weapons[0].Grip(0).position;
-        IK.LeftHand.rotation = StateManager.weapons[0].Grip(0).rotation;
+        IK.LeftHand.position = Manager.weapons[0].Grip(0).position;
+        IK.LeftHand.rotation = Manager.weapons[0].Grip(0).rotation;
     }
 
     public override IEnumerator ExitState()
@@ -89,7 +89,7 @@ public class AimState : EquipmentState
     {
         if (canShoot)
         {
-            StateManager.weapons[0].SendMessage("Shoot", BulletScale);
+            Manager.weapons[0].SendMessage("Shoot", BulletScale);
             BulletScale = 1;
         }
     }
