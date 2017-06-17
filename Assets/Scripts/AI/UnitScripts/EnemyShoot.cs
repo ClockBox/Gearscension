@@ -49,4 +49,6 @@ public class EnemyShoot : MonoBehaviour {
         return velocityStart * displacement.normalized;
 
     }
+  
+
 }
