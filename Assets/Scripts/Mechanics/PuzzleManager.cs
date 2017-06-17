@@ -9,10 +9,16 @@ public class PuzzleManager : MonoBehaviour
     private Vector3 right;
     private bool rotated = false;
     private float moveSpeed = 0.1f;
+    Quaternion startPos;
     
     public void TrapDoor(GameObject thingToRotate)
     {
         StartCoroutine(OpenDoor(thingToRotate));
+    }
+
+    public void RotateRoom(GameObject thingToRotate)
+    {
+        StartCoroutine(Rotate(thingToRotate));
     }
     
     public IEnumerator OpenDoor(GameObject thingToRotate)
@@ -48,13 +54,19 @@ public class PuzzleManager : MonoBehaviour
 
     public IEnumerator Rotate(GameObject thingToRotate)
     {
-        Quaternion fromAngle = thingToRotate.transform.rotation;
-        Quaternion toAngle = Quaternion.Euler(thingToRotate.transform.eulerAngles + new Vector3(0, 60, 0));
-
-        for (var t = 0f; t < 1; t += Time.deltaTime / 3.0f)
+        Debug.Log("Start");
+        moveSpeed = 0;
+        startPos = thingToRotate.transform.rotation;
+        while (thingToRotate.transform.rotation.x > 0)
         {
-            thingToRotate.transform.rotation = Quaternion.Lerp(fromAngle, toAngle, t);
+            thingToRotate.transform.rotation = Quaternion.Slerp(thingToRotate.transform.rotation, Quaternion.Euler(0, 0, 0), moveSpeed * Time.deltaTime);
+            moveSpeed += Time.deltaTime / 10;
+            Debug.Log("Rotating");
             yield return null;
         }
+        Debug.Log("End");
+
+        thingToRotate.transform.rotation = Quaternion.Euler(0, 0, 0);
+        yield return null;
     }
 }
