@@ -8,6 +8,7 @@ public class ButtonTrigger : MonoBehaviour
     public UnityEvent myEvent;
 
     SlidingPlatform sP;
+    PuzzleManager pM;
     
     public void MovePlatform(GameObject platform)
     {
