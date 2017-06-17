@@ -142,10 +142,9 @@ public class AiAction : MonoBehaviour
                 fireRate += Time.deltaTime;
             }
             
-            float step = rotateSpeed * Time.deltaTime;
+
             Vector3 direction = player.transform.position - transform.position;
-            Vector3 newDir = Vector3.RotateTowards(transform.forward, direction, step, 0.0F);
-            transform.rotation = Quaternion.LookRotation(newDir);
+
            
             RaycastHit hit;
             if (Physics.Raycast(transform.position, direction.normalized, out hit))

@@ -12,9 +12,9 @@ public class UnitPathFinding : MonoBehaviour {
 
 	public Vector3 target;
 	public float speed = 20;
-	public float turnSpeed = 3;
-	public float turnDst = 5;
-	public float stoppingDst = 10;
+	public float turnSpeed = 500;
+	public float turnDst = 2;
+	public float stoppingDst = 5;
 
 	Path path;
 
@@ -25,9 +25,11 @@ public class UnitPathFinding : MonoBehaviour {
 	public void travel(Vector3 tar)
 	{
 		target = tar;
-	}
+       
 
-	public void OnPathFound(Vector3[] waypoints, bool pathSuccessful)
+    }
+
+    public void OnPathFound(Vector3[] waypoints, bool pathSuccessful)
 	{
 		if (pathSuccessful)
 		{
@@ -98,12 +100,16 @@ public class UnitPathFinding : MonoBehaviour {
 					}
 				}
 
-				Quaternion targetRotation = Quaternion.LookRotation(path.lookPoints[pathIndex] - transform.position);
-				transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * turnSpeed);
 				transform.Translate(Vector3.forward * Time.deltaTime * speed * speedPercent, Space.Self);
-			}
+                Vector3 lookDir = path.lookPoints[pathIndex] - transform.position;
+                lookDir.y = 0;
+                Quaternion targetRotation = Quaternion.LookRotation(lookDir);
+                transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * turnSpeed);
 
-			yield return null;
+
+            }
+
+            yield return null;
 
 		}
 	}
