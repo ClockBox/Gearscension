@@ -7,8 +7,9 @@ public class AiCrystal : MonoBehaviour {
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "sword"&&exposed==true)
+        if (collision.gameObject.tag == "Projectile"&&exposed==true)
         {
+            Debug.Log("Dead");
             Destroy(this.gameObject);
 
         }

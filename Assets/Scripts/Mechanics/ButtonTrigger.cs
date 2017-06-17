@@ -20,9 +20,10 @@ public class ButtonTrigger : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
-            if (Input.GetKey(KeyCode.E))
+            if (Input.GetKeyDown(KeyCode.E))
             {
                 myEvent.Invoke();
+                Debug.Log("HFDskhfsd");
             }
         }
     }
