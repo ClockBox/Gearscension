@@ -9,13 +9,16 @@ public class CalculateNodeNeighbors : MonoBehaviour
     Collider[] NodeTriggers;
     IKPositionNode[] detectedNodes;
 
+    Vector3 colliderOffset;
+
     Vector3[] CompareDirection = new Vector3[8];
 
     void Start()
     {
         currentNode = GetComponent<IKPositionNode>();
+        colliderOffset = GetComponent<BoxCollider>().center + transform.position;
 
-        NodeTriggers = Physics.OverlapSphere(transform.position, DetectionRadius);
+        NodeTriggers = Physics.OverlapSphere(colliderOffset, DetectionRadius);
 
         detectedNodes = new IKPositionNode[NodeTriggers.Length];
         for (int i = 0; i < NodeTriggers.Length; i++)
