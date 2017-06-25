@@ -7,10 +7,9 @@ public class CombatState : WalkingState
     Transform sword;
 
     private bool hooked = false;
-    private float speed = 15;
 
     public CombatState(StateManager manager, bool grounded) : base(manager, grounded) { }
-    public CombatState(StateManager manager, ClimbingNode node, bool grounded) : base(manager, grounded)
+    public CombatState(StateManager manager, ClimbingNode node) : base(manager, false)
     {
         hookNode = node;
         hooked = true;
@@ -21,7 +20,11 @@ public class CombatState : WalkingState
     {
         if (hooked)
         {
-            anim.SetBool("hook", true);
+            anim.SetBool("climbing", true);
+            anim.SetFloat("braced", 1);
+
+            IK.GlobalWeight = 1;
+
             sword = Player.weapons[1].transform;
             desiredDirection = hookNode.transform.position - Player.transform.position;
         }
@@ -104,7 +107,6 @@ public class CombatState : WalkingState
     private IEnumerator HookTravel()
     {
         IK.SetIKPositions(Player.weapons[1].Grip(1), hookNode.leftHand, hookNode.rightFoot, hookNode.leftFoot);
-        rb.velocity = Vector3.zero;
 
         Vector3 temp = desiredDirection;
         temp.y = Player.transform.position.y;
@@ -121,6 +123,8 @@ public class CombatState : WalkingState
             elapsedTime += Time.deltaTime;
             yield return null;
         }
+        Player.transform.position = hookNode.PlayerPosition;
+        rb.velocity = Vector3.zero;
         inTransition = false;
     }
 
@@ -132,6 +136,11 @@ public class CombatState : WalkingState
             moveX = Input.GetAxisRaw("Horizontal");
             moveY = Input.GetAxisRaw("Vertical");
             moveDirection = new Vector3(moveX, moveY, 0);
+
+            //Rotation
+            Player.transform.rotation = hookNode.transform.rotation;
+            if (hookNode.FreeHang)
+                Player.transform.localEulerAngles = new Vector3(0, Player.transform.localEulerAngles.y, Player.transform.localEulerAngles.z);
         }
         else
             base.UpdateMovement();
@@ -140,16 +149,24 @@ public class CombatState : WalkingState
     {
         if (!hooked)
             base.UpdateAnimator();
+        else anim.ResetTrigger("hook");
     }
     protected override void UpdateIK()
     {
         if (!hooked)
             base.UpdateIK();
+        else if (anim.GetBool("climbing"))
+        {
+            IK.SetIKPositions(null, hookNode.leftHand, hookNode.rightFoot, hookNode.leftFoot);
+            IK.headWeight = 0;
+        }
+
     }
     protected override void UpdatePhysics()
     {
         if (!hooked)
             base.UpdatePhysics();
+        else rb.velocity = Vector3.zero;
     }
 
     //Trigger Functinos

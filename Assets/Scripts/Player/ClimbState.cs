@@ -57,7 +57,7 @@ public class ClimbState : PlayerState
         IK.LeftFoot.Set(currentNodes[1].leftFoot);
 
         elapsedTime = 0;
-        IK.GlobalWeight = elapsedTime;
+        IK.GlobalWeight = 1;
 
         yield return base.EnterState();
     }
@@ -76,12 +76,13 @@ public class ClimbState : PlayerState
     protected override IEnumerator HandleInput()
     {
         if (!currentNodes[0].Active && !currentNodes[1].Active)
-            stateManager.ChangeState(new UnequipedState(stateManager,false));
+            stateManager.ChangeState(new UnequipedState(stateManager, false));
 
+        //Jump Input - While Stationary
         else if (Input.GetButtonDown("Jump"))
             Jump();
 
-        else if (Input.GetButtonDown("Equip")|| Input.GetButtonDown("Attack"))
+        else if (Input.GetButtonDown("Equip") || Input.GetButtonDown("Attack"))
             stateManager.ChangeState(new CombatState(stateManager, currentNodes[0]));
 
         else
@@ -91,9 +92,7 @@ public class ClimbState : PlayerState
 
             moveDirection = new Vector3(moveX, moveY, 0);
 
-            if ((currentNodes[1].FreeHang || currentNodes[0].FreeHang) && braced != 0)
-                yield return BracedTransition(0);
-            else if (!currentNodes[1].FreeHang && !currentNodes[0].FreeHang && braced == 0)
+            if (!currentNodes[1].FreeHang && !currentNodes[0].FreeHang && braced == 0)
                 yield return BracedTransition(1);
 
             if (Vector3.Dot(Player.transform.transform.forward, lookDirection) >= 0)
@@ -191,12 +190,17 @@ public class ClimbState : PlayerState
             else
                 rb.velocity = (Player.transform.right * moveX / 2f + Player.transform.up * moveY) * 5;
         }
-        stateManager.ChangeState(new WalkingState(stateManager, false));
+        stateManager.ChangeState(new UnequipedState(stateManager, false));
+        Player.transform.localEulerAngles = new Vector3(0, Player.transform.localEulerAngles.y, Player.transform.localEulerAngles.z);
     }
 
     private IEnumerator Climb(ClimbingNode nextNode)
     {
         UpdateAnimator();
+
+        if (nextNode.FreeHang && braced != 0)
+             yield return BracedTransition(0);
+
         elapsedTime = 0;
         while (elapsedTime < 1)
         {
@@ -213,8 +217,8 @@ public class ClimbState : PlayerState
             }
             else
             {
-                IK.LeftHand.Set(currentNodes[RIGHT].rightHand);
-                IK.LeftFoot.Set(currentNodes[RIGHT].leftHand);
+                IK.RightHand.Set(currentNodes[RIGHT].rightHand);
+                IK.RightFoot.Set(currentNodes[RIGHT].rightFoot);
             }
 
             //Move Left Side
@@ -235,17 +239,17 @@ public class ClimbState : PlayerState
                 Quaternion.Lerp(currentNodes[(movePolarity + 1) % 2].transform.rotation, nextNode.transform.rotation, 0.5f),
                 elapsedTime);
             if(braced < 0.5f)
-            Player.transform.localEulerAngles = new Vector3(0, Player.transform.localEulerAngles.y, Player.transform.localEulerAngles.z);
+                Player.transform.localEulerAngles = new Vector3(0, Player.transform.localEulerAngles.y, Player.transform.localEulerAngles.z);
 
             //Root Position - While moving
             Player.transform.position = Vector3.Lerp(
-                (currentNodes[LEFT].transform.position + currentNodes[RIGHT].transform.position) / 2, 
-                (currentNodes[(movePolarity + 1) % 2].transform.position + nextNode.transform.position) / 2,
+                (currentNodes[LEFT].PlayerPosition + currentNodes[RIGHT].PlayerPosition) / 2, 
+                (currentNodes[(movePolarity + 1) % 2].PlayerPosition + nextNode.PlayerPosition) / 2,
                 elapsedTime);
-            Player.transform.position += playerOffset;
 
             elapsedTime += Time.deltaTime * movementSpeed;
 
+            //Jump Input - While Moving
             if (Input.GetButtonDown("Jump"))
             {
                 Jump();
@@ -357,12 +361,8 @@ public class ClimbState : PlayerState
         lookDirection = Camera.main.transform.forward;
         lookDirection = Vector3.ProjectOnPlane(lookDirection, Player.transform.up);
 
-        Vector3 bracedOffset = -(currentNodes[1].transform.forward + currentNodes[0].transform.forward).normalized * 0.4f - Player.transform.up * 1.5f;
-        Vector3 freeOffset = -Player.transform.up * 2f;
-        playerOffset = Vector3.Lerp(freeOffset, bracedOffset, braced);
-
         //Root Position - While Stationary
-        Player.transform.position = (currentNodes[1].transform.position + currentNodes[0].transform.position) / 2 + playerOffset;
+        Player.transform.position = (currentNodes[1].PlayerPosition + currentNodes[0].PlayerPosition) / 2;
 
         //Root Rotation - While Stationary
         Player.transform.rotation = Quaternion.Lerp(currentNodes[1].transform.rotation, currentNodes[0].transform.rotation, 0.5f);

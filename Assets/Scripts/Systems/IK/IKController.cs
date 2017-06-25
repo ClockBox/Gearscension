@@ -19,11 +19,11 @@ public class IKController : MonoBehaviour
     private Vector3 _RightKnee;
     private Vector3 _LeftKnee;
 
+    //Unity Functions
     private void Start()
     {
         anim = GetComponent<Animator>();
     }
-
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
@@ -32,7 +32,6 @@ public class IKController : MonoBehaviour
         Gizmos.DrawCube(RightFoot.position, Vector3.one * 0.1f);
         Gizmos.DrawCube(LeftFoot.position, Vector3.one * 0.1f);
     }
-
     private void Update()
     {
         _lookAtPosition = transform.position + new Vector3(
@@ -43,7 +42,6 @@ public class IKController : MonoBehaviour
         if (_RightHand.weight == 0 && _LeftHand.weight == 0 && _RightFoot.weight == 0 && _LeftFoot.weight == 0)
             SetBoneTransforms();
     }
-
     private void OnAnimatorIK(int layerIndex)
     {
         if (layerIndex == 0)
@@ -100,6 +98,7 @@ public class IKController : MonoBehaviour
         }
     }
 
+    //Initial SetupFunctions
     public void SetBoneTransforms()
     {
         _RightHand.Set(anim.GetBoneTransform(HumanBodyBones.RightHand));
@@ -107,7 +106,6 @@ public class IKController : MonoBehaviour
         _RightFoot.Set(anim.GetBoneTransform(HumanBodyBones.RightFoot));
         _LeftFoot.Set(anim.GetBoneTransform(HumanBodyBones.LeftFoot));
     }
-
     public void SetIKPositions(Transform rightH, Transform leftH, Transform rightF, Transform leftF)
     {
         if (rightH)
@@ -130,7 +128,6 @@ public class IKController : MonoBehaviour
         Target.rotation = Quaternion.Lerp(Target.rotation, NewTarget.rotation, delta * 4);
         Target.weight = Mathf.MoveTowards(Target.weight, EndWeight, weightDelta);
     }
-
     public static void MoveIKTarget(IKTarget Target, Transform NewTarget, float delta)
     {
         Target.position = Vector3.MoveTowards(Target.position, NewTarget.position, delta);

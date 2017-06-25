@@ -15,9 +15,9 @@ public class WalkingState : PlayerState
 
     float jumpForce = 6;
 
-    public WalkingState(StateManager manager,bool isgrounded) : base(manager)
+    public WalkingState(StateManager manager,bool isGrounded) : base(manager)
     {
-        grounded = isgrounded;
+        grounded = isGrounded;
     }
 
     //Transitions

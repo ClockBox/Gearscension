@@ -2,7 +2,13 @@
 
 public class ClimbingNode : IKPositionNode
 {
-    static GameObject EdgeNode;
+    private static GameObject EdgeNode;
+
+    private Vector3 playerPosition;
+    public Vector3 PlayerPosition
+    {
+        get {return playerPosition; }
+    }
 
     [Space(10)]
     public Transform rightHand;
@@ -28,8 +34,8 @@ public class ClimbingNode : IKPositionNode
             Debug.LogError("Climbing Node: " + gameObject.name + " is not set up properly");
             return;
         }
+        CalculatePlayerPosition();
     }
-
     private void Update()
     {
         if (!transform.gameObject.isStatic)
@@ -39,18 +45,9 @@ public class ClimbingNode : IKPositionNode
             col.enabled = m_active;
 
             Rotate();
+            CalculatePlayerPosition();
         }
     }
-
-    private void SpawnEdge()
-    {
-        ClimbingEdge edge = Instantiate(EdgeNode, transform.position + transform.up * 0.2f, transform.rotation, transform).GetComponent<ClimbingEdge>();
-        edge.transform.SetAsFirstSibling();
-        edge.neighbours[0] = this;
-
-        neighbours[0] = edge;
-    }
-
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.grey;
@@ -65,5 +62,20 @@ public class ClimbingNode : IKPositionNode
             if (neighbours[i])
                 Gizmos.DrawLine(transform.position, neighbours[i].transform.position);
         }    
+    }
+
+    private void SpawnEdge()
+    {
+        ClimbingEdge edge = Instantiate(EdgeNode, transform.position + transform.up * 0.2f, transform.rotation, transform).GetComponent<ClimbingEdge>();
+        edge.transform.SetAsFirstSibling();
+        edge.neighbours[0] = this;
+
+        neighbours[0] = edge;
+    }
+    private void CalculatePlayerPosition()
+    {
+        if (FreeHang)
+            playerPosition = transform.position - Vector3.up * 2f;
+        else playerPosition = transform.position - transform.forward * 0.4f - transform.up * 1.6f;
     }
 }

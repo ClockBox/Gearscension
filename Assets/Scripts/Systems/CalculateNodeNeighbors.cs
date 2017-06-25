@@ -28,7 +28,10 @@ public class CalculateNodeNeighbors : MonoBehaviour
                 if (checkNode != detectedNodes[i])
                     detectedNodes[i] = checkNode;
         }
-        
+
+        currentNode.Rotate();
+        currentNode.Rotation = 0;
+
         CompareDirection[0] = transform.up;
         CompareDirection[1] = (transform.up + transform.right).normalized;
         CompareDirection[2] = transform.right;
@@ -38,7 +41,6 @@ public class CalculateNodeNeighbors : MonoBehaviour
         CompareDirection[6] = -transform.right;
         CompareDirection[7] = (transform.up - transform.right).normalized;
 
-        currentNode.Rotate();
         ResetNodes();
         //Check for Climbing Nodes
         foreach (IKPositionNode checkNode in detectedNodes)
