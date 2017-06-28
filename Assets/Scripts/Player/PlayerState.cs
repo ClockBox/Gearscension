@@ -8,7 +8,9 @@ public class PlayerState
     protected IKController IK;
     protected Rigidbody rb;
     protected Animator anim;
-    
+
+    protected static bool canClimb = true;
+
     protected float elapsedTime;
     protected bool stopState = false;
     protected bool inTransition = false;

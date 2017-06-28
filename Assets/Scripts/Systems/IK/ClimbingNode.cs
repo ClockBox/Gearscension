@@ -34,19 +34,13 @@ public class ClimbingNode : IKPositionNode
             Debug.LogError("Climbing Node: " + gameObject.name + " is not set up properly");
             return;
         }
-        CalculatePlayerPosition();
+        Rotate();
+        Rotation = 0;
     }
     private void Update()
     {
         if (!transform.gameObject.isStatic)
-        {
-            FreeHang = Vector3.Dot(-transform.forward, Vector3.up) < -0.5f;
-            m_active = Vector3.Dot(-transform.forward, Vector3.up) < 0.9f;
-            col.enabled = m_active;
-
             Rotate();
-            CalculatePlayerPosition();
-        }
     }
     private void OnDrawGizmos()
     {
@@ -61,7 +55,17 @@ public class ClimbingNode : IKPositionNode
         {
             if (neighbours[i])
                 Gizmos.DrawLine(transform.position, neighbours[i].transform.position);
-        }    
+        }
+    }
+
+    public override void Rotate()
+    {
+        FreeHang = Vector3.Dot(-transform.forward, Vector3.up) < -0.5f;
+        m_active = Vector3.Dot(-transform.forward, Vector3.up) < 0.9f;
+        col.enabled = m_active;
+
+        base.Rotate();
+        CalculatePlayerPosition();
     }
 
     private void SpawnEdge()
@@ -76,6 +80,6 @@ public class ClimbingNode : IKPositionNode
     {
         if (FreeHang)
             playerPosition = transform.position - Vector3.up * 2f;
-        else playerPosition = transform.position - transform.forward * 0.4f - transform.up * 1.6f;
+        else playerPosition = transform.position - transform.forward * 0.4f - transform.up * 1.7f;
     }
 }

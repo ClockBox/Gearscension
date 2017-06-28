@@ -46,6 +46,7 @@ public class PushState : PlayerState
     }
     public override IEnumerator ExitState()
     {
+        yield return base.ExitState();
         anim.SetBool("pushing", false);
 
         elapsedTime = 0;
@@ -58,7 +59,6 @@ public class PushState : PlayerState
             elapsedTime += Time.deltaTime * 3;
             yield return null;
         }
-        yield return base.ExitState();
     }
 
     //Actions
@@ -103,9 +103,12 @@ public class PushState : PlayerState
     protected override IEnumerator HandleInput()
     {
         if (Input.GetButtonDown("Action"))
-            stateManager.ChangeState(new UnequipedState(stateManager,true));
+            stateManager.ChangeState(new UnequipedState(stateManager, true));
 
-        if (PlayerOffset.magnitude > 0.5f)
+        else if (pushObject.velocity.y < -1)
+            stateManager.ChangeState(new UnequipedState(stateManager, true));
+
+        else if (PlayerOffset.magnitude > 0.5f)
         {
             moveDirection = Vector3.zero;
             yield return PullObject();

@@ -29,9 +29,6 @@ public class CalculateNodeNeighbors : MonoBehaviour
                     detectedNodes[i] = checkNode;
         }
 
-        currentNode.Rotate();
-        currentNode.Rotation = 0;
-
         CompareDirection[0] = transform.up;
         CompareDirection[1] = (transform.up + transform.right).normalized;
         CompareDirection[2] = transform.right;

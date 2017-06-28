@@ -34,8 +34,13 @@ public class WalkingState : PlayerState
         if (!grounded && elapsedTime > 3.0f)
             stateManager.ChangeState(new FallState(stateManager));
 
-        else if (grounded && Input.GetButtonDown("Jump"))
-            Jump();
+        else if (Input.GetButtonDown("Jump"))
+        {
+            if (grounded)
+                Jump();
+            else
+                canClimb = true;
+        }
 
         else if (Input.GetButtonDown("Roll"))
             yield return Dodge();
@@ -146,14 +151,17 @@ public class WalkingState : PlayerState
 
             if (Physics.Raycast(Player.transform.position + (Player.transform.up * 0.5f) - (Player.transform.forward * 0.3f) - (Player.transform.right * 0.3f), -Player.transform.up, 0.55f) ||
                 Physics.Raycast(Player.transform.position + (Player.transform.up * 0.5f) + (Player.transform.forward * 0.3f) + (Player.transform.right * 0.3f), -Player.transform.up, 0.55f))
+            {
+                canClimb = true;
                 grounded = true;
+            }
         }
     }
 
     //TriggerFucntions
     public override void OnTriggerEnter(Collider other)
     {
-        if (!inTransition)
+        if (!inTransition && canClimb && moveDirection.magnitude < 5.5f)
         {
             if (other.CompareTag("ClimbingNode"))
                 stateManager.ChangeState(new ClimbState(stateManager, other.GetComponent<ClimbingNode>()));

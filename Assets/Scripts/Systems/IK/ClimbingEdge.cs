@@ -6,11 +6,19 @@ public class ClimbingEdge : IKPositionNode
     {
         neighbours = new IKPositionNode[1];
         base.Start();
+
+        Rotate();
+        Rotation = 0;
     }
 
     private void Update()
     {
-        m_active = Vector3.Dot(transform.up, Vector3.up) > 0.8f;
-        col.enabled = m_active;
+        if (!transform.gameObject.isStatic)
+        {
+            m_active = Vector3.Dot(transform.up, Vector3.up) > 0.8f;
+            col.enabled = m_active;
+
+            Rotate();
+        }
     }
 }

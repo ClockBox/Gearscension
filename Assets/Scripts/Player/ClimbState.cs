@@ -188,10 +188,11 @@ public class ClimbState : PlayerState
                 rb.velocity = (lookDirection.normalized / 2 + Player.transform.up) * 5;
             }
             else
-                rb.velocity = (Player.transform.right * moveX / 2f + Player.transform.up * moveY) * 5;
+                rb.velocity = (Player.transform.right * moveX / 2 + Vector3.up * moveY) * 5 + Vector3.up;
         }
-        stateManager.ChangeState(new UnequipedState(stateManager, false));
         Player.transform.localEulerAngles = new Vector3(0, Player.transform.localEulerAngles.y, Player.transform.localEulerAngles.z);
+        canClimb = false;
+        stateManager.ChangeState(new UnequipedState(stateManager, false));
     }
 
     private IEnumerator Climb(ClimbingNode nextNode)

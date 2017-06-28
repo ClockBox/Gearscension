@@ -87,10 +87,12 @@ public class CombatState : WalkingState
 
         inTransition = true;
         hooked = true;
-
         anim.SetBool("hook", true);
+        anim.SetBool("climbing", false);
+
         sword = Player.weapons[1].transform;
         sword.parent = null;
+
         hookNode = node;
         desiredDirection = hookNode.transform.position - Player.transform.position;
 

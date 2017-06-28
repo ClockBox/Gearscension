@@ -22,7 +22,7 @@ public class IKPositionNode : MonoBehaviour
         for (int i = 0; i < distances.Length; i++)
             distances[i] = Mathf.Infinity;
     }
-    public void Rotate()
+    public virtual void Rotate()
     {
         if (Vector3.Dot(transform.up, Vector3.up) < 0)
         {
