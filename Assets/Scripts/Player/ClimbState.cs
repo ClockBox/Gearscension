@@ -181,6 +181,7 @@ public class ClimbState : PlayerState
         if (braced == 1)
         {
             anim.SetBool("climbing", false);
+            anim.SetBool("isGrounded", false);
 
             if (Vector3.Dot(Player.transform.transform.forward, lookDirection) < 0)
             {

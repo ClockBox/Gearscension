@@ -34,6 +34,7 @@ public class CombatState : WalkingState
     }
     public override IEnumerator ExitState()
     {
+        IK.headWeight = 1;
         yield return base.ExitState();
         if (hooked)
             yield return Player.ToggleWeapon(1, 0.6f, 1.24f);
@@ -46,10 +47,21 @@ public class CombatState : WalkingState
     {
         if (Input.GetKeyDown(KeyCode.X))
             Player.StartCoroutine(ThrowHook(Player.FindHookTarget()));
+
+        else if (Input.GetButtonDown("Attack"))
+            yield return Attack();
+
         else if (hooked)
         {
             if (Input.GetButtonDown("Jump"))
+            {
                 grounded = false;
+                canClimb = false;
+                IK.headWeight = 1;
+            }
+
+            else if (Input.GetButtonDown("Equip"))
+                stateManager.ChangeState(new ClimbState(stateManager, hookNode));
 
             if (moveDirection.magnitude > 0)
             {
@@ -62,11 +74,7 @@ public class CombatState : WalkingState
         else
         {
             if (Input.GetButtonDown("Equip"))
-                stateManager.ChangeState(new UnequipedState(stateManager,grounded));
-
-            else if (Input.GetButtonDown("Attack"))
-                yield return Attack();
-
+                stateManager.ChangeState(new UnequipedState(stateManager, grounded));
             else
                 yield return base.HandleInput();
         }
@@ -86,46 +94,56 @@ public class CombatState : WalkingState
             yield break;
 
         inTransition = true;
-        hooked = true;
         anim.SetBool("hook", true);
-        anim.SetBool("climbing", false);
 
         sword = Player.weapons[1].transform;
         sword.parent = null;
 
-        hookNode = node;
-        desiredDirection = hookNode.transform.position - Player.transform.position;
+        desiredDirection = node.transform.position - Player.transform.position;
+
+        if (hookNode)
+        {
+            IK.RightHand.position = hookNode.rightHand.position;
+            IK.RightHand.rotation = hookNode.rightHand.rotation;
+        }
 
         elapsedTime = 0;
         while (elapsedTime < 1)
         {
-            sword.position = Vector3.Lerp(sword.position, hookNode.rightHand.position - hookNode.transform.forward * 0.5f, elapsedTime);
-            sword.rotation = Quaternion.Lerp(sword.rotation, Quaternion.FromToRotation(Vector3.up, hookNode.transform.forward), elapsedTime);
+            sword.position = Vector3.Lerp(sword.position, node.rightHand.position - node.transform.forward * 0.5f, elapsedTime);
+            sword.rotation = Quaternion.Lerp(sword.rotation, Quaternion.FromToRotation(Vector3.up, node.transform.forward), elapsedTime);
             elapsedTime += Time.deltaTime;
+
+            base.UpdateMovement();
+            base.UpdateAnimator();
+            base.UpdateIK();
+            base.UpdatePhysics();
+
             yield return null;
         }
-        yield return HookTravel();
+        yield return HookTravel(node);
     }
-    private IEnumerator HookTravel()
+    private IEnumerator HookTravel(ClimbingNode node)
     {
-        IK.SetIKPositions(Player.weapons[1].Grip(1), hookNode.leftHand, hookNode.rightFoot, hookNode.leftFoot);
-
-        Vector3 temp = desiredDirection;
-        temp.y = Player.transform.position.y;
-        Player.transform.LookAt(Player.transform.position + temp);
+        hooked = true;
+        hookNode = node;
 
         anim.SetBool("climbing", true);
 
         elapsedTime = 0;
         while (elapsedTime < 1)
         {
-            Player.transform.position = Vector3.Lerp(Player.transform.position, hookNode.transform.position - hookNode.transform.forward * 0.4f - Player.transform.up * 1.5f, elapsedTime);
-            IK.RightHand.weight = elapsedTime;
-            IK.LeftHand.weight = elapsedTime;
+            Player.transform.position = Vector3.Lerp(Player.transform.position, node.PlayerPosition, elapsedTime);
+            Player.transform.rotation = Quaternion.Lerp(Player.transform.rotation, node.transform.rotation, elapsedTime);
+
+            IK.GlobalWeight = elapsedTime;
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-        Player.transform.position = hookNode.PlayerPosition;
+        IK.SetIKPositions(Player.weapons[1].Grip(1), node.leftHand, node.rightFoot, node.leftFoot);
+        if (node.FreeHang)
+            Player.transform.localEulerAngles = new Vector3(0, Player.transform.localEulerAngles.y, Player.transform.localEulerAngles.z);
+
         rb.velocity = Vector3.zero;
         inTransition = false;
     }
@@ -138,11 +156,6 @@ public class CombatState : WalkingState
             moveX = Input.GetAxisRaw("Horizontal");
             moveY = Input.GetAxisRaw("Vertical");
             moveDirection = new Vector3(moveX, moveY, 0);
-
-            //Rotation
-            Player.transform.rotation = hookNode.transform.rotation;
-            if (hookNode.FreeHang)
-                Player.transform.localEulerAngles = new Vector3(0, Player.transform.localEulerAngles.y, Player.transform.localEulerAngles.z);
         }
         else
             base.UpdateMovement();
@@ -151,13 +164,21 @@ public class CombatState : WalkingState
     {
         if (!hooked)
             base.UpdateAnimator();
-        else anim.ResetTrigger("hook");
+        else
+        {
+            anim.ResetTrigger("hook");
+            anim.SetBool("climbing", true);
+            if(hookNode.FreeHang)
+                anim.SetFloat("braced", 0);
+            else
+                anim.SetFloat("braced", 1);
+        }
     }
     protected override void UpdateIK()
     {
         if (!hooked)
             base.UpdateIK();
-        else if (anim.GetBool("climbing"))
+        else
         {
             IK.SetIKPositions(null, hookNode.leftHand, hookNode.rightFoot, hookNode.leftFoot);
             IK.headWeight = 0;

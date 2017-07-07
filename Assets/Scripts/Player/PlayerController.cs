@@ -24,8 +24,8 @@ public class PlayerController : MonoBehaviour
     const int DOWN = 1;
     const int STAY = 2;
 
-    public int rightTriggerState = -1;
-    public  int leftTriggerState = -1;
+    private int rightTriggerState = -1;
+    private int leftTriggerState = -1;
 
     //weapon info
     public Transform SwordSheath;
@@ -46,7 +46,6 @@ public class PlayerController : MonoBehaviour
     const int mangetic = 3;
 
     //HUD data
-
     private static float _maxHealth = 100;
     private static float _maxArmor = 2;
     private float _currentHealth = _maxHealth;

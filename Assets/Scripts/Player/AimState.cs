@@ -17,7 +17,7 @@ public class AimState : WalkingState
 
         CameraController.Zoomed = true;
         Player.transform.GetChild(0).position -= Player.transform.right * 0.2f + Player.transform.up * 0.2f;
-        
+
         yield return Player.StartCoroutine(ToggleGun());
     }
     public override IEnumerator ExitState()
@@ -39,13 +39,18 @@ public class AimState : WalkingState
 
         Player.StartCoroutine(Player.ToggleWeapon(0, start, 1));
 
+        //Should be replaced by animation
         elapsedTime = 0;
-
         while (elapsedTime <= equipTime)
         {
             IK.LeftHand.position = Player.transform.GetChild(0).position - Player.transform.up * 0.2f + Camera.main.transform.forward * 0.5f;
             IK.LeftHand.rotation = Camera.main.transform.rotation * Quaternion.LookRotation(Vector3.forward, -Vector3.right);
             IK.LeftHand.weight = Mathf.Lerp(start, end, elapsedTime);
+
+            base.UpdateMovement();
+            base.UpdateAnimator();
+            base.UpdatePhysics();
+            base.UpdateIK();
 
             elapsedTime += Time.deltaTime;
             yield return null;
@@ -56,7 +61,7 @@ public class AimState : WalkingState
     protected override IEnumerator HandleInput()
     {
         if (!Input.GetButton("Aim"))
-            stateManager.ChangeState(new UnequipedState(stateManager,grounded));
+            stateManager.ChangeState(new UnequipedState(stateManager, grounded));
 
         else
             yield return base.HandleInput();

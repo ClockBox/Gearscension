@@ -14,6 +14,7 @@ public class WalkingState : PlayerState
     protected static bool grounded = true;
 
     float jumpForce = 6;
+    float fallTimer = 0;
 
     public WalkingState(StateManager manager,bool isGrounded) : base(manager)
     {
@@ -31,7 +32,7 @@ public class WalkingState : PlayerState
     //State Behaviour
     protected override IEnumerator HandleInput()
     {
-        if (!grounded && elapsedTime > 3.0f)
+        if (!grounded && fallTimer > 3.0f)
             stateManager.ChangeState(new FallState(stateManager));
 
         else if (Input.GetButtonDown("Jump"))
@@ -55,9 +56,9 @@ public class WalkingState : PlayerState
         {
             moveDirection = moveDirection.normalized * anim.velocity.magnitude * 2f;
             UpdateIK();
-             movementSpeed = 10f;
+            movementSpeed = 10f;
             elapsedTime += Time.deltaTime;
-             yield return null;
+            yield return null;
         }
     }
     private void Jump()
@@ -75,7 +76,7 @@ public class WalkingState : PlayerState
 
         if (grounded)
         {
-            elapsedTime = 0;
+            fallTimer = 0;
 
             if (Input.GetKey(KeyCode.LeftShift))
                 movementSpeed = 8;
@@ -95,6 +96,7 @@ public class WalkingState : PlayerState
             if (moveDirection.magnitude > movementSpeed)
                 moveDirection = moveDirection.normalized * movementSpeed;
         }
+        else fallTimer += Time.deltaTime;
     }
     protected override void UpdateAnimator()
     {
@@ -161,11 +163,11 @@ public class WalkingState : PlayerState
     //TriggerFucntions
     public override void OnTriggerEnter(Collider other)
     {
-        if (!inTransition && canClimb && moveDirection.magnitude < 5.5f)
+        if (!inTransition && canClimb)
         {
             if (other.CompareTag("ClimbingNode"))
                 stateManager.ChangeState(new ClimbState(stateManager, other.GetComponent<ClimbingNode>()));
-            else if (grounded && other.CompareTag("ClimbingEdge"))
+            else if (grounded && other.CompareTag("ClimbingEdge") && moveDirection.magnitude < 5.5f)
                 stateManager.ChangeState(new ClimbState(stateManager, other.GetComponent<ClimbingEdge>()));
         }
     }
