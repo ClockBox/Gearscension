@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using System;
 
 public class GameController : MonoBehaviour
 {
@@ -12,8 +13,8 @@ public class GameController : MonoBehaviour
     public float transTime = 0.4f;
 
     string Hud = "Hud";
-    string Player = "CharacterSene";
-    string Puzzel = "Platforms";
+    string Player = "Scene1";
+    string Puzzel = "Scene2";
 
     string targetScene;
     CanvasGroup canvasGroup;
@@ -21,6 +22,11 @@ public class GameController : MonoBehaviour
     // Bool
     // private bool gameStart;
     private bool buttonSelected;
+
+    internal void UnloadScene(string lastScene)
+    {
+        throw new NotImplementedException();
+    }
 
     // Other
     public EventSystem eventSystem;
