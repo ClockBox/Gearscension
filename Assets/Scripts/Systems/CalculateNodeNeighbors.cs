@@ -9,13 +9,16 @@ public class CalculateNodeNeighbors : MonoBehaviour
     Collider[] NodeTriggers;
     IKPositionNode[] detectedNodes;
 
+    Vector3 colliderOffset;
+
     Vector3[] CompareDirection = new Vector3[8];
 
     void Start()
     {
         currentNode = GetComponent<IKPositionNode>();
+        colliderOffset = GetComponent<BoxCollider>().center + transform.position;
 
-        NodeTriggers = Physics.OverlapSphere(transform.position, DetectionRadius);
+        NodeTriggers = Physics.OverlapSphere(colliderOffset, DetectionRadius);
 
         detectedNodes = new IKPositionNode[NodeTriggers.Length];
         for (int i = 0; i < NodeTriggers.Length; i++)
@@ -25,7 +28,7 @@ public class CalculateNodeNeighbors : MonoBehaviour
                 if (checkNode != detectedNodes[i])
                     detectedNodes[i] = checkNode;
         }
-        
+
         CompareDirection[0] = transform.up;
         CompareDirection[1] = (transform.up + transform.right).normalized;
         CompareDirection[2] = transform.right;
@@ -35,7 +38,6 @@ public class CalculateNodeNeighbors : MonoBehaviour
         CompareDirection[6] = -transform.right;
         CompareDirection[7] = (transform.up - transform.right).normalized;
 
-        currentNode.Rotate();
         ResetNodes();
         //Check for Climbing Nodes
         foreach (IKPositionNode checkNode in detectedNodes)

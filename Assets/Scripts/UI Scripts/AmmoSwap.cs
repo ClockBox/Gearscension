@@ -6,7 +6,7 @@ using System.Collections.Generic;
 public class AmmoSwap : MonoBehaviour
 {
 
-    CharacterStateManager CSM;
+    PlayerController CSM;
 
     [Header("Health")]
     public Image healthBar;
@@ -35,7 +35,7 @@ public class AmmoSwap : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        CSM = GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterStateManager>();
+        CSM = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
 
         // change later when get another bullet.
         // magno = mask;
