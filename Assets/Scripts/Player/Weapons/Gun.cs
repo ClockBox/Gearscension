@@ -15,7 +15,7 @@ public class Gun : Weapon
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
     }
 	
-	void Shoot (float BulletScale)
+	public void Shoot (float BulletScale)
     {
         GameObject bullet = Instantiate(Bullet[player.AmmoType], bulletSpawn.position, bulletSpawn.rotation) as GameObject;
         bullet.transform.localScale = bullet.transform.localScale * BulletScale;

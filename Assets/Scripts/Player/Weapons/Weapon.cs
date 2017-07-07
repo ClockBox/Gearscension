@@ -8,8 +8,8 @@ public class Weapon : MonoBehaviour
 
     public virtual void Start()
     {
-        IKHandles[1] = transform.FindChild("Grip_RightHand");
-        IKHandles[0] = transform.FindChild("Grip_LeftHand");
+        IKHandles[1] = transform.Find("Grip_RightHand");
+        IKHandles[0] = transform.Find("Grip_LeftHand");
     }
 
     public Transform Grip(int index)

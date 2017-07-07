@@ -5,6 +5,7 @@ using UnityEngine;
 public class AimState : WalkingState
 {
     float equipTime = 1.233f;
+    float bulletScale = 1;
 
     public AimState(StateManager manager,bool grounded) : base(manager,grounded) { }
 
@@ -62,6 +63,14 @@ public class AimState : WalkingState
     {
         if (!Input.GetButton("Aim"))
             stateManager.ChangeState(new UnequipedState(stateManager, grounded));
+
+        else if (Input.GetButton("Attack"))
+            bulletScale += Time.deltaTime;
+        else if (Input.GetButtonUp("Attack"))
+        {
+            (Player.weapons[0] as Gun).Shoot(bulletScale);
+            bulletScale = 1;
+        }
 
         else
             yield return base.HandleInput();

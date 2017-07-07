@@ -25,7 +25,7 @@ public class CameraController : MonoBehaviour
         {
             //Mouse Input
             currentX += Input.GetAxis("Mouse X") * sensitivity;
-            currentY += Input.GetAxis("Mouse Y") * sensitivity;
+            currentY -= Input.GetAxis("Mouse Y") * sensitivity;
             currentY = Mathf.Clamp(currentY, Y_ANGLE_MIN, Y_ANGLE_MAX);
 
             userDistance -= Input.GetAxis("Zoom") * 2;
