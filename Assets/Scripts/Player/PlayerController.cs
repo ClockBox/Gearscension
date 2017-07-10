@@ -33,17 +33,12 @@ public class PlayerController : MonoBehaviour
     public Weapon[] weapons;
     private bool[] _hasWeapon = { false, false };
 
-    private bool[] _gunUpgrades = new bool[4];
+    private int _gunUpgrade = 4;
     private int[] _ammoAmounts = new int[4];
-    private int _currentAmmo = Electric;
+    private BulletType _currentAmmo = BulletType.Electric;
 
     const int GUN = 0;
     const int SWORD = 1;
-
-    const int Electric = 0;
-    const int Freezing = 1;
-    const int Exposive = 2;
-    const int mangetic = 3;
 
     //HUD data
     private static float _maxHealth = 100;
@@ -80,15 +75,13 @@ public class PlayerController : MonoBehaviour
         set { m_anim = value; }
     }
 
-    public bool GunUpgrades(int index)
+    public int GunUpgrades
     {
-        if (index < _gunUpgrades.Length)
-            return _gunUpgrades[index];
-        else return false;
+        get { return _gunUpgrade; }
     }
     public int AmmoType
     {
-        get { return _currentAmmo; }
+        get { return (int)_currentAmmo; }
     }
     public int AmmoRemaining(int index)
     {
@@ -162,9 +155,9 @@ public class PlayerController : MonoBehaviour
             weapons[i].transform.parent = null;
         }
     }
-    public void UpgradeGun(int index)
+    public void UpgradeGun()
     {
-        _gunUpgrades[index] = true;
+        _gunUpgrade++;
         //hud.SendMessage(GunUpgrade(index));
     }
     public ClimbingNode FindHookTarget()
@@ -262,24 +255,24 @@ public class PlayerController : MonoBehaviour
         //Switching Ammo Types
         if (Input.GetButtonDown("Ammo 1") || Input.GetAxis("AmmoAxis Vertical") > 0)
         {
-            if (_gunUpgrades[Electric])
-                _currentAmmo = Electric;
+            if (_gunUpgrade >= (int)BulletType.Electric)
+                _currentAmmo = BulletType.Electric;
         }
         else if (Input.GetButtonDown("Ammo 2") || Input.GetAxis("AmmoAxis Horizontal") > 0)
         {
-            if (_gunUpgrades[Freezing])
-                _currentAmmo = Freezing;
+            if (_gunUpgrade >= (int)BulletType.Ice)
+                _currentAmmo = BulletType.Ice;
         }
         else if (Input.GetButtonDown("Ammo 3") || Input.GetAxis("AmmoAxis Vertical") < 0)
         {
-            if (_gunUpgrades[Exposive])
-                _currentAmmo = Exposive;
+            if (_gunUpgrade >= (int)BulletType.Explosive)
+                _currentAmmo = BulletType.Explosive;
         }
 
         else if (Input.GetButtonDown("Ammo 4") || Input.GetAxis("AmmoAxis Horizontal") < 0)
         {
-            if (_gunUpgrades[mangetic])
-                _currentAmmo = mangetic;
+            if (_gunUpgrade >= (int)BulletType.Magnetic)
+                _currentAmmo = BulletType.Magnetic;
         }
     }
 

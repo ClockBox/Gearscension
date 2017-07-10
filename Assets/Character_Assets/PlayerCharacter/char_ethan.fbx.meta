@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 3b059b06d05c0e04ba42674f84feac25
-timeCreated: 1498934704
+timeCreated: 1499711926
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -388,10 +388,12 @@ ModelImporter:
     resampleCurves: 1
     optimizeGameObjects: 0
     motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: "Avatar creation errors found in old project file will be treated
+      as a warnings. Error will be ignored, but current Configuration needs to be
+      fixed:\n\tTransform 'char_ethan_Spine' not found in HumanDescription.\n"
     animationImportErrors: 
-    animationImportWarnings: "Avatar creation errors found in old project file will
-      be treated as a warnings. Error will be ignored, but current Configuration needs
-      to be fixed:\n\tTransform 'char_ethan_Spine' not found in HumanDescription.\n"
+    animationImportWarnings: 
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     animationCompression: 1

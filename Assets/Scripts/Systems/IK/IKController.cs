@@ -19,6 +19,8 @@ public class IKController : MonoBehaviour
     private Vector3 _RightKnee;
     private Vector3 _LeftKnee;
 
+    private Vector3 CameraForward;
+
     //Unity Functions
     private void Start()
     {
@@ -34,10 +36,12 @@ public class IKController : MonoBehaviour
     }
     private void Update()
     {
-        _lookAtPosition = transform.position + new Vector3(
-            Camera.main.transform.forward.x * 20,
-            Camera.main.transform.forward.y / Mathf.Abs(Camera.main.transform.forward.y) * 0.8f + 1.8f,
-            Camera.main.transform.forward.z * 20);
+        CameraForward = Camera.main.transform.forward;
+        CameraForward.y = 0;
+
+        _headWeight = Vector3.Dot(CameraForward, transform.forward);
+
+        _lookAtPosition = Vector3.Lerp(_lookAtPosition, transform.position + CameraForward * 20 + Vector3.up * 1.8f, 0.05f);
 
         if (_RightHand.weight == 0 && _LeftHand.weight == 0 && _RightFoot.weight == 0 && _LeftFoot.weight == 0)
             SetBoneTransforms();

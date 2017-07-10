@@ -59,6 +59,8 @@ public class ClimbState : PlayerState
         elapsedTime = 0;
         IK.GlobalWeight = 1;
 
+        UpdateMovement();
+        yield return new WaitForSeconds(0.5f);
         yield return base.EnterState();
     }
     public override IEnumerator ExitState()
@@ -378,7 +380,7 @@ public class ClimbState : PlayerState
         IK.GlobalWeight = 1;
         IK.RightFoot.weight = Mathf.Pow(braced,4);
         IK.LeftFoot.weight = Mathf.Pow(braced,4);
-        IK.headWeight = 0;
+        IK.headWeight = Mathf.Lerp(IK.headWeight, 0, 0.2f);
     }
     protected override void UpdateAnimator()
     {

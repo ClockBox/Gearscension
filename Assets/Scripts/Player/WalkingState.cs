@@ -165,7 +165,7 @@ public class WalkingState : PlayerState
     {
         if (!inTransition && canClimb)
         {
-            if (other.CompareTag("ClimbingNode"))
+            if (other.CompareTag("ClimbingNode") || other.CompareTag("HookNode"))
                 stateManager.ChangeState(new ClimbState(stateManager, other.GetComponent<ClimbingNode>()));
             else if (grounded && other.CompareTag("ClimbingEdge") && moveDirection.magnitude < 5.5f)
                 stateManager.ChangeState(new ClimbState(stateManager, other.GetComponent<ClimbingEdge>()));
