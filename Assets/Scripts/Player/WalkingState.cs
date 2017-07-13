@@ -76,6 +76,7 @@ public class WalkingState : PlayerState
 
         if (grounded)
         {
+            canClimb = true;
             fallTimer = 0;
 
             if (Input.GetKey(KeyCode.LeftShift))
@@ -111,6 +112,31 @@ public class WalkingState : PlayerState
         {
             IK.RightFoot.weight = anim.GetFloat("RightFootWeight");
             IK.LeftFoot.weight = anim.GetFloat("LeftFootWeight");
+
+            //Foot Raycasts
+            RaycastHit RightHit;
+            Transform RightFoot = anim.GetBoneTransform(HumanBodyBones.RightFoot);
+            if (Physics.Raycast(RightFoot.position + Player.transform.up * 0.1f, -Player.transform.up, out RightHit, 1f, LayerMask.GetMask("Ground")))
+            {
+                Debug.DrawRay(RightHit.point, RightHit.normal);
+
+                IK.RightFoot.position = RightHit.point + Player.transform.up * 0.12f;
+                IK.RightFoot.rotation = Quaternion.FromToRotation(Player.transform.up, RightHit.normal) * Player.transform.rotation;
+            }
+            else
+                IK.RightFoot.weight = 0;
+
+            RaycastHit LeftHit;
+            Transform LeftFoot = anim.GetBoneTransform(HumanBodyBones.LeftFoot);
+            if (Physics.Raycast(LeftFoot.position + Player.transform.up * 0.1f, -Player.transform.up, out LeftHit, 1f, LayerMask.GetMask("Ground")))
+            {
+                Debug.DrawRay(LeftHit.point, LeftHit.normal);
+
+                IK.LeftFoot.position = LeftHit.point + Player.transform.up * 0.12f;
+                IK.LeftFoot.rotation = Quaternion.FromToRotation(Player.transform.up, LeftHit.normal) * Player.transform.rotation;
+            }
+            else
+                IK.LeftFoot.weight = 0;
         }
         else
         {
@@ -120,44 +146,14 @@ public class WalkingState : PlayerState
     }
     protected override void UpdatePhysics()
     {
+        grounded = Physics.CheckCapsule(Player.transform.position, Player.transform.position - Vector3.up * 0.1f, 0.18f, LayerMask.GetMask("Ground"));
+
         if (grounded)
         {
             rb.velocity = new Vector3(moveDirection.x, rb.velocity.y, moveDirection.z);
-            rb.AddForce(Player.transform.up * -20f * rb.mass);
-
-            //Foot Raycasts
-            RaycastHit RightHit;
-            Transform RightFoot = anim.GetBoneTransform(HumanBodyBones.RightFoot);
-            if (Physics.Raycast(RightFoot.position + Player.transform.up * 0.1f, -Player.transform.up, out RightHit, 1f))
-            {
-                IK.RightFoot.position = RightHit.point + Player.transform.up * 0.12f;
-                IK.RightFoot.rotation = Quaternion.FromToRotation(Player.transform.up, RightHit.normal) * Player.transform.rotation;
-            }
-            else IK.RightFoot.weight = 0;
-
-            RaycastHit LeftHit;
-            Transform LeftFoot = anim.GetBoneTransform(HumanBodyBones.LeftFoot);
-            if (Physics.Raycast(LeftFoot.position + Player.transform.up * 0.1f, -Player.transform.up, out LeftHit, 1f))
-            {
-                IK.LeftFoot.position = LeftHit.point + Player.transform.up * 0.12f;
-                IK.LeftFoot.rotation = Quaternion.FromToRotation(Player.transform.up, LeftHit.normal) * Player.transform.rotation;
-            }
-            else IK.LeftFoot.weight = 0;
-
-            if (!RightHit.collider && !RightHit.collider)
-                grounded = false;
         }
-        else
-        {
-            rb.AddForce(Player.transform.up * -9.81f * rb.mass);
-
-            if (Physics.Raycast(Player.transform.position + (Player.transform.up * 0.5f) - (Player.transform.forward * 0.3f) - (Player.transform.right * 0.3f), -Player.transform.up, 0.55f) ||
-                Physics.Raycast(Player.transform.position + (Player.transform.up * 0.5f) + (Player.transform.forward * 0.3f) + (Player.transform.right * 0.3f), -Player.transform.up, 0.55f))
-            {
-                canClimb = true;
-                grounded = true;
-            }
-        }
+        //Gravity
+        rb.AddForce(Player.transform.up * -9.81f * rb.mass);
     }
 
     //TriggerFucntions

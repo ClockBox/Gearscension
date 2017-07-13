@@ -107,6 +107,7 @@ public class PlayerController : MonoBehaviour
     {
         _hasWeapon[WeaponType] = !_hasWeapon[WeaponType];
         anim.SetBool("hasSword", _hasWeapon[SWORD]);
+        anim.SetBool("aiming", _hasWeapon[GUN]);
         if (WeaponType == 1)
             IK.RightHand.weight = 0;
 

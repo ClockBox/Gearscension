@@ -16,6 +16,7 @@ public class CarryState : WalkingState
     //Transitions
     public override IEnumerator EnterState()
     {
+        IK.HeadTrunSpeed = 5;
         IK.RightHand.weight = 0.8f;
         IK.LeftHand.weight = 0.8f;
         
@@ -29,6 +30,7 @@ public class CarryState : WalkingState
     public override IEnumerator ExitState()
     {
         yield return base.ExitState();
+        IK.HeadTrunSpeed = 1;
         IK.RightHand.weight = 0;
         IK.LeftHand.weight = 0;
         carryObject.parent = null;

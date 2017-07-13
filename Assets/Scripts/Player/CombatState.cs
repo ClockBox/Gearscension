@@ -34,7 +34,7 @@ public class CombatState : WalkingState
     }
     public override IEnumerator ExitState()
     {
-        IK.headWeight = 1;
+        IK.HeadWeight = 1;
         yield return base.ExitState();
         if (hooked)
             yield return Player.ToggleWeapon(1, 0.6f, 1.24f);
@@ -57,7 +57,7 @@ public class CombatState : WalkingState
             {
                 grounded = false;
                 canClimb = false;
-                IK.headWeight = 1;
+                IK.HeadWeight = 1;
             }
 
             else if (Input.GetButtonDown("Equip"))
@@ -181,7 +181,7 @@ public class CombatState : WalkingState
         else
         {
             IK.SetIKPositions(null, hookNode.leftHand, hookNode.rightFoot, hookNode.leftFoot);
-            IK.headWeight = 0;
+            IK.HeadWeight = 0;
         }
 
     }

@@ -284,7 +284,7 @@ public class ClimbState : PlayerState
         col.enabled = false;
 
         anim.SetTrigger("climbDown");
-        IK.headWeight = 0;
+        IK.HeadWeight = 0;
 
         rb.velocity = Vector3.zero;
 
@@ -337,7 +337,7 @@ public class ClimbState : PlayerState
         col.enabled = false;
 
         anim.SetTrigger("climbUp");
-        IK.headWeight = 0;
+        IK.HeadWeight = 0;
         IK.RightFoot.weight = 0;
         IK.LeftFoot.weight = 0;
 
@@ -380,7 +380,7 @@ public class ClimbState : PlayerState
         IK.GlobalWeight = 1;
         IK.RightFoot.weight = Mathf.Pow(braced,4);
         IK.LeftFoot.weight = Mathf.Pow(braced,4);
-        IK.headWeight = Mathf.Lerp(IK.headWeight, 0, 0.2f);
+        IK.HeadWeight = Mathf.Lerp(IK.HeadWeight, 0, 0.2f);
     }
     protected override void UpdateAnimator()
     {
