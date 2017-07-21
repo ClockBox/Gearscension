@@ -22,6 +22,7 @@ public class ClimbState : PlayerState
     int movePolarity = RIGHT;
 
     float braced;
+    public bool transition = true;
 
     public ClimbState(StateManager manager, ClimbingNode node) : base(manager)
     {
@@ -50,17 +51,22 @@ public class ClimbState : PlayerState
         rb.velocity = Vector3.zero;
         anim.SetBool("climbing", true);
         UpdateAnimator();
-        
-        IK.RightHand.Set(currentNodes[0].rightHand);
-        IK.RightFoot.Set(currentNodes[0].rightFoot);
-        IK.LeftHand.Set(currentNodes[1].leftHand);
-        IK.LeftFoot.Set(currentNodes[1].leftFoot);
 
-        elapsedTime = 0;
-        IK.GlobalWeight = 1;
+        if (transition)
+        {
+            elapsedTime = 0;
+            while (elapsedTime <= 1)
+            {
+                Player.transform.position = Vector3.MoveTowards(Player.transform.position, (currentNodes[1].PlayerPosition + currentNodes[0].PlayerPosition) / 2, 0.5f * elapsedTime);
+                IK.SetIKPositions(currentNodes[0].rightHand, currentNodes[1].leftHand, currentNodes[0].rightFoot, currentNodes[1].leftFoot);
+                IK.GlobalWeight = elapsedTime;
+                elapsedTime += Time.deltaTime * 5;
+                yield return null;
+            }
+        }
+        else IK.GlobalWeight = 1;
 
         UpdateMovement();
-        yield return new WaitForSeconds(0.5f);
         yield return base.EnterState();
     }
     public override IEnumerator ExitState()
@@ -71,7 +77,17 @@ public class ClimbState : PlayerState
         elapsedTime = 0;
         anim.SetBool("climbing", false);
 
-        IK.GlobalWeight = 0;
+        if (transition)
+        {
+            elapsedTime = 1;
+            while (elapsedTime >= 0)
+            {
+                elapsedTime -= Time.deltaTime * 8;
+                IK.GlobalWeight = elapsedTime;
+                yield return null;
+            }
+        }
+        else IK.GlobalWeight = 0;
     }
 
     //State Behaviour
@@ -185,11 +201,13 @@ public class ClimbState : PlayerState
             anim.SetBool("climbing", false);
             anim.SetBool("isGrounded", false);
 
+            //Wall Eject
             if (Vector3.Dot(Player.transform.transform.forward, lookDirection) < 0)
             {
                 Player.transform.LookAt(Player.transform.position + lookDirection);
                 rb.velocity = (lookDirection.normalized / 2 + Player.transform.up) * 5;
             }
+            //Drop/Move allong wall
             else
                 rb.velocity = (Player.transform.right * moveX / 2 + Vector3.up * moveY) * 5 + Vector3.up;
         }
@@ -322,6 +340,7 @@ public class ClimbState : PlayerState
             yield return null;
         }
         col.enabled = true;
+        transition = false;
     }
     private IEnumerator ClimbUp(ClimbingEdge EdgeNode)
     {
@@ -356,6 +375,7 @@ public class ClimbState : PlayerState
         }
         Player.transform.LookAt(Player.transform.position + Vector3.ProjectOnPlane(Player.transform.forward, Vector3.up));
         col.enabled = true;
+        transition = false;
         stateManager.ChangeState(new UnequipedState(stateManager, true));
     }
 

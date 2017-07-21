@@ -34,7 +34,6 @@ public class CombatState : WalkingState
     }
     public override IEnumerator ExitState()
     {
-        IK.HeadWeight = 1;
         yield return base.ExitState();
         if (hooked)
             yield return Player.ToggleWeapon(1, 0.6f, 1.24f);
@@ -61,14 +60,22 @@ public class CombatState : WalkingState
             }
 
             else if (Input.GetButtonDown("Equip"))
-                stateManager.ChangeState(new ClimbState(stateManager, hookNode));
+            {
+                IK.RightHand.Set(hookNode.rightHand);
+                ClimbState temp = new ClimbState(stateManager, hookNode);
+                temp.transition = false;
+                stateManager.ChangeState(temp);
+            }
 
-            if (moveDirection.magnitude > 0)
+            else if (moveDirection.magnitude > 0)
             {
                 IK.RightHand.weight = 0;
                 inTransition = true;
                 Player.weapons[1].transform.parent = anim.GetBoneTransform(HumanBodyBones.RightHand);
-                stateManager.ChangeState(new ClimbState(stateManager, hookNode));
+
+                ClimbState temp = new ClimbState(stateManager, hookNode);
+                temp.transition = false;
+                stateManager.ChangeState(temp);
             }
         }
         else
@@ -110,7 +117,7 @@ public class CombatState : WalkingState
         elapsedTime = 0;
         while (elapsedTime < 1)
         {
-            sword.position = Vector3.Lerp(sword.position, node.rightHand.position - node.transform.forward * 0.5f, elapsedTime);
+            sword.position = Vector3.Lerp(sword.position, node.rightHand.position - node.transform.forward * 0.3f, elapsedTime);
             sword.rotation = Quaternion.Lerp(sword.rotation, Quaternion.FromToRotation(Vector3.up, node.transform.forward), elapsedTime);
             elapsedTime += Time.deltaTime;
 
@@ -140,7 +147,6 @@ public class CombatState : WalkingState
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-        IK.SetIKPositions(Player.weapons[1].Grip(1), node.leftHand, node.rightFoot, node.leftFoot);
         if (node.FreeHang)
             Player.transform.localEulerAngles = new Vector3(0, Player.transform.localEulerAngles.y, Player.transform.localEulerAngles.z);
 
@@ -180,8 +186,8 @@ public class CombatState : WalkingState
             base.UpdateIK();
         else
         {
-            IK.SetIKPositions(null, hookNode.leftHand, hookNode.rightFoot, hookNode.leftFoot);
-            IK.HeadWeight = 0;
+            IK.SetIKPositions(Player.weapons[1].Grip(1), hookNode.leftHand, hookNode.rightFoot, hookNode.leftFoot);
+            IK.HeadWeight = 1;
         }
 
     }

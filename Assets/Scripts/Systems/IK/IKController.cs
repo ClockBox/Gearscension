@@ -53,8 +53,8 @@ public class IKController : MonoBehaviour
         {
             _RightElbow = transform.position + transform.up + transform.right * 5.0f;
             _LeftElbow = transform.position + transform.up - transform.right * 5.0f;
-            _RightKnee = transform.position + transform.up * 5f + transform.forward * 2f + transform.right * 0.2f;
-            _LeftKnee = transform.position + transform.up * 5f + transform.forward * 2f - transform.right * 0.2f;
+            _RightKnee = transform.position + transform.up * 5f + transform.forward * 2f + transform.right * 2f;
+            _LeftKnee = transform.position + transform.up * 5f + transform.forward * 2f - transform.right * 2f;
 
             anim.SetLookAtWeight(_headWeight, 1f, 1.0f, 1.0f, 1.0f);
             anim.SetLookAtPosition(_lookAtPosition);

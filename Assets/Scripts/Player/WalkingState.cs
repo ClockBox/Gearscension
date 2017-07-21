@@ -11,8 +11,6 @@ public class WalkingState : PlayerState
     protected float moveX = 0;
     protected float moveY = 0;
 
-    protected static bool grounded = true;
-
     float jumpForce = 6;
     float fallTimer = 0;
 
@@ -146,7 +144,7 @@ public class WalkingState : PlayerState
     }
     protected override void UpdatePhysics()
     {
-        grounded = Physics.CheckCapsule(Player.transform.position, Player.transform.position - Vector3.up * 0.1f, 0.18f, LayerMask.GetMask("Ground"));
+        grounded = Physics.CheckCapsule(Player.transform.position, Player.transform.position - Vector3.up * 0.15f, 0.18f, LayerMask.GetMask("Ground", "HitBox"));
 
         if (grounded)
         {

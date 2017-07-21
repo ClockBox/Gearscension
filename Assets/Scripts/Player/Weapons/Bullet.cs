@@ -12,23 +12,21 @@ public class Bullet : MonoBehaviour
 {
     public BulletType type;
     public GameObject effectPrefab;
-    public float effectDuration = 3;
 
 	void Start ()
     {
-        Destroy(gameObject, 3);
+        Destroy(gameObject, 4);
 	}
     private void OnCollisionEnter(Collision other)
     {
-        SpawnEffectArea(effectDuration).transform.parent = other.transform;
+        SpawnEffectArea().transform.parent = other.transform;
         Destroy(gameObject);
     }
 
-    GameObject SpawnEffectArea(float duration)
+    GameObject SpawnEffectArea()
     {
         GameObject newEffect = Instantiate(effectPrefab, transform.position, transform.rotation);
         newEffect.transform.localScale = transform.localScale;
-        Destroy(newEffect, duration);
         return newEffect;
     }
 }
