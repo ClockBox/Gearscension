@@ -10,6 +10,7 @@ public class PlayerState
     protected Animator anim;
 
     protected static bool canClimb = true;
+    public static bool grounded = true;
 
     protected float elapsedTime;
     protected bool stopState = false;

@@ -8,6 +8,7 @@ public class CameraController : MonoBehaviour
     public Transform camPivot;
 
     private float distance = 3.0f;
+    private float zoomedDistance = 1.5f;
     private float userDistance = 3.0f;
     private float zoom = 35;
     private float normal = 75;
@@ -15,7 +16,7 @@ public class CameraController : MonoBehaviour
     private float currentY;
     private float sensitivity = 3.0f;
 
-    private static bool m_zoomed = false;
+    private static float m_zoomed = 0;
 
     private void LateUpdate()
     {
@@ -25,23 +26,15 @@ public class CameraController : MonoBehaviour
         {
             //Mouse Input
             currentX += Input.GetAxis("Mouse X") * sensitivity;
-            currentY += Input.GetAxis("Mouse Y") * sensitivity;
+            currentY -= Input.GetAxis("Mouse Y") * sensitivity;
             currentY = Mathf.Clamp(currentY, Y_ANGLE_MIN, Y_ANGLE_MAX);
 
             userDistance -= Input.GetAxis("Zoom") * 2;
             userDistance = Mathf.Clamp(userDistance, 2.5f, 6);
 
             //Zoom
-            if (m_zoomed)
-            {
-                distance = Mathf.MoveTowards(1.5f, userDistance, Time.deltaTime * 0.5f);
-                GetComponent<Camera>().fieldOfView = zoom;
-            }
-            else
-            {
-                distance = Mathf.MoveTowards(userDistance, 1.5f, Time.deltaTime * 0.5f);
-                GetComponent<Camera>().fieldOfView = normal;
-            }
+            distance = Mathf.Lerp(userDistance, zoomedDistance, m_zoomed);
+            GetComponent<Camera>().fieldOfView = Mathf.Lerp(normal, zoom, m_zoomed);
 
             //Set Position and Rotation
             Vector3 moveDirection = new Vector3(0, 0, distance);
@@ -63,7 +56,7 @@ public class CameraController : MonoBehaviour
         }
     }
 
-    public static bool Zoomed
+    public static float Zoom
     {
         get { return m_zoomed; }
         set { m_zoomed = value; }

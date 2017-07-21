@@ -32,7 +32,7 @@ public class PushState : PlayerState
 
         elapsedTime = 0;
         rb.velocity = Vector3.zero;
-        pushObject.constraints = RigidbodyConstraints.FreezeRotation;
+        pushObject.isKinematic = false;
         FindHandPositions();
 
         while (elapsedTime <= 1)
@@ -50,7 +50,7 @@ public class PushState : PlayerState
         anim.SetBool("pushing", false);
 
         elapsedTime = 0;
-        pushObject.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
+        pushObject.isKinematic = true;
 
         while (elapsedTime <= 1)
         {

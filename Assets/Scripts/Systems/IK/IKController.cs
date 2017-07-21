@@ -13,11 +13,14 @@ public class IKController : MonoBehaviour
 
     private Vector3 _lookAtPosition;
     private float _headWeight = 1;
+    private float _headTrunSpeed = 1;
 
     private Vector3 _RightElbow;
     private Vector3 _LeftElbow;
     private Vector3 _RightKnee;
     private Vector3 _LeftKnee;
+
+    private Vector3 CameraForward;
 
     //Unity Functions
     private void Start()
@@ -34,10 +37,12 @@ public class IKController : MonoBehaviour
     }
     private void Update()
     {
-        _lookAtPosition = transform.position + new Vector3(
-            Camera.main.transform.forward.x * 20,
-            Camera.main.transform.forward.y / Mathf.Abs(Camera.main.transform.forward.y) * 0.8f + 1.8f,
-            Camera.main.transform.forward.z * 20);
+        CameraForward = Camera.main.transform.forward;
+        CameraForward.y = 0;
+
+        _headWeight = Vector3.Dot(CameraForward, transform.forward);
+
+        _lookAtPosition = Vector3.Lerp(_lookAtPosition, transform.position + CameraForward * 20 + Vector3.up * 1.8f, _headTrunSpeed / 10);
 
         if (_RightHand.weight == 0 && _LeftHand.weight == 0 && _RightFoot.weight == 0 && _LeftFoot.weight == 0)
             SetBoneTransforms();
@@ -48,8 +53,8 @@ public class IKController : MonoBehaviour
         {
             _RightElbow = transform.position + transform.up + transform.right * 5.0f;
             _LeftElbow = transform.position + transform.up - transform.right * 5.0f;
-            _RightKnee = transform.position + transform.up * 5f + transform.forward * 2f + transform.right * 0.2f;
-            _LeftKnee = transform.position + transform.up * 5f + transform.forward * 2f - transform.right * 0.2f;
+            _RightKnee = transform.position + transform.up * 5f + transform.forward * 2f + transform.right * 2f;
+            _LeftKnee = transform.position + transform.up * 5f + transform.forward * 2f - transform.right * 2f;
 
             anim.SetLookAtWeight(_headWeight, 1f, 1.0f, 1.0f, 1.0f);
             anim.SetLookAtPosition(_lookAtPosition);
@@ -206,9 +211,14 @@ public class IKController : MonoBehaviour
             _LeftFoot.weight = value;
         }
     }
-    public float headWeight
+    public float HeadWeight
     {
         set { _headWeight = value; }
         get { return _headWeight; }
+    }
+    public float HeadTrunSpeed
+    {
+        set { _headTrunSpeed = value; }
+        get { return _headTrunSpeed; }
     }
 }
