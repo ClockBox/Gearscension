@@ -72,8 +72,8 @@ public class AimState : WalkingState
             base.UpdatePhysics();
             base.UpdateIK();
 
-            CameraController.Zoom = Mathf.Lerp(start, end, elapsedTime);
-            handToGunWeight = Mathf.Lerp(start, end, elapsedTime);
+            CameraController.Zoom = Mathf.Lerp(start, end, elapsedTime * 2);
+            handToGunWeight = Mathf.Lerp(start, end, elapsedTime * 2);
 
             elapsedTime += Time.deltaTime;
             yield return null;

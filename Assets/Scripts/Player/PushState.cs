@@ -59,6 +59,7 @@ public class PushState : PlayerState
             elapsedTime += Time.deltaTime * 3;
             yield return null;
         }
+        IK.GlobalWeight = 0;
     }
 
     //Actions

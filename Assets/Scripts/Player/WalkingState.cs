@@ -23,6 +23,8 @@ public class WalkingState : PlayerState
     public override IEnumerator EnterState()
     {
         moveDirection = moveDirection.magnitude * Player.transform.forward;
+        if (canClimb == false)
+            moveDirection = Vector3.zero;
         anim.SetBool("isGrounded", grounded);
         yield return base.EnterState();
     }
@@ -144,10 +146,11 @@ public class WalkingState : PlayerState
     }
     protected override void UpdatePhysics()
     {
-        grounded = Physics.CheckCapsule(Player.transform.position, Player.transform.position - Vector3.up * 0.15f, 0.18f, LayerMask.GetMask("Ground", "HitBox"));
+        grounded = Physics.CheckCapsule(Player.transform.position, Player.transform.position - Vector3.up * 0.10f, 0.18f, LayerMask.GetMask("Ground", "Debris"));
 
         if (grounded)
         {
+            rb.AddForce(Player.transform.up * -18f * rb.mass);
             rb.velocity = new Vector3(moveDirection.x, rb.velocity.y, moveDirection.z);
         }
         //Gravity
