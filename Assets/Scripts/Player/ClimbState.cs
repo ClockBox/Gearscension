@@ -113,7 +113,7 @@ public class ClimbState : PlayerState
             if (!currentNodes[1].FreeHang && !currentNodes[0].FreeHang && braced == 0)
                 yield return BracedTransition(1);
 
-            if (Vector3.Dot(Player.transform.transform.forward, lookDirection) >= 0)
+            if (Vector3.Dot(Vector3.Project(Player.transform.forward, Vector3.up), lookDirection) >= 0)
             {
                 if (moveDirection.magnitude > Mathf.Epsilon)
                 {
@@ -202,10 +202,10 @@ public class ClimbState : PlayerState
             anim.SetBool("isGrounded", false);
 
             //Wall Eject
-            if (Vector3.Dot(Player.transform.transform.forward, lookDirection) < 0)
+            if (Vector3.Dot(Vector3.ProjectOnPlane(Player.transform.transform.forward, Vector3.up), lookDirection) < 0)
             {
                 Player.transform.LookAt(Player.transform.position + lookDirection);
-                rb.velocity = (lookDirection.normalized / 2 + Player.transform.up) * 5;
+                rb.velocity = (Vector3.ProjectOnPlane(lookDirection.normalized, Vector3.up) / 2 + Player.transform.up) * 5;
             }
             //Drop/Move allong wall
             else

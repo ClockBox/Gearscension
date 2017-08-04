@@ -80,8 +80,8 @@ public class WalkingState : PlayerState
             fallTimer = 0;
 
             if (Input.GetKey(KeyCode.LeftShift))
-                movementSpeed = 8;
-            else movementSpeed = 5;
+                movementSpeed = 5;
+            else movementSpeed = 8;
 
             lookDirection = Camera.main.transform.forward;
             lookDirection = Vector3.ProjectOnPlane(lookDirection, Player.transform.up);
