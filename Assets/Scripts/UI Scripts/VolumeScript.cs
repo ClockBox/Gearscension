@@ -25,7 +25,7 @@ public class VolumeScript : MonoBehaviour
     // Use this for initialization
     void Start ()
     {
-        DontDestroyOnLoad(gameObject);
+        // DontDestroyOnLoad(gameObject);
 
         if(FindObjectsOfType<VolumeScript>().Length > 1)
         {
