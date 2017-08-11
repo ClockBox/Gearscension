@@ -3,13 +3,12 @@ using UnityEngine;
 
 public class FallState : PlayerState
 {
-    bool grounded = false;
-
     public FallState(StateManager manager) : base(manager) { }
 
     //Transitions
     public override IEnumerator EnterState()
     {
+        grounded = false;
         anim.SetTrigger("falling");
         yield return base.EnterState();
     }
