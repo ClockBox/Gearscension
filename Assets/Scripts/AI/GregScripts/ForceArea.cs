@@ -44,6 +44,14 @@ public class ForceArea : MonoBehaviour
             }
             if (cols[i].gameObject == player)
                 PlayerState.grounded = false;
+
+
+            cols[i].SendMessageUpwards("TakeDamage", 20);
         }
     }
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, pushRadius);
+    } 
 }
