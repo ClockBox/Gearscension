@@ -10,6 +10,7 @@ public class gregPhaseOne : MonoBehaviour {
 	Vector3 point;
 	public float speed = 1f;
 	Animator anim;
+    public GameObject breakable;
 	private void Start()
 	{
 		player = GameObject.FindGameObjectWithTag("Player");
@@ -31,12 +32,37 @@ public class gregPhaseOne : MonoBehaviour {
 		{
 			attackCD += Time.deltaTime;
 		}
-		transform.position = Vector3.MoveTowards(transform.position, player.transform.position, speed * Time.deltaTime);
-		point = player.transform.position;
-		point.y = transform.position.y;
-		transform.LookAt(point);
+        if (!anim.GetBool("frozen"))
+        {
+            transform.position = Vector3.MoveTowards(transform.position, player.transform.position, speed * Time.deltaTime);
+            point = player.transform.position;
+            point.y = transform.position.y;
+
+            transform.LookAt(point);
+
+        }
+       
+        if (GetComponent<Rigidbody>().constraints == RigidbodyConstraints.FreezeAll)
+        {
+            anim.SetBool("frozen", true);
+            anim.enabled = false;
+           }
+        else
+        {
+            anim.enabled = true;
+            anim.SetBool("frozen", false);
+            
+        }
 	}
 
-	
+    private void OnTriggerEnter(Collider collision)
+    {
+        if (collision.gameObject.tag == "PileDriver")
+        {
+            Debug.Log("EY");
+            GetComponent<Rigidbody>().constraints =RigidbodyConstraints.FreezeAll;
+            breakable.GetComponent<AIBreakable>().broken = true;
+        }
+    }
 
 }
