@@ -10,7 +10,7 @@ public class AiCrystal : MonoBehaviour {
         if (exposed==true)
         {
             Debug.Log("Dead");
-            Destroy(transform.parent.gameObject);
+            Destroy(transform.root.gameObject);
 
         }
     } 
