@@ -92,7 +92,19 @@ public class CombatState : WalkingState
     {
         anim.SetTrigger("attack");
         (Player.weapons[1] as Sword).Blade.enabled = true;
-        yield return new WaitForSeconds(0.5f);
+
+        if (hooked)
+        {
+            elapsedTime = 0;
+            while (elapsedTime < 0.5f)
+            {
+                UpdateIK();
+                Player.transform.position = hookNode.PlayerPosition;
+                Player.transform.rotation = hookNode.transform.rotation;
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+        }
         (Player.weapons[1] as Sword).Blade.enabled = false;
     }
     private IEnumerator ThrowHook(ClimbingNode node)
@@ -162,6 +174,9 @@ public class CombatState : WalkingState
             moveX = Input.GetAxisRaw("Horizontal");
             moveY = Input.GetAxisRaw("Vertical");
             moveDirection = new Vector3(moveX, moveY, 0);
+
+            Player.transform.position = hookNode.PlayerPosition;
+            Player.transform.rotation = hookNode.transform.rotation;
         }
         else
             base.UpdateMovement();

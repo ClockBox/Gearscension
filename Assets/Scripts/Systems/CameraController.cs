@@ -8,15 +8,21 @@ public class CameraController : MonoBehaviour
     public Transform camPivot;
 
     private float distance = 3.0f;
-    private float zoomedDistance = 1.5f;
     private float userDistance = 3.0f;
-    private float zoom = 35;
+    private float zoom = 45;
     private float normal = 75;
     private float currentX;
     private float currentY;
     private float sensitivity = 3.0f;
 
     private static float m_zoomed = 0;
+
+    private Camera thisCamera;
+
+    private void Start()
+    {
+        thisCamera = GetComponent<Camera>();
+    }
 
     private void LateUpdate()
     {
@@ -33,8 +39,8 @@ public class CameraController : MonoBehaviour
             userDistance = Mathf.Clamp(userDistance, 2.5f, 6);
 
             //Zoom
-            distance = Mathf.Lerp(userDistance, zoomedDistance, m_zoomed);
-            GetComponent<Camera>().fieldOfView = Mathf.Lerp(normal, zoom, m_zoomed);
+            distance = userDistance;
+            thisCamera.fieldOfView = Mathf.Lerp(normal, zoom, m_zoomed);
 
             //Set Position and Rotation
             Vector3 moveDirection = new Vector3(0, 0, distance);
