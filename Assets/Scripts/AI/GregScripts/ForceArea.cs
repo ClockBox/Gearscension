@@ -27,6 +27,14 @@ public class ForceArea : MonoBehaviour
                 cols[i].GetComponent<Rigidbody>().AddExplosionForce(pushForce, transform.position, pushRadius);
             if (cols[i].gameObject == player)
                 PlayerState.grounded = false;
+
+
+            cols[i].SendMessageUpwards("TakeDamage", 20);
         }
     }
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, pushRadius);
+    } 
 }
