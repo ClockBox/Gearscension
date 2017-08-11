@@ -76,11 +76,8 @@ public class WalkingState : PlayerState
 
         if (grounded)
         {
-            canClimb = true;
-            fallTimer = 0;
-
             if (Input.GetKey(KeyCode.LeftShift))
-                movementSpeed = 5;
+            movementSpeed = 5;
             else movementSpeed = 8;
 
             lookDirection = Camera.main.transform.forward;
@@ -96,6 +93,9 @@ public class WalkingState : PlayerState
 
             if (moveDirection.magnitude > movementSpeed)
                 moveDirection = moveDirection.normalized * movementSpeed;
+        
+            canClimb = true;
+            fallTimer = 0;
         }
         else fallTimer += Time.deltaTime;
     }
@@ -150,11 +150,10 @@ public class WalkingState : PlayerState
 
         if (grounded)
         {
-            rb.AddForce(Player.transform.up * -18f * rb.mass);
+            rb.AddForce(Player.transform.up * -20f * rb.mass);
             rb.velocity = new Vector3(moveDirection.x, rb.velocity.y, moveDirection.z);
         }
-        //Gravity
-        rb.AddForce(Player.transform.up * -9.81f * rb.mass);
+        else rb.AddForce(Player.transform.up * -9.81f * rb.mass);
     }
 
     //TriggerFucntions
@@ -162,10 +161,17 @@ public class WalkingState : PlayerState
     {
         if (!inTransition && canClimb)
         {
+
             if (other.CompareTag("ClimbingNode") || other.CompareTag("HookNode"))
-                stateManager.ChangeState(new ClimbState(stateManager, other.GetComponent<ClimbingNode>()));
+            {
+                if (Vector3.Dot(other.transform.forward, Player.transform.forward) > 0)
+                    stateManager.ChangeState(new ClimbState(stateManager, other.GetComponent<ClimbingNode>()));
+            }
             else if (grounded && other.CompareTag("ClimbingEdge") && moveDirection.magnitude < 5.5f)
-                stateManager.ChangeState(new ClimbState(stateManager, other.GetComponent<ClimbingEdge>()));
+            {
+                if (Vector3.Dot(other.transform.forward, Player.transform.forward) < 0)
+                    stateManager.ChangeState(new ClimbState(stateManager, other.GetComponent<ClimbingEdge>()));
+            }
         }
     }
 }

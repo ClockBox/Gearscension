@@ -59,12 +59,17 @@ public class ClimbState : PlayerState
             {
                 Player.transform.position = Vector3.MoveTowards(Player.transform.position, (currentNodes[1].PlayerPosition + currentNodes[0].PlayerPosition) / 2, 0.5f * elapsedTime);
                 IK.SetIKPositions(currentNodes[0].rightHand, currentNodes[1].leftHand, currentNodes[0].rightFoot, currentNodes[1].leftFoot);
-                IK.GlobalWeight = elapsedTime;
+
+                IK.RightHand.weight = elapsedTime;
+                IK.LeftHand.weight = elapsedTime;
+                IK.RightFoot.weight = elapsedTime * braced;
+                IK.LeftFoot.weight = elapsedTime * braced;
+
                 elapsedTime += Time.deltaTime * 5;
                 yield return null;
             }
         }
-        else IK.GlobalWeight = 1;
+        else UpdateIK();
 
         UpdateMovement();
         yield return base.EnterState();
@@ -83,7 +88,12 @@ public class ClimbState : PlayerState
             while (elapsedTime >= 0)
             {
                 elapsedTime -= Time.deltaTime * 8;
-                IK.GlobalWeight = elapsedTime;
+
+                IK.RightHand.weight = elapsedTime;
+                IK.LeftHand.weight = elapsedTime;
+                IK.RightFoot.weight = elapsedTime * braced;
+                IK.LeftFoot.weight = elapsedTime * braced;
+
                 yield return null;
             }
         }
