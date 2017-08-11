@@ -150,19 +150,19 @@ public class gregAttacks : MonoBehaviour {
 			switch (c.name)
 			{
 				case "rLegHitBox":
-					damage = 50;
+					damage = 3;
 					break;
 				case "leftFootHitBox":
-					damage = 50;
+					damage = 3;
 					break;
 				case "rightFootHitBox":
-					damage = 50;
+					damage = 3;
 					break;
 				case "lHandHitBox":
-					damage = 50;
+					damage = 3;
 					break;
 				case "rHandHitBox":
-					damage =50;
+					damage = 3;
 					break;
 				default:
 					Debug.Log("Unable to identify hitbox name");

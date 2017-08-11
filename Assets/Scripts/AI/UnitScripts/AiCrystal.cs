@@ -5,12 +5,12 @@ using UnityEngine;
 public class AiCrystal : MonoBehaviour {
     public bool exposed = false;
 
-    public void TakeDamage()
+    private void OnCollisionEnter(Collision collision)
     {
-        if (exposed==true)
+        if (collision.gameObject.tag == "Projectile"&&exposed==true)
         {
             Debug.Log("Dead");
-            Destroy(transform.parent.gameObject);
+            Destroy(this.gameObject);
 
         }
     } 

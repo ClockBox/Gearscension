@@ -20,7 +20,6 @@ public class AIBreakable : MonoBehaviour {
 	{
 		if (broken)
 		{
-            GetComponent<Rigidbody>().useGravity = true;
             crystal.GetComponent<AiCrystal>().exposed = true;
 			transform.parent = null;
 		}

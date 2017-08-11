@@ -42,7 +42,7 @@ public class PlayerController : MonoBehaviour
 
     //HUD data
     private static float _maxHealth = 100;
-    private static float _maxArmor = 0;
+    private static float _maxArmor = 2;
     private float _currentHealth = _maxHealth;
     private float _currentArmor = _maxArmor;
     private float _armorRecharge = 5.0f;

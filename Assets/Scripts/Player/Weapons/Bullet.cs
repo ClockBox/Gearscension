@@ -20,7 +20,6 @@ public class Bullet : MonoBehaviour
     private void OnCollisionEnter(Collision other)
     {
         SpawnEffectArea().transform.parent = other.transform;
-        if(other.gameObject.tag=="Enemy")
         Destroy(gameObject);
     }
 
