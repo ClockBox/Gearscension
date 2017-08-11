@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour
     public Weapon[] weapons;
     private bool[] _hasWeapon = { false, false };
 
-    private int _gunUpgrade = 4;
+    private int _gunUpgrade = 1;
     private int[] _ammoAmounts = new int[4];
     private BulletType _currentAmmo = BulletType.Electric;
 
