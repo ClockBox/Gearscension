@@ -59,12 +59,17 @@ public class ClimbState : PlayerState
             {
                 Player.transform.position = Vector3.MoveTowards(Player.transform.position, (currentNodes[1].PlayerPosition + currentNodes[0].PlayerPosition) / 2, 0.5f * elapsedTime);
                 IK.SetIKPositions(currentNodes[0].rightHand, currentNodes[1].leftHand, currentNodes[0].rightFoot, currentNodes[1].leftFoot);
-                IK.GlobalWeight = elapsedTime;
+
+                IK.RightHand.weight = elapsedTime;
+                IK.LeftHand.weight = elapsedTime;
+                IK.RightFoot.weight = elapsedTime * braced;
+                IK.LeftFoot.weight = elapsedTime * braced;
+
                 elapsedTime += Time.deltaTime * 5;
                 yield return null;
             }
         }
-        else IK.GlobalWeight = 1;
+        else UpdateIK();
 
         UpdateMovement();
         yield return base.EnterState();
@@ -83,7 +88,12 @@ public class ClimbState : PlayerState
             while (elapsedTime >= 0)
             {
                 elapsedTime -= Time.deltaTime * 8;
-                IK.GlobalWeight = elapsedTime;
+
+                IK.RightHand.weight = elapsedTime;
+                IK.LeftHand.weight = elapsedTime;
+                IK.RightFoot.weight = elapsedTime * braced;
+                IK.LeftFoot.weight = elapsedTime * braced;
+
                 yield return null;
             }
         }
@@ -113,7 +123,7 @@ public class ClimbState : PlayerState
             if (!currentNodes[1].FreeHang && !currentNodes[0].FreeHang && braced == 0)
                 yield return BracedTransition(1);
 
-            if (Vector3.Dot(Player.transform.transform.forward, lookDirection) >= 0)
+            if (Vector3.Dot(Vector3.Project(Player.transform.forward, Vector3.up), lookDirection) >= 0)
             {
                 if (moveDirection.magnitude > Mathf.Epsilon)
                 {
@@ -202,10 +212,10 @@ public class ClimbState : PlayerState
             anim.SetBool("isGrounded", false);
 
             //Wall Eject
-            if (Vector3.Dot(Player.transform.transform.forward, lookDirection) < 0)
+            if (Vector3.Dot(Vector3.ProjectOnPlane(Player.transform.transform.forward, Vector3.up), lookDirection) < 0)
             {
                 Player.transform.LookAt(Player.transform.position + lookDirection);
-                rb.velocity = (lookDirection.normalized / 2 + Player.transform.up) * 5;
+                rb.velocity = (Vector3.ProjectOnPlane(lookDirection.normalized, Vector3.up) / 2 + Player.transform.up) * 5;
             }
             //Drop/Move allong wall
             else

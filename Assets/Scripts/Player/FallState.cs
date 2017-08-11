@@ -17,7 +17,7 @@ public class FallState : PlayerState
     {
         yield return base.ExitState();
         rb.velocity = Vector3.zero;
-        yield return new WaitForSeconds(3.5f);
+        yield return null;
     }
 
     //State Behaviour
