@@ -46,7 +46,7 @@ public class ForceArea : MonoBehaviour
                 PlayerState.grounded = false;
 
 
-            cols[i].SendMessageUpwards("TakeDamage", 20);
+            cols[i].SendMessageUpwards("TakeDamage", 20,SendMessageOptions.DontRequireReceiver);
         }
     }
     private void OnDrawGizmos()
