@@ -9,7 +9,7 @@
 
 		_BumpMap("Normal", 2D) = "bump" {}
 			
-		_Metallic("Metallic", 2D) ="gray"{}
+		[Gamma] _Metallic("Metallic", 2D) ="gray"{}
 		_Glossiness("Smoothness", 2D) = "gray" {}
 
 		_Glossiness("Emission", 2D) = "gray" {}
