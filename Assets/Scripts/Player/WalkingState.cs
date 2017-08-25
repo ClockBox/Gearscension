@@ -43,7 +43,7 @@ public class WalkingState : PlayerState
                 canClimb = true;
         }
 
-        else if (Input.GetButtonDown("Roll"))
+        else if (grounded && Input.GetButtonDown("Roll"))
             yield return Dodge();
     }
 
@@ -54,7 +54,7 @@ public class WalkingState : PlayerState
         elapsedTime = 0;
         while (elapsedTime <= 1.3f)
         {
-            moveDirection = moveDirection.normalized * anim.velocity.magnitude * 2f;
+            moveDirection = moveDirection.normalized * anim.velocity.magnitude * 3f;
             UpdateIK();
             movementSpeed = 10f;
             elapsedTime += Time.deltaTime;

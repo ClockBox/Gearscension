@@ -9,7 +9,7 @@ public class ForceArea : MonoBehaviour
 	public float pushRadius;
 	public float pushForce;
     public float lifeTime;
-    public bool ApplyconstantForce;
+    public bool applyConstantForce;
 
     private Rigidbody tempRB;
 
@@ -19,13 +19,13 @@ public class ForceArea : MonoBehaviour
             player = GameObject.FindGameObjectWithTag("Player");
         Destroy(gameObject, lifeTime);
 
-        if (!ApplyconstantForce)
+        if (!applyConstantForce)
             ApplyForce();
     }
 
     void FixedUpdate()
     {
-        if (ApplyconstantForce)
+        if (applyConstantForce)
             ApplyForce();
     }
 
