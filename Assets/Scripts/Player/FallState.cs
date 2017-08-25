@@ -23,7 +23,11 @@ public class FallState : PlayerState
     protected override IEnumerator HandleInput()
     {
         if (grounded)
+        {
+            anim.SetBool("isGrounded", true);
+            yield return new WaitForSeconds(3.5f);
             stateManager.ChangeState(new UnequipedState(stateManager, true));
+        }
 
         yield return null;
     }
