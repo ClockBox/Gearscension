@@ -8,12 +8,12 @@ public class Timed : Condition
     [SerializeField]
     float timerAmount;
     
-    public Timed(Trigger trigger, string name, object checkObject, GameObject player, float timerAmount) : base (trigger, name, checkObject, player)
+    public Timed(Trigger trigger, string name, GameObject player) : base (trigger, name, player)
     {
-        this.timerAmount = timerAmount;
+        trigger.StartCoroutine(StartTimer());
     }
 
-    IEnumerator startTimer()
+    IEnumerator StartTimer()
     {
         yield return new WaitForSeconds(this.timerAmount);
         conditionIsMet = true;
