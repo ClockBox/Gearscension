@@ -4,23 +4,26 @@ using UnityEngine;
 
 public class Button : Condition
 {
-    public Button(Trigger trigger, string name, object checkObject, GameObject player) : base (trigger, name, checkObject, player)
+    public Button(Trigger trigger, string name, GameObject player) : base (trigger, name, player)
     {
-
+        trigger.StartCoroutine(inputCheck());
     }
 
     protected virtual IEnumerator inputCheck()
     {
-        while(trigger.inArea)
+        while(true)
         {
-            if (Input.GetButtonDown("Action"))
+            if (trigger.inArea)
             {
-                conditionIsMet = true;
-                break;
+                if (Input.GetButtonDown("Action"))
+                {
+                    conditionIsMet = true;
+                    break;
+                }
+                else
+                    conditionIsMet = false;
+                yield return null; 
             }
-            else
-                conditionIsMet = false;
-            yield return null;
         }
     }
 }

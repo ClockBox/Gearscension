@@ -27,10 +27,9 @@ public class Condition
     }
 
     // - Constuctor
-    protected Condition(Trigger trigger,string name,object checkObject, GameObject _player)
+    protected Condition(Trigger trigger,string name, GameObject _player)
     {
         this.name = name;
-        this.checkObject = checkObject;
         this.trigger = trigger;
 
         if (player == null)

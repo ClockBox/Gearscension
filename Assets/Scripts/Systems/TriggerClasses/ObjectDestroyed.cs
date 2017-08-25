@@ -7,9 +7,9 @@ public class ObjectDestroyed : Condition
     [SerializeField]
     GameObject obj;
 
-    public ObjectDestroyed(Trigger trigger, string name, object checkObject, GameObject player) : base (trigger, name, checkObject, player)
+    public ObjectDestroyed(Trigger trigger, string name, GameObject player) : base (trigger, name, player)
     {
-
+        check();
     }
 
     void check()
