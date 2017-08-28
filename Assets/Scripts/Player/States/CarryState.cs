@@ -25,6 +25,10 @@ public class CarryState : WalkingState
 
         carryObject = carryNode.gameObject.transform.parent;
         carryObject.parent = Player.transform;
+
+        carryObject.position = Player.transform.position + (Player.transform.up * 1.1f) + (Player.transform.forward * 0.3f);
+        carryObject.rotation = Player.transform.rotation;
+
         yield return base.EnterState();
     }
     public override IEnumerator ExitState()
@@ -58,7 +62,6 @@ public class CarryState : WalkingState
     protected override void UpdateIK()
     {
         base.UpdateIK();
-        OffsetPosition = Player.transform.position + (Player.transform.up * 1.1f) + (Player.transform.forward * 0.3f);
 
         IK.RightHand.weight = 0.8f;
         IK.RightHand.position = carryNode.rightHand.position;
@@ -67,9 +70,6 @@ public class CarryState : WalkingState
         IK.LeftHand.weight = 0.8f;
         IK.LeftHand.position = carryNode.leftHand.position;
         IK.LeftHand.rotation = carryNode.leftHand.rotation;
-
-        carryObject.rotation = Player.transform.rotation;
-        carryObject.position = OffsetPosition;
     }
 
     //Trigger Functions

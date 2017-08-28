@@ -42,7 +42,7 @@ public class PlayerController : MonoBehaviour
 
     //HUD data
     private static float _maxHealth = 100;
-    private static float _maxArmor = 0;
+    private static float _maxArmor = 2;
     private float _currentHealth = _maxHealth;
     private float _currentArmor = _maxArmor;
     private float _armorRecharge = 5.0f;
@@ -161,21 +161,21 @@ public class PlayerController : MonoBehaviour
         _gunUpgrade++;
         //hud.SendMessage(GunUpgrade(index));
     }
-    public ClimbingNode FindHookTarget()
-    {
-        GameObject[] Hooks = GameObject.FindGameObjectsWithTag("HookNode");
 
-        float closestDistance = 0;
-        for (int i = 0; i < Hooks.Length; i++)
+    public GameObject FindHookTarget(string tag)
+    {
+        GameObject[] targets = GameObject.FindGameObjectsWithTag(tag);
+        float closestAngle = 0;
+        for (int i = 0; i < targets.Length; i++)
         {
-            Vector3 checkDistance = Hooks[i].transform.position - Player.transform.position;
-            if (checkDistance.magnitude < HookRange && Vector3.Dot(Camera.main.transform.forward, Hooks[i].transform.forward) > 0.5f)
+            Vector3 checkDistance = targets[i].transform.position - Player.transform.position;
+            if (checkDistance.magnitude < HookRange && Vector3.Dot(Camera.main.transform.forward, targets[i].transform.forward) > 0.5f)
             {
-                float checkAngle = (Vector3.Dot(Hooks[i].transform.position - Player.transform.position, Camera.main.transform.forward));
-                if (checkAngle > closestDistance)
+                float checkAngle = (Vector3.Dot(targets[i].transform.position - Player.transform.position, Camera.main.transform.forward));
+                if (checkAngle > closestAngle)
                 {
-                    closestDistance = checkAngle;
-                    return Hooks[i].GetComponent<ClimbingNode>();
+                    closestAngle = checkAngle;
+                    return targets[i];
                 }
             }
         }

@@ -7,13 +7,14 @@ public class AimState : WalkingState
     float equipTime = 1.233f;
     float bulletScale = 1;
     float handToGunWeight;
+    
+    private Transform sword;
 
     public AimState(StateManager manager,bool grounded) : base(manager,grounded) { }
 
     //Transitions
     public override IEnumerator EnterState()
     {
-        //Time.timeScale = 0.1f;
         yield return base.EnterState();
         lookDirection = Camera.main.transform.forward;
         lookDirection = Vector3.ProjectOnPlane(lookDirection, Player.transform.up);
@@ -33,13 +34,15 @@ public class AimState : WalkingState
         Player.StartCoroutine(Player.ToggleWeapon(0, 1, 1));
         Player.transform.GetChild(0).position += Player.transform.right * 0.23f + Player.transform.up * 0.15f;
         yield return ToggleGun();
-        //Time.timeScale = 1f;
     }
 
     //State Behaviour
     protected override IEnumerator HandleInput()
     {
-        if (!Input.GetButton("Aim"))
+        if (Input.GetKeyDown(KeyCode.X))
+            Player.StartCoroutine(ThrowHook(Player.FindHookTarget("CarryNode")));
+
+        if (!Input.GetButton("Aim") || Input.GetButtonDown("Roll"))
             stateManager.ChangeState(new UnequipedState(stateManager, grounded));
 
         if (Input.GetButton("Attack"))
@@ -50,7 +53,6 @@ public class AimState : WalkingState
             (Player.weapons[0] as Gun).Shoot(bulletScale);
             bulletScale = 1;
         }
-
         else
             yield return base.HandleInput();
     }
@@ -79,7 +81,57 @@ public class AimState : WalkingState
             yield return null;
         }
     }
-        
+
+    private IEnumerator ThrowHook(GameObject node)
+    {
+        if (!node)
+            yield break;
+
+        InTransition = true;
+        anim.SetBool("hook", true);
+
+        sword = Player.weapons[1].transform;
+        sword.parent = null;
+
+        desiredDirection = node.transform.position - Player.transform.position;
+
+        elapsedTime = 0;
+        while (elapsedTime < 1)
+        {
+            sword.position = Vector3.Lerp(sword.position, node.transform.position - node.transform.forward * 0.3f, elapsedTime);
+            sword.rotation = Quaternion.Lerp(sword.rotation, Quaternion.FromToRotation(Vector3.up, node.transform.forward), elapsedTime);
+            elapsedTime += Time.deltaTime;
+
+            base.UpdateMovement();
+            base.UpdateAnimator();
+            base.UpdateIK();
+            base.UpdatePhysics();
+
+            yield return null;
+        }
+        sword.parent = node.transform.parent;
+        yield return HookTravel(node);
+    }
+    private IEnumerator HookTravel(GameObject node)
+    {
+        Vector3 startPos = node.transform.parent.position;
+        Vector3 offsetPos = Player.transform.position + (Player.transform.up * 1.1f) + (Player.transform.forward * 0.3f);
+
+        elapsedTime = 0;
+        while (elapsedTime < 1)
+        {
+            node.transform.parent.position = Vector3.Lerp(startPos, offsetPos, elapsedTime);
+            node.transform.parent.rotation = Quaternion.Lerp(node.transform.parent.rotation, Player.transform.rotation, elapsedTime);
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        rb.velocity = Vector3.zero;
+        stateManager.ChangeState(new CarryState(stateManager, node.GetComponent<CarryNode>(), grounded));
+        InTransition = false;
+    }
+
     //State Updates
     protected override void UpdateMovement()
     {

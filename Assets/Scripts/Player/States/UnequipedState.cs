@@ -20,7 +20,7 @@ public class UnequipedState : WalkingState
 
     public override void OnTriggerStay(Collider other)
     {
-        if (Input.GetButtonDown("Action") && !inTransition)
+        if (Input.GetButtonDown("Action") && !InTransition)
         {
             if (other.CompareTag("CarryNode"))
                 stateManager.ChangeState(new CarryState(stateManager, other.GetComponent<CarryNode>(), grounded));

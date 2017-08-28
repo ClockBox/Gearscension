@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class CombatState : WalkingState
 {
-    ClimbingNode hookNode;
-    Transform sword;
+    private ClimbingNode hookNode;
+    private Transform sword;
 
     private bool hooked = false;
 
@@ -45,7 +45,7 @@ public class CombatState : WalkingState
     protected override IEnumerator HandleInput()
     {
         if (Input.GetKeyDown(KeyCode.X))
-            Player.StartCoroutine(ThrowHook(Player.FindHookTarget()));
+            Player.StartCoroutine(ThrowHook(Player.FindHookTarget("HookNode")));
 
         else if (Input.GetButtonDown("Attack"))
             yield return Attack();
@@ -70,7 +70,7 @@ public class CombatState : WalkingState
             else if (moveDirection.magnitude > 0)
             {
                 IK.RightHand.weight = 0;
-                inTransition = true;
+                InTransition = true;
                 Player.weapons[1].transform.parent = anim.GetBoneTransform(HumanBodyBones.RightHand);
 
                 ClimbState temp = new ClimbState(stateManager, hookNode);
@@ -107,14 +107,15 @@ public class CombatState : WalkingState
         }
         (Player.weapons[1] as Sword).Blade.enabled = false;
     }
-    private IEnumerator ThrowHook(ClimbingNode node)
+    private IEnumerator ThrowHook(GameObject node)
     {
+        Debug.Log(node);
         if (!node)
             yield break;
 
-        inTransition = true;
+        InTransition = true;
         anim.SetBool("hook", true);
-
+        
         sword = Player.weapons[1].transform;
         sword.parent = null;
 
@@ -129,7 +130,7 @@ public class CombatState : WalkingState
         elapsedTime = 0;
         while (elapsedTime < 1)
         {
-            sword.position = Vector3.Lerp(sword.position, node.rightHand.position - node.transform.forward * 0.3f, elapsedTime);
+            sword.position = Vector3.Lerp(sword.position, node.transform.position - node.transform.forward * 0.3f, elapsedTime);
             sword.rotation = Quaternion.Lerp(sword.rotation, Quaternion.FromToRotation(Vector3.up, node.transform.forward), elapsedTime);
             elapsedTime += Time.deltaTime;
 
@@ -140,7 +141,7 @@ public class CombatState : WalkingState
 
             yield return null;
         }
-        yield return HookTravel(node);
+        yield return HookTravel(node.GetComponent<ClimbingNode>());
     }
     private IEnumerator HookTravel(ClimbingNode node)
     {
@@ -163,7 +164,7 @@ public class CombatState : WalkingState
             Player.transform.localEulerAngles = new Vector3(0, Player.transform.localEulerAngles.y, Player.transform.localEulerAngles.z);
 
         rb.velocity = Vector3.zero;
-        inTransition = false;
+        InTransition = false;
     }
 
     //State Updates

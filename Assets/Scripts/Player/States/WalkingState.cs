@@ -64,6 +64,7 @@ public class WalkingState : PlayerState
     private void Jump()
     {
         anim.SetBool("isGrounded", false);
+        rb.velocity = -new Vector3(rb.velocity.x, 0, rb.velocity.z);
         rb.AddForce(Player.transform.up * jumpForce * rb.mass, ForceMode.Impulse);
         grounded = false;
     }
@@ -159,7 +160,7 @@ public class WalkingState : PlayerState
     //TriggerFucntions
     public override void OnTriggerEnter(Collider other)
     {
-        if (!inTransition && canClimb)
+        if (!InTransition && canClimb)
         {
 
             if (other.CompareTag("ClimbingNode") || other.CompareTag("HookNode"))
