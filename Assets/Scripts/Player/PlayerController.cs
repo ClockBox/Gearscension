@@ -176,7 +176,6 @@ public class PlayerController : MonoBehaviour
                 if (checkAngle > closestAngle)
                 {
                     closestAngle = checkAngle;
-                    Debug.Log(closestAngle);
                     temp = targets[i];
                 }
             }

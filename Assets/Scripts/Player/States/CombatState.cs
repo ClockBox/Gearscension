@@ -93,17 +93,23 @@ public class CombatState : WalkingState
         anim.SetTrigger("attack");
         (Player.weapons[1] as Sword).Blade.enabled = true;
 
-        if (hooked)
+        elapsedTime = 0;
+        while (elapsedTime < 0.5f)
         {
-            elapsedTime = 0;
-            while (elapsedTime < 0.5f)
+            UpdateIK();
+            if (hooked)
             {
-                UpdateIK();
                 Player.transform.position = hookNode.PlayerPosition;
                 Player.transform.rotation = hookNode.transform.rotation;
-                elapsedTime += Time.deltaTime;
-                yield return null;
             }
+            else
+            {
+                UpdateMovement();
+                UpdateAnimator();
+            }
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
         }
         (Player.weapons[1] as Sword).Blade.enabled = false;
     }

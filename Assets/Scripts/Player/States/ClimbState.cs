@@ -212,10 +212,10 @@ public class ClimbState : PlayerState
             anim.SetBool("isGrounded", false);
 
             //Wall Eject
-            if (Vector3.Dot(Vector3.ProjectOnPlane(Player.transform.transform.forward, Vector3.up), lookDirection) < 0)
+            if (Vector3.Dot(currentNodes[0].transform.transform.forward, lookDirection) < 0)
             {
                 Player.transform.LookAt(Player.transform.position + lookDirection);
-                rb.velocity = (Vector3.ProjectOnPlane(lookDirection.normalized, Vector3.up) / 2 + Player.transform.up) * 5;
+                rb.velocity = Vector3.ProjectOnPlane(lookDirection.normalized, Vector3.up) * 2.5f + Player.transform.up * 2;
             }
             //Drop/Move allong wall
             else
