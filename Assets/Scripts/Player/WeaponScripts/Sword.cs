@@ -11,7 +11,7 @@ public class Sword : Weapon
         base.Start();
         _Collider = GetComponentInChildren<Collider>();
         if (!_Collider)
-            Debug.LogWarning(transform.root.gameObject.name + ": " + name + ": cannot find Collider");
+            Debug.LogWarning(transform.root.gameObject.name + ": " + name + ": cannot find blade Collider");
     }
 
     private void OnTriggerEnter(Collider other)

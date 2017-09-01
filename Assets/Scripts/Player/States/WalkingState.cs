@@ -5,7 +5,7 @@ public class WalkingState : PlayerState
 {
     protected Vector3 desiredDirection;
     protected Vector3 lookDirection;
-    protected Vector3 moveDirection;
+    protected static Vector3 moveDirection;
 
     protected float movementSpeed = 5;
     protected float moveX = 0;

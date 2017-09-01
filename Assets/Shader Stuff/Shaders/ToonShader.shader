@@ -24,8 +24,6 @@
 		Tags{ "Queue" = "Transparent" "RenderType" = "Transparent" }
 		LOD 200
 
-		UsePass "EdgeDetectNormals/Test"
-
 		CGPROGRAM
 			#pragma surface surf ToonRamp fullforwardshadows
 			#include "UnityPBSLighting.cginc"
@@ -87,7 +85,9 @@
 
 				o.Emission = (tex2D(_Emission, IN.uv_Emission) * _EmissionColor).rgb;
 			}
-		ENDCG
+			ENDCG
+
+			//UsePass "EdgeDetectNormals/Test"
 	}
 	FallBack "Diffuse"
 }
