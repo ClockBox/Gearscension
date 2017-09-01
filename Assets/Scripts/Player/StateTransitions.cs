@@ -9,7 +9,7 @@ public class StateTransitions : MonoBehaviour
     public string statesFolderPath = "Assets/";
     protected string[] stateTypes;
 
-    public delegate IEnumerator TransitionDelegate();
+    public delegate IEnumerator TransitionDelegate(PlayerState fromstate, PlayerState toState);
     public Dictionary<string, Dictionary<string, TransitionDelegate>> Transitions = new Dictionary<string, Dictionary<string, TransitionDelegate>>();
 
     private void Awake()
@@ -43,7 +43,7 @@ public class StateTransitions : MonoBehaviour
     }
 
     // NullTransition - all transitions not Initilaized will default to NullTransition;
-    public virtual IEnumerator NullTransition()
+    public virtual IEnumerator NullTransition(PlayerState fromstate, PlayerState toState)
     {
         yield return null;
     }

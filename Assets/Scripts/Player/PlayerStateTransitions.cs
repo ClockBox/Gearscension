@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerStateTransitions : StateTransitions
 {
+    PlayerController Player;
+
 	protected override void Start ()
     {
         //Unequiped
@@ -14,7 +16,7 @@ public class PlayerStateTransitions : StateTransitions
         Transitions["UnequipedState"]["PushState"] = UnequipedToPushing;
 
         // Pushing
-        Transitions["PushState"]["UnequipedState"] = PushingToWalking;
+        Transitions["PushState"]["UnequipedState"] = PushingToUnequiped;
 
         // Combat
         Transitions["CombatState"]["UnequipedState"] = CombatToUnequiped;
@@ -33,65 +35,69 @@ public class PlayerStateTransitions : StateTransitions
     }
 
     //Unequiped
-    private IEnumerator UnequipedToCombat()
+    private IEnumerator UnequipedToCombat(PlayerState fromstate, PlayerState toState)
     {
         yield return null;
     }
-    private IEnumerator UnequipedToAiming()
+    private IEnumerator UnequipedToAiming(PlayerState fromstate, PlayerState toState)
     {
         yield return null;
     }
-    private IEnumerator UnequipedToClimbing()
+    private IEnumerator UnequipedToClimbing(PlayerState fromstate, PlayerState toState)
     {
         yield return null;
     }
-    private IEnumerator UnequipedToCarrying()
+    private IEnumerator UnequipedToCarrying(PlayerState fromstate, PlayerState toState)
     {
         yield return null;
     }
-    private IEnumerator UnequipedToPushing()
+    private IEnumerator UnequipedToPushing(PlayerState fromstate, PlayerState toState)
     {
         yield return null;
     }
 
     // Pushing
-    private IEnumerator PushingToWalking()
+    private IEnumerator PushingToUnequiped(PlayerState fromstate, PlayerState toState)
     {
         yield return null;
     }
 
     // Combat
-    private IEnumerator CombatToUnequiped()
+    private IEnumerator CombatToUnequiped(PlayerState fromstate, PlayerState toState)
     {
         yield return null;
     }
-    private IEnumerator CombatToAiming()
+    private IEnumerator CombatToAiming(PlayerState fromstate, PlayerState toState)
+    {
+        yield return null;
+    }
+    private IEnumerator CombatToClimbing(PlayerState fromstate, PlayerState toState)
     {
         yield return null;
     }
 
     // Aiming
-    private IEnumerator AimingToUnequiped()
+    private IEnumerator AimingToUnequiped(PlayerState fromstate, PlayerState toState)
     {
         yield return null;
     }
 
     // Climbing
-    private IEnumerator ClimbingToUnequiped()
+    private IEnumerator ClimbingToUnequiped(PlayerState fromstate, PlayerState toState)
     {
         yield return null;
     }
-    private IEnumerator ClimbingToCombat()
+    private IEnumerator ClimbingToCombat(PlayerState fromstate, PlayerState toState)
     {
         yield return null;
     }
 
     // Carrying
-    private IEnumerator CarryingToUnequiped()
+    private IEnumerator CarryingToUnequiped(PlayerState fromstate, PlayerState toState)
     {
         yield return null;
     }
-    private IEnumerator CarryingToCombat()
+    private IEnumerator CarryingToCombat(PlayerState fromstate, PlayerState toState)
     {
         yield return null;
     }

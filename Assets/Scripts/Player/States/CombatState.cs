@@ -109,7 +109,6 @@ public class CombatState : WalkingState
     }
     private IEnumerator ThrowHook(GameObject node)
     {
-        Debug.Log(node);
         if (!node)
             yield break;
 

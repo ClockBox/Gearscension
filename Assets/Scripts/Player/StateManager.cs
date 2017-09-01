@@ -28,8 +28,6 @@ public class StateManager : MonoBehaviour
     }
     protected IEnumerator HandleStateTransition(PlayerState newState)
     {
-        Debug.Log("From:" + State + " \tTo:" + newState);
-
         RemoveTriggers(State);
         RemoveCollisions(State);
         SetTriggers(newState);
@@ -45,18 +43,12 @@ public class StateManager : MonoBehaviour
         yield return StartCoroutine(State.EnterState());
         State.InTransition = false;
     }
-    
-    public IEnumerator TransitionTo(string newStateName)
-    {
-        if (transitions.Transitions[State.ToString()][newStateName] == transitions.NullTransition)
-            Debug.LogWarning(gameObject.name + ": Transition not set for transition: " + State.ToString() + " to " + newStateName);
-        yield return transitions.Transitions[State.ToString()][newStateName]();
-    }
+
     public IEnumerator TransitionTo(PlayerState newState)
     {
         if (transitions.Transitions[State.ToString()][newState.ToString()] == transitions.NullTransition)
-            Debug.LogError(gameObject.name + ": Transition not set for transition: " + State.ToString() + " to " + newState.ToString());
-        yield return transitions.Transitions[State.ToString()][newState.ToString()]();
+            Debug.LogError(gameObject.name + ": Transition not set for transition from: " + State.ToString() + "  to: " + newState.ToString());
+        yield return transitions.Transitions[State.ToString()][newState.ToString()](State, newState);
     }
 
     // Trigger Delegates

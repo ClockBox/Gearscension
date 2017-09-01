@@ -165,21 +165,23 @@ public class PlayerController : MonoBehaviour
     public GameObject FindHookTarget(string tag)
     {
         GameObject[] targets = GameObject.FindGameObjectsWithTag(tag);
-        float closestAngle = 0;
+        GameObject temp = null;
+        float closestAngle = 0.5f;
         for (int i = 0; i < targets.Length; i++)
         {
             Vector3 checkDistance = targets[i].transform.position - Player.transform.position;
-            if (checkDistance.magnitude < HookRange && Vector3.Dot(Camera.main.transform.forward, targets[i].transform.forward) > 0.5f)
+            if (checkDistance.magnitude < HookRange)
             {
                 float checkAngle = (Vector3.Dot(targets[i].transform.position - Player.transform.position, Camera.main.transform.forward));
                 if (checkAngle > closestAngle)
                 {
                     closestAngle = checkAngle;
-                    return targets[i];
+                    Debug.Log(closestAngle);
+                    temp = targets[i];
                 }
             }
         }
-        return null;
+        return temp;
     }
 
     //Health and armor functions
