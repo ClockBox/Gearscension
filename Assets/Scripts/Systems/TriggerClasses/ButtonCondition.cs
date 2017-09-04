@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Button : Condition
+public class ButtonCondition : Condition
 {
-    public Button(Trigger trigger, string name, GameObject player) : base (trigger, name, player)
+    public ButtonCondition(Trigger trigger, string name, GameObject player) : base(trigger, name, player)
     {
         trigger.StartCoroutine(inputCheck());
     }

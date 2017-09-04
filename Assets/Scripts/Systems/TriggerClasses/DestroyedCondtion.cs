@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectDestroyed : Condition
+public class DestroyedCondition : Condition
 {
     [SerializeField]
     GameObject obj;
 
-    public ObjectDestroyed(Trigger trigger, string name, GameObject player) : base (trigger, name, player)
+    public DestroyedCondition(Trigger trigger, string name, GameObject player) : base(trigger, name, player)
     {
         check();
     }

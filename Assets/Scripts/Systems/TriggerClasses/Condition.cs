@@ -5,12 +5,13 @@ using UnityEngine;
 [System.Serializable]
 public class Condition
 {
-    protected static GameObject player;
+    [SerializeField]
     protected string name;
+    protected static GameObject player;
     protected Trigger trigger;
 
     [SerializeField]
-    protected object checkObject;
+    protected GameObject checkObject;
     protected System.Type objectType { get { return checkObject.GetType(); } }
 
     [Space(20)]
@@ -27,14 +28,12 @@ public class Condition
     }
 
     // - Constuctor
-    protected Condition(Trigger trigger,string name, GameObject _player)
+    public Condition(Trigger trigger,string name, GameObject _player)
     {
         this.name = name;
         this.trigger = trigger;
 
         if (player == null)
-        {
             player = _player; 
-        }
     }
 }

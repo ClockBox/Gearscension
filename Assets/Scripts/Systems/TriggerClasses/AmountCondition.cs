@@ -9,7 +9,7 @@ enum CompareType
     EqualTo
 }
 
-public class AmountOf : Condition
+public class AmountCondition : Condition
 {
     [SerializeField]
     CompareType typeOfCompare;
@@ -21,7 +21,7 @@ public class AmountOf : Condition
     protected int amountOfObjects;
     Collider[] colArray;
 
-    public AmountOf(Trigger trigger, string name, GameObject player) : base(trigger, name, player)
+    public AmountCondition(Trigger trigger,string name, GameObject player) : base(trigger, name, player)
     {
         trigger.StartCoroutine(CheckArea());
     }

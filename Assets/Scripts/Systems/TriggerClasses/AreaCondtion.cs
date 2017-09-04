@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InArea : Condition
+public class AreaCondition : Condition
 {
     Collider[] col;
     [SerializeField]
@@ -10,12 +10,12 @@ public class InArea : Condition
 
     Vector3 triggerCol;
 
-    public InArea(Trigger trigger, string name, GameObject player) : base (trigger, name, player)
+    public AreaCondition(Trigger trigger, string name, GameObject player) : base(trigger, name, player)
     {
         triggerCol = trigger.GetComponent<Collider>().bounds.extents;
         trigger.StartCoroutine(CheckArea());
     }
-    
+
     IEnumerator CheckArea()
     {
         while (true)
@@ -25,9 +25,7 @@ public class InArea : Condition
             for(int i = 0; i < col.Length - 1; i++)
             {
                 if (col[i].gameObject == (GameObject)checkObject)
-                {
                     conditionIsMet = true;
-                }
                 else
                     conditionIsMet = false;
             }
