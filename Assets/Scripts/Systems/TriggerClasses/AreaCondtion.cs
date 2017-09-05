@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class AreaCondition : Condition
 {
-    Collider[] col;
+    [SerializeField]
+    protected GameObject checkObject;
     [SerializeField]
     protected int layer;
 
-    Vector3 triggerCol;
+    Vector3 triggerArea;
+    Collider[] cols;
 
-    public AreaCondition(Trigger trigger, string name, GameObject player) : base(trigger, name, player)
+    public AreaCondition(Trigger trigger) : base(trigger)
     {
-        triggerCol = trigger.GetComponent<Collider>().bounds.extents;
+        triggerArea = trigger.GetComponent<Collider>().bounds.extents;
         trigger.StartCoroutine(CheckArea());
     }
 
@@ -20,11 +22,11 @@ public class AreaCondition : Condition
     {
         while (true)
         {
-            col = Physics.OverlapBox(trigger.transform.position, triggerCol, Quaternion.identity, LayerMask.GetMask(LayerMask.LayerToName(layer)));
+            cols = Physics.OverlapBox(trigger.transform.position, triggerArea, Quaternion.identity, LayerMask.GetMask(LayerMask.LayerToName(layer)));
             
-            for(int i = 0; i < col.Length - 1; i++)
+            for(int i = 0; i < cols.Length - 1; i++)
             {
-                if (col[i].gameObject == (GameObject)checkObject)
+                if (cols[i].gameObject == checkObject)
                     conditionIsMet = true;
                 else
                     conditionIsMet = false;

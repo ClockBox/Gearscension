@@ -5,9 +5,9 @@ using UnityEngine;
 public class DestroyedCondition : Condition
 {
     [SerializeField]
-    GameObject obj;
+    GameObject checkObject;
 
-    public DestroyedCondition(Trigger trigger, string name, GameObject player) : base(trigger, name, player)
+    public DestroyedCondition(Trigger trigger) : base(trigger)
     {
         check();
     }

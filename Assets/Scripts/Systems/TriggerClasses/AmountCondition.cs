@@ -21,7 +21,7 @@ public class AmountCondition : Condition
     protected int amountOfObjects;
     Collider[] colArray;
 
-    public AmountCondition(Trigger trigger,string name, GameObject player) : base(trigger, name, player)
+    public AmountCondition(Trigger trigger) : base(trigger)
     {
         trigger.StartCoroutine(CheckArea());
     }

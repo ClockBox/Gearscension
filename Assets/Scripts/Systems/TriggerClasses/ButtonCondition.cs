@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ButtonCondition : Condition
 {
-    public ButtonCondition(Trigger trigger, string name, GameObject player) : base(trigger, name, player)
+    public ButtonCondition(Trigger trigger) : base(trigger)
     {
         trigger.StartCoroutine(inputCheck());
     }
@@ -13,7 +13,7 @@ public class ButtonCondition : Condition
     {
         while(true)
         {
-            if (trigger.inArea)
+            if (trigger.InArea)
             {
                 if (Input.GetButtonDown("Action"))
                 {
@@ -22,8 +22,8 @@ public class ButtonCondition : Condition
                 }
                 else
                     conditionIsMet = false;
-                yield return null; 
             }
+            yield return null;
         }
     }
 }

@@ -8,14 +8,19 @@ public class TimedCondition : Condition
     [SerializeField]
     float timerAmount;
 
-    public TimedCondition(Trigger trigger, string name, GameObject player) : base(trigger, name, player)
+    [SerializeField]
+    bool loop;
+
+    public TimedCondition(Trigger trigger) : base(trigger)
     {
         trigger.StartCoroutine(StartTimer());
+
     }
 
     IEnumerator StartTimer()
     {
         yield return new WaitForSeconds(timerAmount);
-        conditionIsMet = true;
+        trigger.CheckConditions();
+        if (loop) trigger.StartCoroutine(StartTimer());
     }
 }

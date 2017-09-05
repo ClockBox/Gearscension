@@ -1,91 +1,82 @@
 ﻿using UnityEngine;
 using UnityEditor;
+using UnityEditorInternal;
 
 [CustomEditor(typeof(Trigger),true)]
 [CanEditMultipleObjects]
 public class TriggerScriptEditor : Editor
 {
     Trigger m_target;
-
-    public enum ConditionTypes
-    {
-        NewCondition,
-        Timed,                          // - Trigger is simply placed on a timer with an option to loop.
-        Area,                           // – Triggered when "CheckObject" is within the trigger's area.
-        Button,                         // - Triggered when "CheckObject" is in area and "Input" is recieved 
-        Destroyed,                      // - triggered when a specific "CheckObject" or "objectType" is destroyed.
-        Amount                          // - Triggered when defined amount of “objectType” are in scene(can be zero).
-    }
-    protected ConditionTypes condType;
+    ReorderableList m_condList;
+    SerializedProperty conditionProp;
+    SerializedProperty resultProp;
+    
+    protected ConditionType condType;
 
     protected virtual void OnEnable()
     {
         m_target = (Trigger)target;
+        resultProp = serializedObject.FindProperty("result");
+        SetupConditionList();
     }
 
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
-        DrawDefaultInspector();
-
-        if (m_target.conditions.Count > 0)
         {
-            EditorGUILayout.LabelField("Conditions:");
-            for (int i = 0; i < m_target.conditions.Count; i++)
-                DrawCondition(i);
-        }
+            DrawDefaultInspector();
 
-        EditorGUI.BeginChangeCheck();
-        condType = (ConditionTypes)EditorGUILayout.EnumPopup("Condition Type", condType);
-        if (EditorGUI.EndChangeCheck())
-        {
-            Undo.RecordObject(m_target, "Add Condiction");
-            AddCondition(condType);
-            condType = ConditionTypes.NewCondition;
-            EditorUtility.SetDirty(m_target);
-        }
+            GUILayout.Space(10);
+            m_condList.DoLayoutList();
 
+            GUILayout.Space(10);
+            EditorGUILayout.PropertyField(resultProp);
+        }
         serializedObject.ApplyModifiedProperties();
     }
-    
-    protected virtual void DrawCondition(int index)
+
+    private void SetupConditionList()
     {
-        if (index < 0 || index > m_target.conditions.Count)
-            return;
-        GUILayout.BeginHorizontal();
+        conditionProp = serializedObject.FindProperty("conditions");
+
+        m_condList = new ReorderableList(serializedObject, conditionProp, true, true, true, true);
+        m_condList.drawHeaderCallback = (Rect rect) =>
         {
-            GUILayout.Space(20);
-            SerializedProperty conditionProp = serializedObject.FindProperty("conditions").GetArrayElementAtIndex(index);
-            Debug.Log(conditionProp.type);
-            EditorGUILayout.PropertyField(conditionProp, true);
-            if (GUILayout.Button("X", GUILayout.Width(20)))
+            EditorGUI.LabelField(new Rect(rect), "Conditions");
+        };
+        m_condList.drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
             {
-                Undo.RecordObject(m_target, "Remove Condition");
-                RemoveCondition(index);
-                EditorUtility.SetDirty(m_target);
-            }
-        }
-        GUILayout.EndHorizontal();
+                SerializedProperty element = m_condList.serializedProperty.GetArrayElementAtIndex(index);
+                EditorGUI.PropertyField(new Rect(rect),element);
+            };
+        m_condList.onAddDropdownCallback = (Rect buttonRect, ReorderableList l) =>
+            {
+                GenericMenu menu = new GenericMenu();
+                foreach (ConditionType type in System.Enum.GetValues(typeof(ConditionType)))
+                    menu.AddItem(new GUIContent(type.ToString()), false, AddCondition, type);
+                menu.ShowAsContext();
+            };
     }
 
-    private void AddCondition(ConditionTypes conditionType)
+    private void AddCondition(object type)
     {
+        ConditionType conditionType = (ConditionType)type;
         switch (conditionType)
         {
-            case ConditionTypes.Timed:
-                m_target.conditions.Add(new TimedCondition(m_target,"Timed", m_target.player));
+            case ConditionType.Timed:
+                m_target.conditions.Add(new TimedCondition(m_target));
                 break;
-            case ConditionTypes.Area:
-                m_target.conditions.Add(new AreaCondition(m_target, "Area", m_target.player));
+            case ConditionType.Area:
+                m_target.conditions.Add(new AreaCondition(m_target));
                 break;
-            case ConditionTypes.Button:
-                m_target.conditions.Add(new ButtonCondition(m_target, "Button", m_target.player));
+            case ConditionType.Button:
+                m_target.conditions.Add(new ButtonCondition(m_target));
                 break;
-            case ConditionTypes.Destroyed:
-                m_target.conditions.Add(new DestroyedCondition(m_target, "Destroyed", m_target.player));
+            case ConditionType.Destroyed:
+                m_target.conditions.Add(new DestroyedCondition(m_target));
                 break;
-            case ConditionTypes.Amount:
-                m_target.conditions.Add(new AmountCondition(m_target, "Amount", m_target.player));
+            case ConditionType.Amount:
+                m_target.conditions.Add(new AmountCondition(m_target));
                 break;
         }
     }
