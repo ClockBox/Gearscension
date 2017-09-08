@@ -9,17 +9,17 @@
 		_Detail("Detail", 2D) = "gray" {}
 
 		[NoScaleOffset]_Normal("Normal", 2D) = "bump" {}
-		_Parallax("Height", 2D) = "black" {}
+		_Heightmap("HeightMap", 2D) = "black" {}
 
 		[NoScaleOffset]_Metallic("Metallic", 2D) = "white"{}
-		[NoScaleOffset]_Roughness("Roughness", 2D) = "gray" {}
+		[NoScaleOffset]_Smoothness("Smoothness", 2D) = "gray" {}
 
-		[NoScaleOffset]_EmissionColor("EmissionColor", Color) = (0,0,0)
+		[HDR]_EmissionColor("EmissionColor", Color) = (0,0,0)
 		[NoScaleOffset]_Emmision("Emission", 2D) = "black" {}
 
 		[NoScaleOffset]_Ramp("Toon Ramp", 2D) = "gray" {}
 	}
-	SubShader
+		SubShader
 	{
 		Tags{ "Queue" = "Transparent" "RenderType" = "Transparent" }
 		LOD 200
@@ -34,11 +34,41 @@
 			sampler2D _Alpha;
 			sampler2D _Detail;
 			sampler2D _Normal;
-			sampler2D _Parallax;
+			sampler2D _Heightmap;
 			sampler2D _Metallic;
-			sampler2D _Roughness;
+			sampler2D _Smoothness;
 			sampler2D _Emission;
 			sampler2D _Ramp;
+
+			fixed4 _EmissionColor;
+			fixed4 _Color;
+
+			struct Input
+			{
+				float2 uv_MainTex;
+				float2 uv_Detail;
+				float2 uv_Normal;
+				float2 uv_Heightmap;
+				float2 uv_Metallic;
+				float2 uv_Emission;
+				float3 viewDir;
+			};
+
+			void surf(Input IN, inout SurfaceOutputStandard  o)
+			{
+				//float2 offset = ParallaxOffset(tex2D(_Heightmap, IN.uv_Heightmap).r, 0.1, IN.viewDir);
+				half rim = 1.0 - saturate(dot(normalize(IN.viewDir), o.Normal));
+
+				o.Albedo = tex2D(_MainTex, IN.uv_MainTex);
+				o.Albedo *= tex2D(_Detail, IN.uv_Detail).rgb;
+				o.Alpha = tex2D(_Alpha, IN.uv_MainTex).rgb;
+
+				o.Normal = UnpackNormal(tex2D(_Normal, IN.uv_Normal));
+				o.Emission = tex2D(_Emission, IN.uv_Emission) * _EmissionColor;
+
+				o.Metallic = tex2D(_Metallic, IN.uv_Metallic).rgb;
+				o.Smoothness = tex2D(_Metallic, IN.uv_Metallic).a;
+			}
 
 			#pragma lighting ToonRamp exclude_path:prepass
 			inline half4 LightingToonRamp(SurfaceOutputStandard s, half3 lightDir, half atten)
@@ -54,40 +84,7 @@
 				c.a = 0;
 				return c;
 			}
-
-			fixed4 _EmissionColor;
-			fixed4 _Color;
-
-			struct Input
-			{
-				float2 uv_MainTex;
-				float2 uv_Detail;
-				float2 uv_Normal;
-				float2 uv_Parallax;
-				float2 uv_Metallic;
-				float2 uv_Emission;
-				float3 viewDir;
-			};
-
-			void surf(Input IN, inout SurfaceOutputStandard  o)
-			{
-				float2 offset = ParallaxOffset(tex2D(_Parallax, IN.uv_Parallax).r, 0.1, IN.viewDir);
-
-				o.Albedo = (tex2D(_MainTex, IN.uv_MainTex) * _Color).rgb;
-				o.Albedo *= tex2D(_Detail, IN.uv_Detail).rgb;
-				o.Alpha = tex2D(_Alpha, IN.uv_MainTex).rgb;
-
-				o.Normal = UnpackNormal(tex2D(_Normal, IN.uv_Normal));
-
-				o.Metallic = tex2D(_Metallic, IN.uv_Metallic).rgb;
-				half rim = 1.0 - saturate(dot(normalize(IN.viewDir), o.Normal));
-				o.Smoothness = tex2D(_Roughness, IN.uv_Metallic).rgb;
-
-				o.Emission = (tex2D(_Emission, IN.uv_Emission) * _EmissionColor).rgb;
-			}
-			ENDCG
-
-			//UsePass "EdgeDetectNormals/Test"
+		ENDCG
 	}
 	FallBack "Diffuse"
 }
