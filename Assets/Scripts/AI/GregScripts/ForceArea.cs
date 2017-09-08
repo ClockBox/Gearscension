@@ -10,7 +10,6 @@ public class ForceArea : MonoBehaviour
 	public float pushForce;
     public float lifeTime;
     public bool applyConstantForce;
-
     private Rigidbody tempRB;
 
     void Start()
@@ -43,10 +42,11 @@ public class ForceArea : MonoBehaviour
                     tempRB.isKinematic = false;
             }
             if (cols[i].gameObject == player)
+            
                 PlayerState.grounded = false;
 
 
-            cols[i].SendMessageUpwards("TakeDamage", 20,SendMessageOptions.DontRequireReceiver);
+            cols[i].SendMessageUpwards("TakeDamage", 5,SendMessageOptions.DontRequireReceiver);
         }
     }
     private void OnDrawGizmos()
