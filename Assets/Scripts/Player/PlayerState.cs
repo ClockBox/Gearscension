@@ -12,9 +12,9 @@ public class PlayerState
     protected static bool canClimb = true;
     public static bool grounded = true;
 
+    private bool stopState = false;
+    private bool inTransition = false;
     protected float elapsedTime;
-    protected bool stopState = false;
-    protected bool inTransition = false;
     public bool InTransition
     {
         get {return inTransition; }
@@ -42,6 +42,10 @@ public class PlayerState
     {
         stopState = true;
         yield return null;
+    }
+    public void StopState()
+    {
+        stopState = false;
     }
 
     //State Loops
@@ -84,7 +88,12 @@ public class PlayerState
     protected virtual void UpdatePhysics() { }
 
     //Trigger Functions
-    public virtual void OnTriggerEnter(Collider other) { }
-    public virtual void OnTriggerStay(Collider other) { }
-    public virtual void OnTriggerExit(Collider other) { }
+    public virtual void OnTriggerEnter(Collider collider) { }
+    public virtual void OnTriggerStay(Collider collider) { }
+    public virtual void OnTriggerExit(Collider collider) { }
+
+    //Colission Functions
+    public virtual void OnCollisionEnter(Collision collision) { }
+    public virtual void OnCollisionStay(Collision collision) { }
+    public virtual void OnCollisionExit(Collision collision) { }
 }

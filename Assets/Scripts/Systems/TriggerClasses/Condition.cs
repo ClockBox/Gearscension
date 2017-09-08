@@ -2,39 +2,39 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum ConditionType
+{
+    Timed,                          // - Trigger is simply placed on a timer with an option to loop.
+    Area,                           // – Triggered when "CheckObject" is within the trigger's area.
+    Button,                         // - Triggered when "CheckObject" is in area and "Input" is recieved 
+    Destroyed,                      // - triggered when a specific "CheckObject" or "objectType" is destroyed.
+    Amount,                         // - Triggered when defined amount of “objectType” are in scene(can be zero).                  
+}
+
 [System.Serializable]
-public class Condition
+public class Condition :ScriptableObject
 {
     protected static GameObject player;
-    protected string name;
     protected Trigger trigger;
-
-    [SerializeField]
-    protected object checkObject;
-    protected System.Type objectType { get { return checkObject.GetType(); } }
 
     [Space(20)]
     protected bool conditionIsMet = false;
-    public bool ConditionMet                        //Check by the trigger.
+    public bool ConditionMet
     {
         get { return conditionIsMet; }
         set
         {
             conditionIsMet = value;
             if (conditionIsMet == true)
-                trigger.CheckConditions();          //If this condition is met then check the trigger to see if the other condtions are as well.
+                trigger.CheckConditions();
         }
     }
-
-    // - Constuctor
-    protected Condition(Trigger trigger,string name, GameObject _player)
+    
+    public Condition(Trigger trigger)
     {
-        this.name = name;
         this.trigger = trigger;
 
         if (player == null)
-        {
-            player = _player; 
-        }
+            player = trigger.Player;
     }
 }
