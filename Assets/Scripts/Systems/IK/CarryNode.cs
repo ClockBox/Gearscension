@@ -3,6 +3,7 @@ using System.Collections;
 
 public class CarryNode : MonoBehaviour
 {
+    public static CarryNode Type;
     public Transform rightHand;
     public Transform leftHand;
 
@@ -11,7 +12,11 @@ public class CarryNode : MonoBehaviour
 
     bool active = true;
     
-    void Start () {
+    void Start ()
+    {
+        if (!Type)
+            Type = this;
+
         if (!rightHand || !leftHand)
             Debug.LogError("Carry Node: " + gameObject.name + " cannot find hand positions");
 

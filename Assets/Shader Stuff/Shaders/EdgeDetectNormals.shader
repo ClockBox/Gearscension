@@ -7,7 +7,6 @@ Shader "Hidden/EdgeDetect" {
 	}
 
 	CGINCLUDE
-	
 	#include "UnityCG.cginc"
 	
 	struct v2f {
@@ -282,6 +281,7 @@ Shader "Hidden/EdgeDetect" {
 	
 Subshader {
  Pass {
+	 Name "Test"
 	  ZTest Always Cull Off ZWrite Off
 
       CGPROGRAM

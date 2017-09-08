@@ -1,9 +1,20 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class StateManager : MonoBehaviour
 {
+    private StateTransitions transitions;
     public PlayerState State;
+
+    protected void Start()
+    {
+        transitions = GetComponent<StateTransitions>();
+
+        //Initialize trigger Delegates
+        SetTriggers(State);
+        SetCollisions(State);
+    }
 
     //State Functions
     public void StartState(PlayerState state)
@@ -11,56 +22,72 @@ public class StateManager : MonoBehaviour
         StartCoroutine(state.FixedUpdate());
         StartCoroutine(state.Update());
     }
-    public void ChangeState(PlayerState toState)
+    public void ChangeState(PlayerState newState)
     {
-        StartCoroutine(HandleStateTransition(toState));
+        StartCoroutine(HandleStateTransition(newState));
     }
-
-    protected IEnumerator HandleStateTransition(PlayerState toState)
+    protected IEnumerator HandleStateTransition(PlayerState newState)
     {
-        Debug.Log("From:" + State + " \tTo:" + toState);
+        RemoveTriggers(State);
+        RemoveCollisions(State);
+        SetTriggers(newState);
+        SetCollisions(newState);
 
-        SetTriggers(toState);
-
-        toState.InTransition = true;
+        newState.InTransition = true;
         yield return StartCoroutine(State.ExitState());
-        toState.InTransition = false;
+        newState.InTransition = false;
 
-        State = toState;
+        State = newState;
 
         State.InTransition = true;
         yield return StartCoroutine(State.EnterState());
         State.InTransition = false;
     }
 
-    //Trigger Delegates
-    delegate void TriggerEnterDelegate(Collider other);
-    delegate void TriggerStayDelegate(Collider other);
-    delegate void TriggerExitDelegate(Collider other);
-
-    TriggerEnterDelegate triggerEnter;
-    TriggerStayDelegate triggerStay;
-    TriggerExitDelegate triggerExit;
-
-    private void Start()
+    public IEnumerator TransitionTo(PlayerState newState)
     {
-        //Initialize Delegates
-        triggerEnter += State.OnTriggerEnter;
-        triggerStay += State.OnTriggerStay;
-        triggerExit += State.OnTriggerExit;
-    }
-    private void SetTriggers(PlayerState newState)
-    {
-        triggerEnter -= State.OnTriggerEnter;
-        triggerStay -= State.OnTriggerStay;
-        triggerExit -= State.OnTriggerExit;
-
-        triggerEnter += newState.OnTriggerEnter;
-        triggerStay += newState.OnTriggerStay;
-        triggerExit += newState.OnTriggerExit;
+        if (transitions.Transitions[State.ToString()][newState.ToString()] == transitions.NullTransition)
+            Debug.LogError(gameObject.name + ": Transition not set for transition from: " + State.ToString() + "  to: " + newState.ToString());
+        yield return transitions.Transitions[State.ToString()][newState.ToString()](State, newState);
     }
 
-    //Trigger Functions
+    // Trigger Delegates
+    delegate void TriggerDelegate(Collider collider);
+    private TriggerDelegate triggerEnter;
+    private TriggerDelegate triggerStay;
+    private TriggerDelegate triggerExit;
+    delegate void CollisionDelegate(Collision collision);
+    private CollisionDelegate collisionEnter;
+    private CollisionDelegate collisionStay;
+    private CollisionDelegate collisionExit;
+    
+    private void RemoveTriggers(PlayerState state)
+    {
+        triggerEnter -= state.OnTriggerEnter;
+        triggerStay -= state.OnTriggerStay;
+        triggerExit -= state.OnTriggerExit;
+    }
+    private void SetTriggers(PlayerState state)
+    {
+        triggerEnter += state.OnTriggerEnter;
+        triggerStay += state.OnTriggerStay;
+        triggerExit += state.OnTriggerExit;
+    }
+
+    private void RemoveCollisions(PlayerState state)
+    {
+        collisionEnter -= state.OnCollisionEnter;
+        collisionStay -= state.OnCollisionStay;
+        collisionExit -= state.OnCollisionExit;
+    }
+    private void SetCollisions(PlayerState state)
+    {
+        collisionEnter += state.OnCollisionEnter;
+        collisionStay += state.OnCollisionStay;
+        collisionExit += state.OnCollisionExit;
+    }
+
+    // Unity Trigger Functions Call Current State Tirgger Functions
     private void OnTriggerEnter(Collider other)
     {
         triggerEnter.Invoke(other);
@@ -72,5 +99,19 @@ public class StateManager : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         triggerExit.Invoke(other);
+    }
+
+    // Unity Collision Functions Call Current State Collision Functions
+    private void OnCollisionEnter(Collision collision)
+    {
+        collisionExit.Invoke(collision);
+    }
+    private void OnCollisionStay(Collision collision)
+    {
+        collisionStay.Invoke(collision);
+    }
+    private void OnCollisionExit(Collision collision)
+    {
+        collisionExit.Invoke(collision);
     }
 }

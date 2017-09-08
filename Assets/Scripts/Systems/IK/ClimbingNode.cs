@@ -2,6 +2,7 @@
 
 public class ClimbingNode : IKPositionNode
 {
+    public static ClimbingNode Type;
     private static GameObject EdgeNode;
 
     private Vector3 playerPosition;
