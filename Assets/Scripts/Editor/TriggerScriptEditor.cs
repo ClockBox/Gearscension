@@ -42,41 +42,86 @@ public class TriggerScriptEditor : Editor
         m_condList = new ReorderableList(serializedObject, conditionProp, true, true, true, true);
         m_condList.drawHeaderCallback = (Rect rect) =>
         {
-            EditorGUI.LabelField(new Rect(rect), "Conditions");
+            EditorGUI.LabelField(rect, "Conditions");
         };
         m_condList.drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
             {
                 SerializedProperty element = m_condList.serializedProperty.GetArrayElementAtIndex(index);
-                EditorGUI.PropertyField(new Rect(rect),element);
+                EditorGUI.PropertyField(rect, element, true);
             };
-        m_condList.onAddDropdownCallback = (Rect buttonRect, ReorderableList l) =>
+        m_condList.onAddDropdownCallback = (Rect buttonRect, ReorderableList list) =>
             {
                 GenericMenu menu = new GenericMenu();
                 foreach (ConditionType type in System.Enum.GetValues(typeof(ConditionType)))
                     menu.AddItem(new GUIContent(type.ToString()), false, AddCondition, type);
                 menu.ShowAsContext();
             };
+        m_condList.onRemoveCallback = (ReorderableList list) =>
+        {
+            RemoveCondition(list.index);
+        };
     }
 
     private void AddCondition(object type)
     {
+        // MonoBehaviour
         ConditionType conditionType = (ConditionType)type;
+        //switch (conditionType)
+        //{
+        //    case ConditionType.Timed:
+        //        m_target.conditions.Add(CreateInstance<TimedCondition>());
+        //        break;
+        //    case ConditionType.Area:
+        //        m_target.conditions.Add(CreateInstance<AreaCondition>());
+        //        break;
+        //    case ConditionType.Button:
+        //        m_target.conditions.Add(CreateInstance<ButtonCondition>());
+        //        break;
+        //    case ConditionType.Destroyed:
+        //        m_target.conditions.Add(CreateInstance<DestroyedCondition>());
+        //        break;
+        //    case ConditionType.Amount:
+        //        m_target.conditions.Add(CreateInstance<AmountCondition>());
+        //        break;
+        //}
+
+        // Object
+        //switch (conditionType)
+        //{
+        //    case ConditionType.Timed:
+        //        m_target.conditions.Add(new TimedCondition(m_target));
+        //        break;
+        //    case ConditionType.Area:
+        //        m_target.conditions.Add(new AreaCondition(m_target));
+        //        break;
+        //    case ConditionType.Button:
+        //        m_target.conditions.Add(new ButtonCondition(m_target));
+        //        break;
+        //    case ConditionType.Destroyed:
+        //        m_target.conditions.Add(new DestroyedCondition(m_target));
+        //        break;
+        //    case ConditionType.Amount:
+        //        m_target.conditions.Add(new AmountCondition(m_target));
+        //        break;
+        //}
+
+        // ScriptableObject
         switch (conditionType)
         {
             case ConditionType.Timed:
-                m_target.conditions.Add(new TimedCondition(m_target));
+                m_target.conditions.Add(CreateInstance<TimedCondition>());
                 break;
             case ConditionType.Area:
-                m_target.conditions.Add(new AreaCondition(m_target));
+                m_target.conditions.Add(CreateInstance<AreaCondition>());
                 break;
             case ConditionType.Button:
-                m_target.conditions.Add(new ButtonCondition(m_target));
+                m_target.conditions.Add(CreateInstance<ButtonCondition>());
                 break;
             case ConditionType.Destroyed:
-                m_target.conditions.Add(new DestroyedCondition(m_target));
+                m_target.conditions.Add(CreateInstance<DestroyedCondition>());
                 break;
             case ConditionType.Amount:
-                m_target.conditions.Add(new AmountCondition(m_target));
+                m_target.conditions.Add(CreateInstance<AmountCondition>());
                 break;
         }
     }

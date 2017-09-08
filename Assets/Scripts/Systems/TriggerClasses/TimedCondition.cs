@@ -6,15 +6,14 @@ using UnityEngine;
 public class TimedCondition : Condition
 {
     [SerializeField]
-    float timerAmount;
+    private float timerAmount;
 
     [SerializeField]
-    bool loop;
+    private bool loop;
 
     public TimedCondition(Trigger trigger) : base(trigger)
     {
         trigger.StartCoroutine(StartTimer());
-
     }
 
     IEnumerator StartTimer()

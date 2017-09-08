@@ -12,7 +12,7 @@ public enum ConditionType
 }
 
 [System.Serializable]
-public class Condition
+public class Condition :ScriptableObject
 {
     protected static GameObject player;
     protected Trigger trigger;

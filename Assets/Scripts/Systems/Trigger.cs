@@ -17,11 +17,16 @@ public class Trigger : MonoBehaviour
         get { return inArea; }
     }
 
-    [SerializeField,HideInInspector]
+    [SerializeField, HideInInspector]
     public List<Condition> conditions = new List<Condition>();
 
     [SerializeField, HideInInspector]
     protected UnityEvent result;
+
+    private void Start()
+    {
+        //conditions.AddRange(FindObjectsOfType<Condition>());
+    }
 
     public virtual void CheckConditions()
     {
