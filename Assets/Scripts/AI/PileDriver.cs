@@ -4,59 +4,61 @@ using UnityEngine;
 
 public class PileDriver : MonoBehaviour {
     public bool retracted = true;
+    public float speed = 20f;
     Rigidbody rb;
     Transform bossTransform;
-    Transform originalPos;
-    float force;
-    float mass;
+    Vector3 originalPos;
+    bool activated = false;
+    
     private void Start()
     {
         
-        originalPos = transform;
+        originalPos = transform.position;
         rb = GetComponent<Rigidbody>();
         bossTransform = GameObject.FindGameObjectWithTag("Boss").transform;
-        mass = rb.mass;
     }
     private void FixedUpdate()
     {
+        if(!activated)
         bossTransform = GameObject.FindGameObjectWithTag("Boss").transform;
-    
+        else if (activated) {
+            if (!retracted)
+            {
+                Debug.Log("EHIEJIE");
+                transform.position = Vector3.MoveTowards(transform.position, bossTransform.position, speed * Time.deltaTime);
+
+                Vector3 point = bossTransform.position;
+                point.y = transform.position.y;
+
+                transform.LookAt(point);
+
+            }
+            else
+
+            {
+                Debug.Log("fefefe");
+
+                transform.position = Vector3.MoveTowards(transform.position, originalPos, speed * Time.deltaTime);
+
+               
+            }
+        }
+
+      
     }
 
  
 	public void Activate()
     {
-        if (retracted)
-        {
-
-            force = calculateForce(transform, bossTransform,1);
-            transform.LookAt(bossTransform);
-            rb.AddForce(transform.forward* force);
-            retracted = false;
-        }
-        else if (!retracted)
-        {
-            force = calculateForce(transform, originalPos, 1);
-
-            transform.LookAt(originalPos);
-            rb.AddForce(transform.forward * force,ForceMode.Impulse);
-            retracted = true;
-
-        }
-        Invoke("resetSpeed", 0.5f);
+        activated = true;
+        retracted = !retracted;
     }
 
-    float calculateForce(Transform a, Transform b, float time)
+    private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(retracted);
-        float sforce;
-        float acceleration = Vector3.Distance(a.position, b.position) * 2 / time;
-        sforce = mass * acceleration*acceleration;
-
-        return sforce;
-    }
-    void resetSpeed()
-    {
-        rb.velocity = Vector3.zero;
-    }
+        if (other.gameObject.tag == "Boss")
+        {
+            other.gameObject.GetComponent<gregPhaseOne>().hitByPD();
+        }
+    } 
 }

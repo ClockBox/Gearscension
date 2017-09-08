@@ -4,18 +4,28 @@ using UnityEngine;
 
 public class gregAttacks : MonoBehaviour {
 	public Collider[] attackHitBoxes;
-	Animator anim;
 	public GameObject magnet;
-	public Transform magnetPos;
 	public GameObject explosive;
-	public Transform explosivePos;
 	public GameObject killFloor;
 	public Transform killFloorPos;
-	GameObject player;
-	public int frozen = 0;
+
+
+    public Transform rightFootMagnetPos;
+    public Transform leftFootExplodePos;
+    GameObject player;
+
+
+
+    //Animator anim;
 	
+        /*
+         Attack HitBoxes:
+
+        1: Left Foot
+        2: Right Foot
+         */
 	void Start () {
-		anim = GetComponent<Animator>();
+		//anim = GetComponent<Animator>();
 		player = GameObject.FindGameObjectWithTag("Player");
 	}
 
@@ -30,7 +40,7 @@ public class gregAttacks : MonoBehaviour {
 			int num = Random.Range(0, 2);
 			if (num == 0)
 			{
-				Invoke("lStomp", 3f);
+				Invoke("lStomp", 1f);
 			}
 
 		}
@@ -40,14 +50,11 @@ public class gregAttacks : MonoBehaviour {
 	{
 		if (Vector3.Distance(transform.position, player.transform.position) < 2f)
 		{
-			if (frozen == 0)
-			{
+			
 				lStomp();
-			}
-			else
-			{
+		
 				rStomp();
-			}
+			
 
 		}
 		else
@@ -101,21 +108,22 @@ public class gregAttacks : MonoBehaviour {
 
 	void lStomp()
 	{
-		anim.SetTrigger("lStomp");
+		//anim.SetTrigger("lStomp");
 		LaunchAttack(attackHitBoxes[0]);
-
+        StartCoroutine(spawnExplode(leftFootExplodePos, 1f));
 	}
 	void rStomp()
 	{
 
-		anim.SetTrigger("rStomp");
+		//anim.SetTrigger("rStomp");
 		LaunchAttack(attackHitBoxes[1]);
+        StartCoroutine(spawnMagnet(rightFootMagnetPos, 1f));
 
-	}
-	void hSlam()
+    }
+    void hSlam()
 	{
 
-		anim.SetTrigger("Slam");
+		//anim.SetTrigger("Slam");
 		LaunchAttack(attackHitBoxes[3]);
 		LaunchAttack(attackHitBoxes[4]);
 		int num = Random.Range(0, 2);
@@ -128,7 +136,7 @@ public class gregAttacks : MonoBehaviour {
 	void sweep()
 	{
 
-		anim.SetTrigger("Sweep");
+		//anim.SetTrigger("Sweep");
 		LaunchAttack(attackHitBoxes[2]);
 
 	}
@@ -136,7 +144,7 @@ public class gregAttacks : MonoBehaviour {
 
 	private void LaunchAttack(Collider c)
 	{
-		Collider[] cols = Physics.OverlapBox(c.bounds.center, c.bounds.extents, c.transform.rotation, LayerMask.GetMask("Hitbox"));
+		Collider[] cols = Physics.OverlapBox(c.bounds.center, c.bounds.extents, c.transform.rotation, LayerMask.GetMask("Hitbox", "Character"));
 		Debug.Log(c.name);
 		foreach (Collider col in cols)
 		{
@@ -152,10 +160,10 @@ public class gregAttacks : MonoBehaviour {
 				case "rLegHitBox":
 					damage = 50;
 					break;
-				case "leftFootHitBox":
+				case "LeftFootHitbox":
 					damage = 50;
 					break;
-				case "rightFootHitBox":
+				case "RightFootHitbox":
 					damage = 50;
 					break;
 				case "lHandHitBox":
@@ -172,18 +180,21 @@ public class gregAttacks : MonoBehaviour {
 			col.SendMessageUpwards("TakeDamage", damage);
 		}
 	}
-	void rightFootStomp()
+	IEnumerator spawnMagnet(Transform t,float delayTime)
 	{
+        yield return new WaitForSeconds(delayTime);
 		if (magnet)
 		{
-			Instantiate(magnet, magnetPos.position, magnetPos.rotation);
+			Instantiate(magnet, t.position, t.rotation);
 		}
 	}
-	void leftFootStomp()
+    IEnumerator spawnExplode(Transform t,float delayTime)
 	{
-		if (explosive)
+        yield return new WaitForSeconds(delayTime);
+
+        if (explosive)
 		{
-			Instantiate(explosive, explosivePos.position, explosivePos.rotation);
+			Instantiate(explosive, t.position, t.rotation);
 
 		}
 	}
