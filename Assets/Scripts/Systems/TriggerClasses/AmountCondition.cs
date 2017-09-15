@@ -2,52 +2,78 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-enum CompareType
+public enum FindType
+{
+    Tag,
+    Layer,
+    ByType
+}
+
+public enum CompareType
 {
     LessThan,
     GreaterThan,
-    EqualTo
+    EqualTo,
+    LessThanOrEqual,
+    GreaterThanOrEqual,
 }
 
 public class AmountCondition : Condition
 {
-    [SerializeField]
-    CompareType typeOfCompare;
-    [SerializeField]
-    protected Vector3 areaSize;
-    [SerializeField]
-    protected int layer;
-    [SerializeField]
-    protected int amountOfObjects;
+    public string tag;
+    public LayerMask layer;
+
+    public Object typeTemplate;
+
+    public FindType typeOfFind;
+    public CompareType typeOfCompare;
+    public Vector3 areaSize;
+    public int amount;
     Collider[] colArray;
 
-    public AmountCondition(Trigger trigger) : base(trigger)
+    public AmountCondition() { }
+    public override void InitCondition(Trigger trigger)
     {
+        base.InitCondition(trigger);
+        areaSize = trigger.GetComponent<Collider>().bounds.extents;
         trigger.StartCoroutine(CheckArea());
     }
 
     IEnumerator CheckArea()
     {
-        int numOfObjects;
+        int numOfObjects = 0;
         while (true)
         {
-            colArray = Physics.OverlapBox(trigger.transform.position, areaSize, Quaternion.identity, LayerMask.GetMask(LayerMask.LayerToName(layer)));
-            numOfObjects = colArray.Length;
+            if (typeOfFind == FindType.Layer)
+            {
+                Debug.Log(layer << 8);
+                colArray = Physics.OverlapBox(trigger.transform.position, areaSize, Quaternion.identity, layer << 8);
+                numOfObjects = colArray.Length;
+            }
+            else if (typeOfFind == FindType.Tag)
+                numOfObjects = GameObject.FindGameObjectsWithTag(tag).Length;
 
-            if (typeOfCompare == CompareType.LessThan && numOfObjects < amountOfObjects)
-            {
-                conditionIsMet = true;
-            }
-            else if (typeOfCompare == CompareType.GreaterThan && numOfObjects > amountOfObjects)
-            {
-                conditionIsMet = true;
-            }
-            else if (typeOfCompare == CompareType.EqualTo && numOfObjects == amountOfObjects)
-            {
-                conditionIsMet = true;
-            }
-            else
-                conditionIsMet = false;
+            else if (typeOfFind == FindType.ByType && typeTemplate != null)
+                numOfObjects = FindObjectsOfType(typeTemplate.GetType()).Length;
+
+            Debug.Log(numOfObjects);
+
+            if (typeOfCompare == CompareType.LessThan && numOfObjects < amount)
+                ConditionMet = true;
+
+            else if (typeOfCompare == CompareType.GreaterThan && numOfObjects > amount)
+                ConditionMet = true;
+
+            else if (typeOfCompare == CompareType.EqualTo && numOfObjects == amount)
+                ConditionMet = true;
+
+            else if (typeOfCompare == CompareType.LessThanOrEqual && numOfObjects <= amount)
+                ConditionMet = true;
+
+            else if (typeOfCompare == CompareType.GreaterThanOrEqual && numOfObjects >= amount)
+                ConditionMet = true;
+
+            else conditionIsMet = false;
 
             yield return null;
         }

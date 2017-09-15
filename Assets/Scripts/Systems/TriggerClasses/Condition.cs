@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 public enum ConditionType
 {
@@ -12,7 +14,7 @@ public enum ConditionType
 }
 
 [System.Serializable]
-public class Condition :ScriptableObject
+public class Condition : ScriptableObject
 {
     protected static GameObject player;
     protected Trigger trigger;
@@ -25,16 +27,18 @@ public class Condition :ScriptableObject
         set
         {
             conditionIsMet = value;
-            if (conditionIsMet == true)
+            if (value == true)
                 trigger.CheckConditions();
         }
     }
-    
-    public Condition(Trigger trigger)
+    public Condition() { }
+    public virtual void InitCondition(Trigger trigger)
     {
         this.trigger = trigger;
 
-        if (player == null)
+        if (!player)
             player = trigger.Player;
     }
+
+    public virtual void OnDrawGizmos() { }
 }

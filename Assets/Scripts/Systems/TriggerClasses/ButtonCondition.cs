@@ -4,7 +4,11 @@ using UnityEngine;
 
 public class ButtonCondition : Condition
 {
-    public ButtonCondition(Trigger trigger) : base(trigger)
+    public ButtonTrigger button;
+    public bool Toggled; 
+
+    public ButtonCondition() { }
+    public override void InitCondition(Trigger trigger)
     {
         trigger.StartCoroutine(inputCheck());
     }
@@ -13,16 +17,12 @@ public class ButtonCondition : Condition
     {
         while(true)
         {
-            if (trigger.InArea)
+            if (trigger.InArea && Input.GetButtonDown("Action"))
             {
-                if (Input.GetButtonDown("Action"))
-                {
-                    conditionIsMet = true;
-                    break;
-                }
-                else
-                    conditionIsMet = false;
+                conditionIsMet = true;
+                break;
             }
+            else conditionIsMet = false;
             yield return null;
         }
     }

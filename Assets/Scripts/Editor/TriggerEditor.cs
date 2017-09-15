@@ -4,13 +4,14 @@ using UnityEditorInternal;
 
 [CustomEditor(typeof(Trigger),true)]
 [CanEditMultipleObjects]
-public class TriggerScriptEditor : Editor
+public class TriggerEditor : Editor
 {
     Trigger m_target;
     ReorderableList m_condList;
     SerializedProperty conditionProp;
     SerializedProperty resultProp;
-    
+
+
     protected ConditionType condType;
 
     protected virtual void OnEnable()
@@ -20,8 +21,22 @@ public class TriggerScriptEditor : Editor
         SetupConditionList();
     }
 
+    private void OnSceneGUI()
+    {
+        if (Selection.activeGameObject == m_target.gameObject)
+        {
+            Condition cond;
+            for (int i = 0; i < m_condList.count; i++)
+            {
+                if (cond = m_condList.serializedProperty.GetArrayElementAtIndex(i).objectReferenceValue as AreaCondition)
+                    (cond as AreaCondition).OnDrawGizmos();
+            }
+        }
+    }
+
     public override void OnInspectorGUI()
     {
+        
         serializedObject.Update();
         {
             DrawDefaultInspector();
@@ -40,6 +55,7 @@ public class TriggerScriptEditor : Editor
         conditionProp = serializedObject.FindProperty("conditions");
 
         m_condList = new ReorderableList(serializedObject, conditionProp, true, true, true, true);
+        m_condList.elementHeight = 45;
         m_condList.drawHeaderCallback = (Rect rect) =>
         {
             EditorGUI.LabelField(rect, "Conditions");
@@ -64,49 +80,8 @@ public class TriggerScriptEditor : Editor
 
     private void AddCondition(object type)
     {
-        // MonoBehaviour
-        ConditionType conditionType = (ConditionType)type;
-        //switch (conditionType)
-        //{
-        //    case ConditionType.Timed:
-        //        m_target.conditions.Add(CreateInstance<TimedCondition>());
-        //        break;
-        //    case ConditionType.Area:
-        //        m_target.conditions.Add(CreateInstance<AreaCondition>());
-        //        break;
-        //    case ConditionType.Button:
-        //        m_target.conditions.Add(CreateInstance<ButtonCondition>());
-        //        break;
-        //    case ConditionType.Destroyed:
-        //        m_target.conditions.Add(CreateInstance<DestroyedCondition>());
-        //        break;
-        //    case ConditionType.Amount:
-        //        m_target.conditions.Add(CreateInstance<AmountCondition>());
-        //        break;
-        //}
-
-        // Object
-        //switch (conditionType)
-        //{
-        //    case ConditionType.Timed:
-        //        m_target.conditions.Add(new TimedCondition(m_target));
-        //        break;
-        //    case ConditionType.Area:
-        //        m_target.conditions.Add(new AreaCondition(m_target));
-        //        break;
-        //    case ConditionType.Button:
-        //        m_target.conditions.Add(new ButtonCondition(m_target));
-        //        break;
-        //    case ConditionType.Destroyed:
-        //        m_target.conditions.Add(new DestroyedCondition(m_target));
-        //        break;
-        //    case ConditionType.Amount:
-        //        m_target.conditions.Add(new AmountCondition(m_target));
-        //        break;
-        //}
-
-        // ScriptableObject
-        switch (conditionType)
+        //ScriptableObject
+        switch ((ConditionType)type)
         {
             case ConditionType.Timed:
                 m_target.conditions.Add(CreateInstance<TimedCondition>());

@@ -11,11 +11,7 @@ public class Trigger : MonoBehaviour
     {
         get { return player; }
     }
-    private bool inArea;
-    public bool InArea
-    {
-        get { return inArea; }
-    }
+    public bool InArea;
 
     [SerializeField, HideInInspector]
     public List<Condition> conditions = new List<Condition>();
@@ -25,7 +21,8 @@ public class Trigger : MonoBehaviour
 
     private void Start()
     {
-        //conditions.AddRange(FindObjectsOfType<Condition>());
+        for (int i = 0; i < conditions.Count; i++)
+            conditions[i].InitCondition(this);
     }
 
     public virtual void CheckConditions()
@@ -41,12 +38,12 @@ public class Trigger : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject == player)
-            inArea = true;
+            InArea = true;
     }
 
     private void OnTriggerExit(Collider other)
     {
         if (other.gameObject == player)
-            inArea = false;
+            InArea = false;
     }
 }

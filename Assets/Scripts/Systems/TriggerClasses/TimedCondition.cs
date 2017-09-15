@@ -5,21 +5,24 @@ using UnityEngine;
 [System.Serializable]
 public class TimedCondition : Condition
 {
-    [SerializeField]
-    private float timerAmount;
+    public float timerAmount = 1;
+    public bool loop;
 
-    [SerializeField]
-    private bool loop;
+    public TimedCondition() { }
 
-    public TimedCondition(Trigger trigger) : base(trigger)
+    public override void InitCondition(Trigger trigger)
     {
+        base.InitCondition(trigger);
         trigger.StartCoroutine(StartTimer());
     }
 
     IEnumerator StartTimer()
     {
         yield return new WaitForSeconds(timerAmount);
-        trigger.CheckConditions();
+        Debug.Log("Timer Done");
+        ConditionMet = true;
+        yield return new WaitForEndOfFrame();
+        conditionIsMet = false;
         if (loop) trigger.StartCoroutine(StartTimer());
     }
 }
