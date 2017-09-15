@@ -12,8 +12,10 @@ public class AmmoSwap : MonoBehaviour
     PlayerController CSM;
 
     [Header("Main Hud")]
-    public Image healthBar;
-    public Image armorBar;
+    private GameObject healthBar;
+    private Image healthImage;
+    private GameObject armorBar;
+    private Image armorImage;
 
     [Header("Ammo Hud")]
     [SerializeField] private Image slot1;
@@ -24,16 +26,29 @@ public class AmmoSwap : MonoBehaviour
     [Header("Ammo")]
     public Image current;
     public Text bullets;
-    public Image pos1;
-    public Image pos2;
-    public Image pos3;
+    [SerializeField] private Image pos1;
+    [SerializeField] private Image pos2;
+    [SerializeField] private Image pos3;
 
     public GameObject[] sprites = new GameObject[4];
 
     // Use this for initialization
-    void Start()
+    void Awake()
     {
         CSM = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+
+        healthBar = GameObject.FindGameObjectWithTag("Health Bar");
+        if (healthBar != null)
+        {
+            healthImage = healthBar.GetComponent<Image>();
+        }
+
+        armorBar = GameObject.FindGameObjectWithTag("Armor Bar");
+        if (armorBar != null)
+        {
+            armorImage = healthBar.GetComponent<Image>();
+        }
+
     }
 
 
@@ -57,20 +72,20 @@ public class AmmoSwap : MonoBehaviour
     private void HealthBar()
     {
 
-        if (healthBar.fillAmount != CSM.Health/100)
+        if (healthImage.fillAmount != CSM.Health/100)
         {
-            healthBar.fillAmount = CSM.Health / 100;
-            Debug.Log(healthBar.fillAmount + " " + CSM.Health/100);
+            healthImage.fillAmount = CSM.Health / 100;
+            Debug.Log(healthImage.fillAmount + " " + CSM.Health/100);
         }
         return;
     }
 
     private void ArmorBar()
     {
-        if (armorBar.fillAmount != CSM.Armor/2)
+        if (armorImage.fillAmount != CSM.Armor/2)
         {
-            armorBar.fillAmount = CSM.Armor / 2;
-            Debug.Log(armorBar.fillAmount + " " + CSM.Armor/2);
+            armorImage.fillAmount = CSM.Armor / 2;
+            Debug.Log(armorImage.fillAmount + " " + CSM.Armor/2);
         }
         return;
     }
@@ -96,19 +111,19 @@ public class AmmoSwap : MonoBehaviour
 
     public void BulletUpgrade()
     {
-        if (slot2.enabled == true)
+        if (slot2.GetComponent<Image>().enabled == true)
         {
-            slot3.enabled = true;
+            slot3.GetComponent<Image>().enabled = true;
             slot3.GetComponent<Animator>().enabled = true;
         }
-        else if (slot1.enabled == true)
+        else if (slot1.GetComponent<Image>().enabled == true)
         {
-            slot2.enabled = true;
+            slot2.GetComponent<Image>().enabled = true;
             slot2.GetComponent<Animator>().enabled = true;
         }
         else
         {
-            slot1.enabled = true;
+            slot1.GetComponent<Image>().enabled = true;
             slot1.GetComponent<Animator>().enabled = true;
         }
     }
