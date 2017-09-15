@@ -24,19 +24,12 @@ public class TriggerEditor : Editor
     private void OnSceneGUI()
     {
         if (Selection.activeGameObject == m_target.gameObject)
-        {
-            Condition cond;
             for (int i = 0; i < m_condList.count; i++)
-            {
-                if (cond = m_condList.serializedProperty.GetArrayElementAtIndex(i).objectReferenceValue as AreaCondition)
-                    (cond as AreaCondition).OnDrawGizmos();
-            }
-        }
+                m_target.conditions[i].OnDrawGizmos();
     }
 
     public override void OnInspectorGUI()
     {
-        
         serializedObject.Update();
         {
             DrawDefaultInspector();
@@ -80,25 +73,27 @@ public class TriggerEditor : Editor
 
     private void AddCondition(object type)
     {
+        Condition temp = CreateInstance<TimedCondition>();
         //ScriptableObject
         switch ((ConditionType)type)
         {
             case ConditionType.Timed:
-                m_target.conditions.Add(CreateInstance<TimedCondition>());
+                m_target.conditions.Add(temp = CreateInstance<TimedCondition>());
                 break;
             case ConditionType.Area:
-                m_target.conditions.Add(CreateInstance<AreaCondition>());
-                break;
-            case ConditionType.Button:
-                m_target.conditions.Add(CreateInstance<ButtonCondition>());
+                m_target.conditions.Add(temp = CreateInstance<AreaCondition>());
                 break;
             case ConditionType.Destroyed:
-                m_target.conditions.Add(CreateInstance<DestroyedCondition>());
+                m_target.conditions.Add(temp = CreateInstance<DestroyedCondition>());
                 break;
             case ConditionType.Amount:
-                m_target.conditions.Add(CreateInstance<AmountCondition>());
+                m_target.conditions.Add(temp = CreateInstance<AmountCondition>());
+                break;
+            case ConditionType.Trigger:
+                m_target.conditions.Add(temp = CreateInstance<TriggerCondition>());
                 break;
         }
+        temp.InitCondition(m_target);
     }
     private void RemoveCondition(int index)
     {

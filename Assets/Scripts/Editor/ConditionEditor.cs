@@ -9,50 +9,43 @@ public class ConditionDrawer : PropertyDrawer
     public override void OnGUI(Rect pos, SerializedProperty prop, GUIContent label)
     {
         EditorGUI.BeginProperty(pos, label, prop);
+        EditorGUI.BeginChangeCheck();
+        GUILayout.BeginHorizontal();
         {
-            EditorGUI.BeginChangeCheck();
+            try
             {
-                GUILayout.BeginHorizontal();
-                {
-                    try
-                    {
-                        UnityEngine.Object condition = prop.objectReferenceValue;
-                        if (condition as TimedCondition)
-                            DrawTimed(pos, condition as TimedCondition, label);
+                UnityEngine.Object condition = prop.objectReferenceValue;
+                if (condition as TimedCondition)
+                    DrawTimed(pos, condition as TimedCondition, label);
 
-                        else if (condition as AreaCondition)
-                            DrawArea(pos, condition as AreaCondition, label);
+                else if (condition as AreaCondition)
+                    DrawArea(pos, condition as AreaCondition, label);
 
-                        else if (condition as ButtonCondition)
-                            DrawButton(pos, condition as ButtonCondition, label);
+                else if (condition as DestroyedCondition)
+                    DrawDestroyed(pos, condition as DestroyedCondition, label);
 
-                        else if (condition as DestroyedCondition)
-                            DrawDestroyed(pos, condition as DestroyedCondition, label);
+                else if (condition as AmountCondition)
+                    DrawAmount(pos, condition as AmountCondition, label);
 
-                        else if (condition as AmountCondition)
-                            DrawAmount(pos, condition as AmountCondition, label);
+                else if (condition as TriggerCondition)
+                    DrawTrigger(pos, condition as TriggerCondition, label);
 
-                        else
-                        {
-                            if(condition)
-                                DrawDefault(pos, condition.GetType());
-                        }
-                    }
-                    catch (InvalidCastException e)
-                    {
-                        Debug.Log("property was not a Condition");
-                        Debug.LogException(e);
-                    }
-                }
-                GUILayout.EndHorizontal();
+                else if (condition)
+                    DrawDefault(pos, condition.GetType());
             }
-            if (EditorGUI.EndChangeCheck())
-                EditorUtility.SetDirty(prop.serializedObject.targetObject);
+            catch (InvalidCastException e)
+            {
+                Debug.Log("property was not a Condition");
+                Debug.LogException(e);
+            }
         }
+        GUILayout.EndHorizontal();
+        if (EditorGUI.EndChangeCheck())
+            EditorUtility.SetDirty(prop.serializedObject.targetObject);
         EditorGUI.EndProperty();
     }
 
-    // Helpers
+    #region Helpers
     private class InLine
     {
         static public Rect position;
@@ -174,6 +167,7 @@ public class ConditionDrawer : PropertyDrawer
         }
         return layerNames.ToArray();
     }
+    #endregion
 
     #region Draw Functions
     protected virtual void DrawDefault(Rect pos, Type type)
@@ -199,24 +193,12 @@ public class ConditionDrawer : PropertyDrawer
     {
         InLine.SetRect(pos, 0, 0, 6);
         {
-            EditorGUI.LabelField(InLine.NextRect(), "UseCollider");
-            condition.useCollider = EditorGUI.Toggle(InLine.NextRect(true), condition.useCollider);
+            EditorGUI.LabelField(InLine.NextRect(), "Area");
         }
-        if(!condition.useCollider)
-            condition.triggerArea = EditorGUI.BoundsField(InLine.GetLine(0, pos.width / 2, 1), condition.triggerArea);
+        condition.triggerArea = EditorGUI.BoundsField(InLine.GetLine(0, pos.width / 2, 1), condition.triggerArea);
         condition.checkObject = (GameObject)EditorGUI.ObjectField(InLine.GetLine(1, 0, 2), condition.checkObject, typeof(GameObject), true);
-        InLine.Reset();
-    }
-
-    protected void DrawButton(Rect pos, ButtonCondition condition, GUIContent label)
-    {
-        EditorGUI.LabelField(InLine.GetRect(pos, 0, 0, 2), "Button");
-        condition.button = (ButtonTrigger)EditorGUI.ObjectField(InLine.GetRect(pos, 0, 100, 1), condition.button, typeof(ButtonTrigger), true);
-        InLine.SetRect(pos, 1, 0, 6);
-        {
-            EditorGUI.LabelField(InLine.NextRect(), "Toggled");
-            condition.Toggled = EditorGUI.Toggle(InLine.NextRect(true), condition.Toggled);
-        }
+        if (!condition.checkObject)
+            EditorGUILayout.HelpBox("CheckObject is null for AreaCondition", MessageType.Warning);
         InLine.Reset();
     }
 
@@ -260,6 +242,17 @@ public class ConditionDrawer : PropertyDrawer
             condition.amount = EditorGUI.IntField(InLine.NextRect(), condition.amount);
         }
         InLine.Reset();
+    }
+
+    private void DrawTrigger(Rect pos, TriggerCondition condition, GUIContent label)
+    {
+        EditorGUI.LabelField(InLine.GetRect(pos, 0, 0, 2), "Trigger");
+        condition.referenceTrigger = (Trigger)EditorGUI.ObjectField(InLine.GetRect(pos, 0, 100, 1), condition.referenceTrigger, typeof(Trigger), true);
+        InLine.SetRect(pos, 1, 0, 6);
+        {
+            EditorGUI.LabelField(InLine.NextRect(), "IsTrue");
+            condition.isTrue = EditorGUI.Toggle(InLine.NextRect(true), condition.isTrue);
+        }
     }
     #endregion
 }

@@ -46,7 +46,6 @@ public class AmountCondition : Condition
         {
             if (typeOfFind == FindType.Layer)
             {
-                Debug.Log(layer << 8);
                 colArray = Physics.OverlapBox(trigger.transform.position, areaSize, Quaternion.identity, layer << 8);
                 numOfObjects = colArray.Length;
             }
@@ -54,9 +53,7 @@ public class AmountCondition : Condition
                 numOfObjects = GameObject.FindGameObjectsWithTag(tag).Length;
 
             else if (typeOfFind == FindType.ByType && typeTemplate != null)
-                numOfObjects = FindObjectsOfType(typeTemplate.GetType()).Length;
-
-            Debug.Log(numOfObjects);
+                numOfObjects = Object.FindObjectsOfType(typeTemplate.GetType()).Length;
 
             if (typeOfCompare == CompareType.LessThan && numOfObjects < amount)
                 ConditionMet = true;

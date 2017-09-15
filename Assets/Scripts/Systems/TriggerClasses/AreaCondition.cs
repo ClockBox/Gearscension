@@ -6,7 +6,6 @@ using UnityEditor;
 public class AreaCondition : Condition
 {
     public GameObject checkObject;
-    public bool useCollider = true;
 
     public Bounds triggerArea;
     private Collider[] cols;
@@ -15,11 +14,6 @@ public class AreaCondition : Condition
     public override void InitCondition(Trigger trigger)
     {
         base.InitCondition(trigger);
-        if (useCollider)
-        {
-            triggerArea.center = trigger.transform.position;
-            triggerArea.extents = trigger.GetComponent<Collider>().bounds.extents;
-        }
         trigger.StartCoroutine(CheckArea());
     }
 
@@ -27,46 +21,47 @@ public class AreaCondition : Condition
     {
         while (true)
         {
-            cols = Physics.OverlapBox(triggerArea.center, triggerArea.extents, Quaternion.identity, LayerMask.GetMask(LayerMask.LayerToName(checkObject.gameObject.layer)));
-            
-            for(int i = 0; i < cols.Length - 1; i++)
+            if (checkObject)
             {
-                if (cols[i].gameObject == checkObject)
+                cols = Physics.OverlapBox(gameObject.transform.position + triggerArea.center, triggerArea.extents, Quaternion.identity, checkObject.gameObject.layer);
+                for (int i = 0; i < cols.Length - 1; i++)
                 {
-                    Debug.Log("InArea");
-                    ConditionMet = true;
+                    if (cols[i].gameObject == checkObject)
+                    {
+                        Debug.Log("InArea");
+                        ConditionMet = true;
+                    }
+                    else conditionIsMet = false;
                 }
-                else
-                    conditionIsMet = false;
             }
-
             yield return null;
         }
     }
 
     public override void OnDrawGizmos()
     {
-        if (!useCollider)
-        {
-            Handles.color = Color.magenta;
-            float x = triggerArea.extents.x;
-            float y = triggerArea.extents.y;
-            float z = triggerArea.extents.z;
-            Handles.DrawLines (new Vector3[] 
-                {
-                    new Vector3(x, y, z) + triggerArea.center, new Vector3(-x, y, z) + triggerArea.center,
-                    new Vector3(x, y, z) + triggerArea.center, new Vector3(x, -y, z) + triggerArea.center,
-                    new Vector3(x, y, z) + triggerArea.center, new Vector3(x, y, -z) + triggerArea.center,
-                    new Vector3(-x, -y, -z) + triggerArea.center, new Vector3(x, -y, -z) + triggerArea.center,
-                    new Vector3(-x, -y, -z) + triggerArea.center, new Vector3(-x, y, -z) + triggerArea.center,
-                    new Vector3(-x, -y, -z) + triggerArea.center, new Vector3(-x, -y, z) + triggerArea.center,
-                    new Vector3(x, y, -z) + triggerArea.center, new Vector3(-x, y, -z) + triggerArea.center,
-                    new Vector3(x, y, -z) + triggerArea.center, new Vector3(x, -y, -z) + triggerArea.center,
-                    new Vector3(x, -y, z) + triggerArea.center, new Vector3(x, -y, -z) + triggerArea.center,
-                    new Vector3(x, -y, z) + triggerArea.center, new Vector3(-x, -y, z) + triggerArea.center,
-                    new Vector3(-x, y, z) + triggerArea.center, new Vector3(-x, -y, z) + triggerArea.center,
-                    new Vector3(-x, y, z) + triggerArea.center, new Vector3(-x, y, -z) + triggerArea.center
-                });
-        }
+        Debug.Log(gameObject);
+        Vector3 center = triggerArea.center + gameObject.transform.position;
+
+        float x = triggerArea.extents.x;
+        float y = triggerArea.extents.y;
+        float z = triggerArea.extents.z;
+
+        Handles.color = Color.magenta;
+        Handles.DrawLines(new Vector3[]
+            {
+                new Vector3(x, y, z) + center, new Vector3(-x, y, z) + center,
+                new Vector3(x, y, z) + center, new Vector3(x, -y, z) + center,
+                new Vector3(x, y, z) + center, new Vector3(x, y, -z) + center,
+                new Vector3(-x, -y, -z) + center, new Vector3(x, -y, -z) + center,
+                new Vector3(-x, -y, -z) + center, new Vector3(-x, y, -z) + center,
+                new Vector3(-x, -y, -z) + center, new Vector3(-x, -y, z) + center,
+                new Vector3(x, y, -z) + center, new Vector3(-x, y, -z) + center,
+                new Vector3(x, y, -z) + center, new Vector3(x, -y, -z) + center,
+                new Vector3(x, -y, z) + center, new Vector3(x, -y, -z) + center,
+                new Vector3(x, -y, z) + center, new Vector3(-x, -y, z) + center,
+                new Vector3(-x, y, z) + center, new Vector3(-x, -y, z) + center,
+                new Vector3(-x, y, z) + center, new Vector3(-x, y, -z) + center
+            });
     }
 }
