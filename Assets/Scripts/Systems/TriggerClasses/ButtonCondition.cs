@@ -2,28 +2,33 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum InputType
+{
+    Down,
+    Held,
+    Up
+}
+
 public class ButtonCondition : Condition
 {
-    public ButtonCondition(Trigger trigger) : base(trigger)
+    public string button;
+    public InputType type;
+    
+    public override bool checkCondition()
     {
-        trigger.StartCoroutine(inputCheck());
-    }
+        Debug.Log("checkCondition");
+        if (type == InputType.Down)
+            return conditionIsMet = Input.GetButtonDown(button);
 
-    protected virtual IEnumerator inputCheck()
-    {
-        while(true)
+        else if (type == InputType.Held)
         {
-            if (trigger.InArea)
-            {
-                if (Input.GetButtonDown("Action"))
-                {
-                    conditionIsMet = true;
-                    break;
-                }
-                else
-                    conditionIsMet = false;
-            }
-            yield return null;
+            Debug.Log(Input.GetButton(button));
+            return conditionIsMet = Input.GetButton(button);
         }
+
+        else if (type == InputType.Up)
+            return conditionIsMet = Input.GetButtonUp(button);
+
+        else return false;
     }
 }
