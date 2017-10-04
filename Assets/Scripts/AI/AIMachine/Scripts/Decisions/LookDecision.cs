@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-[CreateAssetMenu(menuName = "AIMachine/ScriptableObjects/AIDecisions/Look")]
+[CreateAssetMenu(menuName = "AIMachine/ScriptableObjects/AIDecisions/LookDecision")]
 
 public class LookDecision : AIDecisions {
 
@@ -18,12 +18,13 @@ public class LookDecision : AIDecisions {
 
 			RaycastHit hit;
 
-			Debug.DrawRay(manager.visionPoints[i].position, manager.visionPoints[i].forward.normalized * manager.stats.lookRange, Color.red);
+			Debug.DrawRay(manager.visionPoints[i].position, manager.visionPoints[i].forward.normalized * manager.stats.lookRange, Color.green);
 
 			if (Physics.SphereCast(manager.visionPoints[i].position, manager.stats.castSphereRadius, manager.visionPoints[i].forward, out hit, manager.stats.lookRange)
 				&& hit.collider.CompareTag("Player"))
 			{
-				manager.searchPosition = hit.transform;
+				manager.searchPosition = hit.collider.transform;
+				manager.pathAgent.speed = 5;
 				return true;
 			}
 		}

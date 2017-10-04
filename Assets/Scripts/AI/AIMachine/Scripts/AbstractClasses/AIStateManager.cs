@@ -5,16 +5,17 @@ using UnityEngine;
 public abstract class AIStateManager : MonoBehaviour {
 	public Transform[] patrolPoints;
 	public Transform[] visionPoints;
-	public Transform searchPosition;
 	public AIStates currentState;
 	public AIStates alertedState;
 	public AIStates remainState;
+
+	[HideInInspector]
+	public Transform searchPosition;
 	[HideInInspector]
 	public AIStats stats;
 	[HideInInspector]
 	public UnitPathFinding pathAgent;
-	[HideInInspector]
-	public float setSpeed;
+
 	[HideInInspector]
 	public Transform pathTarget;
 	[HideInInspector]
@@ -31,7 +32,6 @@ public abstract class AIStateManager : MonoBehaviour {
 		player = GameObject.FindGameObjectWithTag("Player");
 		stats = GetComponent<AIStats>();
 		pathAgent = GetComponent<UnitPathFinding>();
-		setSpeed = stats.attackSpeed;
 		pathIndex = 0;
 		pathTarget = patrolPoints[pathIndex];
 		pathAgent.travel(pathTarget.position);
