@@ -9,6 +9,6 @@ public class TriggerCondition : Condition
     
     public override bool checkCondition()
     {
-        return conditionIsMet = referenceTrigger.CheckConditions();
+        return conditionIsMet = referenceTrigger.ConditionsMet;
     }
 }

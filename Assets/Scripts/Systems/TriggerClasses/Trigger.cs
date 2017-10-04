@@ -7,19 +7,27 @@ using UnityEngine.Events;
 public class Trigger : MonoBehaviour
 {
     [SerializeField]
-    protected bool checkTriggerOnPlay;
-    public bool CheckTriggerOnPlay
+    protected bool checkOnPlay = true;
+    public bool CheckOnPlay
     {
-        get { return checkTriggerOnPlay; }
-        set { checkTriggerOnPlay = value; }
+        get { return checkOnPlay; }
+        set { checkOnPlay = value; }
     }
 
     [SerializeField]
-    protected bool repeat;
+    protected bool repeat = true;
     public bool Repeat
     {
         get { return repeat; }
         set { repeat = value; }
+    }
+
+    [SerializeField]
+    protected bool inOrder = false;
+    public bool InOrder
+    {
+        get { return inOrder; }
+        set { inOrder = value; }
     }
 
     [SerializeField, HideInInspector]
@@ -38,7 +46,18 @@ public class Trigger : MonoBehaviour
         set { result = value; }
     }
 
-    private bool check = false;
+    private bool conditionsMet;
+    public bool ConditionsMet
+    {
+        get { return conditionsMet; }
+        set { conditionsMet = value; }
+    }
+
+    protected bool check = false;
+    public void Reset()
+    {
+        check = true;
+    }
 
     protected virtual void OnValidate()
     {
@@ -48,7 +67,7 @@ public class Trigger : MonoBehaviour
 
     protected virtual void OnEnable()
     {
-        if (checkTriggerOnPlay)
+        if (checkOnPlay)
             check = true;
     }
     protected virtual void OnDisable()
@@ -58,14 +77,29 @@ public class Trigger : MonoBehaviour
     }
     protected virtual void Update()
     {
-        if(check) CheckConditions();
+        if (check) conditionsMet = CheckConditions();
     }
 
     public virtual bool CheckConditions()
     {
-        for (int i = 0; i < conditions.Count; i++)
+        if (inOrder)
         {
-            if (conditions[i].checkCondition() == false)
+            for (int i = 0; i < conditions.Count; i++)
+            {
+                if (conditions[i].checkCondition() == false)
+                {
+                    ResetCondtions(i + 1);
+                    return false;
+                }
+            }
+        }
+        else
+        {
+            int condtionsMet = 0;
+            for (int i = 0; i < conditions.Count; i++)
+                condtionsMet += conditions[i].checkCondition() ? 1 : 0;
+
+            if (condtionsMet != conditions.Count)
                 return false;
         }
 
@@ -78,5 +112,11 @@ public class Trigger : MonoBehaviour
             StopAllCoroutines();
         }
         return true;
+    }
+
+    private void ResetCondtions(int startAtIndex)
+    {
+        for (int i = startAtIndex; i < conditions.Count; i++)
+            conditions[i].ResetCondition();
     }
 }

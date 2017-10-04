@@ -32,14 +32,14 @@ public class Condition : MonoBehaviour
         set { conditionIsMet = value; }
     }
 
-    protected virtual void OnEnable()
+    protected void OnEnable()
     {
         trigger = GetComponent<Trigger>();
         CheckVisible();
         InitCondition();
     }
 
-    protected virtual void OnDisable()
+    protected void OnDisable()
     {
         StopAllCoroutines();
     }
@@ -59,5 +59,6 @@ public class Condition : MonoBehaviour
     }
 
     public virtual void InitCondition() { }
+    public virtual void ResetCondition() { conditionIsMet = false; }
     public virtual bool checkCondition() { return false; }
 }
