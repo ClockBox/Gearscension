@@ -7,12 +7,10 @@ public class TimedCondition : Condition
 {
     public float timerAmount = 1;
     public bool loop;
-
-    public TimedCondition() { }
-
-    public override void InitCondition(Trigger trigger)
+    
+    public override void InitCondition()
     {
-        base.InitCondition(trigger);
+        base.InitCondition();
         trigger.StartCoroutine(StartTimer());
     }
 
@@ -22,7 +20,14 @@ public class TimedCondition : Condition
         Debug.Log("Timer Done");
         ConditionMet = true;
         yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
         conditionIsMet = false;
         if (loop) trigger.StartCoroutine(StartTimer());
+    }
+
+    public override bool checkCondition()
+    {
+        Debug.Log("Timer checked");
+        return conditionIsMet;
     }
 }

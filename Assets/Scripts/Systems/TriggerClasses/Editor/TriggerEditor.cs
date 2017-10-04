@@ -21,24 +21,21 @@ public class TriggerEditor : Editor
         SetupConditionList();
     }
 
-    private void OnSceneGUI()
-    {
-        if (Selection.activeGameObject == m_target.gameObject)
-            for (int i = 0; i < m_condList.count; i++)
-                m_target.conditions[i].OnDrawGizmos();
-    }
-
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
         {
             DrawDefaultInspector();
-
+            
             GUILayout.Space(10);
             m_condList.DoLayoutList();
 
             GUILayout.Space(10);
             EditorGUILayout.PropertyField(resultProp);
+            
+            Condition[] temp = m_target.GetComponents<Condition>();
+            for (int i = 0; i < temp.Length; i++)
+                temp[i].CheckVisible();
         }
         serializedObject.ApplyModifiedProperties();
     }
@@ -54,17 +51,17 @@ public class TriggerEditor : Editor
             EditorGUI.LabelField(rect, "Conditions");
         };
         m_condList.drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
-            {
-                SerializedProperty element = m_condList.serializedProperty.GetArrayElementAtIndex(index);
-                EditorGUI.PropertyField(rect, element, true);
-            };
+        {
+            SerializedProperty element = m_condList.serializedProperty.GetArrayElementAtIndex(index);
+            EditorGUI.PropertyField(rect, element, true);
+        };
         m_condList.onAddDropdownCallback = (Rect buttonRect, ReorderableList list) =>
-            {
-                GenericMenu menu = new GenericMenu();
-                foreach (ConditionType type in System.Enum.GetValues(typeof(ConditionType)))
-                    menu.AddItem(new GUIContent(type.ToString()), false, AddCondition, type);
-                menu.ShowAsContext();
-            };
+        {
+            GenericMenu menu = new GenericMenu();
+            foreach (ConditionType type in System.Enum.GetValues(typeof(ConditionType)))
+                menu.AddItem(new GUIContent(type.ToString()), false, AddCondition, type);
+            menu.ShowAsContext();
+        };
         m_condList.onRemoveCallback = (ReorderableList list) =>
         {
             RemoveCondition(list.index);
@@ -73,30 +70,32 @@ public class TriggerEditor : Editor
 
     private void AddCondition(object type)
     {
-        Condition temp = CreateInstance<TimedCondition>();
-        //ScriptableObject
         switch ((ConditionType)type)
         {
             case ConditionType.Timed:
-                m_target.conditions.Add(temp = CreateInstance<TimedCondition>());
+                m_target.gameObject.AddComponent<TimedCondition>();
                 break;
             case ConditionType.Area:
-                m_target.conditions.Add(temp = CreateInstance<AreaCondition>());
+                m_target.gameObject.AddComponent<AreaCondition>();
                 break;
             case ConditionType.Destroyed:
-                m_target.conditions.Add(temp = CreateInstance<DestroyedCondition>());
+                m_target.gameObject.AddComponent<DestroyedCondition>();
                 break;
             case ConditionType.Amount:
-                m_target.conditions.Add(temp = CreateInstance<AmountCondition>());
+                m_target.gameObject.AddComponent<AmountCondition>();
+                break;
+            case ConditionType.Button:
+                m_target.gameObject.AddComponent<ButtonCondition>();
                 break;
             case ConditionType.Trigger:
-                m_target.conditions.Add(temp = CreateInstance<TriggerCondition>());
+                m_target.gameObject.AddComponent<TriggerCondition>();
                 break;
         }
-        temp.InitCondition(m_target);
     }
     private void RemoveCondition(int index)
     {
-        m_target.conditions.RemoveAt(index);
+        Condition temp = m_target.Conditions[index];
+        m_target.Conditions.RemoveAt(index);
+        DestroyImmediate(temp);
     }
 }

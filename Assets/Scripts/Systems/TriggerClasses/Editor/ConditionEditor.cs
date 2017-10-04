@@ -16,19 +16,22 @@ public class ConditionDrawer : PropertyDrawer
             {
                 UnityEngine.Object condition = prop.objectReferenceValue;
                 if (condition as TimedCondition)
-                    DrawTimed(pos, condition as TimedCondition, label);
+                    DrawCondition(pos, condition as TimedCondition, label);
 
                 else if (condition as AreaCondition)
-                    DrawArea(pos, condition as AreaCondition, label);
+                    DrawCondition(pos, condition as AreaCondition, label);
 
                 else if (condition as DestroyedCondition)
-                    DrawDestroyed(pos, condition as DestroyedCondition, label);
+                    DrawCondition(pos, condition as DestroyedCondition, label);
 
                 else if (condition as AmountCondition)
-                    DrawAmount(pos, condition as AmountCondition, label);
+                    DrawCondition(pos, condition as AmountCondition, label);
+
+                else if (condition as ButtonCondition)
+                    DrawCondition(pos, condition as ButtonCondition, label);
 
                 else if (condition as TriggerCondition)
-                    DrawTrigger(pos, condition as TriggerCondition, label);
+                    DrawCondition(pos, condition as TriggerCondition, label);
 
                 else if (condition)
                     DrawDefault(pos, condition.GetType());
@@ -40,6 +43,7 @@ public class ConditionDrawer : PropertyDrawer
             }
         }
         GUILayout.EndHorizontal();
+
         if (EditorGUI.EndChangeCheck())
             EditorUtility.SetDirty(prop.serializedObject.targetObject);
         EditorGUI.EndProperty();
@@ -53,7 +57,7 @@ public class ConditionDrawer : PropertyDrawer
 
         static public int line = 0;
         static public float indent = 0;
-        static public int items = 1;
+        static public float items = 1;
         static public int currentItem = 0;
 
         public static Rect NextRect(bool toggleButton = false)
@@ -64,6 +68,15 @@ public class ConditionDrawer : PropertyDrawer
             currentItem++;
             return temp;
         }
+        public static void Reset()
+        {
+            position = new Rect();
+            line = 0;
+            indent = 0;
+            items = 1;
+            currentItem = 0;
+        }
+
         public static void SetRect(Rect newPosition, bool toggleButton = false)
         {
             position = newPosition;
@@ -82,7 +95,7 @@ public class ConditionDrawer : PropertyDrawer
             currentItem = 0;
             indent = newIndent;
         }
-        public static void SetRect(Rect newPosition, int newLine, float newIndent,int itemAmount, bool toggleButton = false)
+        public static void SetRect(Rect newPosition, int newLine, float newIndent, float itemAmount, bool toggleButton = false)
         {
             position = newPosition;
             line = newLine;
@@ -106,7 +119,7 @@ public class ConditionDrawer : PropertyDrawer
             SetRect(newPosition, newLine, newIndent, toggleButton);
             return NextRect();
         }
-        public static Rect GetRect(Rect newPosition, int newLine, float newIndent, int itemAmount, bool toggleButton = false)
+        public static Rect GetRect(Rect newPosition, int newLine, float newIndent, float itemAmount, bool toggleButton = false)
         {
             SetRect(newPosition, newLine, newIndent, itemAmount, toggleButton);
             return NextRect();
@@ -123,7 +136,7 @@ public class ConditionDrawer : PropertyDrawer
             indent = newIndent;
             currentItem = 0;
         }
-        public static void SetLine(int newLine, float newIndent,int itemAmount, bool toggleButton = false)
+        public static void SetLine(int newLine, float newIndent, float itemAmount, bool toggleButton = false)
         {
             line = newLine;
             indent = newIndent;
@@ -141,19 +154,10 @@ public class ConditionDrawer : PropertyDrawer
             SetLine(newLine, newIndent, toggleButton);
             return NextRect();
         }
-        public static Rect GetLine(int newLine, float newIndent,int itemAmount, bool toggleButton = false)
+        public static Rect GetLine(int newLine, float newIndent, float itemAmount, bool toggleButton = false)
         {
             SetLine(newLine, newIndent, itemAmount, toggleButton);
             return NextRect();
-        }
-
-        public static void Reset()
-        {
-            position = new Rect();
-            line = 0;
-            indent = 0;
-            items = 1;
-            currentItem = 0;
         }
     }
     private string[] FindLayerNames()
@@ -176,7 +180,7 @@ public class ConditionDrawer : PropertyDrawer
         EditorGUILayout.HelpBox("No Draw function For condition Type: " + type + ", has been Declared", MessageType.Warning);
     }
 
-    protected void DrawTimed(Rect pos, TimedCondition condition, GUIContent label)
+    protected void DrawCondition(Rect pos, TimedCondition condition, GUIContent label)
     {
         EditorGUI.LabelField(InLine.GetRect(pos, 0, 0, 2), "Timer Amount");
         condition.timerAmount = EditorGUI.FloatField(InLine.GetRect(pos, 0, 100, 1), condition.timerAmount);
@@ -189,7 +193,7 @@ public class ConditionDrawer : PropertyDrawer
         InLine.Reset();
     }
 
-    protected void DrawArea(Rect pos, AreaCondition condition, GUIContent label)
+    protected void DrawCondition(Rect pos, AreaCondition condition, GUIContent label)
     {
         InLine.SetRect(pos, 0, 0, 6);
         {
@@ -202,7 +206,7 @@ public class ConditionDrawer : PropertyDrawer
         InLine.Reset();
     }
 
-    protected void DrawDestroyed(Rect pos, DestroyedCondition condition, GUIContent label)
+    protected void DrawCondition(Rect pos, DestroyedCondition condition, GUIContent label)
     {
         EditorGUI.LabelField(InLine.GetRect(pos, 0, 0, 2), "Object");
         condition.checkObject = EditorGUI.ObjectField(InLine.GetRect(pos, 0, 100, 1), condition.checkObject, typeof(UnityEngine.Object), true);
@@ -215,15 +219,15 @@ public class ConditionDrawer : PropertyDrawer
         InLine.Reset();
     }
 
-    protected void DrawAmount(Rect pos, AmountCondition condition, GUIContent label)
+    protected void DrawCondition(Rect pos, AmountCondition condition, GUIContent label)
     {
-        InLine.SetRect(pos, 0, 0, 2);
+        InLine.SetRect(pos, 0, 0, 3);
         {
             condition.typeOfFind = (FindType)EditorGUI.EnumPopup(InLine.NextRect(), condition.typeOfFind);
             switch (condition.typeOfFind)
             {
                 case FindType.Tag:
-                    condition.tag = EditorGUI.TagField(InLine.NextRect(), condition.tag);
+                    condition.checkTag = EditorGUI.TagField(InLine.NextRect(), condition.checkTag);
                     break;
                 case FindType.Layer:
                     condition.layer = EditorGUI.MaskField(InLine.NextRect(), condition.layer, FindLayerNames());
@@ -233,6 +237,8 @@ public class ConditionDrawer : PropertyDrawer
                     if (condition.typeTemplate == null) EditorGUILayout.HelpBox("A Destroy Condition needs a type template", MessageType.Warning);
                     break;
             }
+            EditorGUI.LabelField(InLine.GetLine(0, pos.width / 1.5f, 1.2f),"  Current Amount", GUIStyle.none);
+            EditorGUI.IntField(InLine.NextRect(), condition.numOfObjects, GUIStyle.none);
         }
 
         InLine.SetRect(pos, 1, 0, 3);
@@ -244,7 +250,21 @@ public class ConditionDrawer : PropertyDrawer
         InLine.Reset();
     }
 
-    private void DrawTrigger(Rect pos, TriggerCondition condition, GUIContent label)
+    private void DrawCondition(Rect pos, ButtonCondition condition, GUIContent label)
+    {
+        InLine.SetRect(pos, 0, 0, 3);
+        {
+            EditorGUI.LabelField(InLine.NextRect(), "Button");
+            condition.button = EditorGUI.TextField(InLine.NextRect(), condition.button);
+        }
+        InLine.SetRect(pos, 1, 0, 3);
+        {
+            EditorGUI.LabelField(InLine.NextRect(), "InputType");
+            condition.type = (InputType)EditorGUI.EnumPopup(InLine.NextRect(), condition.type);
+        }
+    }
+
+    private void DrawCondition(Rect pos, TriggerCondition condition, GUIContent label)
     {
         EditorGUI.LabelField(InLine.GetRect(pos, 0, 0, 2), "Trigger");
         condition.referenceTrigger = (Trigger)EditorGUI.ObjectField(InLine.GetRect(pos, 0, 100, 1), condition.referenceTrigger, typeof(Trigger), true);

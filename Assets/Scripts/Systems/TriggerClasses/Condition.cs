@@ -2,44 +2,62 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
 
 public enum ConditionType
 {
     Timed,                          // - Trigger is simply placed on a timer with an option to loop.
     Area,                           // – Triggered when "CheckObject" is within the trigger's area.
     Destroyed,                      // - Triggered when a specific "CheckObject" is destroyed.
-    Amount,                         // - Triggered when defined amount of “objects” are in scene(can be zero).   
+    Amount,                         // - Triggered when defined amount of “objects” are in scene(can be zero).  
+    Button,                         // - Triggered with button press.
     Trigger                         // - Triggered when referenced Trigger returns true.
 }
 
 [System.Serializable]
-public class Condition : ScriptableObject
+[RequireComponent(typeof(Trigger))]
+public class Condition : MonoBehaviour
 {
-    protected GameObject gameObject;
     protected Trigger trigger;
+    public Trigger Trigger
+    {
+        get { return trigger; }
+        set { trigger = value; }
+    }
 
     [Space(20)]
     protected bool conditionIsMet = false;
     public bool ConditionMet
     {
         get { return conditionIsMet; }
-        set
-        {
-            conditionIsMet = value;
-            if (value == true)
-                trigger.CheckConditions();
-        }
+        set { conditionIsMet = value; }
     }
 
-    public Condition() { }
-    public virtual void InitCondition(Trigger trigger)
+    protected virtual void OnEnable()
     {
-        this.trigger = trigger;
-        gameObject = trigger.gameObject;
-        Debug.Log(gameObject);
+        trigger = GetComponent<Trigger>();
+        CheckVisible();
+        InitCondition();
     }
 
-    public virtual void OnDrawGizmos() { }
-    
+    protected virtual void OnDisable()
+    {
+        StopAllCoroutines();
+    }
+
+    private void Reset()
+    {
+        trigger = GetComponent<Trigger>();
+        trigger.Conditions.Add(this);
+        CheckVisible();
+    }
+
+    public void CheckVisible()
+    {
+        if (trigger && trigger.Conditions.Contains(this))
+            hideFlags = HideFlags.HideInInspector;
+        else hideFlags = HideFlags.None;
+    }
+
+    public virtual void InitCondition() { }
+    public virtual bool checkCondition() { return false; }
 }
