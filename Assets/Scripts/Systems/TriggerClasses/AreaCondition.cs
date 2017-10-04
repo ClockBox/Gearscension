@@ -8,13 +8,13 @@ public class AreaCondition : Condition
     public GameObject checkObject;
 
     public Bounds triggerArea = new Bounds(Vector3.zero, Vector3.one * 2);
-    private Collider[] cols;
+    protected Collider[] cols;
 
     public override bool checkCondition()
     {
         if (checkObject)
         {
-            cols = Physics.OverlapBox(gameObject.transform.position + triggerArea.center, triggerArea.extents, checkObject.transform.rotation, ~checkObject.gameObject.layer);
+            cols = Physics.OverlapBox(transform.position + triggerArea.center, triggerArea.extents, transform.rotation, ~checkObject.gameObject.layer);
             for (int i = 0; i < cols.Length - 1; i++)
             {
                 if (cols[i].gameObject == checkObject)
@@ -27,8 +27,7 @@ public class AreaCondition : Condition
 
     public void OnDrawGizmosSelected()
     {
-        Vector3 center = triggerArea.center + gameObject.transform.position;
-        Transform rotation = gameObject.transform;
+        Vector3 center = triggerArea.center + transform.position;
 
         float x = triggerArea.extents.x;
         float y = triggerArea.extents.y;
@@ -37,30 +36,30 @@ public class AreaCondition : Condition
         Handles.color = new Color(1, 0, 0.5f, 0.5f);
         Handles.DrawLines(new Vector3[]
         {
-            rotation.right * x + rotation.up * y + rotation.forward * z + center,
-            rotation.right * -x + rotation.up * y + rotation.forward * z + center,
-            rotation.right * x + rotation.up * y + rotation.forward * z + center,
-            rotation.right * x + rotation.up *- y + rotation.forward * z + center,
-            rotation.right * x + rotation.up * y + rotation.forward * z + center,
-            rotation.right * x + rotation.up * y + rotation.forward * -z + center,
-            rotation.right * -x + rotation.up * -y + rotation.forward * -z + center,
-            rotation.right * x + rotation.up * -y + rotation.forward * -z + center,
-            rotation.right * -x + rotation.up * -y + rotation.forward * -z + center,
-            rotation.right * -x + rotation.up * y + rotation.forward * -z + center,
-            rotation.right * -x + rotation.up * -y + rotation.forward * -z + center,
-            rotation.right * -x + rotation.up * -y + rotation.forward * z + center,
-            rotation.right * x + rotation.up * y + rotation.forward * -z + center,
-            rotation.right * -x + rotation.up * y + rotation.forward * -z + center,
-            rotation.right * x + rotation.up * y + rotation.forward * -z + center,
-            rotation.right * x + rotation.up * -y + rotation.forward * -z + center,
-            rotation.right * x + rotation.up * -y + rotation.forward * z + center,
-            rotation.right * x + rotation.up * -y + rotation.forward * -z + center,
-            rotation.right * x + rotation.up * -y + rotation.forward * z + center,
-            rotation.right * -x + rotation.up * -y + rotation.forward * z + center,
-            rotation.right * -x + rotation.up * y + rotation.forward * z + center,
-            rotation.right * -x + rotation.up * -y + rotation.forward * z + center,
-            rotation.right * -x + rotation.up * y + rotation.forward * z + center,
-            rotation.right * -x + rotation.up * y + rotation.forward * -z + center,
+            transform.right * x + transform.up * y + transform.forward * z + center,
+            transform.right * -x + transform.up * y + transform.forward * z + center,
+            transform.right * x + transform.up * y + transform.forward * z + center,
+            transform.right * x + transform.up *- y + transform.forward * z + center,
+            transform.right * x + transform.up * y + transform.forward * z + center,
+            transform.right * x + transform.up * y + transform.forward * -z + center,
+            transform.right * -x + transform.up * -y + transform.forward * -z + center,
+            transform.right * x + transform.up * -y + transform.forward * -z + center,
+            transform.right * -x + transform.up * -y + transform.forward * -z + center,
+            transform.right * -x + transform.up * y + transform.forward * -z + center,
+            transform.right * -x + transform.up * -y + transform.forward * -z + center,
+            transform.right * -x + transform.up * -y + transform.forward * z + center,
+            transform.right * x + transform.up * y + transform.forward * -z + center,
+            transform.right * -x + transform.up * y + transform.forward * -z + center,
+            transform.right * x + transform.up * y + transform.forward * -z + center,
+            transform.right * x + transform.up * -y + transform.forward * -z + center,
+            transform.right * x + transform.up * -y + transform.forward * z + center,
+            transform.right * x + transform.up * -y + transform.forward * -z + center,
+            transform.right * x + transform.up * -y + transform.forward * z + center,
+            transform.right * -x + transform.up * -y + transform.forward * z + center,
+            transform.right * -x + transform.up * y + transform.forward * z + center,
+            transform.right * -x + transform.up * -y + transform.forward * z + center,
+            transform.right * -x + transform.up * y + transform.forward * z + center,
+            transform.right * -x + transform.up * y + transform.forward * -z + center,
         });
     }
 }

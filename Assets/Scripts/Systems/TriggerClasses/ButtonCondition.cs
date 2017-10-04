@@ -16,13 +16,17 @@ public class ButtonCondition : Condition
     
     public override bool checkCondition()
     {
-        if(type == InputType.Down)
+        Debug.Log("checkCondition");
+        if (type == InputType.Down)
             return conditionIsMet = Input.GetButtonDown(button);
 
-        else if(type == InputType.Held)
+        else if (type == InputType.Held)
+        {
+            Debug.Log(Input.GetButton(button));
             return conditionIsMet = Input.GetButton(button);
+        }
 
-        else if(type == InputType.Up)
+        else if (type == InputType.Up)
             return conditionIsMet = Input.GetButtonUp(button);
 
         else return false;

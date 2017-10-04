@@ -4,6 +4,7 @@ using UnityEditor;
 using System;
 
 [CustomPropertyDrawer(typeof(Condition), true)]
+[CanEditMultipleObjects]
 public class ConditionDrawer : PropertyDrawer
 {
     public override void OnGUI(Rect pos, SerializedProperty prop, GUIContent label)
@@ -18,14 +19,14 @@ public class ConditionDrawer : PropertyDrawer
                 if (condition as TimedCondition)
                     DrawCondition(pos, condition as TimedCondition, label);
 
+                else if (condition as AmountCondition)
+                    DrawCondition(pos, condition as AmountCondition, label);
+
                 else if (condition as AreaCondition)
                     DrawCondition(pos, condition as AreaCondition, label);
 
                 else if (condition as DestroyedCondition)
                     DrawCondition(pos, condition as DestroyedCondition, label);
-
-                else if (condition as AmountCondition)
-                    DrawCondition(pos, condition as AmountCondition, label);
 
                 else if (condition as ButtonCondition)
                     DrawCondition(pos, condition as ButtonCondition, label);
@@ -221,7 +222,7 @@ public class ConditionDrawer : PropertyDrawer
 
     protected void DrawCondition(Rect pos, AmountCondition condition, GUIContent label)
     {
-        InLine.SetRect(pos, 0, 0, 3);
+        InLine.SetRect(pos, 0, 0, 6);
         {
             condition.typeOfFind = (FindType)EditorGUI.EnumPopup(InLine.NextRect(), condition.typeOfFind);
             switch (condition.typeOfFind)
@@ -234,19 +235,22 @@ public class ConditionDrawer : PropertyDrawer
                     break;
                 case FindType.ByType:
                     condition.typeTemplate = EditorGUI.ObjectField(InLine.NextRect(), condition.typeTemplate, typeof(UnityEngine.Object), true);
-                    if (condition.typeTemplate == null) EditorGUILayout.HelpBox("A Destroy Condition needs a type template", MessageType.Warning);
+                    if (condition.typeTemplate == null) EditorGUILayout.HelpBox("A Amount Condition needs a type template", MessageType.Warning);
                     break;
             }
-            EditorGUI.LabelField(InLine.GetLine(0, pos.width / 1.5f, 1.2f),"  Current Amount", GUIStyle.none);
+            EditorGUI.LabelField(InLine.GetLine(0, pos.width / 3, 5f),"  Current", GUIStyle.none);
             EditorGUI.IntField(InLine.NextRect(), condition.numOfObjects, GUIStyle.none);
         }
 
-        InLine.SetRect(pos, 1, 0, 3);
+        InLine.SetRect(pos, 1, 0, 6);
         {
-            EditorGUI.LabelField(InLine.NextRect(), "Remaining Objects");
+            EditorGUI.LabelField(InLine.NextRect(), "Remaining");
             condition.typeOfCompare = (CompareType)EditorGUI.EnumPopup(InLine.NextRect(), condition.typeOfCompare);
             condition.amount = EditorGUI.IntField(InLine.NextRect(), condition.amount);
         }
+
+        condition.triggerArea = EditorGUI.BoundsField(InLine.GetLine(0, pos.width / 2, 1), condition.triggerArea);
+
         InLine.Reset();
     }
 

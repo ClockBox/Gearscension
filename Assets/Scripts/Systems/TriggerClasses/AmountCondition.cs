@@ -18,7 +18,7 @@ public enum CompareType
     GreaterThanOrEqual,
 }
 
-public class AmountCondition : Condition
+public class AmountCondition : AreaCondition
 {
     public FindType typeOfFind;
     public CompareType typeOfCompare;
@@ -26,32 +26,39 @@ public class AmountCondition : Condition
     public string checkTag;
     public LayerMask layer;
     public Object typeTemplate;
-
-    public Vector3 areaSize;
+    
     public int amount;
-    private Collider[] colArray;
 
     public int numOfObjects = 0;
     
     public override void InitCondition()
     {
         base.InitCondition();
-        areaSize = trigger.GetComponent<Collider>().bounds.extents;
     }
 
     public override bool checkCondition()
     {
-        if (typeOfFind == FindType.Layer)
+        // - Find Types -
+        if (typeOfFind == FindType.Tag)
         {
-            colArray = Physics.OverlapBox(trigger.transform.position, areaSize, Quaternion.identity, layer << 8);
-            numOfObjects = colArray.Length;
+            cols = Physics.OverlapBox(transform.position + triggerArea.center, triggerArea.extents, transform.rotation);
+            for (int i = 0; i < cols.Length; i++)
+                numOfObjects += cols[i].tag == checkTag ? 1 : 0;
         }
-        else if (typeOfFind == FindType.Tag)
-            numOfObjects = GameObject.FindGameObjectsWithTag(checkTag).Length;
 
+        else if (typeOfFind == FindType.Layer)
+        {
+            cols = Physics.OverlapBox(transform.position + triggerArea.center, triggerArea.extents, Quaternion.identity, layer << 8);
+            numOfObjects = cols.Length;
+        }
         else if (typeOfFind == FindType.ByType && typeTemplate != null)
-            numOfObjects = FindObjectsOfType(typeTemplate.GetType()).Length;
+        {
+            cols = Physics.OverlapBox(transform.position + triggerArea.center, triggerArea.extents, transform.rotation);
+            for (int i = 0; i < cols.Length; i++)
+                numOfObjects += cols[i].GetComponentsInChildren(typeTemplate.GetType()).Length;
+        }
 
+        // - Compare Types - 
         if (typeOfCompare == CompareType.LessThan && numOfObjects < amount)
             ConditionMet = true;
 

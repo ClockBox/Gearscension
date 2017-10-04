@@ -9,11 +9,6 @@ public class TimedCondition : Condition
     public bool loop;
     
     private bool isCounting;
-    
-    public override void InitCondition()
-    {
-        base.InitCondition();
-    }
 
     IEnumerator StartTimer()
     {
