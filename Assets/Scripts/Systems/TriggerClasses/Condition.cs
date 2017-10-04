@@ -10,7 +10,8 @@ public enum ConditionType
     Destroyed,                      // - Triggered when a specific "CheckObject" is destroyed.
     Amount,                         // - Triggered when defined amount of “objects” are in scene(can be zero).  
     Button,                         // - Triggered with button press.
-    Trigger                         // - Triggered when referenced Trigger returns true.
+    Trigger,                        // - Triggered when referenced Trigger returns true.
+    BulletHit,                      // - Triggered when shot by buttlet type.
 }
 
 [System.Serializable]
@@ -60,5 +61,5 @@ public class Condition : MonoBehaviour
 
     public virtual void InitCondition() { }
     public virtual void ResetCondition() { conditionIsMet = false; }
-    public virtual bool checkCondition() { return false; }
+    public virtual bool CheckCondition() { return false; }
 }

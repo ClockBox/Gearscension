@@ -10,7 +10,7 @@ public class AreaCondition : Condition
     public Bounds triggerArea = new Bounds(Vector3.zero, Vector3.one * 2);
     protected Collider[] cols;
 
-    public override bool checkCondition()
+    public override bool CheckCondition()
     {
         if (checkObject)
         {

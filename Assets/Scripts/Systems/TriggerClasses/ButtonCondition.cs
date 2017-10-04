@@ -14,7 +14,7 @@ public class ButtonCondition : Condition
     public string button;
     public InputType type;
     
-    public override bool checkCondition()
+    public override bool CheckCondition()
     {
         Debug.Log("checkCondition");
         if (type == InputType.Down)

@@ -11,7 +11,6 @@ public class TriggerEditor : Editor
     SerializedProperty conditionProp;
     SerializedProperty resultProp;
 
-
     protected ConditionType condType;
 
     protected virtual void OnEnable()
@@ -89,6 +88,9 @@ public class TriggerEditor : Editor
                 break;
             case ConditionType.Trigger:
                 m_target.gameObject.AddComponent<TriggerCondition>();
+                break;
+            case ConditionType.BulletHit:
+                m_target.gameObject.AddComponent<BulletHitCondition>();
                 break;
         }
     }
