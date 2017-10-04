@@ -2,54 +2,73 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-enum CompareType
+public enum FindType
+{
+    Tag,
+    Layer,
+    ByType
+}
+
+public enum CompareType
 {
     LessThan,
     GreaterThan,
-    EqualTo
+    EqualTo,
+    LessThanOrEqual,
+    GreaterThanOrEqual,
 }
 
 public class AmountCondition : Condition
 {
-    [SerializeField]
-    CompareType typeOfCompare;
-    [SerializeField]
-    protected Vector3 areaSize;
-    [SerializeField]
-    protected int layer;
-    [SerializeField]
-    protected int amountOfObjects;
-    Collider[] colArray;
+    public FindType typeOfFind;
+    public CompareType typeOfCompare;
 
-    public AmountCondition(Trigger trigger) : base(trigger)
+    public string checkTag;
+    public LayerMask layer;
+    public Object typeTemplate;
+
+    public Vector3 areaSize;
+    public int amount;
+    private Collider[] colArray;
+
+    public int numOfObjects = 0;
+    
+    public override void InitCondition()
     {
-        trigger.StartCoroutine(CheckArea());
+        base.InitCondition();
+        areaSize = trigger.GetComponent<Collider>().bounds.extents;
     }
 
-    IEnumerator CheckArea()
+    public override bool checkCondition()
     {
-        int numOfObjects;
-        while (true)
+        if (typeOfFind == FindType.Layer)
         {
-            colArray = Physics.OverlapBox(trigger.transform.position, areaSize, Quaternion.identity, LayerMask.GetMask(LayerMask.LayerToName(layer)));
+            colArray = Physics.OverlapBox(trigger.transform.position, areaSize, Quaternion.identity, layer << 8);
             numOfObjects = colArray.Length;
-
-            if (typeOfCompare == CompareType.LessThan && numOfObjects < amountOfObjects)
-            {
-                conditionIsMet = true;
-            }
-            else if (typeOfCompare == CompareType.GreaterThan && numOfObjects > amountOfObjects)
-            {
-                conditionIsMet = true;
-            }
-            else if (typeOfCompare == CompareType.EqualTo && numOfObjects == amountOfObjects)
-            {
-                conditionIsMet = true;
-            }
-            else
-                conditionIsMet = false;
-
-            yield return null;
         }
+        else if (typeOfFind == FindType.Tag)
+            numOfObjects = GameObject.FindGameObjectsWithTag(checkTag).Length;
+
+        else if (typeOfFind == FindType.ByType && typeTemplate != null)
+            numOfObjects = FindObjectsOfType(typeTemplate.GetType()).Length;
+
+        if (typeOfCompare == CompareType.LessThan && numOfObjects < amount)
+            ConditionMet = true;
+
+        else if (typeOfCompare == CompareType.GreaterThan && numOfObjects > amount)
+            ConditionMet = true;
+
+        else if (typeOfCompare == CompareType.EqualTo && numOfObjects == amount)
+            ConditionMet = true;
+
+        else if (typeOfCompare == CompareType.LessThanOrEqual && numOfObjects <= amount)
+            ConditionMet = true;
+
+        else if (typeOfCompare == CompareType.GreaterThanOrEqual && numOfObjects >= amount)
+            ConditionMet = true;
+
+        else conditionIsMet = false;
+
+        return ConditionMet;
     }
 }

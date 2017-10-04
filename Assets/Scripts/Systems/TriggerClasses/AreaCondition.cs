@@ -1,38 +1,66 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 public class AreaCondition : Condition
 {
-    [SerializeField]
-    protected GameObject checkObject;
-    [SerializeField]
-    protected int layer;
+    public GameObject checkObject;
 
-    Vector3 triggerArea;
-    Collider[] cols;
+    public Bounds triggerArea = new Bounds(Vector3.zero, Vector3.one * 2);
+    private Collider[] cols;
 
-    public AreaCondition(Trigger trigger) : base(trigger)
+    public override bool checkCondition()
     {
-        triggerArea = trigger.GetComponent<Collider>().bounds.extents;
-        trigger.StartCoroutine(CheckArea());
-    }
-
-    IEnumerator CheckArea()
-    {
-        while (true)
+        if (checkObject)
         {
-            cols = Physics.OverlapBox(trigger.transform.position, triggerArea, Quaternion.identity, LayerMask.GetMask(LayerMask.LayerToName(layer)));
-            
-            for(int i = 0; i < cols.Length - 1; i++)
+            cols = Physics.OverlapBox(gameObject.transform.position + triggerArea.center, triggerArea.extents, checkObject.transform.rotation, ~checkObject.gameObject.layer);
+            for (int i = 0; i < cols.Length - 1; i++)
             {
                 if (cols[i].gameObject == checkObject)
-                    conditionIsMet = true;
-                else
-                    conditionIsMet = false;
+                    ConditionMet = true;
+                else conditionIsMet = false;
             }
-
-            yield return null;
         }
+        return conditionIsMet;
+    }
+
+    public void OnDrawGizmosSelected()
+    {
+        Vector3 center = triggerArea.center + gameObject.transform.position;
+        Transform rotation = gameObject.transform;
+
+        float x = triggerArea.extents.x;
+        float y = triggerArea.extents.y;
+        float z = triggerArea.extents.z;
+
+        Handles.color = new Color(1, 0, 0.5f, 0.5f);
+        Handles.DrawLines(new Vector3[]
+        {
+            rotation.right * x + rotation.up * y + rotation.forward * z + center,
+            rotation.right * -x + rotation.up * y + rotation.forward * z + center,
+            rotation.right * x + rotation.up * y + rotation.forward * z + center,
+            rotation.right * x + rotation.up *- y + rotation.forward * z + center,
+            rotation.right * x + rotation.up * y + rotation.forward * z + center,
+            rotation.right * x + rotation.up * y + rotation.forward * -z + center,
+            rotation.right * -x + rotation.up * -y + rotation.forward * -z + center,
+            rotation.right * x + rotation.up * -y + rotation.forward * -z + center,
+            rotation.right * -x + rotation.up * -y + rotation.forward * -z + center,
+            rotation.right * -x + rotation.up * y + rotation.forward * -z + center,
+            rotation.right * -x + rotation.up * -y + rotation.forward * -z + center,
+            rotation.right * -x + rotation.up * -y + rotation.forward * z + center,
+            rotation.right * x + rotation.up * y + rotation.forward * -z + center,
+            rotation.right * -x + rotation.up * y + rotation.forward * -z + center,
+            rotation.right * x + rotation.up * y + rotation.forward * -z + center,
+            rotation.right * x + rotation.up * -y + rotation.forward * -z + center,
+            rotation.right * x + rotation.up * -y + rotation.forward * z + center,
+            rotation.right * x + rotation.up * -y + rotation.forward * -z + center,
+            rotation.right * x + rotation.up * -y + rotation.forward * z + center,
+            rotation.right * -x + rotation.up * -y + rotation.forward * z + center,
+            rotation.right * -x + rotation.up * y + rotation.forward * z + center,
+            rotation.right * -x + rotation.up * -y + rotation.forward * z + center,
+            rotation.right * -x + rotation.up * y + rotation.forward * z + center,
+            rotation.right * -x + rotation.up * y + rotation.forward * -z + center,
+        });
     }
 }
