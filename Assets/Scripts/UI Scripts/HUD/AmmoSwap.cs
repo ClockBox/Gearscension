@@ -9,7 +9,7 @@ public class AmmoSwap : MonoBehaviour
     // Int
     private int ammo;
 
-    PlayerController CSM;
+    PlayerController PC;
 
     [Header("Main Hud")]
     [SerializeField] private GameObject healtOne;
@@ -21,44 +21,34 @@ public class AmmoSwap : MonoBehaviour
 
     private GameObject[] healthBar;
 
-    [SerializeField] private GameObject armorPieceOne;
+    private GameObject armorPieceOne;
     private Animator animOne;
-    private bool armorOneTrigger = true;
 
-    [SerializeField] private GameObject armorPieceTwo;
+    private GameObject armorPieceTwo;
     private Animator animTwo;
-    private bool armorTwoTrigger = true;
 
     [Header("Ammo Hud")]
     [SerializeField] private Image slot1;
     [SerializeField] private Image slot2;
     [SerializeField] private Image slot3;
 
-    // Other
-    [Header("Ammo")]
-    public Image current;
-    public Text bullets;
-    [SerializeField] private Image pos1;
-    [SerializeField] private Image pos2;
-    [SerializeField] private Image pos3;
-
-    public GameObject[] sprites = new GameObject[4];
+    public GameObject[] ammoType = new GameObject[4];
 
     // Use this for initialization
     void Awake()
     {
-        CSM = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        PC = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
 
-        armorPieceOne = GameObject.FindGameObjectWithTag("Armor 1");
+        armorPieceOne = GameObject.Find("/Gear Hud/Armor 1");
         if (armorPieceOne != null)
         {
-            animOne = GetComponent<Animator>();
+            animOne = armorPieceOne.GetComponent<Animator>();
         }
 
-        armorPieceTwo = GameObject.FindGameObjectWithTag("Armor2");
+        armorPieceTwo = GameObject.Find("/Gear Hud/Armor 2");
         if (armorPieceTwo != null)
         {
-            animTwo = GetComponent<Animator>();
+            animTwo = armorPieceTwo.GetComponent<Animator>();
         }
 
         healthBar = new GameObject[]
@@ -76,13 +66,12 @@ public class AmmoSwap : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Space))
             { BulletUpgrade(); }
 
+        if (ammo != PC.AmmoType)
+        {
+            ammo = PC.AmmoType;
+            setAmmo(ammo);
+        }
 
-
-        //if (ammo != CSM.AmmoType)
-        //{
-        //    ammo = CSM.AmmoType;
-        //    setAmmo(ammo);
-        //}
         //HealthBar();
         ArmorCheck();
         //Bullets();
@@ -90,17 +79,88 @@ public class AmmoSwap : MonoBehaviour
 
     private void HealthBar()
     {
-        Mathf.RoundToInt(CSM.Health / 20);
+        int healthCount = Mathf.RoundToInt(PC.Health / 20);
 
-        if()
+        if(healthCount >= 5)
         {
+            healtSix.SetActive(true);
 
+            healtOne.SetActive(false);
+            healtTwo.SetActive(false);
+            healtThree.SetActive(false);
+            healtFour.SetActive(false);
+            healtFive.SetActive(false);
+            Debug.Log("Health Set to full");
         }
 
-        //if (healthImage.fillAmount != CSM.Health/100)
+        else if (healthCount == 4)
+        {
+            healtFive.SetActive(true);
+
+            healtOne.SetActive(true);
+            healtTwo.SetActive(false);
+            healtThree.SetActive(false);
+            healtFour.SetActive(false);
+
+            healtSix.SetActive(false);
+            Debug.Log("Health taken 1 DMG");
+        }
+
+        else if (healthCount == 3)
+        {
+            healtFour.SetActive(true);
+
+            healtOne.SetActive(false);
+            healtTwo.SetActive(false);
+            healtThree.SetActive(false);
+
+            healtFive.SetActive(false);
+            healtSix.SetActive(false);
+            Debug.Log("Health taken 2 DMG");
+        }
+
+        else if (healthCount == 2)
+        {
+            healtThree.SetActive(true);
+
+            healtOne.SetActive(false);
+            healtTwo.SetActive(false);
+
+            healtFour.SetActive(false);
+            healtFive.SetActive(false);
+            healtSix.SetActive(false);
+            Debug.Log("Health taken 3 DMG");
+        }
+
+        else if (healthCount == 1)
+        {
+            healtTwo.SetActive(true);
+
+            healtOne.SetActive(false);
+
+            healtThree.SetActive(false);
+            healtFour.SetActive(false);
+            healtFive.SetActive(false);
+            healtSix.SetActive(false);
+            Debug.Log("Health taken 4 DMG");
+        }
+
+        else
+        {
+            healtOne.SetActive(true);
+
+            healtTwo.SetActive(false);
+            healtThree.SetActive(false);
+            healtFour.SetActive(false);
+            healtFive.SetActive(false);
+            healtSix.SetActive(false);
+            Debug.Log("Health gone");
+        }
+
+        //if (healthImage.fillAmount != PC.Health/100)
         //{
-        //    healthImage.fillAmount = CSM.Health / 100;
-        //    Debug.Log(healthImage.fillAmount + " " + CSM.Health/100);
+        //    healthImage.fillAmount = PC.Health / 100;
+        //    Debug.Log(healthImage.fillAmount + " " + PC.Health/100);
         //}
         //return;
     }
@@ -108,44 +168,45 @@ public class AmmoSwap : MonoBehaviour
     public void ArmorCheck()
     {
 
-        if (CSM.Armor >= 2)
+        if (PC.Armor >= 2)
         {
             animOne.SetBool("Destroyed", false);
             animTwo.SetBool("Destroyed", false);
-            animOne.SetTrigger("armorTrigger");
-            animTwo.SetTrigger("armorTrigger");
+            Debug.Log("Full Armor plates");
         }
-        else if (CSM.Armor == 1)
+
+        else if (PC.Armor == 1)
         {
             animOne.SetBool("Destroyed", false);
             animTwo.SetBool("Destroyed", true);
-            animOne.SetTrigger("armorTrigger");
-            animTwo.SetTrigger("armorTrigger");
+            Debug.Log("1st Armor plate destroyed");
         }
-        else if (CSM.Armor == 0)
+
+        else
         {
             animOne.SetBool("Destroyed", true);
             animTwo.SetBool("Destroyed", true);
-            animOne.SetTrigger("armorTrigger");
-            animTwo.SetTrigger("armorTrigger");
+            Debug.Log("2nd Armor plate Destroyed");
             HealthBar();
         }
     }
 
     public void Bullets()
     {
-        bullets.text = " " + CSM.AmmoRemaining(ammo).ToString();
+        // bullets.text = " " + PC.AmmoRemaining(ammo).ToString();
     }
 
     public void setAmmo(int currentType)
     {
-        sprites[currentType].transform.position = current.transform.position;
-        sprites[(currentType + 1) % 4].transform.position = pos1.transform.position;
+        ammoType[currentType].SetActive(true);
+        ammoType[(currentType + 1) % 4].SetActive(false);
+        ammoType[(currentType + 2) % 4].SetActive(false);
+        ammoType[(currentType + 3) % 4].SetActive(false);
 
-
-
-        sprites[(currentType + 2) % 4].transform.position = pos2.transform.position;
-        sprites[(currentType + 3) % 4].transform.position = pos3.transform.position;
+        //ammoType[currentType].transform.position = current.transform.position;
+        //ammoType[(currentType + 1) % 4].transform.position = pos1.transform.position;
+        //ammoType[(currentType + 2) % 4].transform.position = pos2.transform.position;
+        //ammoType[(currentType + 3) % 4].transform.position = pos3.transform.position;
         // lightprefab.transform.position = pos3.transform.position;
         Debug.Log("Ammo Changed!");
     }
