@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class MainMenuController : MonoBehaviour
 {
@@ -9,10 +8,6 @@ public class MainMenuController : MonoBehaviour
     // Int
     private int speed = 3;
     private int speed2 = 4;
-
-    // Bool
-    private bool allowSceneActivation;
-    private bool isDone;
 
     // Other
     private Vector3 start2;
@@ -43,25 +38,5 @@ public class MainMenuController : MonoBehaviour
             Cloads.transform.position = start2;
         }
 
-    }
-
-    public void Quit()
-    {
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#else
-        Application.Quit();
-#endif
-    }
-
-
-    public void LoadByIndex(int SceneIndex)
-    {
-        SceneManager.LoadScene(SceneIndex);
-    }
-
-    public void LoadAdd(int Scene)
-    {
-        // SceneManager.LoadSceneAsync(4, LoadSceneMode.Additive);
     }
 }

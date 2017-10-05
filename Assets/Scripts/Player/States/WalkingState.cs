@@ -5,7 +5,7 @@ public class WalkingState : PlayerState
 {
     protected Vector3 desiredDirection;
     protected Vector3 lookDirection;
-    protected Vector3 moveDirection;
+    protected static Vector3 moveDirection;
 
     protected float movementSpeed = 5;
     protected float moveX = 0;
@@ -74,25 +74,25 @@ public class WalkingState : PlayerState
     {
         moveX = Input.GetAxis("Horizontal");
         moveY = Input.GetAxis("Vertical");
+        
+        if (Input.GetKey(KeyCode.LeftShift))
+        movementSpeed = 5;
+        else movementSpeed = 8;
+
+        lookDirection = Camera.main.transform.forward;
+        lookDirection = Vector3.ProjectOnPlane(lookDirection, Player.transform.up);
+
+        desiredDirection = Quaternion.FromToRotation(Player.transform.forward, lookDirection) * (Player.transform.right * moveX + Player.transform.forward * moveY);
+        moveDirection = Vector3.MoveTowards(moveDirection, desiredDirection * movementSpeed, 10 * Time.deltaTime);
+
+        if (desiredDirection.magnitude > 0)
+            moveDirection = Vector3.RotateTowards(moveDirection, desiredDirection + lookDirection * 0.01f, 20 * Time.deltaTime, 0);
+
+        if (moveDirection.magnitude > movementSpeed)
+            moveDirection = moveDirection.normalized * movementSpeed;
 
         if (grounded)
         {
-            if (Input.GetKey(KeyCode.LeftShift))
-            movementSpeed = 5;
-            else movementSpeed = 8;
-
-            lookDirection = Camera.main.transform.forward;
-            lookDirection = Vector3.ProjectOnPlane(lookDirection, Player.transform.up);
-
-            desiredDirection = Quaternion.FromToRotation(Player.transform.forward, lookDirection) * (Player.transform.right * moveX + Player.transform.forward * moveY);
-            moveDirection = Vector3.MoveTowards(moveDirection, desiredDirection * movementSpeed, 10 * Time.deltaTime);
-
-            if (desiredDirection.magnitude > 0)
-                moveDirection = Vector3.RotateTowards(moveDirection, desiredDirection + lookDirection * 0.01f, 20 * Time.deltaTime, 0);
-
-            if (moveDirection.magnitude > movementSpeed)
-                moveDirection = moveDirection.normalized * movementSpeed;
-        
             Player.transform.LookAt(Player.transform.position + moveDirection, Player.transform.up);
             canClimb = true;
             fallTimer = 0;
@@ -108,7 +108,7 @@ public class WalkingState : PlayerState
     }
     protected override void UpdateIK()
     {
-        if (grounded && moveDirection.magnitude <= 0.01f)
+        if (grounded && (moveDirection.magnitude > 1  ||moveDirection.magnitude <= 0.01f))
         {
             IK.RightFoot.weight = anim.GetFloat("RightFootWeight");
             IK.LeftFoot.weight = anim.GetFloat("LeftFootWeight");
@@ -156,7 +156,7 @@ public class WalkingState : PlayerState
         else
         {
             rb.AddForce(Player.transform.up * -9.81f * rb.mass);
-            rb.AddForce(-moveDirection/3 * rb.mass);
+            rb.AddForce(moveDirection/2 * rb.mass);
         }
     }
 

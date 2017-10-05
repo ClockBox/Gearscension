@@ -2,80 +2,54 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum FindType
-{
-    Tag,
-    Layer,
-    ByType
-}
-
-public enum CompareType
+enum CompareType
 {
     LessThan,
     GreaterThan,
-    EqualTo,
-    LessThanOrEqual,
-    GreaterThanOrEqual,
+    EqualTo
 }
 
-public class AmountCondition : AreaCondition
+public class AmountCondition : Condition
 {
-    public FindType typeOfFind;
-    public CompareType typeOfCompare;
+    [SerializeField]
+    CompareType typeOfCompare;
+    [SerializeField]
+    protected Vector3 areaSize;
+    [SerializeField]
+    protected int layer;
+    [SerializeField]
+    protected int amountOfObjects;
+    Collider[] colArray;
 
-    public string checkTag;
-    public LayerMask layer;
-    public Object typeTemplate;
-    
-    public int amount;
-
-    public int numOfObjects = 0;
-    
-    public override void InitCondition()
+    public AmountCondition(Trigger trigger) : base(trigger)
     {
-        base.InitCondition();
+        trigger.StartCoroutine(CheckArea());
     }
 
-    public override bool checkCondition()
+    IEnumerator CheckArea()
     {
-        // - Find Types -
-        if (typeOfFind == FindType.Tag)
+        int numOfObjects;
+        while (true)
         {
-            cols = Physics.OverlapBox(transform.position + triggerArea.center, triggerArea.extents, transform.rotation);
-            for (int i = 0; i < cols.Length; i++)
-                numOfObjects += cols[i].tag == checkTag ? 1 : 0;
+            colArray = Physics.OverlapBox(trigger.transform.position, areaSize, Quaternion.identity, LayerMask.GetMask(LayerMask.LayerToName(layer)));
+            numOfObjects = colArray.Length;
+
+            if (typeOfCompare == CompareType.LessThan && numOfObjects < amountOfObjects)
+            {
+                conditionIsMet = true;
+            }
+            else if (typeOfCompare == CompareType.GreaterThan && numOfObjects > amountOfObjects)
+            {
+                conditionIsMet = true;
+            }
+            else if (typeOfCompare == CompareType.EqualTo && numOfObjects == amountOfObjects)
+            {
+                conditionIsMet = true;
+            }
+            else
+                conditionIsMet = false;
+
+            yield return null;
         }
-
-        else if (typeOfFind == FindType.Layer)
-        {
-            cols = Physics.OverlapBox(transform.position + triggerArea.center, triggerArea.extents, Quaternion.identity, layer << 8);
-            numOfObjects = cols.Length;
-        }
-        else if (typeOfFind == FindType.ByType && typeTemplate != null)
-        {
-            cols = Physics.OverlapBox(transform.position + triggerArea.center, triggerArea.extents, transform.rotation);
-            for (int i = 0; i < cols.Length; i++)
-                numOfObjects += cols[i].GetComponentsInChildren(typeTemplate.GetType()).Length;
-        }
-
-        // - Compare Types - 
-        if (typeOfCompare == CompareType.LessThan && numOfObjects < amount)
-            ConditionMet = true;
-
-        else if (typeOfCompare == CompareType.GreaterThan && numOfObjects > amount)
-            ConditionMet = true;
-
-        else if (typeOfCompare == CompareType.EqualTo && numOfObjects == amount)
-            ConditionMet = true;
-
-        else if (typeOfCompare == CompareType.LessThanOrEqual && numOfObjects <= amount)
-            ConditionMet = true;
-
-        else if (typeOfCompare == CompareType.GreaterThanOrEqual && numOfObjects >= amount)
-            ConditionMet = true;
-
-        else conditionIsMet = false;
-
-        return ConditionMet;
     }
 }
