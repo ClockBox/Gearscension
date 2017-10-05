@@ -69,7 +69,7 @@ public class UnitHealth : MonoBehaviour {
         AIBreakable[] breakables=gameObject.GetComponentsInChildren<AIBreakable>();
         foreach(AIBreakable breakable in breakables)
         {
-            breakable.broken = true;
+            //breakable.broken = true;
         }
     }
 

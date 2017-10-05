@@ -3,27 +3,39 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class AIBreakable : MonoBehaviour {
-	public bool broken = false;
-    public GameObject crystal;
-	// Use this for initialization
-	void Start () {
-        if (crystal==null)
-        {
-            Debug.Log("corresponding crystal not set");
+	bool broken = false;
+    public GameObject breakablePart;
 
-        }
-		
+	private void Update()
+	{
+		//if (Input.GetKeyDown(KeyCode.G))
+		//{
+		//	TakeDamage(1);
+			
+		//}
 	}
 
-	// Update is called once per frame
-	void Update()
+	public void TakeDamage(float damage)
 	{
-		if (broken)
-		{
-            GetComponent<Rigidbody>().useGravity = true;
-            crystal.GetComponent<AiCrystal>().exposed = true;
-			transform.parent = null;
+		if (damage > 0) {
+
+			if (!broken)
+			{
+				gameObject.transform.root.GetComponent<AIStateManager>().Stun();
+				breakablePart.GetComponent<Rigidbody>().useGravity = true;
+				
+				breakablePart.transform.parent = null;
+				breakablePart.GetComponent<BoxCollider>().enabled = true;
+				broken = true;
+			}
+			else
+			{
+				gameObject.transform.root.GetComponent<AIStateManager>().Die();
+
+			}
+
 		}
+
 	}
 
 }

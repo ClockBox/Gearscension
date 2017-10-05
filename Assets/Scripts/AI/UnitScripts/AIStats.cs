@@ -16,6 +16,8 @@ public class AIStats : MonoBehaviour {
 	public float turnSpeed;
 	public float rangedAttackDuration;
 	public float meleeAttackDuration;
+	public float armour;
+	public float stunDuration;
 	[HideInInspector]
 	public float stopDistance = 5.5f;
 }
