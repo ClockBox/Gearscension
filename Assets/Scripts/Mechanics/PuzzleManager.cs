@@ -21,43 +21,47 @@ public class PuzzleManager : MonoBehaviour
     private float moveSpeed = 0.1f;
     private Vector3 rotateAngle;
     private float toAngle;
+    private Vector3 startPos;
     public Axis axis;
-    
-    public void TrapDoor(GameObject thingToRotate)
-    {
-        StartCoroutine(OpenDoor(thingToRotate));
-    }
 
-    public IEnumerator OpenDoor(GameObject thingToRotate)
-    {
-        if (!rotated)
-        {
-            float x = 140;
-            while (thingToRotate.transform.rotation.x < 135)
-            {
-                thingToRotate.transform.rotation = Quaternion.Slerp(thingToRotate.transform.rotation, Quaternion.Euler(x, 0, 90), moveSpeed * Time.deltaTime);
-                yield return null;
-            }
-            thingToRotate.transform.rotation = Quaternion.Euler(x, 0,90);
-            yield return null;
-        }
-        else if(rotated)
-        {
-            float x = 0;
-            while (thingToRotate.transform.rotation.x > 0)
-            {
-                thingToRotate.transform.rotation = Quaternion.Slerp(thingToRotate.transform.rotation, Quaternion.Euler(x, 0, 90), moveSpeed * Time.deltaTime);
-                yield return null;
-            }
+    #region TrapDoor
+    //public void TrapDoor(GameObject thingToRotate)
+    //{
+    //    StartCoroutine(OpenDoor(thingToRotate));
+    //}
 
-            if (rotated)
-                rotated = false;
+    //public IEnumerator OpenDoor(GameObject thingToRotate)
+    //{
+    //    if (!rotated)
+    //    {
+    //        float x = 140;
+    //        while (thingToRotate.transform.rotation.x < 135)
+    //        {
+    //            thingToRotate.transform.rotation = Quaternion.Slerp(thingToRotate.transform.rotation, Quaternion.Euler(x, 0, 90), moveSpeed * Time.deltaTime);
+    //            yield return null;
+    //        }
+    //        thingToRotate.transform.rotation = Quaternion.Euler(x, 0, 90);
+    //        yield return null;
+    //    }
+    //    else if (rotated)
+    //    {
+    //        float x = 0;
+    //        while (thingToRotate.transform.rotation.x > 0)
+    //        {
+    //            thingToRotate.transform.rotation = Quaternion.Slerp(thingToRotate.transform.rotation, Quaternion.Euler(x, 0, 90), moveSpeed * Time.deltaTime);
+    //            yield return null;
+    //        }
 
-            thingToRotate.transform.rotation = Quaternion.Euler(x, 0, 90);
-            yield return null;
-        }
-    }
+    //        if (rotated)
+    //            rotated = false;
 
+    //        thingToRotate.transform.rotation = Quaternion.Euler(x, 0, 90);
+    //        yield return null;
+    //    }
+    //}
+    #endregion
+
+    #region RotateOverTime
     public void RotateRoom(GameObject thingToRotate)
     {
         StartCoroutine(Rotate(thingToRotate));
@@ -76,8 +80,10 @@ public class PuzzleManager : MonoBehaviour
 
         thingToRotate.transform.rotation = Quaternion.Euler(0, 0, 0);
         yield return null;
-    }
+    } 
+    #endregion
 
+    #region RotateObject
     public void SetAxis(string _axis)
     {
         switch (_axis)
@@ -99,33 +105,49 @@ public class PuzzleManager : MonoBehaviour
         toAngle = angle;
     }
 
+    public void SetRotateSpeed(float speed)
+    {
+        rotateSpeed = speed;
+    }
+
     public void RotateObject(Transform thingToRotate)
     {
+        startPos = thingToRotate.localEulerAngles;
         StartCoroutine(RotateObj(thingToRotate));
     }
 
     private IEnumerator RotateObj(Transform thingToRotate)
     {
         angleRotated = 0;
-        while(angleRotated < toAngle)
+        while (angleRotated < toAngle)
         {
-            Debug.Log(angleRotated);
             switch (axis)
             {
                 case Axis.X:
-                    thingToRotate.Rotate(2f * Time.deltaTime, 0, 0);
+                    thingToRotate.Rotate(rotateSpeed * Time.deltaTime * transform.right);
                     break;
                 case Axis.Y:
-                    thingToRotate.Rotate(0, 2f * Time.deltaTime, 0);
+                    thingToRotate.Rotate(rotateSpeed * Time.deltaTime * transform.up);
                     break;
                 case Axis.Z:
-                    thingToRotate.Rotate(0, 0, 2f * Time.deltaTime);
+                    thingToRotate.Rotate(rotateSpeed * Time.deltaTime * transform.forward);
                     break;
             }
-            angleRotated += 2f * Time.deltaTime;
+            angleRotated += rotateSpeed * Time.deltaTime;
             yield return null;
         }
-        thingToRotate.localEulerAngles = new Vector3(axis == Axis.X ? toAngle : 0, axis == Axis.Y ? toAngle : 0, axis == Axis.Z ? toAngle : 0);
-        
+        thingToRotate.localEulerAngles =
+            (axis == Axis.X ? toAngle * thingToRotate.right : Vector3.zero) +
+            (axis == Axis.Y ? toAngle * thingToRotate.up : Vector3.zero) +
+            (axis == Axis.Z ? toAngle * thingToRotate.forward : Vector3.zero) +
+            startPos;
+
+
+    } 
+    #endregion
+
+    public void Debuging()
+    {
+        Debug.Log("PuzzleDone");
     }
 }

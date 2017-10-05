@@ -1,17 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class LightPuzzle : MonoBehaviour
 {
     public GameObject green, blue, red;
     public GameObject[] boxPositioningLights;
+    public GameObject[] pressurePlates;
     public Material greyMat, greenMat, blueMat, redMat;
     public Light greenLight, blueLight, redLight;
+    public UnityEvent myEvent;
     
     private bool allowChange;
     private int counter;
     private int counterMax;
+    private int correctBlockCounter;
     private int[] randomPuzzleSelect, group1, group2, group3;
     
     private void Start()
@@ -21,6 +25,8 @@ public class LightPuzzle : MonoBehaviour
         counterMax = Mathf.RoundToInt(boxPositioningLights.Length / 2) - 1;
 
         counter = 0;
+        
+        correctBlockCounter = 0;
 
         group1 = new int[boxPositioningLights.Length];
         group2 = new int[boxPositioningLights.Length];
@@ -237,9 +243,48 @@ public class LightPuzzle : MonoBehaviour
             Debug.Log(randomPuzzleSelect[i]);
     }
 
+    public void CheckPuzzlePiece(GameObject goToCheck)
+    {
+        Debug.Log("CheckPuzzlePiece1");
+        for (int i = 0; i < pressurePlates.Length; i++)
+        {
+            if(goToCheck.name == pressurePlates[i].name && randomPuzzleSelect[i] == 1)
+            {
+                Debug.Log("CheckPuzzlePiece2");
+                correctBlockCounter++;
+                Debug.Log(correctBlockCounter);
+                CheckPuzzle();
+            }
+        }
+    }
+
+    public void DisengagePuzzlePiece(GameObject goToCheck)
+    {
+        Debug.Log("CheckPuzzlePiece1");
+        for (int i = 0; i < pressurePlates.Length; i++)
+        {
+            if (goToCheck.name == pressurePlates[i].name && randomPuzzleSelect[i] == 1)
+            {
+                Debug.Log("Piece removed");
+                correctBlockCounter--;
+                Debug.Log(correctBlockCounter);
+            }
+        }
+    }
+
+    public void CheckPuzzle()
+    {
+        if (correctBlockCounter >= counterMax + 1)
+        {
+            myEvent.Invoke();
+            counterMax = 0;
+        }
+    }
+
     public IEnumerator WaitForLight()
     {
         yield return new WaitForSeconds(0.5f);
         allowChange = !allowChange;
     }
+
 }
