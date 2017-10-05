@@ -34,6 +34,9 @@ public class ConditionDrawer : PropertyDrawer
                 else if (condition as TriggerCondition)
                     DrawCondition(pos, condition as TriggerCondition, label);
 
+                else if (condition as BulletHitCondition)
+                    DrawCondition(pos, condition as BulletHitCondition, label);
+
                 else if (condition)
                     DrawDefault(pos, condition.GetType());
             }
@@ -276,6 +279,16 @@ public class ConditionDrawer : PropertyDrawer
         {
             EditorGUI.LabelField(InLine.NextRect(), "IsTrue");
             condition.isTrue = EditorGUI.Toggle(InLine.NextRect(true), condition.isTrue);
+        }
+    }
+
+    private void DrawCondition(Rect pos, BulletHitCondition condition, GUIContent label)
+    {
+        EditorGUI.LabelField(InLine.GetRect(pos, 0, 0, 2), "BulletHit");
+        InLine.SetRect(pos, 1, 0, 4);
+        {
+            EditorGUI.LabelField(InLine.NextRect(), "IsTrue");
+            condition.type = (BulletType)EditorGUI.EnumPopup(InLine.NextRect(), condition.type);
         }
     }
     #endregion

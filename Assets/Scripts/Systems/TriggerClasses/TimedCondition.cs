@@ -25,7 +25,7 @@ public class TimedCondition : Condition
         }
     }
 
-    public override bool checkCondition()
+    public override bool CheckCondition()
     {
         Debug.Log("Timer checked");
         if (!isCounting)

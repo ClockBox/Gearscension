@@ -36,7 +36,7 @@ public class AmountCondition : AreaCondition
         base.InitCondition();
     }
 
-    public override bool checkCondition()
+    public override bool CheckCondition()
     {
         // - Find Types -
         if (typeOfFind == FindType.Tag)

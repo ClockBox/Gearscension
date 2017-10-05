@@ -86,7 +86,7 @@ public class Trigger : MonoBehaviour
         {
             for (int i = 0; i < conditions.Count; i++)
             {
-                if (conditions[i].checkCondition() == false)
+                if (conditions[i].CheckCondition() == false)
                 {
                     ResetCondtions(i + 1);
                     return false;
@@ -97,7 +97,7 @@ public class Trigger : MonoBehaviour
         {
             int condtionsMet = 0;
             for (int i = 0; i < conditions.Count; i++)
-                condtionsMet += conditions[i].checkCondition() ? 1 : 0;
+                condtionsMet += conditions[i].CheckCondition() ? 1 : 0;
 
             if (condtionsMet != conditions.Count)
                 return false;

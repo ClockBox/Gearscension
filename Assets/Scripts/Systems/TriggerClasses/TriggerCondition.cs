@@ -7,7 +7,7 @@ public class TriggerCondition : Condition
     public Trigger referenceTrigger;
     public bool isTrue;
     
-    public override bool checkCondition()
+    public override bool CheckCondition()
     {
         return conditionIsMet = referenceTrigger.ConditionsMet;
     }
