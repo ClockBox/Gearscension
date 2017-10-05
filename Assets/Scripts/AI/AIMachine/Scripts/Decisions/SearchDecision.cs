@@ -27,6 +27,7 @@ public class SearchDecision : AIDecisions {
 				if (manager.checkTimeElapsed(manager.stats.alertTimer))
 				{
 					manager.AlertOthers();
+					manager.pathAgent.speed = manager.stats.engageSpeed;
 					return true;
 				}
 			}

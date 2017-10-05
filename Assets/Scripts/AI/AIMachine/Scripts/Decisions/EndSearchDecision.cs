@@ -12,7 +12,14 @@ public class EndSearchDecision : AIDecisions {
 
 	private bool EndSearch (AIStateManager manager) {
 
-
-		return (Vector3.Distance(manager.transform.position, manager.searchPosition.position) <= manager.stats.stopDistance);
+		if (Vector3.Distance(manager.transform.position, manager.searchPosition.position) <= manager.stats.stopDistance)
+		{
+			manager.pathAgent.speed = manager.stats.patrolSpeed;
+			manager.pathAgent.travel(manager.pathTarget.position);
+			return true;
+		}
+		else
+			return false;
+			
 	}
 }

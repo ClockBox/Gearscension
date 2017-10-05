@@ -11,13 +11,10 @@ public class EngageDecision : AIDecisions {
 	}
 
 
-	// Update is called once per frame
 	private bool Engage (AIStateManager manager) {
 
-		if (Vector3.Distance(manager.transform.position, manager.player.transform.position) <= manager.stats.rangedRange)
+		if (Vector3.Distance(manager.transform.position, manager.player.transform.position) <= manager.stats.rangedRange&&manager.setFrequency >=manager.stats.attackFrequency)
 		{
-			manager.pathAgent.speed = 0;
-			manager.pathAgent.turnSpeed = 0;
 
 			return true;
 		}

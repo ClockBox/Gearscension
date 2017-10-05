@@ -10,9 +10,7 @@ public class AttackAction : AIActions {
 		StartAttack(manager);
 	}
 
-	// Update is called once per frame
 	private void StartAttack (AIStateManager manager) {
-		if(manager.pathAgent.enabled)
-		manager.pathAgent.enabled = false;
+
 	}
 }

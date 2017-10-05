@@ -12,6 +12,15 @@ public class ExitMeleeDecision : AIDecisions {
 
 	private bool Exit(AIStateManager manager)
 	{
-		return manager.checkTimeElapsed(manager.stats.meleeAttackDuration );
+		if (manager.checkTimeElapsed(manager.stats.meleeAttackDuration))
+		{
+			//manager.pathAgent.enabled = true;
+			//manager.pathAgent.speed = manager.stats.engageSpeed;
+			//manager.pathAgent.turnSpeed = manager.stats.turnSpeed;
+			manager.setFrequency = 0;
+			return true;
+		}
+		else
+			return false;
 	}
 }

@@ -10,6 +10,8 @@ public abstract class AIStateManager : MonoBehaviour {
 	public AIStates remainState;
 
 	[HideInInspector]
+	public float setFrequency;
+	[HideInInspector]
 	public Transform searchPosition;
 	[HideInInspector]
 	public AIStats stats;
@@ -35,10 +37,12 @@ public abstract class AIStateManager : MonoBehaviour {
 		pathIndex = 0;
 		pathTarget = patrolPoints[pathIndex];
 		pathAgent.travel(pathTarget.position);
+		setFrequency = stats.attackFrequency;
 	}
 	public void Update()
 	{
 		currentState.UpdateState(this);
+		setFrequency += Time.deltaTime;
 	}
 	public void TransitionToState(AIStates nextState) {
 		if (nextState != remainState)

@@ -24,7 +24,7 @@ public class LookDecision : AIDecisions {
 				&& hit.collider.CompareTag("Player"))
 			{
 				manager.searchPosition = hit.collider.transform;
-				manager.pathAgent.speed = 5;
+				manager.pathAgent.speed = manager.stats.searchSpeed;
 				return true;
 			}
 		}

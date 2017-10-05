@@ -13,8 +13,16 @@ public class AttackChoiceDecision : AIDecisions {
 	private bool ChooseAttack (AIStateManager manager) {
 
 		if (Vector3.Distance(manager.transform.position, manager.player.transform.position) <= manager.stats.meleeRange)
+		{
+
 			return true;
+		}
 		else
+		{
+			manager.pathAgent.speed = 0;
+			manager.pathAgent.turnSpeed = 0;
+			manager.pathAgent.enabled = false;
 			return false;
+		}
 	}
 }
