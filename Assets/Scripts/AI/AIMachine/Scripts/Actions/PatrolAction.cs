@@ -15,7 +15,6 @@ public class PatrolAction : AIActions {
 
 		if ((Vector3.Distance(manager.pathTarget.position, manager.transform.position)) <= manager.stats.stopDistance)
 		{
-			Debug.Log("Patrling");
 			manager.pathIndex++;
 
 
