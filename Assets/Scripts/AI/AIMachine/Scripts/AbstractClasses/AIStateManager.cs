@@ -1,13 +1,16 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class AIStateManager : MonoBehaviour {
+public abstract class AIStateManager : MonoBehaviour  {
 	public Transform[] patrolPoints;
 	public Transform[] visionPoints;
 	public AIStates currentState;
 	public AIStates alertedState;
 	public AIStates remainState;
+	public AIStates stunState;
+
 
 	[HideInInspector]
 	public float setFrequency;
@@ -17,7 +20,6 @@ public abstract class AIStateManager : MonoBehaviour {
 	public AIStats stats;
 	[HideInInspector]
 	public UnitPathFinding pathAgent;
-
 	[HideInInspector]
 	public Transform pathTarget;
 	[HideInInspector]
@@ -28,6 +30,7 @@ public abstract class AIStateManager : MonoBehaviour {
 	public GameObject player;
 
 
+	
 
 	public void Start()
 	{
@@ -38,11 +41,19 @@ public abstract class AIStateManager : MonoBehaviour {
 		pathTarget = patrolPoints[pathIndex];
 		pathAgent.travel(pathTarget.position);
 		setFrequency = stats.attackFrequency;
+
 	}
 	public void Update()
 	{
 		currentState.UpdateState(this);
 		setFrequency += Time.deltaTime;
+
+
+		//if (Input.GetKeyDown(KeyCode.G))
+		//{
+		//	TakeDamage(1);
+		//	Debug.Log(stats.armour);
+		//}
 	}
 	public void TransitionToState(AIStates nextState) {
 		if (nextState != remainState)
@@ -58,6 +69,8 @@ public abstract class AIStateManager : MonoBehaviour {
 	public abstract void MeleeAttack();
 
 	public abstract void AlertOthers();
+
+	public abstract void Die();
 
 	public void OnDrawGizmos()
 	{
@@ -80,5 +93,30 @@ public abstract class AIStateManager : MonoBehaviour {
 		stateTimeElapsed = 0;
 	}
 
+	public void TakeDamage(float damage) {
+		Debug.Log("Taking damage"+ damage);
+		stats.armour--;
+		if (stats.armour <= 0)
+		{
+			Stun();
+		}
+	}
 
+	public void Stun()
+	{
+		Debug.Log("Stunned");
+		stats.armour = 0;
+		pathAgent.speed = 0;
+		pathAgent.turnSpeed = 0;
+		TransitionToState(stunState);
+	}
+
+	public void OnFreeze() {
+
+
+	}
+	public void OnThaw() {
+
+
+	}
 }

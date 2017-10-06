@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,11 +16,14 @@ public class Soldier : AIStateManager {
 	private float attackFrequency = -1;
 	public float meleeRange;
 	public float meleeDamage;
+
+
+
 	public override void RangedAttack()
 	{
 		if (shotFrequency < 0)
 		{
-			int i = Random.Range(0, 2);
+			int i = UnityEngine.Random.Range(0, 2);
 			if (i == 0)
 			{
 				rotateSpeed = rotateSpeed * -1;
@@ -63,5 +67,9 @@ public class Soldier : AIStateManager {
 	}
 	public override void AlertOthers()
 	{
+	}
+	public override void Die()
+	{
+		Debug.Log("dead");
 	}
 }
