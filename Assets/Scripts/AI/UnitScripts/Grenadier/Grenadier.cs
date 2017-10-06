@@ -8,14 +8,24 @@ public class Grenadier : AIStateManager {
 	public Transform gunPoint;
 	public float launchAngle;
 	public Rigidbody grenadePrefab;
-
+	public float shotInterval;
+	private float shotFrequency = -1;
 
 	public override void RangedAttack()
 	{
+		if (shotFrequency < 0) {
 
-		Vector3 displacement = player.transform.position - transform.position;
-		Rigidbody rb = Instantiate(grenadePrefab, gunPoint.position, gunPoint.rotation) as Rigidbody;
-		rb.velocity = CalculateVelocityArc(launchAngle, displacement);
+			shotFrequency = shotInterval;
+		}
+		if (shotFrequency >= shotInterval)
+		{
+			Vector3 displacement = player.transform.position - transform.position;
+			Rigidbody rb = Instantiate(grenadePrefab, gunPoint.position, gunPoint.rotation) as Rigidbody;
+			rb.velocity = CalculateVelocityArc(launchAngle, displacement);
+
+			shotFrequency = 0;
+		}
+		shotFrequency += Time.deltaTime;
 
 	}
 	public override void MeleeAttack()

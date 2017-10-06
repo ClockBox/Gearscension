@@ -12,11 +12,11 @@ public class EngageAction : AIActions {
 
 	private void Engage(AIStateManager manager)
 	{
-		if (!manager.pathAgent.enabled)
-		{
-			manager.pathAgent.enabled = true;
-			manager.pathAgent.speed = manager.stats.engageSpeed;
-		}
+		//if (!manager.pathAgent.enabled)
+		//{
+		//	manager.pathAgent.enabled = true;
+		//	manager.pathAgent.speed = manager.stats.engageSpeed;
+		//}
 
 		manager.pathAgent.travel(manager.player.transform.position);
 	}
