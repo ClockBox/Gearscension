@@ -235,16 +235,20 @@ public class PlayerController : MonoBehaviour
     //Initialize Player
     private void Awake()
     {
-        GameManager.Player = this;
+        //GameManager.Player = gameObject;
     }
 
     private void Start ()
     {
-        Cursor.lockState = CursorLockMode.Locked;
-
         if (!m_player)
             m_player = this;
-        else DestroyImmediate(gameObject);
+        else
+        {
+            DestroyImmediate(gameObject);
+            return;
+        }
+
+        Cursor.lockState = CursorLockMode.Locked;
 
         m_stateM = GetComponent<StateManager>();
         m_ik = GetComponent<IKController>();

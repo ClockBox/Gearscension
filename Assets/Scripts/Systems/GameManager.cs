@@ -14,8 +14,8 @@ public class GameManager : MonoBehaviour
     //    set { audio = value; }
     //}
 
-    private static PlayerController player;
-    public static PlayerController Player
+    private static GameObject player;
+    public static GameObject Player
     {
         get { return player; }
         set { player = value; }
@@ -39,11 +39,17 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
 
         if (!player)
-            player = FindObjectOfType<PlayerController>();
+            player = FindObjectOfType<PlayerController>().gameObject;
     }
 
     private void Update()
     {
+        AudioListener[] temp = FindObjectsOfType<AudioListener>();
+        for (int i = 0; i < temp.Length; i++)
+        {
+            Debug.Log(temp[i].gameObject, temp[i].gameObject);
+        }
+
         if (Input.GetButton("Quit"))
             Quit();
     }
@@ -60,11 +66,7 @@ public class GameManager : MonoBehaviour
 
     public static void Quit()
     {
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#else
         Application.Quit();
-#endif
     }
 
     #region SceneManagment
@@ -89,7 +91,7 @@ public class GameManager : MonoBehaviour
     private void OnSceneChanged(Scene scene, LoadSceneMode mode)
     {
         if (!player)
-            player = FindObjectOfType<PlayerController>();
+            player = FindObjectOfType<PlayerController>().gameObject;
         if (scene.buildIndex > 2)
         { 
             SceneManager.LoadScene(2, LoadSceneMode.Additive);
