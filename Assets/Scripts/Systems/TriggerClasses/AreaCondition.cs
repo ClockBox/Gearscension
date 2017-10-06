@@ -6,6 +6,7 @@ using UnityEditor;
 public class AreaCondition : Condition
 {
     public GameObject checkObject;
+    public bool UseColider;
 
     public Bounds triggerArea = new Bounds(Vector3.zero, Vector3.one * 2);
     protected Collider[] cols;

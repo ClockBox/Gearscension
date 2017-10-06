@@ -7,19 +7,47 @@ public class Grenadier : AIStateManager {
 
 	public Transform gunPoint;
 	public float launchAngle;
-	public Rigidbody grenadePrefab;
-
+	public Rigidbody icePrefab;
+	public Rigidbody magnetPrefab;
+	public Rigidbody explosionPrefab;
+	public float shotInterval;
+	private float shotFrequency;
+	private int choice;
+	private Rigidbody grenadePrefab;
 
 	public override void RangedAttack()
 	{
+		
+		if (!callOnce) {
+			choice = UnityEngine.Random.Range(0, 3);
+			shotFrequency = shotInterval;
+			switch (choice) {
+				case 0:
+					grenadePrefab = explosionPrefab;
+					break;
+				case 1:
+					grenadePrefab = icePrefab;
+					break;
+				case 2:
+					grenadePrefab = magnetPrefab;
+					break;
+			}
+			callOnce = true;
+		}
+		if (shotFrequency >= shotInterval)
+		{
+			Vector3 displacement = player.transform.position - transform.position;
+			Rigidbody rb = Instantiate(grenadePrefab, gunPoint.position, gunPoint.rotation) as Rigidbody;
+			rb.velocity = CalculateVelocityArc(launchAngle, displacement);
 
-		Vector3 displacement = player.transform.position - transform.position;
-		Rigidbody rb = Instantiate(grenadePrefab, gunPoint.position, gunPoint.rotation) as Rigidbody;
-		rb.velocity = CalculateVelocityArc(launchAngle, displacement);
+			shotFrequency = 0;
+		}
+		shotFrequency += Time.deltaTime;
 
 	}
 	public override void MeleeAttack()
 	{
+
 	}
 	public override void AlertOthers()
 	{

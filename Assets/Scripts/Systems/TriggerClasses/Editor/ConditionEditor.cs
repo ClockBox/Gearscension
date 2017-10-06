@@ -225,7 +225,7 @@ public class ConditionDrawer : PropertyDrawer
 
     protected void DrawCondition(Rect pos, AmountCondition condition, GUIContent label)
     {
-        InLine.SetRect(pos, 0, 0, 6);
+        InLine.SetRect(pos, 0, 0, 6); 
         {
             condition.typeOfFind = (FindType)EditorGUI.EnumPopup(InLine.NextRect(), condition.typeOfFind);
             switch (condition.typeOfFind)
@@ -241,7 +241,7 @@ public class ConditionDrawer : PropertyDrawer
                     if (condition.typeTemplate == null) EditorGUILayout.HelpBox("A Amount Condition needs a type template", MessageType.Warning);
                     break;
             }
-            EditorGUI.LabelField(InLine.GetLine(0, pos.width / 3, 5f),"  Current", GUIStyle.none);
+            EditorGUI.LabelField(InLine.GetLine(0, pos.width / 3, 5f),"Current", GUIStyle.none);
             EditorGUI.IntField(InLine.NextRect(), condition.numOfObjects, GUIStyle.none);
         }
 
