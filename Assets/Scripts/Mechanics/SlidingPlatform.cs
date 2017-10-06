@@ -8,6 +8,11 @@ public class SlidingPlatform : MonoBehaviour
 
     public float distance;
     public bool move;
+    public bool Move
+    {
+        get { return move; }
+        set { move = value; }
+    }
 
     Vector3 platformStartPos;
 

@@ -11,11 +11,18 @@ public class AreaCondition : Condition
     public Bounds triggerArea = new Bounds(Vector3.zero, Vector3.one * 2);
     protected Collider[] cols;
 
+    private Vector3 center;
+
     public override bool CheckCondition()
     {
+        center = transform.position +
+            transform.right * triggerArea.center.x +
+            transform.up * triggerArea.center.y +
+            transform.forward * triggerArea.center.z;
+
         if (checkObject)
         {
-            cols = Physics.OverlapBox(transform.position + triggerArea.center, triggerArea.extents, transform.rotation, ~checkObject.gameObject.layer);
+            cols = Physics.OverlapBox(center, triggerArea.extents, transform.rotation, ~checkObject.gameObject.layer);
             for (int i = 0; i < cols.Length - 1; i++)
             {
                 if (cols[i].gameObject == checkObject)
@@ -28,7 +35,10 @@ public class AreaCondition : Condition
 
     public void OnDrawGizmosSelected()
     {
-        Vector3 center = triggerArea.center + transform.position;
+        center = transform.position +
+               transform.right * triggerArea.center.x +
+               transform.up * triggerArea.center.y +
+               transform.forward * triggerArea.center.z;
 
         float x = triggerArea.extents.x;
         float y = triggerArea.extents.y;

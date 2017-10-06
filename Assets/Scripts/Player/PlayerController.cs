@@ -228,6 +228,11 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     //Initialize Player
+    private void Awake()
+    {
+        GameManager.Player = this;
+    }
+
     private void Start ()
     {
         Cursor.lockState = CursorLockMode.Locked;

@@ -28,7 +28,6 @@ public class AmountCondition : AreaCondition
     public Object typeTemplate;
     
     public int amount;
-
     public int numOfObjects = 0;
     
     public override void InitCondition()
@@ -38,6 +37,8 @@ public class AmountCondition : AreaCondition
 
     public override bool CheckCondition()
     {
+        numOfObjects = 0;
+
         // - Find Types -
         if (typeOfFind == FindType.Tag)
         {
