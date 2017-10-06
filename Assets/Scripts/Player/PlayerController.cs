@@ -154,15 +154,20 @@ public class PlayerController : MonoBehaviour
     {
         for (int i = 0; i < weapons.Length; i++)
         {
-            weapons[i].gameObject.GetComponent<BoxCollider>().enabled = true;
+            weapons[i].gameObject.GetComponentInChildren<BoxCollider>().enabled = true;
             weapons[i].gameObject.AddComponent<Rigidbody>();
             weapons[i].transform.parent = null;
         }
     }
+
+    public void PickupGun()
+    {
+
+    }
+
     public void UpgradeGun()
     {
         _gunUpgrade++;
-        //hud.SendMessage(GunUpgrade(index));
     }
 
     public GameObject FindHookTarget(string tag)
