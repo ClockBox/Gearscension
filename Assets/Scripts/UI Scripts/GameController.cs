@@ -17,7 +17,7 @@ public class GameController : MonoBehaviour
     string Puzzel = "Scene2";
 
     string targetScene;
-    CanvasGroup canvasGroup;
+    public CanvasGroup canvasGroup;
 
     // Bool
     // private bool gameStart;
