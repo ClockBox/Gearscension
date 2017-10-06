@@ -4,27 +4,16 @@ using UnityEngine;
 
 public interface IFreezable
 {
-    float freezeResistance { get; set;}
-    bool isFrozen { get; set; }
+	float freezeResistance { get; set; }
+	bool isFrozen { get; set; }
 
-    void OnFreeze();
-    void OnThaw();
-}
-
-public interface IMagnetic
-{
-    float magnetizingForce { get; set; }
-    bool isMagnitized { get; set; }
-
-    void OnMagnetized();
-    void OnDeMagnetized();
+	void OnFreeze();
+	void OnThaw();
 }
 
 public interface IBreakable
 {
-    float durability { get; set; }
-    bool isBroken { get; set; }
-
-    void TakeDamage();
-    void OnBreak();
+}
+public interface IMagnetic
+{
 }

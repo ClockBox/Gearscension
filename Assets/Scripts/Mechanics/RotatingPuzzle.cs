@@ -21,7 +21,6 @@ public class RotatingPuzzle : MonoBehaviour
             Quaternion rotateNinety = Quaternion.LookRotation(right);
             Vector3 rotation = Quaternion.RotateTowards(transform.rotation, rotateNinety, Time.deltaTime * rotateSpeed).eulerAngles;
             transform.rotation = Quaternion.Euler(0f, rotation.y, 0f);
-            Debug.Log("HERERERERERERERE");
         }
     }
 

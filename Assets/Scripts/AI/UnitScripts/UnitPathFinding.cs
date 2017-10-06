@@ -101,15 +101,15 @@ public class UnitPathFinding : MonoBehaviour {
 				}
 
 				transform.Translate(Vector3.forward * Time.deltaTime * speed * speedPercent, Space.Self);
-                Vector3 lookDir = path.lookPoints[pathIndex] - transform.position;
-                lookDir.y = 0;
-                Quaternion targetRotation = Quaternion.LookRotation(lookDir);
-                transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * turnSpeed);
+				Vector3 lookDir = path.lookPoints[pathIndex] - transform.position;
+				//lookDir.y = 0;
+				Quaternion targetRotation = Quaternion.LookRotation(lookDir);
+				transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * turnSpeed);
 
 
-            }
+			}
 
-            yield return null;
+			yield return null;
 
 		}
 	}

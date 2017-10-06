@@ -14,11 +14,12 @@ public class Sword : Weapon
             Debug.LogWarning(transform.root.gameObject.name + ": " + name + ": cannot find blade Collider");
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Enemy"))
-            other.gameObject.SendMessage("TakeDamage", SendMessageOptions.DontRequireReceiver);
-    }
+	private void OnTriggerEnter(Collider other)
+	{
+		if (other.CompareTag("Enemy"))
+			other.gameObject.SendMessage("TakeDamage", SendMessageOptions.DontRequireReceiver);
+	
+	}
 
     public Collider Blade
     {

@@ -92,7 +92,7 @@ public class gregPhaseOne : MonoBehaviour {
     {
         Debug.Log("HITBYPD");
         //GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-        breakable.GetComponent<AIBreakable>().broken = true;
+        //breakable.GetComponent<AIBreakable>().broken = true;
         GetComponent<Collider>().enabled = false;
         p1Alive = false;
     }

@@ -257,7 +257,7 @@ public class PlayerController : MonoBehaviour
 
         //testing armor and health
         if (Input.GetKeyDown(KeyCode.Alpha0))
-            TakeDamage(50);
+            TakeDamage(10);
         RechargeArmor();
 
         //Switching Ammo Types
