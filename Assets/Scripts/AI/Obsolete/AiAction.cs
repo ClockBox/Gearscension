@@ -155,7 +155,7 @@ public class AiAction : MonoBehaviour
                     {
                         pathAgent.travel(GetClosest(covers).transform.position);
 
-                        GetComponent<EnemyShoot>().launchShot(player.transform);
+                        //GetComponent<EnemyShoot>().launchShot(player.transform);
                         fireRate = 0;
                         
                     }

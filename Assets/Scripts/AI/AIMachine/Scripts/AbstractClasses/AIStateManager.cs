@@ -28,9 +28,11 @@ public abstract class AIStateManager : MonoBehaviour  {
 	public float stateTimeElapsed;
 	[HideInInspector]
 	public GameObject player;
+	[HideInInspector]
+	public bool callOnce=false;
 
 
-	
+
 
 	public void Start()
 	{
@@ -91,6 +93,7 @@ public abstract class AIStateManager : MonoBehaviour  {
 
 	void OnStateExit() {
 		stateTimeElapsed = 0;
+		callOnce = false;
 	}
 
 	public void TakeDamage(float damage) {
