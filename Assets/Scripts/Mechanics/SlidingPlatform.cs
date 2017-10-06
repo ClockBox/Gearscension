@@ -1,14 +1,21 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SlidingPlatform : MonoBehaviour
+public class SlidingPlatform : Platform
 {
+    public Axis axis;
     float counter = 0;
     float speed;
 
     public float distance;
-    public bool move;
+    private bool move;
 
+    public bool Move
+    {
+        get { return move; }
+        set { move = value; }
+    }
+    
     Vector3 platformStartPos;
 
     private void Start()
@@ -23,34 +30,29 @@ public class SlidingPlatform : MonoBehaviour
     {
         if (move)
         {
-            counter += Time.deltaTime * speed;
-
             float movementDir = Mathf.Sin(counter) * distance;
 
-            transform.position = ((transform.forward * movementDir) + platformStartPos);
+            counter += Time.deltaTime * speed;
+
+            switch (axis)
+            {
+                case Axis.X:
+                    transform.position = ((transform.right * movementDir) + platformStartPos);
+                    break;
+                case Axis.Y:
+                    transform.position = ((transform.up * movementDir) + platformStartPos);
+                    break;
+                case Axis.Z:
+                    transform.position = ((transform.forward * movementDir) + platformStartPos);
+                    break;
+            }
         }
         else
         {
             return;
         }
     }
-
-    void OnTriggerStay(Collider c)
-    {
-        if (c.gameObject.tag == "Player")
-        {
-            c.gameObject.transform.parent = GetComponentInChildren<Transform>();
-        }
-    }
-
-    void OnTriggerExit(Collider c)
-    {
-        if (c.gameObject.tag == "Player")
-        {
-            c.gameObject.transform.parent = null;
-        }
-    }
-
+    
     IEnumerator StopMoving()
     {
         yield return new WaitForSeconds(0.5f);

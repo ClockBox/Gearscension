@@ -12,26 +12,30 @@ public class Soldier : AIStateManager {
 	public float shotInterval;
 	public float attackInterval;
 	public float rotateSpeed;
-	private float shotFrequency=-1;
-	private float attackFrequency = -1;
+	private float shotFrequency;
+	private float attackFrequency;
 	public float meleeRange;
 	public float meleeDamage;
-
-
+	public float rotationMagnitude;
+	private Quaternion rotationA;
+	private Quaternion rotationB;
+	private int choice;
 
 	public override void RangedAttack()
 	{
-		if (shotFrequency < 0)
+		if (!callOnce)
 		{
-			int i = UnityEngine.Random.Range(0, 2);
-			if (i == 0)
-			{
-				rotateSpeed = rotateSpeed * -1;
-			}
-			
+			choice = UnityEngine.Random.Range(0, 2);
+			rotationA = new Quaternion(transform.rotation.x, transform.rotation.y + rotationMagnitude, transform.rotation.z,transform.rotation.w);
+			rotationB= new Quaternion(transform.rotation.x, transform.rotation.y - rotationMagnitude, transform.rotation.z, transform.rotation.w);
 			shotFrequency = shotInterval;
+			callOnce = true;
 		}
-		transform.Rotate(0, rotateSpeed * Time.deltaTime, 0);
+		//transform.Rotate(0, rotateSpeed * Time.deltaTime, 0);
+		if(choice==0)
+			transform.rotation = Quaternion.Lerp(transform.rotation, rotationA, Time.deltaTime * rotateSpeed);
+		else
+			transform.rotation = Quaternion.Lerp(transform.rotation, rotationB, Time.deltaTime * rotateSpeed);
 
 		if (shotFrequency >= shotInterval)
 		{
@@ -48,7 +52,7 @@ public class Soldier : AIStateManager {
 	}
 	public override void MeleeAttack()
 	{
-		if (attackFrequency < 0)
+		if (!callOnce)
 		{
 			attackFrequency = attackInterval;
 		}

@@ -41,7 +41,7 @@ public class BomberAI : MonoBehaviour {
 			rb.constraints = RigidbodyConstraints.FreezeRotation;
 			if (transform.position.y <= 8f)
 			{
-				rb.AddForce(transform.up * 1.2f, ForceMode.Impulse);
+				rb.AddForce(transform.up * 3f, ForceMode.Impulse);
 
 			}
 

@@ -1,19 +1,23 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class LightPuzzle : MonoBehaviour
 {
     public GameObject green, blue, red;
     public GameObject[] boxPositioningLights;
+    public GameObject[] pressurePlates;
     public Material greyMat, greenMat, blueMat, redMat;
     public Light greenLight, blueLight, redLight;
-    
+    public UnityEvent myEvent;
+
     private bool allowChange;
     private int counter;
     private int counterMax;
+    private int correctBlockCounter;
     private int[] randomPuzzleSelect, group1, group2, group3;
-    
+
     private void Start()
     {
         randomPuzzleSelect = new int[boxPositioningLights.Length];
@@ -21,6 +25,8 @@ public class LightPuzzle : MonoBehaviour
         counterMax = Mathf.RoundToInt(boxPositioningLights.Length / 2) - 1;
 
         counter = 0;
+
+        correctBlockCounter = 0;
 
         group1 = new int[boxPositioningLights.Length];
         group2 = new int[boxPositioningLights.Length];
@@ -90,13 +96,12 @@ public class LightPuzzle : MonoBehaviour
             }
         }
     }
-    
+
 
     public void GreenTrigger()
     {
         if (allowChange)
         {
-            Debug.Log("GreenTrigger running...");
             greenLight.enabled = !greenLight.enabled;
             if (greenLight.enabled)
                 green.GetComponent<Renderer>().material = greenMat;
@@ -111,7 +116,6 @@ public class LightPuzzle : MonoBehaviour
     {
         if (allowChange)
         {
-            Debug.Log("BlueTrigger running...");
             blueLight.enabled = !blueLight.enabled;
             if (blueLight.enabled)
                 blue.GetComponent<Renderer>().material = blueMat;
@@ -126,7 +130,6 @@ public class LightPuzzle : MonoBehaviour
     {
         if (allowChange)
         {
-            Debug.Log("RedTrigger running...");
             redLight.enabled = !redLight.enabled;
             if (redLight.enabled)
                 red.GetComponent<Renderer>().material = redMat;
@@ -176,7 +179,7 @@ public class LightPuzzle : MonoBehaviour
                     counter++;
             }
         }
-        
+
         // Checks counter to fill in light locations until full
         if (counter <= counterMax)
         {
@@ -200,13 +203,13 @@ public class LightPuzzle : MonoBehaviour
             else
                 TurnOnRedLight(boxPositioningLights[i]);
         }
-        
+
         for (int i = 0; i < randomPuzzleSelect.Length; i++)
         {
             TurnOffLights(boxPositioningLights[i]);
         }
 
-        
+
         for (int i = 0; i < randomPuzzleSelect.Length; i++)
         {
             if (i < boxPositioningLights.Length / 3)
@@ -237,9 +240,44 @@ public class LightPuzzle : MonoBehaviour
             Debug.Log(randomPuzzleSelect[i]);
     }
 
+    public void CheckPuzzlePiece(GameObject goToCheck)
+    {
+        for (int i = 0; i < pressurePlates.Length; i++)
+        {
+            if (goToCheck.name == pressurePlates[i].name && randomPuzzleSelect[i] == 1)
+            {
+                correctBlockCounter++;
+                Debug.Log(correctBlockCounter);
+                CheckPuzzle();
+            }
+        }
+    }
+
+    public void DisengagePuzzlePiece(GameObject goToCheck)
+    {
+        for (int i = 0; i < pressurePlates.Length; i++)
+        {
+            if (goToCheck.name == pressurePlates[i].name && randomPuzzleSelect[i] == 1)
+            {
+                correctBlockCounter--;
+                Debug.Log(correctBlockCounter);
+            }
+        }
+    }
+
+    public void CheckPuzzle()
+    {
+        if (correctBlockCounter >= counterMax + 1)
+        {
+            myEvent.Invoke();
+            counterMax = 0;
+        }
+    }
+
     public IEnumerator WaitForLight()
     {
         yield return new WaitForSeconds(0.5f);
         allowChange = !allowChange;
     }
+
 }
