@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour
     public Weapon[] weapons;
     private bool[] _hasWeapon = { false, false };
 
-    private int _gunUpgrade = 4;
+    private int _gunUpgrade = 0;
     private int[] _ammoAmounts = new int[4];
     private BulletType _currentAmmo = BulletType.Electric;
 
@@ -162,7 +162,8 @@ public class PlayerController : MonoBehaviour
 
     public void PickupGun()
     {
-
+        weapons[0].gameObject.SetActive(true);
+        _gunUpgrade++;
     }
 
     public void UpgradeGun()
@@ -236,7 +237,7 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         if (!GameManager.Instance.Player)
-            GameManager.Instance.Player = gameObject;
+            GameManager.Instance.Player = this;
         else Destroy(gameObject);
     }
 

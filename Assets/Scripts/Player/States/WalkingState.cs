@@ -11,7 +11,7 @@ public class WalkingState : PlayerState
     protected float moveX = 0;
     protected float moveY = 0;
 
-    float jumpForce = 6;
+    float jumpForce = 7;
     float fallTimer = 0;
 
     public WalkingState(StateManager manager,bool isGrounded) : base(manager)
@@ -118,7 +118,7 @@ public class WalkingState : PlayerState
         else
         {
             rb.AddForce(Player.transform.up * -9.81f * rb.mass);
-            rb.AddForce(moveDirection/2 * rb.mass);
+            rb.AddForce(-moveDirection / 4 * rb.mass);
         }
     }
 

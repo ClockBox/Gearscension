@@ -14,15 +14,15 @@ public class GameManager : MonoBehaviour
     //    set { audio = value; }
     //}
 
-    private GameObject player;
-    public GameObject Player
+    private PlayerController player;
+    public PlayerController Player
     {
         get { return player; }
         set { player = value; }
     }
     
-    private static GameObject hud;
-    public GameObject Hud
+    private static PlayerHud hud;
+    public PlayerHud Hud
     {
         get { return hud; }
         set { hud = value; }
@@ -88,10 +88,14 @@ public class GameManager : MonoBehaviour
 
     private void OnSceneChanged(Scene scene, LoadSceneMode mode)
     {
-        if (scene.buildIndex > 2)
+        if (scene.buildIndex <= 2)
         { 
-            SceneManager.LoadScene(2, LoadSceneMode.Additive);
-            //AudioDictionary = FindObjectOfType<AudioDictionary>();
+            // If the scene was a menu
+        }
+        else
+        {
+            AddScene("Hud");
+            // If the scene was a level
         }
     }
     #endregion
@@ -106,5 +110,10 @@ public class GameManager : MonoBehaviour
 
             PlayerController.rb.velocity = Vector3.zero;
         }
+    }
+
+    public void DestroyObject(GameObject targetObject)
+    {
+        Destroy(targetObject);
     }
 }
