@@ -18,7 +18,8 @@ public class SearchDecision : AIDecisions {
 		{
 
 			RaycastHit hit;
-			Vector3 direction = (manager.player.transform.position - manager.visionPoints[i].position).normalized;
+			Vector3 playerPos = new Vector3(manager.player.transform.position.x, manager.player.transform.position.y + 1.25f, manager.player.transform.position.z);
+			Vector3 direction = (playerPos - manager.visionPoints[i].position).normalized;
 			Debug.DrawRay(manager.visionPoints[i].position,direction * manager.stats.lookRange, Color.red);
 
 			if (Physics.SphereCast(manager.visionPoints[i].position, manager.stats.castSphereRadius, direction, out hit, manager.stats.lookRange)

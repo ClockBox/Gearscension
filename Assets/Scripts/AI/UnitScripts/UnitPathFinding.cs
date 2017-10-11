@@ -68,12 +68,14 @@ public class UnitPathFinding : MonoBehaviour {
 
 		bool followingPath = true;
 		int pathIndex = 0;
-		transform.LookAt(path.lookPoints[0]);
+		//transform.LookAt(path.lookPoints[0]);
 
 		float speedPercent = 1;
 
-		while (followingPath)
+
+		while (followingPath&&pathIndex<path.turnBoundaries.Length&&pathIndex<path.lookPoints.Length)
 		{
+			
 			Vector2 pos2D = new Vector2(transform.position.x, transform.position.z);
 			while (path.turnBoundaries[pathIndex].HasCrossedLine(pos2D))
 			{

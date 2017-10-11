@@ -7,7 +7,7 @@ using UnityEngine;
 [RequireComponent(typeof(Animator))]
 public class PlayerController : MonoBehaviour
 {
-    //Class Variables
+    #region Variables
     private static PlayerController m_player;
     private static StateManager m_stateM;
     private static IKController m_ik;
@@ -41,6 +41,7 @@ public class PlayerController : MonoBehaviour
     const int SWORD = 1;
 
     //HUD data
+    private bool _isDead;
     private static float _maxHealth = 100;
     private static float _maxArmor = 2;
     private float _currentHealth = _maxHealth;
@@ -101,8 +102,9 @@ public class PlayerController : MonoBehaviour
     {
         return _hasWeapon[index];
     }
+    #endregion
 
-    //Weapon Functions
+    #region Weapon Function
     public IEnumerator ToggleWeapon(int WeaponType, float toggleTime, float transitionTime)
     {
         _hasWeapon[WeaponType] = !_hasWeapon[WeaponType];
@@ -183,8 +185,9 @@ public class PlayerController : MonoBehaviour
         }
         return temp;
     }
+    #endregion
 
-    //Health and armor functions
+    #region Health & Armour
     public void TakeDamage(float damage)
     {
         if (_damageImmune <= 0)
@@ -204,7 +207,7 @@ public class PlayerController : MonoBehaviour
     }
     private void RechargeArmor()
     {
-        if (_currentArmor < _maxArmor)
+        if (_currentArmor < _maxArmor && !_isDead)
         {
             elapsedTime += Time.deltaTime;
             if (elapsedTime >= _armorRecharge)
@@ -217,10 +220,12 @@ public class PlayerController : MonoBehaviour
     }
     private void Die()
     {
+        _isDead = true;
         DropWeapons();
         Instantiate(Ragdoll, transform.position, transform.rotation);
         Destroy(transform.gameObject);
     }
+    #endregion
 
     //Initialize Player
     private void Start ()
