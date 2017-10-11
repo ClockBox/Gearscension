@@ -9,6 +9,7 @@ public enum Axis
     Z
 }
 
+
 public class PuzzleManager : MonoBehaviour
 {
     private float rotateSpeed;

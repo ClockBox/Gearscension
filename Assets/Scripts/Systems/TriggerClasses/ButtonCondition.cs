@@ -16,7 +16,6 @@ public class ButtonCondition : Condition
     
     public override bool CheckCondition()
     {
-        Debug.Log("checkCondition");
         if (type == InputType.Down)
             return conditionIsMet = Input.GetButtonDown(button);
 

@@ -13,7 +13,7 @@ public class MainMenuController : MonoBehaviour
     // Bool
     private bool allowSceneActivation;
     private bool isDone;
-
+    
     // Other
     private Vector3 start2;
     private Vector3 start;

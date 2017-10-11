@@ -15,7 +15,7 @@ public class SlidingPlatform : Platform
         get { return move; }
         set { move = value; }
     }
-    
+
     Vector3 platformStartPos;
 
     private void Start()
@@ -52,11 +52,10 @@ public class SlidingPlatform : Platform
             return;
         }
     }
-    
+
     IEnumerator StopMoving()
     {
         yield return new WaitForSeconds(0.5f);
         move = false;
     }
 }
-    

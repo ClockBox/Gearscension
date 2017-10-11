@@ -104,7 +104,7 @@ public class Trigger : MonoBehaviour
         }
 
         result.Invoke();
-        Debug.Log(this + ":Triggered", this);
+        //Debug.Log(this + ":Triggered", this);
 
         if (!repeat)
         {

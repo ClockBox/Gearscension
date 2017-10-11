@@ -106,44 +106,6 @@ public class WalkingState : PlayerState
         anim.SetFloat("Speed", speed.magnitude);
         anim.SetBool("isGrounded", grounded);
     }
-    protected override void UpdateIK()
-    {
-        if (grounded && (moveDirection.magnitude > 1  ||moveDirection.magnitude <= 0.01f))
-        {
-            IK.RightFoot.weight = anim.GetFloat("RightFootWeight");
-            IK.LeftFoot.weight = anim.GetFloat("LeftFootWeight");
-
-            //Foot Raycasts
-            RaycastHit RightHit;
-            Transform RightFoot = anim.GetBoneTransform(HumanBodyBones.RightFoot);
-            if (Physics.Raycast(RightFoot.position + Player.transform.up * 0.1f, -Player.transform.up, out RightHit, 1f, LayerMask.GetMask("Ground")))
-            {
-                Debug.DrawRay(RightHit.point, RightHit.normal);
-
-                IK.RightFoot.position = RightHit.point + Player.transform.up * 0.12f;
-                IK.RightFoot.rotation = Quaternion.FromToRotation(Player.transform.up, RightHit.normal) * Player.transform.rotation;
-            }
-            else
-                IK.RightFoot.weight = 0;
-
-            RaycastHit LeftHit;
-            Transform LeftFoot = anim.GetBoneTransform(HumanBodyBones.LeftFoot);
-            if (Physics.Raycast(LeftFoot.position + Player.transform.up * 0.1f, -Player.transform.up, out LeftHit, 1f, LayerMask.GetMask("Ground")))
-            {
-                Debug.DrawRay(LeftHit.point, LeftHit.normal);
-
-                IK.LeftFoot.position = LeftHit.point + Player.transform.up * 0.12f;
-                IK.LeftFoot.rotation = Quaternion.FromToRotation(Player.transform.up, LeftHit.normal) * Player.transform.rotation;
-            }
-            else
-                IK.LeftFoot.weight = 0;
-        }
-        else
-        {
-            IK.LeftFoot.weight = Mathf.MoveTowards(IK.LeftFoot.weight, 0, 0.1f);
-            IK.RightFoot.weight = Mathf.MoveTowards(IK.RightFoot.weight, 0, 0.1f);
-        }
-    }
     protected override void UpdatePhysics()
     {
         grounded = Physics.CheckCapsule(Player.transform.position, Player.transform.position - Vector3.up * 0.05f, 0.18f, LayerMask.GetMask("Ground", "Debris"));

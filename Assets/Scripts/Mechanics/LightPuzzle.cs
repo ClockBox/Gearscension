@@ -102,6 +102,7 @@ public class LightPuzzle : MonoBehaviour
     {
         if (allowChange)
         {
+            Debug.Log("GreenTrigger running...");
             greenLight.enabled = !greenLight.enabled;
             if (greenLight.enabled)
                 green.GetComponent<Renderer>().material = greenMat;
@@ -116,6 +117,7 @@ public class LightPuzzle : MonoBehaviour
     {
         if (allowChange)
         {
+            Debug.Log("BlueTrigger running...");
             blueLight.enabled = !blueLight.enabled;
             if (blueLight.enabled)
                 blue.GetComponent<Renderer>().material = blueMat;
@@ -130,6 +132,7 @@ public class LightPuzzle : MonoBehaviour
     {
         if (allowChange)
         {
+            Debug.Log("RedTrigger running...");
             redLight.enabled = !redLight.enabled;
             if (redLight.enabled)
                 red.GetComponent<Renderer>().material = redMat;
@@ -242,10 +245,12 @@ public class LightPuzzle : MonoBehaviour
 
     public void CheckPuzzlePiece(GameObject goToCheck)
     {
+        Debug.Log("CheckPuzzlePiece1");
         for (int i = 0; i < pressurePlates.Length; i++)
         {
             if (goToCheck.name == pressurePlates[i].name && randomPuzzleSelect[i] == 1)
             {
+                Debug.Log("CheckPuzzlePiece2");
                 correctBlockCounter++;
                 Debug.Log(correctBlockCounter);
                 CheckPuzzle();
@@ -255,10 +260,12 @@ public class LightPuzzle : MonoBehaviour
 
     public void DisengagePuzzlePiece(GameObject goToCheck)
     {
+        Debug.Log("CheckPuzzlePiece1");
         for (int i = 0; i < pressurePlates.Length; i++)
         {
             if (goToCheck.name == pressurePlates[i].name && randomPuzzleSelect[i] == 1)
             {
+                Debug.Log("Piece removed");
                 correctBlockCounter--;
                 Debug.Log(correctBlockCounter);
             }
