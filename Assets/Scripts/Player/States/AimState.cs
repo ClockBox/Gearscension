@@ -150,7 +150,7 @@ public class AimState : WalkingState
     {
         base.UpdateIK();
         //Should be replaced by equip animation
-        //Hand transfor
+        //Hand transform
 
         IK.LeftHand.position = Player.weapons[0].Grip(0).position;
         IK.LeftHand.rotation = Player.weapons[0].Grip(0).rotation;
