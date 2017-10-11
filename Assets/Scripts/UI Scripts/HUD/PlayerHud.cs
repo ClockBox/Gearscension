@@ -16,7 +16,8 @@ public class PlayerHud : MonoBehaviour
     private string passedString;
 
     [Header("Main Hud")]
-    [SerializeField] private GameObject healthZero;
+    [SerializeField]
+    private GameObject healthZero;
     [SerializeField] private GameObject healthOne;
     [SerializeField] private GameObject healthTwo;
     [SerializeField] private GameObject healthThree;
@@ -36,7 +37,8 @@ public class PlayerHud : MonoBehaviour
     [SerializeField] private Text blackText;
 
     [Header("Ammo Hud")]
-    [SerializeField] private GameObject ammoReel;
+    [SerializeField]
+    private GameObject ammoReel;
     private Animator animReel;
 
     public GameObject[] ammoType = new GameObject[4];
@@ -72,7 +74,7 @@ public class PlayerHud : MonoBehaviour
 
     private void Start()
     {
-        // whiteText.text = "";
+
         blackText.text = "";
         DisplayText();
     }
@@ -201,8 +203,8 @@ public class PlayerHud : MonoBehaviour
 
     public void DisplayText()
     {
-        // whiteText.text = passedString;
-        // blackText.text = passedString;
+        // whiteText.text = "" + PC.passedString;
+        // blackText.text = "" + PC.passedString;
     }
 
     public void SetAmmo(int currentType)
@@ -221,21 +223,15 @@ public class PlayerHud : MonoBehaviour
         Debug.Log("Ammo Hud Activated.");
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void AddDislplay(string description)
     {
-        if (other.gameObject.CompareTag("DisplayText"))
-        {
-            DisplayText();
-            textBox.SetActive(true);
-        }
+        DisplayText();
+
+        textBox.SetActive(true);
     }
 
-    private void OnTriggerExit(Collider other)
+    public void RemoveDisplay()
     {
-        if (other.gameObject.CompareTag("DisplayText"))
-        {
-            textBox.SetActive(false);
-        }
+        textBox.SetActive(false);
     }
-
 }
