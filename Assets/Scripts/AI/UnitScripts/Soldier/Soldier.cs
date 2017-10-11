@@ -55,6 +55,8 @@ public class Soldier : AIStateManager {
 		if (!callOnce)
 		{
 			attackFrequency = attackInterval;
+			callOnce = true;
+
 		}
 
 		if (attackFrequency >= attackInterval)
@@ -69,11 +71,12 @@ public class Soldier : AIStateManager {
 		attackFrequency += Time.deltaTime;
 
 	}
-	public override void AlertOthers()
-	{
-	}
+
 	public override void Die()
 	{
 		Debug.Log("dead");
+	}
+	public override void CollisionEvents()
+	{
 	}
 }

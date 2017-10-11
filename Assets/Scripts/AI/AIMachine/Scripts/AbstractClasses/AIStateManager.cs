@@ -10,8 +10,6 @@ public abstract class AIStateManager : MonoBehaviour  {
 	public AIStates alertedState;
 	public AIStates remainState;
 	public AIStates stunState;
-
-
 	[HideInInspector]
 	public float setFrequency;
 	[HideInInspector]
@@ -70,10 +68,25 @@ public abstract class AIStateManager : MonoBehaviour  {
 
 	public abstract void MeleeAttack();
 
-	public abstract void AlertOthers();
+	public void AlertOthers() {
+
+		Collider[] cols;
+		cols = Physics.OverlapSphere(transform.position, stats.alertRadius);
+		for (int i = 0; i < cols.Length; i++)
+		{
+			if (cols[i].gameObject.tag == "Enemy")
+
+				cols[i].GetComponent<AIStateManager>().Alerted();
+		}
+	}
 
 	public abstract void Die();
 
+	public abstract void CollisionEvents();
+
+	public void Alerted() {
+		TransitionToState(alertedState);
+	}
 	public void OnDrawGizmos()
 	{
 		if (currentState != null)
@@ -122,4 +135,9 @@ public abstract class AIStateManager : MonoBehaviour  {
 
 
 	}
+
+	private void OnCollisionEnter(Collision collision)
+	{
+		CollisionEvents();
+	} 
 }

@@ -10,9 +10,7 @@ public class Kamakazi : AIStateManager {
 	public float force;
 	public float proximity;
 	private bool exploded;
-	public override void AlertOthers()
-	{
-	}
+
 
 	public override void Die()
 	{
@@ -84,6 +82,9 @@ public class Kamakazi : AIStateManager {
 		exploded = true;
 		return newEffect;
 		
+	}
+	public override void CollisionEvents()
+	{
 	}
 
 }

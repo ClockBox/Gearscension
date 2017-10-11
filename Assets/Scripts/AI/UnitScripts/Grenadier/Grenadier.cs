@@ -49,10 +49,11 @@ public class Grenadier : AIStateManager {
 	{
 
 	}
-	public override void AlertOthers()
+
+	public override void Die()
 	{
 	}
-	public override void Die()
+	public override void CollisionEvents()
 	{
 	}
 
