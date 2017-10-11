@@ -235,7 +235,9 @@ public class PlayerController : MonoBehaviour
     //Initialize Player
     private void Awake()
     {
-        //GameManager.Player = gameObject;
+        if (!GameManager.Instance.Player)
+            GameManager.Instance.Player = gameObject;
+        else Destroy(gameObject);
     }
 
     private void Start ()

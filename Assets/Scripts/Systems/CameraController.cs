@@ -27,7 +27,7 @@ public class CameraController : MonoBehaviour
     private void LateUpdate()
     {
         if (!camPivot)
-            camPivot = GameObject.FindGameObjectWithTag("Player").transform.GetChild(0);
+            camPivot = GameManager.Instance.Player.transform.GetChild(0);
         else
         {
             //Mouse Input
