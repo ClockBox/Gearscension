@@ -62,7 +62,10 @@ public class Trigger : MonoBehaviour
     protected virtual void OnValidate()
     {
         for (int i = 0; i < conditions.Count; i++)
+        {
+            if(conditions[i])
             conditions[i].Trigger = this;
+        }
     }
 
     protected virtual void OnEnable()
@@ -75,6 +78,7 @@ public class Trigger : MonoBehaviour
         StopAllCoroutines();
         check = false;
     }
+
     protected virtual void Update()
     {
         if (check) conditionsMet = CheckConditions();
@@ -88,7 +92,7 @@ public class Trigger : MonoBehaviour
             {
                 if (conditions[i].CheckCondition() == false)
                 {
-                    ResetCondtions(i + 1);
+                    ResetConditions(i + 1);
                     return false;
                 }
             }
@@ -114,7 +118,7 @@ public class Trigger : MonoBehaviour
         return true;
     }
 
-    private void ResetCondtions(int startAtIndex)
+    private void ResetConditions(int startAtIndex)
     {
         for (int i = startAtIndex; i < conditions.Count; i++)
             conditions[i].ResetCondition();

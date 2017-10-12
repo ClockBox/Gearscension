@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour
     public Weapon[] weapons;
     private bool[] _hasWeapon = { false, false };
 
-    private int gunUpgrade = 4;
+    private int gunUpgrade = -1;
     private int[] ammoAmounts = new int[4];
     private int ammoType = 0;
 
@@ -180,7 +180,7 @@ public class PlayerController : MonoBehaviour
     public void UpgradeGun()
     {
         gunUpgrade++;
-        //PlayerHud UpgradeGun();
+        GameManager.Instance.Hud.BulletUpgrade();
     }
 
     public GameObject FindHookTarget(string tag)

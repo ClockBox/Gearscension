@@ -16,6 +16,7 @@ public enum ConditionType
 
 [System.Serializable]
 [RequireComponent(typeof(Trigger))]
+[ExecuteInEditMode]
 public class Condition : MonoBehaviour
 {
     protected Trigger trigger;
@@ -35,28 +36,19 @@ public class Condition : MonoBehaviour
 
     protected void OnEnable()
     {
-        trigger = GetComponent<Trigger>();
-        CheckVisible();
+        if (!trigger) trigger = GetComponent<Trigger>();
         InitCondition();
+    }
+
+    private void Update()
+    {
+        //hideFlags = trigger == null ? 
+        hideFlags = HideFlags.None; //: HidFlags.HideInInspector;
     }
 
     protected void OnDisable()
     {
         StopAllCoroutines();
-    }
-
-    private void Reset()
-    {
-        trigger = GetComponent<Trigger>();
-        trigger.Conditions.Add(this);
-        CheckVisible();
-    }
-
-    public void CheckVisible()
-    {
-        if (trigger && trigger.Conditions.Contains(this))
-            hideFlags = HideFlags.HideInInspector;
-        else hideFlags = HideFlags.None;
     }
 
     public virtual void InitCondition() { }

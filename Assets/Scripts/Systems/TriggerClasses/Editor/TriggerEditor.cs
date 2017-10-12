@@ -31,10 +31,6 @@ public class TriggerEditor : Editor
 
             GUILayout.Space(10);
             EditorGUILayout.PropertyField(resultProp);
-            
-            Condition[] temp = m_target.GetComponents<Condition>();
-            for (int i = 0; i < temp.Length; i++)
-                temp[i].CheckVisible();
         }
         serializedObject.ApplyModifiedProperties();
     }
@@ -69,33 +65,41 @@ public class TriggerEditor : Editor
 
     private void AddCondition(object type)
     {
+        Undo.RegisterCompleteObjectUndo(m_target, "Add Condition");
+        EditorUtility.SetDirty(m_target);
+
+        Condition temp = null;
         switch ((ConditionType)type)
         {
             case ConditionType.Timed:
-                m_target.gameObject.AddComponent<TimedCondition>();
+                m_target.Conditions.Add(temp = m_target.gameObject.AddComponent<TimedCondition>());
                 break;
             case ConditionType.Area:
-                m_target.gameObject.AddComponent<AreaCondition>();
+                m_target.Conditions.Add(temp = m_target.gameObject.AddComponent<AreaCondition>());
                 break;
             case ConditionType.Destroyed:
-                m_target.gameObject.AddComponent<DestroyedCondition>();
+                m_target.Conditions.Add(temp = m_target.gameObject.AddComponent<DestroyedCondition>());
                 break;
             case ConditionType.Amount:
-                m_target.gameObject.AddComponent<AmountCondition>();
+                m_target.Conditions.Add(temp = m_target.gameObject.AddComponent<AmountCondition>());
                 break;
             case ConditionType.Button:
-                m_target.gameObject.AddComponent<ButtonCondition>();
+                m_target.Conditions.Add(temp = m_target.gameObject.AddComponent<ButtonCondition>());
                 break;
             case ConditionType.Trigger:
-                m_target.gameObject.AddComponent<TriggerCondition>();
+                m_target.Conditions.Add(temp = m_target.gameObject.AddComponent<TriggerCondition>());
                 break;
             case ConditionType.BulletHit:
-                m_target.gameObject.AddComponent<BulletHitCondition>();
+                m_target.Conditions.Add(temp = m_target.gameObject.AddComponent<BulletHitCondition>());
                 break;
         }
+        temp.Trigger = m_target;
+        temp.hideFlags = HideFlags.HideInInspector;
     }
     private void RemoveCondition(int index)
     {
+        Undo.RegisterCompleteObjectUndo(m_target, "Remove Condition");
+        EditorUtility.SetDirty(m_target);
         Condition temp = m_target.Conditions[index];
         m_target.Conditions.RemoveAt(index);
         DestroyImmediate(temp);

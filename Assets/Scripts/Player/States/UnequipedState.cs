@@ -9,13 +9,12 @@ public class UnequipedState : WalkingState
     protected override IEnumerator HandleInput()
     {
         if (Input.GetButtonDown("Attack") || Input.GetButtonDown("Equip") || Player.RightTrigger.Down)
-            stateManager.ChangeState(new CombatState(stateManager,grounded));
+            stateManager.ChangeState(new CombatState(stateManager, grounded));
 
-        else if (Input.GetButton("Aim") || Player.LeftTrigger.Stay)
+        else if (Player.GunUpgrades >= 0 && (Input.GetButton("Aim") || Player.LeftTrigger.Stay))
             stateManager.ChangeState(new AimState(stateManager,grounded));
 
-        else
-            yield return base.HandleInput();
+        else yield return base.HandleInput();
     }
 
     public override void OnTriggerStay(Collider other)

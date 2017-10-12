@@ -49,7 +49,10 @@ public class ConditionDrawer : PropertyDrawer
         GUILayout.EndHorizontal();
 
         if (EditorGUI.EndChangeCheck())
-            EditorUtility.SetDirty(prop.serializedObject.targetObject);
+        {
+            Undo.RegisterCompleteObjectUndo(prop.objectReferenceValue, "Condition Change");
+            EditorUtility.SetDirty(prop.objectReferenceValue);
+        }
         EditorGUI.EndProperty();
     }
 

@@ -1,0 +1,235 @@
+fileFormatVersion: 2
+guid: 48021309b8eac054f9f2c7563693b6a5
+timeCreated: 1507834812
+licenseType: Pro
+ModelImporter:
+  serializedVersion: 21
+  fileIDToRecycleName:
+    100000: Base_low
+    100002: Cap_low
+    100004: Fin_low
+    100006: //RootNode
+    100008: Generator_low
+    100010: Light001_low
+    100012: Light002_low
+    100014: Light003_low
+    100016: Light004_low
+    100018: Light005_low
+    100020: Light006_low
+    100022: Light007_low
+    100024: Light008_low
+    100026: Light_low
+    100028: LightGlass_low
+    100030: LightGlass_low001
+    100032: LightGlass_low002
+    100034: LightGlass_low003
+    100036: LightGlass_low004
+    100038: LightGlass_low005
+    100040: LightGlass_low006
+    100042: LightGlass_low007
+    100044: LightGlass_low008
+    100046: Pipe_low
+    100048: Rivet_low
+    400000: Base_low
+    400002: Cap_low
+    400004: Fin_low
+    400006: //RootNode
+    400008: Generator_low
+    400010: Light001_low
+    400012: Light002_low
+    400014: Light003_low
+    400016: Light004_low
+    400018: Light005_low
+    400020: Light006_low
+    400022: Light007_low
+    400024: Light008_low
+    400026: Light_low
+    400028: LightGlass_low
+    400030: LightGlass_low001
+    400032: LightGlass_low002
+    400034: LightGlass_low003
+    400036: LightGlass_low004
+    400038: LightGlass_low005
+    400040: LightGlass_low006
+    400042: LightGlass_low007
+    400044: LightGlass_low008
+    400046: Pipe_low
+    400048: Rivet_low
+    2300000: Base_low
+    2300002: Cap_low
+    2300004: Fin_low
+    2300006: Generator_low
+    2300008: Light001_low
+    2300010: Light002_low
+    2300012: Light003_low
+    2300014: Light004_low
+    2300016: Light005_low
+    2300018: Light006_low
+    2300020: Light007_low
+    2300022: Light008_low
+    2300024: Light_low
+    2300026: LightGlass_low
+    2300028: LightGlass_low001
+    2300030: LightGlass_low002
+    2300032: LightGlass_low003
+    2300034: LightGlass_low004
+    2300036: LightGlass_low005
+    2300038: LightGlass_low006
+    2300040: LightGlass_low007
+    2300042: LightGlass_low008
+    2300044: Pipe_low
+    2300046: Rivet_low
+    3300000: Base_low
+    3300002: Cap_low
+    3300004: Fin_low
+    3300006: Generator_low
+    3300008: Light001_low
+    3300010: Light002_low
+    3300012: Light003_low
+    3300014: Light004_low
+    3300016: Light005_low
+    3300018: Light006_low
+    3300020: Light007_low
+    3300022: Light008_low
+    3300024: Light_low
+    3300026: LightGlass_low
+    3300028: LightGlass_low001
+    3300030: LightGlass_low002
+    3300032: LightGlass_low003
+    3300034: LightGlass_low004
+    3300036: LightGlass_low005
+    3300038: LightGlass_low006
+    3300040: LightGlass_low007
+    3300042: LightGlass_low008
+    3300044: Pipe_low
+    3300046: Rivet_low
+    4300000: Generator_low
+    4300002: Base_low
+    4300004: Cap_low
+    4300006: Pipe_low
+    4300008: Light_low
+    4300010: Rivet_low
+    4300012: LightGlass_low
+    4300014: LightGlass_low001
+    4300016: Light001_low
+    4300018: LightGlass_low002
+    4300020: Light002_low
+    4300022: LightGlass_low003
+    4300024: Light003_low
+    4300026: LightGlass_low004
+    4300028: Light004_low
+    4300030: LightGlass_low005
+    4300032: Light005_low
+    4300034: LightGlass_low006
+    4300036: Light006_low
+    4300038: LightGlass_low007
+    4300040: Light007_low
+    4300042: LightGlass_low008
+    4300044: Light008_low
+    4300046: Fin_low
+    7400000: Rotate
+    9500000: //RootNode
+    11100000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 3
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Rotate
+      takeName: Take 001
+      firstFrame: 0
+      lastFrame: 5
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 0.5
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 1
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

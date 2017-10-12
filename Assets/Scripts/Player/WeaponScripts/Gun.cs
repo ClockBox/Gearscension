@@ -12,6 +12,7 @@ public class Gun : Weapon
         base.Start();
         bulletSpawn = transform.GetChild(0);
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        gameObject.SetActive(false);
     }
 	
 	public void Shoot (float BulletScale)
