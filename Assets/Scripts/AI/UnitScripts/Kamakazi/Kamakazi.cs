@@ -10,14 +10,14 @@ public class Kamakazi : AIStateManager {
 	public float force;
 	public float proximity;
 	private bool exploded;
-	public override void AlertOthers()
-	{
-	}
+
 
 	public override void Die()
 	{
 		Destroy(gameObject);
 	}
+	public override void StartEvents() { }
+
 
 	public override void MeleeAttack()
 	{
@@ -84,6 +84,9 @@ public class Kamakazi : AIStateManager {
 		exploded = true;
 		return newEffect;
 		
+	}
+	public override void CollisionEvents()
+	{
 	}
 
 }

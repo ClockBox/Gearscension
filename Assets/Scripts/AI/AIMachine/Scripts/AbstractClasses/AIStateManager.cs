@@ -11,7 +11,6 @@ public abstract class AIStateManager : MonoBehaviour  {
 	public AIStates remainState;
 	public AIStates stunState;
 
-
 	[HideInInspector]
 	public float setFrequency;
 	[HideInInspector]
@@ -30,6 +29,8 @@ public abstract class AIStateManager : MonoBehaviour  {
 	public GameObject player;
 	[HideInInspector]
 	public bool callOnce=false;
+	[HideInInspector]
+	public bool isAlive;
 
 
 
@@ -43,6 +44,8 @@ public abstract class AIStateManager : MonoBehaviour  {
 		pathTarget = patrolPoints[pathIndex];
 		pathAgent.travel(pathTarget.position);
 		setFrequency = stats.attackFrequency;
+		isAlive = true;
+		StartEvents();
 
 	}
 	public void Update()
@@ -70,10 +73,28 @@ public abstract class AIStateManager : MonoBehaviour  {
 
 	public abstract void MeleeAttack();
 
-	public abstract void AlertOthers();
+	public abstract void StartEvents();
+
+
+	public void AlertOthers() {
+
+		Collider[] cols;
+		cols = Physics.OverlapSphere(transform.position, stats.alertRadius);
+		for (int i = 0; i < cols.Length; i++)
+		{
+			if (cols[i].gameObject.tag == "Enemy")
+
+				cols[i].GetComponent<AIStateManager>().Alerted();
+		}
+	}
 
 	public abstract void Die();
 
+	public abstract void CollisionEvents();
+
+	public void Alerted() {
+		TransitionToState(alertedState);
+	}
 	public void OnDrawGizmos()
 	{
 		if (currentState != null)
@@ -97,7 +118,7 @@ public abstract class AIStateManager : MonoBehaviour  {
 	}
 
 	public void TakeDamage(float damage) {
-		Debug.Log("Taking damage"+ damage);
+ 
 		stats.armour--;
 		if (stats.armour <= 0)
 		{
@@ -122,4 +143,9 @@ public abstract class AIStateManager : MonoBehaviour  {
 
 
 	}
+
+	private void OnCollisionEnter(Collision collision)
+	{
+		CollisionEvents();
+	} 
 }

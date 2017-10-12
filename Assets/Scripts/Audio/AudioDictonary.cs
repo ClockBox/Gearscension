@@ -13,8 +13,22 @@ public class AudioDictonary : MonoBehaviour {
     {
         for (int i = 0; i < AudioClips.Count; i++)
         {
-            Debug.Log(AudioClips[i].name);
+            Debug.Log(Rename(AudioClips[i].name));
         }
     }
 
+
+    private string Rename(string n)
+    {
+        string name = "";
+
+        string[] temp = n.Split('_');
+
+        for (int i = 0; i < temp.Length; i++)
+        {
+            name += temp[i].ToLower();
+        }
+
+        return name;
+    }
 }
