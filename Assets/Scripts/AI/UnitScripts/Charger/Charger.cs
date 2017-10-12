@@ -14,6 +14,7 @@ public class Charger : AIStateManager {
 	private bool isCharging=false;
 	private GameObject shieldEffect;
 
+	public override void StartEvents() { }
 
 	public override void Die()
 	{

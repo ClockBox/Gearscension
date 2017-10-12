@@ -16,6 +16,8 @@ public class Kamakazi : AIStateManager {
 	{
 		Destroy(gameObject);
 	}
+	public override void StartEvents() { }
+
 
 	public override void MeleeAttack()
 	{

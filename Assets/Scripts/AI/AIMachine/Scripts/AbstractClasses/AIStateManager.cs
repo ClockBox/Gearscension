@@ -10,6 +10,7 @@ public abstract class AIStateManager : MonoBehaviour  {
 	public AIStates alertedState;
 	public AIStates remainState;
 	public AIStates stunState;
+
 	[HideInInspector]
 	public float setFrequency;
 	[HideInInspector]
@@ -28,6 +29,8 @@ public abstract class AIStateManager : MonoBehaviour  {
 	public GameObject player;
 	[HideInInspector]
 	public bool callOnce=false;
+	[HideInInspector]
+	public bool isAlive;
 
 
 
@@ -41,6 +44,8 @@ public abstract class AIStateManager : MonoBehaviour  {
 		pathTarget = patrolPoints[pathIndex];
 		pathAgent.travel(pathTarget.position);
 		setFrequency = stats.attackFrequency;
+		isAlive = true;
+		StartEvents();
 
 	}
 	public void Update()
@@ -67,6 +72,9 @@ public abstract class AIStateManager : MonoBehaviour  {
 	public abstract void RangedAttack();
 
 	public abstract void MeleeAttack();
+
+	public abstract void StartEvents();
+
 
 	public void AlertOthers() {
 
@@ -110,7 +118,7 @@ public abstract class AIStateManager : MonoBehaviour  {
 	}
 
 	public void TakeDamage(float damage) {
-		Debug.Log("Taking damage"+ damage);
+ 
 		stats.armour--;
 		if (stats.armour <= 0)
 		{

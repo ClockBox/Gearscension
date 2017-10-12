@@ -15,6 +15,8 @@ public class Grenadier : AIStateManager {
 	private int choice;
 	private Rigidbody grenadePrefab;
 
+	public override void StartEvents() { }
+
 	public override void RangedAttack()
 	{
 		

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class Soldier : AIStateManager {
@@ -20,7 +18,7 @@ public class Soldier : AIStateManager {
 	private Quaternion rotationA;
 	private Quaternion rotationB;
 	private int choice;
-
+	
 	public override void RangedAttack()
 	{
 		if (!callOnce)
@@ -74,9 +72,35 @@ public class Soldier : AIStateManager {
 
 	public override void Die()
 	{
-		Debug.Log("dead");
+		if (isAlive)
+		{
+			Debug.Log("Soldier dead");
+
+			Rigidbody[] temp = GetComponentsInChildren<Rigidbody>();
+			if (temp.Length > 0)
+			{
+				for (int i = 0; i < temp.Length; i++)
+				{
+					temp[i].useGravity = true;
+					temp[i].constraints = RigidbodyConstraints.None;
+					temp[i].transform.parent = null;
+					temp[i].GetComponent<BoxCollider>().enabled = true;
+
+				}
+			}
+			
+			Destroy(gameObject, 1f);
+			isAlive = false;
+		}
+	}
+
+	public override void StartEvents() {
+
+		
 	}
 	public override void CollisionEvents()
 	{
+		
 	}
+
 }
