@@ -10,6 +10,7 @@ public class SlidingPlatform : Platform
     float counter = 0;
 
     public float distance;
+    [SerializeField]
     private bool move;
 
     public bool Move
@@ -24,7 +25,10 @@ public class SlidingPlatform : Platform
     {
         platformStartPos = transform.position;
         move = true;
-        StartCoroutine(StopMoving());
+        if (!move)
+        {
+            StartCoroutine(StopMoving()); 
+        }
     }
 
     void Update()
