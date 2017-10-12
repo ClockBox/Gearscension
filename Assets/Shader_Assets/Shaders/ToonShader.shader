@@ -19,7 +19,7 @@
 
 		[NoScaleOffset]_Ramp("Toon Ramp", 2D) = "gray" {}
 	}
-		SubShader
+	SubShader
 	{
 		Tags{ "Queue" = "Transparent" "RenderType" = "Transparent" }
 		LOD 200
@@ -54,27 +54,11 @@
 				float3 viewDir;
 			};
 
-			void surf(Input IN, inout SurfaceOutputStandard  o)
-			{
-				//float2 offset = ParallaxOffset(tex2D(_Heightmap, IN.uv_Heightmap).r, 0.1, IN.viewDir);
-				half rim = 1.0 - saturate(dot(normalize(IN.viewDir), o.Normal));
-
-				o.Albedo = tex2D(_MainTex, IN.uv_MainTex);
-				o.Albedo *= tex2D(_Detail, IN.uv_Detail).rgb;
-				o.Alpha = tex2D(_Alpha, IN.uv_MainTex).rgb;
-
-				o.Normal = UnpackNormal(tex2D(_Normal, IN.uv_Normal));
-				o.Emission = tex2D(_Emission, IN.uv_Emission) * _EmissionColor;
-
-				o.Metallic = tex2D(_Metallic, IN.uv_Metallic).rgb;
-				o.Smoothness = tex2D(_Metallic, IN.uv_Metallic).a;
-			}
-
 			#pragma lighting ToonRamp exclude_path:prepass
 			inline half4 LightingToonRamp(SurfaceOutputStandard s, half3 lightDir, half atten)
 			{
 				#ifndef USING_DIRECTIONAL_LIGHT
-				lightDir = normalize(lightDir);
+					lightDir = normalize(lightDir);
 				#endif
 				half d = dot(s.Normal, lightDir) * 0.5 + 0.5;
 				half3 ramp = tex2D(_Ramp, float2(d, d)).rgb;
@@ -83,6 +67,22 @@
 				c.rgb = s.Albedo * (_LightColor0.rgb) * ramp * (atten * 2);
 				c.a = 0;
 				return c;
+			}
+
+			void surf(Input IN, inout SurfaceOutputStandard  o)
+			{
+				//float2 offset = ParallaxOffset(tex2D(_Heightmap, IN.uv_Heightmap).r, 0.1, IN.viewDir);
+				half rim = 1.0 - saturate(dot(normalize(IN.viewDir), o.Normal));
+
+				o.Albedo = tex2D(_MainTex, IN.uv_MainTex);
+				o.Albedo *= tex2D(_Detail, IN.uv_Detail).rgb;
+				o.Alpha = tex2D(_Alpha, IN.uv_MainTex).a;
+
+				o.Normal = UnpackNormal(tex2D(_Normal, IN.uv_Normal));
+				o.Emission = tex2D(_Emission, IN.uv_Emission) * _EmissionColor;
+
+				o.Metallic = tex2D(_Metallic, IN.uv_Metallic).rgb;
+				o.Smoothness = tex2D(_Metallic, IN.uv_Metallic).a;
 			}
 		ENDCG
 	}
