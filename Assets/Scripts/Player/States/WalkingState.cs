@@ -75,7 +75,7 @@ public class WalkingState : PlayerState
         moveX = Input.GetAxis("Horizontal");
         moveY = Input.GetAxis("Vertical");
         
-        if (Input.GetKey(KeyCode.LeftShift))
+        if (Input.GetButton("Sprint"))
         movementSpeed = 5;
         else movementSpeed = 8;
 

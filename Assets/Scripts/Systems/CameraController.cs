@@ -5,7 +5,7 @@ public class CameraController : MonoBehaviour
     private const float Y_ANGLE_MIN = 290;
     private const float Y_ANGLE_MAX = 410.0f;
     
-    public Transform camPivot;
+    private Transform camPivot;
 
     private float distance = 3.0f;
     private float userDistance = 3.0f;
@@ -19,15 +19,17 @@ public class CameraController : MonoBehaviour
 
     private Camera thisCamera;
 
-    private void Start()
+    private void Awake()
     {
         thisCamera = GetComponent<Camera>();
+        if (!camPivot)
+            camPivot = GameManager.Instance.Player.transform.GetChild(0);
     }
 
     private void LateUpdate()
     {
         if (!camPivot)
-            camPivot = GameManager.Instance.Player.transform.GetChild(0);
+            camPivot = GameObject.FindGameObjectWithTag("Player").transform.GetChild(0);
         else
         {
             //Mouse Input

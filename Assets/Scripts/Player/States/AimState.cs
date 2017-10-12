@@ -42,13 +42,13 @@ public class AimState : WalkingState
         if (Input.GetKeyDown(KeyCode.X))
             Player.StartCoroutine(ThrowHook(Player.FindHookTarget("CarryNode")));
 
-        if (!Input.GetButton("Aim") || Input.GetButtonDown("Roll"))
+        if ((!Input.GetButton("Aim") && !Player.LeftTrigger.Stay) || Input.GetButtonDown("Roll"))
             stateManager.ChangeState(new UnequipedState(stateManager, grounded));
 
         if (Input.GetButton("Attack"))
             bulletScale += Time.deltaTime;
 
-        else if (Input.GetButtonUp("Attack"))
+        else if (Input.GetButtonUp("Attack") || Player.RightTrigger.Up)
         {
             (Player.weapons[0] as Gun).Shoot(bulletScale);
             bulletScale = 1;

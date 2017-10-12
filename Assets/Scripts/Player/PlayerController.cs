@@ -19,13 +19,10 @@ public class PlayerController : MonoBehaviour
     private float elapsedTime = 0;
     private float HookRange = 15;
 
-    //Inputs variables
-    const int UP = 0;
-    const int DOWN = 1;
-    const int STAY = 2;
-
-    private int rightTriggerState = -1;
-    private int leftTriggerState = -1;
+    // trigger inputs variables
+    private InputAxis rightTriggerState = new InputAxis("RightTrigger",AxisType.Trigger);
+    private InputAxis leftTriggerState = new InputAxis("LeftTrigger", AxisType.Trigger);
+    private InputAxis ammoAxis = new InputAxis("AmmoAxis", AxisType.Axis);
 
     //weapon info
     public Transform SwordSheath;
@@ -33,9 +30,9 @@ public class PlayerController : MonoBehaviour
     public Weapon[] weapons;
     private bool[] _hasWeapon = { false, false };
 
-    private int _gunUpgrade = 0;
-    private int[] _ammoAmounts = new int[4];
-    private BulletType _currentAmmo = BulletType.Electric;
+    private int gunUpgrade = 4;
+    private int[] ammoAmounts = new int[4];
+    private int ammoType = 0;
 
     const int GUN = 0;
     const int SWORD = 1;
@@ -76,18 +73,14 @@ public class PlayerController : MonoBehaviour
         set { m_anim = value; }
     }
 
-    public int GunUpgrades
-    {
-        get { return _gunUpgrade; }
-    }
     public int AmmoType
     {
-        get { return (int)_currentAmmo; }
+        get { return ammoType; }
     }
     public int AmmoRemaining(int index)
     {
-        if (index < _ammoAmounts.Length)
-            return _ammoAmounts[index];
+        if (index < ammoAmounts.Length)
+            return ammoAmounts[index];
         else return 0;
     }
     public float Health
@@ -98,9 +91,27 @@ public class PlayerController : MonoBehaviour
     {
         get { return _currentArmor; }
     }
+
+    public int GunUpgrades
+    {
+        get { return gunUpgrade; }
+    }
     public bool HasWeapon(int index)
     {
         return _hasWeapon[index];
+    }
+    
+    public InputAxis RightTrigger
+    {
+        get { return rightTriggerState; }
+    }
+    public InputAxis LeftTrigger
+    {
+        get { return leftTriggerState; }
+    }
+    public InputAxis AmmoAxis
+    {
+        get { return ammoAxis; }
     }
     #endregion
 
@@ -163,12 +174,13 @@ public class PlayerController : MonoBehaviour
     public void PickupGun()
     {
         weapons[0].gameObject.SetActive(true);
-        _gunUpgrade++;
+        UpgradeGun();
     }
 
     public void UpgradeGun()
     {
-        _gunUpgrade++;
+        gunUpgrade++;
+        //PlayerHud UpgradeGun();
     }
 
     public GameObject FindHookTarget(string tag)
@@ -266,9 +278,6 @@ public class PlayerController : MonoBehaviour
     }
     private void Update()
     {
-        RightTriggerState();
-        LeftTriggerState();
-
         if (_damageImmune > 0)
             _damageImmune -= Time.deltaTime;
 
@@ -278,60 +287,32 @@ public class PlayerController : MonoBehaviour
         RechargeArmor();
 
         //Switching Ammo Types
-        if (Input.GetButtonDown("Ammo 1") || Input.GetAxis("AmmoAxis Vertical") > 0)
+        if (Input.GetButtonDown("Ammo 1"))
         {
-            if (_gunUpgrade >= (int)BulletType.Electric)
-                _currentAmmo = BulletType.Electric;
+            if (gunUpgrade >= (int)BulletType.Electric)
+                ammoType = (int)BulletType.Electric;
         }
-        else if (Input.GetButtonDown("Ammo 2") || Input.GetAxis("AmmoAxis Horizontal") > 0)
+        else if (Input.GetButtonDown("Ammo 2"))
         {
-            if (_gunUpgrade >= (int)BulletType.Ice)
-                _currentAmmo = BulletType.Ice;
+            if (gunUpgrade >= (int)BulletType.Ice)
+                ammoType = (int)BulletType.Ice;
         }
-        else if (Input.GetButtonDown("Ammo 3") || Input.GetAxis("AmmoAxis Vertical") < 0)
+        else if (Input.GetButtonDown("Ammo 3"))
         {
-            if (_gunUpgrade >= (int)BulletType.Explosive)
-                _currentAmmo = BulletType.Explosive;
+            if (gunUpgrade >= (int)BulletType.Explosive)
+                ammoType = (int)BulletType.Explosive;
         }
 
-        else if (Input.GetButtonDown("Ammo 4") || Input.GetAxis("AmmoAxis Horizontal") < 0)
+        else if (Input.GetButtonDown("Ammo 4"))
         {
-            if (_gunUpgrade >= (int)BulletType.Magnetic)
-                _currentAmmo = BulletType.Magnetic;
+            if (gunUpgrade >= (int)BulletType.Magnetic)
+                ammoType = (int)BulletType.Magnetic;
         }
-    }
 
-    //Input Functions
-    private void RightTriggerState()
-    {
-        if (rightTriggerState == -1)
+        if (ammoAxis.Down)
         {
-            if (Input.GetAxisRaw("RightTrigger") > 0)
-                rightTriggerState = DOWN;
+            ammoType = (ammoType + ammoAxis.RawValue) % 4;
+            if (ammoType < 0) ammoType += 4;
         }
-        else if (rightTriggerState > 0)
-        {
-            if (Input.GetAxisRaw("RightTrigger") > 0)
-                rightTriggerState = STAY;
-            else
-                rightTriggerState = UP;
-        }
-        else rightTriggerState = -1;
-    }
-    private void LeftTriggerState()
-    {
-        if (leftTriggerState == -1)
-        {
-            if (Input.GetAxisRaw("LeftTrigger") > 0)
-                leftTriggerState = DOWN;
-        }
-        else if (leftTriggerState > 0)
-        {
-            if (Input.GetAxisRaw("LeftTrigger") > 0)
-                leftTriggerState = STAY;
-            else
-                leftTriggerState = UP;
-        }
-        else leftTriggerState = -1;
     }
 }

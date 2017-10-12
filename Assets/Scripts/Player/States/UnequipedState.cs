@@ -8,10 +8,10 @@ public class UnequipedState : WalkingState
     //State Behaviour
     protected override IEnumerator HandleInput()
     {
-        if (Input.GetButtonDown("Attack") || Input.GetButtonDown("Equip"))
+        if (Input.GetButtonDown("Attack") || Input.GetButtonDown("Equip") || Player.RightTrigger.Down)
             stateManager.ChangeState(new CombatState(stateManager,grounded));
 
-        else if (Input.GetButton("Aim"))
+        else if (Input.GetButton("Aim") || Player.LeftTrigger.Stay)
             stateManager.ChangeState(new AimState(stateManager,grounded));
 
         else

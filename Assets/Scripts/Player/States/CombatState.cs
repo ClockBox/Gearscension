@@ -44,10 +44,10 @@ public class CombatState : WalkingState
     //State Behaviour
     protected override IEnumerator HandleInput()
     {
-        if (Input.GetKeyDown(KeyCode.X))
+        if (Input.GetButtonDown("Hook"))
             Player.StartCoroutine(ThrowHook(Player.FindHookTarget("HookNode")));
 
-        else if (Input.GetButtonDown("Attack"))
+        else if (Input.GetButtonDown("Attack") || Player.RightTrigger.Down)
             yield return Attack();
 
         else if (hooked)
@@ -210,8 +210,8 @@ public class CombatState : WalkingState
             IK.SetIKPositions(Player.weapons[1].Grip(1), hookNode.leftHand, hookNode.rightFoot, hookNode.leftFoot);
             IK.HeadWeight = 1;
         }
-
     }
+
     protected override void UpdatePhysics()
     {
         if (!hooked)

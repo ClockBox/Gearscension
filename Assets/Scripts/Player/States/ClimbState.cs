@@ -110,7 +110,7 @@ public class ClimbState : PlayerState
         else if (Input.GetButtonDown("Jump"))
             Jump();
 
-        else if (Input.GetButtonDown("Equip") || Input.GetButtonDown("Attack"))
+        else if (Input.GetButtonDown("Equip") || Input.GetButtonDown("Attack") || Player.RightTrigger.Down)
             stateManager.ChangeState(new CombatState(stateManager, currentNodes[0]));
 
         else
