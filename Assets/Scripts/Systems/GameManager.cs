@@ -14,18 +14,25 @@ public class GameManager : MonoBehaviour
     //    set { audio = value; }
     //}
 
-    private static PlayerController player;
-    public static PlayerController Player
+    private PlayerController player;
+    public PlayerController Player
     {
         get { return player; }
         set { player = value; }
     }
     
-    private static GameObject hud;
-    public static GameObject Hud
+    private static PlayerHud hud;
+    public PlayerHud Hud
     {
         get { return hud; }
         set { hud = value; }
+    }
+
+    private static Transform spawnLocation;
+    public Transform SpawnLocation
+    {
+        get { return spawnLocation; }
+        set { spawnLocation = value; }
     }
 
     private void Awake()
@@ -37,9 +44,6 @@ public class GameManager : MonoBehaviour
         }
         else
             Destroy(gameObject);
-
-        if (!player)
-            player = FindObjectOfType<PlayerController>();
     }
 
     private void Update()
@@ -60,11 +64,7 @@ public class GameManager : MonoBehaviour
 
     public static void Quit()
     {
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#else
         Application.Quit();
-#endif
     }
 
     #region SceneManagment
@@ -88,13 +88,32 @@ public class GameManager : MonoBehaviour
 
     private void OnSceneChanged(Scene scene, LoadSceneMode mode)
     {
-        if (!player)
-            player = FindObjectOfType<PlayerController>();
-        if (scene.buildIndex > 2)
+        if (scene.buildIndex <= 2)
         { 
-            SceneManager.LoadScene(2, LoadSceneMode.Additive);
-            //AudioDictionary = FindObjectOfType<AudioDictionary>();
+            // If the scene was a menu
+        }
+        else
+        {
+            AddScene("Hud");
+            // If the scene was a level
         }
     }
-    #endregion  
+    #endregion
+    
+    public void RespawnPlayer()
+    {
+        if (player)
+        {
+            if (spawnLocation)
+                player.transform.position = spawnLocation.position;
+            else player.transform.position = Vector3.zero;
+
+            PlayerController.rb.velocity = Vector3.zero;
+        }
+    }
+
+    public void DestroyObject(GameObject targetObject)
+    {
+        Destroy(targetObject);
+    }
 }
