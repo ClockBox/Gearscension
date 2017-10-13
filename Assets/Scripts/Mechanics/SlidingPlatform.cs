@@ -3,11 +3,14 @@ using System.Collections;
 
 public class SlidingPlatform : Platform
 {
-    public Axis axis;
-    float counter = 0;
+    [SerializeField]
     float speed;
 
+    public Axis axis;
+    float counter = 0;
+
     public float distance;
+    [SerializeField]
     private bool move;
 
     public bool Move
@@ -21,9 +24,11 @@ public class SlidingPlatform : Platform
     private void Start()
     {
         platformStartPos = transform.position;
-        speed = 0.4f;
         move = true;
-        StartCoroutine(StopMoving());
+        if (!move)
+        {
+            StartCoroutine(StopMoving()); 
+        }
     }
 
     void Update()

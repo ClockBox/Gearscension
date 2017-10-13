@@ -12,11 +12,9 @@ public class PlayerHud : MonoBehaviour
     // Int
     private int ammo;
 
-    // String
-    private string passedString;
-
     [Header("Main Hud")]
-    [SerializeField] private GameObject healthZero;
+    [SerializeField]
+    private GameObject healthZero;
     [SerializeField] private GameObject healthOne;
     [SerializeField] private GameObject healthTwo;
     [SerializeField] private GameObject healthThree;
@@ -36,8 +34,13 @@ public class PlayerHud : MonoBehaviour
     [SerializeField] private Text blackText;
 
     [Header("Ammo Hud")]
-    [SerializeField] private GameObject ammoReel;
-    private Animator animReel;
+    [SerializeField]
+    private GameObject ammoReelMid;
+    private Animator animReelMid;
+    [SerializeField] private GameObject ammoReelTop;
+    private Animator animReelTop;
+    [SerializeField] private GameObject ammoReelBot;
+    private Animator animReelBot;
 
     public GameObject[] ammoType = new GameObject[4];
 
@@ -58,10 +61,22 @@ public class PlayerHud : MonoBehaviour
             animTwo = armorPieceTwo.GetComponent<Animator>();
         }
 
-        ammoReel = GameObject.Find("/Gear Hud/AmmoTypes/AmmoReel");
-        if (ammoReel != null)
+        ammoReelMid = GameObject.Find("/Gear Hud/AmmoTypes/AmmoReel Middle");
+        if (ammoReelMid != null)
         {
-            animReel = ammoReel.GetComponent<Animator>();
+            animReelMid = ammoReelMid.GetComponent<Animator>();
+        }
+
+        ammoReelTop = GameObject.Find("/Gear Hud/AmmoTypes/AmmoReel Top");
+        if (ammoReelTop != null)
+        {
+            animReelTop = ammoReelTop.GetComponent<Animator>();
+        }
+
+        ammoReelBot = GameObject.Find("/Gear Hud/AmmoTypes/AmmoReel Bottom");
+        if (ammoReelBot != null)
+        {
+            animReelBot = ammoReelBot.GetComponent<Animator>();
         }
 
         healthBar = new GameObject[]
@@ -72,9 +87,7 @@ public class PlayerHud : MonoBehaviour
 
     private void Start()
     {
-        // whiteText.text = "";
-        blackText.text = "";
-        DisplayText();
+
     }
 
     void Update()
@@ -199,12 +212,6 @@ public class PlayerHud : MonoBehaviour
         }
     }
 
-    public void DisplayText()
-    {
-        // whiteText.text = passedString;
-        // blackText.text = passedString;
-    }
-
     public void SetAmmo(int currentType)
     {
 
@@ -213,29 +220,46 @@ public class PlayerHud : MonoBehaviour
         ammoType[(currentType + 2) % 4].SetActive(false);
         ammoType[(currentType + 3) % 4].SetActive(false);
         Debug.Log("Ammo type changed!");
+
+        if ((currentType + 1) % 4 <= PC.GunUpgrades)
+        {
+            // Set Top Open
+            animReelTop.SetBool("Active", true);
+        }
+        else
+        {
+            // Set Top Closed.
+            animReelTop.SetBool("Active", false);
+        }
+        if ((currentType + 3) % 4 <= PC.GunUpgrades)
+        {
+            // Set Bottom Open
+            animReelBot.SetBool("Active", true);
+        }
+        else
+        {
+            // Set Bottom Closed.
+            animReelBot.SetBool("Active", false);
+        }
+        Debug.Log((currentType + 1 % 3) + ":" + PC.GunUpgrades);
     }
 
     public void BulletUpgrade()
     {
-        animReel.SetTrigger("Active");
+        PC.UpgradeGun();
+        animReelMid.SetTrigger("Active");
         Debug.Log("Ammo Hud Activated.");
+        SetAmmo(ammo);
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void AddDisplay(string passedString)
     {
-        if (other.gameObject.CompareTag("DisplayText"))
-        {
-            DisplayText();
-            textBox.SetActive(true);
-        }
+        whiteText.text = "" + passedString;
+        textBox.SetActive(true);
     }
 
-    private void OnTriggerExit(Collider other)
+    public void RemoveDisplay()
     {
-        if (other.gameObject.CompareTag("DisplayText"))
-        {
-            textBox.SetActive(false);
-        }
+        textBox.SetActive(false);
     }
-
 }

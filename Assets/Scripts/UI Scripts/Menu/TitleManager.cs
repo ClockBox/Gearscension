@@ -10,17 +10,15 @@ public class TitleManager : MonoBehaviour
     public AudioClip listen;
     public AudioClip niceThousand;
 
+    private AudioSource audio;
+
+    private void Awake()
+    {
+       audio = GetComponent<AudioSource>();
+    }
 
     IEnumerator Start()
     {
-
-        AudioSource audio = GetComponent<AudioSource>();
-
-        audio.clip = listen;
-        audio.Play();
-        // yield return new WaitForSeconds(audio.clip.length);
-
-        // yield return new WaitForSeconds(1f);
 
         audio.clip = niceThousand;
         audio.Play();
@@ -32,9 +30,9 @@ public class TitleManager : MonoBehaviour
     IEnumerator Coroutine()
     {
 
-        yield return new WaitForSeconds(1f);
         Debug.Log("Main menu called.");
         SceneManager.LoadScene("Main Menu");
+        yield return new WaitForSeconds(0f);
     }
 
 }

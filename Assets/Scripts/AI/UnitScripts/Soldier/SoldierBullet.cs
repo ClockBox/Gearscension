@@ -5,15 +5,28 @@ using UnityEngine;
 public class SoldierBullet : MonoBehaviour {
 
 	public float damage;
-	private void OnTriggerEnter(Collider other)
+
+
+	private void OnCollisionEnter(Collision collision)
 	{
-		if (other.gameObject.tag == "Player")
+		if (collision.gameObject.tag == "Player")
 		{
-			Debug.Log("Damage");
-			other.gameObject.SendMessage("TakeDamage", damage, SendMessageOptions.DontRequireReceiver);
+			Debug.Log("Hit By Soldier Bullet");
+			collision.gameObject.SendMessage("TakeDamage", damage, SendMessageOptions.DontRequireReceiver);
+			Destroy(gameObject);
 		}
 
-	} 
+	}
+
+
+	//{
+	//	if (other.gameObject.tag == "Player")
+	//	{
+	//		Debug.Log("Damage");
+	//		other.gameObject.SendMessage("TakeDamage", damage, SendMessageOptions.DontRequireReceiver);
+	//	}
+
+	//} 
 	//private void OnTrigger(Collision collision)
 	//{
 	//	if (collision.gameObject.tag == "Player")
@@ -23,5 +36,5 @@ public class SoldierBullet : MonoBehaviour {
 	//	}
 
 	//}
- 
+
 }

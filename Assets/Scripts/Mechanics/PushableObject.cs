@@ -1,11 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PushableObject : MonoBehaviour
 {
     StateManager stateManager;
     LightPuzzle lp;
+    public UnityEvent myEvent;
+    [SerializeField]
+    private bool useEvent;
     float moveSpeed;
 
     private void Start()
@@ -44,7 +48,7 @@ public class PushableObject : MonoBehaviour
             _toFrom = col.transform.position - transform.position;
             yield return null;
         }
-        
+
         Vector3 endPos = (col.transform.position - new Vector3(0, 0.1f, 0)) - transform.position;
         Debug.Log(endPos.magnitude);
 
@@ -54,5 +58,8 @@ public class PushableObject : MonoBehaviour
             endPos = (col.transform.position - new Vector3(0, 0.1f, 0)) - transform.position;
             yield return null;
         }
+
+        if (useEvent)
+            myEvent.Invoke();
     }
 }
