@@ -76,7 +76,7 @@ public class WalkingState : PlayerState
         moveY = Input.GetAxis("Vertical");
         
         if (Input.GetButton("Sprint"))
-        movementSpeed = 5;
+            movementSpeed = 5;
         else movementSpeed = 8;
 
         lookDirection = Camera.main.transform.forward;
@@ -108,7 +108,7 @@ public class WalkingState : PlayerState
     }
     protected override void UpdatePhysics()
     {
-        grounded = Physics.CheckCapsule(Player.transform.position, Player.transform.position - Vector3.up * 0.05f, 0.18f, LayerMask.GetMask("Ground", "Debris"));
+        grounded = Physics.CheckCapsule(Player.transform.position, Player.transform.position - Vector3.up * 0.05f, 0.15f, LayerMask.GetMask("Ground", "Debris"));
 
         if (grounded)
         {

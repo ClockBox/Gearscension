@@ -174,12 +174,12 @@ public class PlayerController : MonoBehaviour
     public void PickupGun()
     {
         weapons[0].gameObject.SetActive(true);
-        UpgradeGun();
+        UpgradeGun(0);
     }
 
-    public void UpgradeGun()
+    public void UpgradeGun(int upgrade)
     {
-        gunUpgrade++;
+        gunUpgrade = upgrade;
         GameManager.Instance.Hud.BulletUpgrade();
     }
 
