@@ -15,6 +15,8 @@ public class Grenadier : AIStateManager {
 	private int choice;
 	private Rigidbody grenadePrefab;
 
+	public override void StartEvents() { }
+
 	public override void RangedAttack()
 	{
 		
@@ -49,10 +51,11 @@ public class Grenadier : AIStateManager {
 	{
 
 	}
-	public override void AlertOthers()
+
+	public override void Die()
 	{
 	}
-	public override void Die()
+	public override void CollisionEvents()
 	{
 	}
 

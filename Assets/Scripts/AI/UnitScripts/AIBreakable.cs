@@ -23,7 +23,8 @@ public class AIBreakable : MonoBehaviour {
 			{
 				gameObject.transform.root.GetComponent<AIStateManager>().Stun();
 				breakablePart.GetComponent<Rigidbody>().useGravity = true;
-				
+				breakablePart.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+
 				breakablePart.transform.parent = null;
 				breakablePart.GetComponent<BoxCollider>().enabled = true;
 				broken = true;
