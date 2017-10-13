@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
 using UnityEngine.Events;
 
 public class Trigger : MonoBehaviour
@@ -92,7 +91,7 @@ public class Trigger : MonoBehaviour
             {
                 if (conditions[i].CheckCondition() == false)
                 {
-                    ResetConditions(i + 1);
+                    ResetConditions(i + 1); 
                     return false;
                 }
             }
@@ -108,12 +107,13 @@ public class Trigger : MonoBehaviour
         }
 
         result.Invoke();
-        //Debug.Log(this + ":Triggered", this);
+        Debug.Log(this + ":Triggered", this);
 
         if (!repeat)
         {
             check = false;
             StopAllCoroutines();
+            ResetConditions(0);
         }
         return true;
     }

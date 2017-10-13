@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
 
 [System.Serializable]
 public class AreaCondition : Condition
@@ -45,33 +44,66 @@ public class AreaCondition : Condition
         float y = triggerArea.extents.y;
         float z = triggerArea.extents.z;
 
-        Handles.color = new Color(1, 0, 0.5f, 0.5f);
-        Handles.DrawLines(new Vector3[]
-        {
+        Gizmos.color = new Color(1, 0, 0.5f, 0.5f);
+        Gizmos.DrawLine
+        (
             transform.right * x + transform.up * y + transform.forward * z + center,
-            transform.right * -x + transform.up * y + transform.forward * z + center,
+            transform.right * -x + transform.up * y + transform.forward * z + center
+        );
+        Gizmos.DrawLine
+        (
             transform.right * x + transform.up * y + transform.forward * z + center,
-            transform.right * x + transform.up *- y + transform.forward * z + center,
+            transform.right * x + transform.up *- y + transform.forward * z + center
+        );
+        Gizmos.DrawLine
+        (
             transform.right * x + transform.up * y + transform.forward * z + center,
-            transform.right * x + transform.up * y + transform.forward * -z + center,
+            transform.right * x + transform.up * y + transform.forward * -z + center
+        );
+        Gizmos.DrawLine
+        (
             transform.right * -x + transform.up * -y + transform.forward * -z + center,
-            transform.right * x + transform.up * -y + transform.forward * -z + center,
+            transform.right * x + transform.up * -y + transform.forward * -z + center
+        );
+        Gizmos.DrawLine
+        (
             transform.right * -x + transform.up * -y + transform.forward * -z + center,
-            transform.right * -x + transform.up * y + transform.forward * -z + center,
+            transform.right * -x + transform.up * y + transform.forward * -z + center
+        );
+        Gizmos.DrawLine
+        (
             transform.right * -x + transform.up * -y + transform.forward * -z + center,
-            transform.right * -x + transform.up * -y + transform.forward * z + center,
+            transform.right * -x + transform.up * -y + transform.forward * z + center
+        );
+        Gizmos.DrawLine
+        (
             transform.right * x + transform.up * y + transform.forward * -z + center,
-            transform.right * -x + transform.up * y + transform.forward * -z + center,
+            transform.right * -x + transform.up * y + transform.forward * -z + center
+        );
+        Gizmos.DrawLine
+        (
             transform.right * x + transform.up * y + transform.forward * -z + center,
-            transform.right * x + transform.up * -y + transform.forward * -z + center,
+            transform.right * x + transform.up * -y + transform.forward * -z + center
+        );
+        Gizmos.DrawLine
+        (
             transform.right * x + transform.up * -y + transform.forward * z + center,
-            transform.right * x + transform.up * -y + transform.forward * -z + center,
+            transform.right * x + transform.up * -y + transform.forward * -z + center
+        );
+        Gizmos.DrawLine
+        (
             transform.right * x + transform.up * -y + transform.forward * z + center,
-            transform.right * -x + transform.up * -y + transform.forward * z + center,
+            transform.right * -x + transform.up * -y + transform.forward * z + center
+        );
+        Gizmos.DrawLine
+        (
             transform.right * -x + transform.up * y + transform.forward * z + center,
-            transform.right * -x + transform.up * -y + transform.forward * z + center,
+            transform.right * -x + transform.up * -y + transform.forward * z + center
+        );
+        Gizmos.DrawLine
+        (
             transform.right * -x + transform.up * y + transform.forward * z + center,
-            transform.right * -x + transform.up * y + transform.forward * -z + center,
-        });
+            transform.right * -x + transform.up * y + transform.forward * -z + center
+        );
     }
 }

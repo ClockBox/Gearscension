@@ -13,9 +13,7 @@ public class TimedCondition : Condition
     IEnumerator StartTimer()
     {
         isCounting = true;
-        Debug.Log("Timer Started");
         yield return new WaitForSeconds(timerAmount);
-        Debug.Log("Timer Done");
         ConditionMet = true;
         if (loop)
         {
@@ -27,7 +25,6 @@ public class TimedCondition : Condition
 
     public override bool CheckCondition()
     {
-        Debug.Log("Timer checked");
         if (!isCounting)
         {
             StartCoroutine(StartTimer());

@@ -11,6 +11,7 @@ public class AudioDictonary : MonoBehaviour {
 
     void Start()
     {
+        GameManager.Instance.AudioManager = this;
         for (int i = 0; i < AudioClips.Count; i++)
         {
             Debug.Log(Rename(AudioClips[i].name));

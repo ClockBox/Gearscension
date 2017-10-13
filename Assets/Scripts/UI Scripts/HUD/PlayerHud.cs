@@ -46,8 +46,8 @@ public class PlayerHud : MonoBehaviour
 
     void Awake()
     {
-
-        PC = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        GameManager.Instance.Hud = this;
+        PC = GameManager.Instance.Player;
 
         armorPieceOne = GameObject.Find("/Gear Hud/Armor 1");
         if (armorPieceOne != null)
@@ -85,17 +85,8 @@ public class PlayerHud : MonoBehaviour
         };
     }
 
-    private void Start()
-    {
-
-    }
-
     void Update()
     {
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        { BulletUpgrade(); }
-
         if (ammo != PC.AmmoType)
         {
             ammo = PC.AmmoType;
@@ -214,7 +205,6 @@ public class PlayerHud : MonoBehaviour
 
     public void SetAmmo(int currentType)
     {
-
         ammoType[currentType].SetActive(true);
         ammoType[(currentType + 1) % 4].SetActive(false);
         ammoType[(currentType + 2) % 4].SetActive(false);
@@ -246,7 +236,6 @@ public class PlayerHud : MonoBehaviour
 
     public void BulletUpgrade()
     {
-        PC.UpgradeGun();
         animReelMid.SetTrigger("Active");
         Debug.Log("Ammo Hud Activated.");
         SetAmmo(ammo);

@@ -5,30 +5,30 @@ using UnityEngine;
 
 public class PauseController : MonoBehaviour
 {
-    private MenuController MC;
+    private GameManager GM;
 	// Use this for initialization
 	void Start ()
     {
-        MC = GameObject.Find("MenuController").GetComponent<MenuController>();
+        GM = GameManager.Instance;
 	}
 
     public void Continue()
     {
-        MC.Pause();
+        GM.Pause();
     }
 
     public void Restart()
     {
-        MC.Restart();
+        GM.Restart();
     }
 
     public void MainMenu()
     {
-        MC.MainMenu();
+        GM.MainMenu();
     }
 
     public void EXIT()
     {
-        MC.EXIT();
+        GM.Quit();
     }
 }
