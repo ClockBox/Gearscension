@@ -7,6 +7,19 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
+    // Bool
+    public static bool gameIsOver;
+
+    // Strings
+    private string mainMenuScene = "Main Menu";
+    private string pauseMenuScene = "Pause Menu";
+    private string levelCompleteScene = "Completed Level";
+    private string gameOverScene = "Game Over";
+    private string hudScene = "Hud";
+    
+    // Other
+    public SceneFader sceneFader;
+
     //private static AudioDictionary audio;
     //public static AudioDictionary Audio
     //{
@@ -40,6 +53,12 @@ public class GameManager : MonoBehaviour
 
         if (!player)
             player = FindObjectOfType<PlayerController>().gameObject;
+
+    }
+
+    private void Start()
+    {
+        gameIsOver = false;
     }
 
     private void Update()
@@ -50,8 +69,58 @@ public class GameManager : MonoBehaviour
             Debug.Log(temp[i].gameObject, temp[i].gameObject);
         }
 
-        if (Input.GetButton("Quit"))
-            Quit();
+        if (gameIsOver)
+        {
+            return;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Pause();
+        }
+    }
+
+    public void Pause()
+    {
+        if (Time.timeScale == 1f)
+        {
+            SceneManager.LoadScene(pauseMenuScene, LoadSceneMode.Additive);
+            Time.timeScale = 0f;
+        }
+        else if (Time.timeScale == 0f)
+        {
+            SceneManager.UnloadSceneAsync(pauseMenuScene);
+            Time.timeScale = 1f;
+        }
+    }
+
+    public void MainMenu()
+    {
+        Pause();
+        SceneManager.LoadScene(mainMenuScene);
+    }
+
+    public void Restart()
+    {
+        if (gameIsOver)
+        {
+            SceneManager.UnloadSceneAsync(gameOverScene);
+            sceneFader.FadeTo(SceneManager.GetActiveScene().name);
+        }
+        else
+            Pause();
+
+        sceneFader.FadeTo(SceneManager.GetActiveScene().name);
+
+    }
+
+    public void Quit()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
     }
 
     private void OnEnable()
@@ -62,11 +131,6 @@ public class GameManager : MonoBehaviour
     private void OnDisable()
     {
         SceneManager.sceneLoaded -= OnSceneChanged;
-    }
-
-    public static void Quit()
-    {
-        Application.Quit();
     }
 
     #region SceneManagment
@@ -83,6 +147,7 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene(name, LoadSceneMode.Additive);
     }
+
     private void AddScene(Scene scene)
     {
         AddScene(scene.name);
@@ -92,11 +157,25 @@ public class GameManager : MonoBehaviour
     {
         if (!player)
             player = FindObjectOfType<PlayerController>().gameObject;
-        if (scene.buildIndex > 2)
+        if (scene.buildIndex > 3)
         { 
-            SceneManager.LoadScene(2, LoadSceneMode.Additive);
+            SceneManager.LoadScene(hudScene, LoadSceneMode.Additive);
             //AudioDictionary = FindObjectOfType<AudioDictionary>();
         }
     }
+
+    private void EndGame()
+    {
+        SceneManager.LoadScene(gameOverScene, LoadSceneMode.Additive);
+        gameIsOver = true;
+    }
+
+    private void WinLevel()
+    {
+        SceneManager.LoadScene(levelCompleteScene, LoadSceneMode.Additive);
+        gameIsOver = true;
+
+    }
+
     #endregion  
 }
