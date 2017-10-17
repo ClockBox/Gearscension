@@ -61,7 +61,7 @@ public class WalkingState : PlayerState
             yield return null;
         }
     }
-    private void Jump()
+    protected void Jump()
     {
         anim.SetBool("isGrounded", false);
         rb.velocity = -new Vector3(rb.velocity.x, 0, rb.velocity.z);
@@ -131,12 +131,18 @@ public class WalkingState : PlayerState
             if (other.CompareTag("ClimbingNode") || other.CompareTag("HookNode"))
             {
                 if (Vector3.Dot(other.transform.forward, Player.transform.forward) > 0)
+                {
+                    moveDirection = Vector3.zero;
                     stateManager.ChangeState(new ClimbState(stateManager, other.GetComponent<ClimbingNode>()));
+                }
             }
             else if (grounded && other.CompareTag("ClimbingEdge") && moveDirection.magnitude < 5.5f)
             {
                 if (Vector3.Dot(other.transform.forward, Player.transform.forward) < 0)
+                {
+                    moveDirection = Vector3.zero;
                     stateManager.ChangeState(new ClimbState(stateManager, other.GetComponent<ClimbingEdge>()));
+                }
             }
         }
     }

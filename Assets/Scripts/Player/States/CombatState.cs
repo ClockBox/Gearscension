@@ -30,15 +30,12 @@ public class CombatState : WalkingState
         }
 
         yield return base.EnterState();
-        Player.StartCoroutine(Player.ToggleWeapon(1, 0.6f, 1.24f));
+        yield return ToggleSword();
     }
     public override IEnumerator ExitState()
     {
+        yield return ToggleSword();
         yield return base.ExitState();
-        if (hooked)
-            yield return Player.ToggleWeapon(1, 0.6f, 1.24f);
-        else
-            Player.StartCoroutine(Player.ToggleWeapon(1, 0.6f, 1.24f));
     }
 
     //State Behaviour
@@ -53,11 +50,7 @@ public class CombatState : WalkingState
         else if (hooked)
         {
             if (Input.GetButtonDown("Jump"))
-            {
-                grounded = false;
-                canClimb = false;
-                IK.HeadWeight = 1;
-            }
+                Drop();
 
             else if (Input.GetButtonDown("Equip"))
             {
@@ -88,6 +81,32 @@ public class CombatState : WalkingState
     }
 
     //State Actions
+    private IEnumerator ToggleSword()
+    {
+        float waitTime = 1.25f;
+        Player.StartCoroutine(Player.ToggleWeapon(1, 0.6f, waitTime));
+        elapsedTime = 0;
+        while (elapsedTime < waitTime)
+        {
+            if (Input.GetButtonDown("Jump"))
+            {
+                if (grounded)
+                    Jump();
+                else if (hooked)
+                    Drop();
+            }
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+    }
+
+    private void Drop()
+    {
+        grounded = false;
+        canClimb = false;
+        IK.HeadWeight = 1;
+    }
+
     private IEnumerator Attack()
     {
         anim.SetTrigger("attack");
