@@ -50,13 +50,7 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        if (!Instance)
-        {
-            Instance = this;
-            DontDestroyOnLoad(this);
-        }
-        else
-            Destroy(gameObject);
+        Instance = this;
     }
 
     private void Start()
@@ -149,19 +143,26 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene(name);
     }
+    private void LoadScene(int name)
+    {
+        SceneManager.LoadScene(name);
+    }
     private void LoadScene(Scene scene)
     {
-        LoadScene(scene.name);
+        LoadScene(scene.buildIndex);
     }
     
     private void AddScene(string name)
     {
         SceneManager.LoadScene(name, LoadSceneMode.Additive);
     }
-
+    private void AddScene(int name)
+    {
+        SceneManager.LoadScene(name);
+    }
     private void AddScene(Scene scene)
     {
-        AddScene(scene.name);
+        AddScene(scene.buildIndex);
     }
 
     private void OnSceneChanged(Scene scene, LoadSceneMode mode)
@@ -180,7 +181,6 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene(levelCompleteScene, LoadSceneMode.Additive);
         gameIsOver = true;
-
     }
 
     #endregion  
