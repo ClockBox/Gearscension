@@ -41,52 +41,31 @@ public class PointToPointPlatform : Platform
         set { moveSpeed = value; }
     }
 
-    private bool reset;
-    public bool Reset
-    {
-        get { return reset; }
-        set { reset = value; }
-    }
-
     private void Start()
     {
         startPos = transform.position;
-        move = true;
-        endPos = movementNodes[currentNode].position - transform.position;
+        currentNode = 0;
     }
 
     private void Update()
     {
-        if (move && loop && movementNodes.Length > 1)
+        if (move)
         {
-            if (endPos.magnitude <= 0.1)
-            {
-                if (currentNode >= movementNodes.Length - 1)
-                {
-                    currentNode = 0;
-                }
-                else
-                    currentNode++;
-
-                endPos = movementNodes[currentNode].position - transform.position;
-            }
-
             transform.Translate(endPos.normalized * Time.deltaTime * moveSpeed);
-            endPos = movementNodes[currentNode].transform.position - transform.position;
-        }
-        else if (move || movementNodes.Length <= 1)
-        {
-            if(endPos.magnitude > 0.1)
+            endPos = movementNodes[currentNode].position - transform.position;
+            if (endPos.magnitude <= 0.2)
             {
-                endPos = movementNodes[currentNode].position - transform.position;
-                transform.Translate(endPos.normalized * Time.deltaTime * moveSpeed);
+                currentNode = (currentNode + 1) % movementNodes.Length;
+                if (!Loop)
+                    move = false;
+                Debug.Log(currentNode);
             }
         }
+    }
 
-        if(reset)
-        {
-            transform.position = startPos;
-            currentNode = 0;
-        }
+    private void Reset()
+    {
+        transform.position = startPos;
+        currentNode = 0;
     }
 }

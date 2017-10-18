@@ -47,6 +47,9 @@ public class CombatState : WalkingState
         else if (Input.GetButtonDown("Attack") || Player.RightTrigger.Down)
             yield return Attack();
 
+        else if (Player.GunUpgrades >= 0 && (Input.GetButton("Aim") || Player.LeftTrigger.Stay))
+            stateManager.ChangeState(new AimState(stateManager, grounded));
+
         else if (hooked)
         {
             if (Input.GetButtonDown("Jump"))

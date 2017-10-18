@@ -30,6 +30,7 @@ public class PlayerController : MonoBehaviour
     public Weapon[] weapons;
     private bool[] _hasWeapon = { false, false };
 
+    [SerializeField, Range(-1,3)]
     private int gunUpgrade = -1;
     private int[] ammoAmounts = new int[4];
     private int ammoType = 0;
