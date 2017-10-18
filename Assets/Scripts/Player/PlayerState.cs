@@ -64,6 +64,7 @@ public class PlayerState
 
             elapsedTime += Time.deltaTime;
         }
+        stateManager.StopCoroutine(HandleInput());
     }
     public virtual IEnumerator FixedUpdate()
     {
