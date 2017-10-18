@@ -19,7 +19,9 @@ public class EndSearchDecision : AIDecisions {
 			return true;
 		}
 		else
+		{
 			return false;
-			
+
+		}
 	}
 }

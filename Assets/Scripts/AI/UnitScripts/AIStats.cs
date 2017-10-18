@@ -19,9 +19,10 @@ public class AIStats : MonoBehaviour {
 	public float armour;
 	public float stunDuration;
 	public float alertRadius;
-	public float lookHAngle;
-	public float lookVAngle;
+	//public float lookHAngle;
+	//public float lookVAngle;
+	public float fovAngle;
 	public float detectionRange;
 	[HideInInspector]
-	public float stopDistance = 5.5f;
+	public float stopDistance = 3.5f;
 }

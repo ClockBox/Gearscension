@@ -13,32 +13,31 @@ public class LookDecision : AIDecisions {
 
 	private bool Look(AIStateManager manager)
 {
-	//	for (int i = 0; i < manager.visionPoints.Length; i++)
-	//	{
+		//	for (int i = 0; i < manager.visionPoints.Length; i++)
+		//	{
 
-	//		RaycastHit hit;
+		//		RaycastHit hit;
 
-	//		Debug.DrawRay(manager.visionPoints[i].position, manager.visionPoints[i].forward.normalized * manager.stats.lookRange, Color.green);
+		//		Debug.DrawRay(manager.visionPoints[i].position, manager.visionPoints[i].forward.normalized * manager.stats.lookRange, Color.green);
 
-	//		if (Physics.SphereCast(manager.visionPoints[i].position, manager.stats.castSphereRadius, manager.visionPoints[i].forward, out hit, manager.stats.lookRange)
-	//			&& hit.collider.CompareTag("Player"))
-	//		{
-	//			manager.searchPosition = hit.collider.transform;
-	//			manager.pathAgent.speed = manager.stats.searchSpeed;
-	//			return true;
-	//		}
+		//		if (Physics.SphereCast(manager.visionPoints[i].position, manager.stats.castSphereRadius, manager.visionPoints[i].forward, out hit, manager.stats.lookRange)
+		//			&& hit.collider.CompareTag("Player"))
+		//		{
+		//			manager.searchPosition = hit.collider.transform;
+		//			manager.pathAgent.speed = manager.stats.searchSpeed;
+		//			return true;
+		//		}
 
 
-	//	}
-		float dotRange= Vector3.Dot(manager.transform.forward, manager.player.transform.position - manager.transform.position);
-		float dotX= Vector3.Dot(manager.transform.right, manager.player.transform.position - manager.transform.position);
-		float dotY = Vector3.Dot(manager.transform.up, manager.player.transform.position - manager.transform.position);
-		if (Vector3.Distance(manager.transform.position, manager.player.transform.position) <= manager.stats.detectionRange)
+		//	}
+		//float dotRange= Vector3.Dot(manager.transform.forward, manager.player.transform.position - manager.transform.position);
+		//float dotX= Vector3.Dot(manager.transform.right, manager.player.transform.position - manager.transform.position);
+		//float dotY = Vector3.Dot(manager.transform.up, manager.player.transform.position - manager.transform.position);
+
+		float angle = Vector3.Angle(manager.player.transform.position - manager.transform.position, manager.transform.forward);
+		if (Vector3.Distance(manager.transform.position, manager.player.transform.position) <= manager.stats.detectionRange|| angle <= manager.stats.fovAngle)
 		{
-			return true;
-		}
-		if (dotRange>0&&dotRange <= manager.stats.lookRange && Mathf.Abs(dotX) <= manager.stats.lookHAngle && Mathf.Abs(dotY) <= manager.stats.lookVAngle)
-		{
+
 			for (int i = 0; i < manager.visionPoints.Length; i++)
 			{
 				Vector3 playerPos = new Vector3(manager.player.transform.position.x, manager.player.transform.position.y + 1.25f, manager.player.transform.position.z);

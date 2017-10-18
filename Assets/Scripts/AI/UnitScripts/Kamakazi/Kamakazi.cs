@@ -27,6 +27,8 @@ public class Kamakazi : AIStateManager {
 	{
 		if (!callOnce)
 		{
+			pathAgent.turnSpeed = 0;
+			pathAgent.enabled = false;
 			rb = GetComponent<Rigidbody>();
 			callOnce = true;
 			exploded = false;

@@ -13,15 +13,11 @@ public class SearchDecision : AIDecisions {
 
 	private bool Search (AIStateManager manager) {
 
-		float dotRange = Vector3.Dot(manager.transform.forward, manager.player.transform.position - manager.transform.position);
-		float dotX = Vector3.Dot(manager.transform.right, manager.player.transform.position - manager.transform.position);
-		float dotY = Vector3.Dot(manager.transform.up, manager.player.transform.position - manager.transform.position);
-		if (Vector3.Distance(manager.transform.position, manager.player.transform.position) <= manager.stats.detectionRange)
+		float angle = Vector3.Angle(manager.player.transform.position - manager.transform.position, manager.transform.forward);
+
+		if (Vector3.Distance(manager.transform.position, manager.player.transform.position) <= manager.stats.detectionRange|| angle <= manager.stats.fovAngle)
 		{
-			return true;
-		}
-		if (dotRange > 0 && dotRange <= manager.stats.lookRange && Mathf.Abs(dotX) <= manager.stats.lookHAngle && Mathf.Abs(dotY) <= manager.stats.lookVAngle)
-		{
+		
 			for (int i = 0; i < manager.visionPoints.Length; i++)
 			{
 

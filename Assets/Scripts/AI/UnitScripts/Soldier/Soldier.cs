@@ -9,37 +9,33 @@ public class Soldier : AIStateManager {
 	public float bulletSpeed;
 	public float shotInterval;
 	public float attackInterval;
-	public float rotateSpeed;
 	private float shotFrequency;
 	private float attackFrequency;
 	public float meleeRange;
 	public float meleeDamage;
-	public float rotationMagnitude;
-	private Quaternion rotationA;
-	private Quaternion rotationB;
+	private GameObject fireBurster;
 	private int choice;
+	private float bulletRotation;
 	
 	public override void RangedAttack()
 	{
 		if (!callOnce)
 		{
-			choice = UnityEngine.Random.Range(0, 2);
-			rotationA = new Quaternion(transform.rotation.x, transform.rotation.y + rotationMagnitude, transform.rotation.z,transform.rotation.w);
-			rotationB= new Quaternion(transform.rotation.x, transform.rotation.y - rotationMagnitude, transform.rotation.z, transform.rotation.w);
-			shotFrequency = shotInterval;
+			shotFrequency = shotInterval-0.9f;
+			GameObject smoke = Instantiate(smokePrefab, exhaust.transform.position, exhaust.transform.rotation);
+			smoke.GetComponent<ParticleSystem>().Emit(1);
+			Destroy(smoke, 1f);
+			bulletRotation = -10;
 			callOnce = true;
 		}
-		//transform.Rotate(0, rotateSpeed * Time.deltaTime, 0);
-		if(choice==0)
-			transform.rotation = Quaternion.Lerp(transform.rotation, rotationA, Time.deltaTime * rotateSpeed);
-		else
-			transform.rotation = Quaternion.Lerp(transform.rotation, rotationB, Time.deltaTime * rotateSpeed);
-
+		
 		if (shotFrequency >= shotInterval)
 		{
 			Rigidbody _bullet;
 			_bullet = Instantiate(bulletPrefab, gunPoint.transform.position, gunPoint.transform.rotation);
-			_bullet.velocity = transform.forward * bulletSpeed;
+			_bullet.transform.Rotate(0, bulletRotation, 0);
+			bulletRotation += 5;
+			_bullet.velocity = _bullet.transform.forward* bulletSpeed;
 			Destroy(_bullet.gameObject, 5);
 			shotFrequency = 0;
 		}
@@ -62,6 +58,7 @@ public class Soldier : AIStateManager {
 			pathAgent.travel(player.transform.position);
 			if (Vector3.Distance(transform.position, player.transform.position) <= meleeRange)
 			{
+				fireBurster.GetComponent<ParticleSystem>().Emit(2);
 				player.gameObject.SendMessage("TakeDamage", meleeDamage, SendMessageOptions.DontRequireReceiver);
 			}
 			attackFrequency = 0;
@@ -95,7 +92,8 @@ public class Soldier : AIStateManager {
 	}
 
 	public override void StartEvents() {
-
+		fireBurster = Instantiate(firePrefab, transform.position, transform.rotation);
+		fireBurster.transform.parent = transform;
 		
 	}
 	public override void CollisionEvents()

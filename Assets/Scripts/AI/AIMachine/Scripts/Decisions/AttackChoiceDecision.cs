@@ -21,8 +21,8 @@ public class AttackChoiceDecision : AIDecisions {
 		{
 		
 			manager.pathAgent.speed = 0;
-			manager.pathAgent.turnSpeed = 0;
-			manager.pathAgent.enabled = false;
+			//manager.pathAgent.turnSpeed = 0;
+			//manager.pathAgent.enabled = false;
 			return false;
 		}
 	}

@@ -5,18 +5,17 @@ using UnityEngine;
 public class SoldierBullet : MonoBehaviour {
 
 	public float damage;
-
-
-	private void OnCollisionEnter(Collision collision)
+	private void OnTriggerEnter(Collider collision)
 	{
 		if (collision.gameObject.tag == "Player")
 		{
 			Debug.Log("Hit By Soldier Bullet");
 			collision.gameObject.SendMessage("TakeDamage", damage, SendMessageOptions.DontRequireReceiver);
 			Destroy(gameObject);
-		}
 
-	}
+		}
+	} 
+
 
 
 	//{
