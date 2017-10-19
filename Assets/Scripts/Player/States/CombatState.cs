@@ -87,7 +87,7 @@ public class CombatState : WalkingState
     private IEnumerator ToggleSword()
     {
         float waitTime = 1.25f;
-        Player.StartCoroutine(Player.ToggleWeapon(1, 0.6f, waitTime));
+        Player.StartCoroutine(Player.ToggleSword(0.6f, waitTime));
         elapsedTime = 0;
         while (elapsedTime < waitTime)
         {
