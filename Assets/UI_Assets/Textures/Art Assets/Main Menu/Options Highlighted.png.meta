@@ -1,11 +1,11 @@
 fileFormatVersion: 2
-guid: 061eacc4ae875a440afcb40589b5223c
-timeCreated: 1508449042
+guid: a312ecf4460935540930d35ddfcf0fb8
+timeCreated: 1508449416
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: Blank_Button_Clicked
-    21300002: Clicked
+    21300000: Options_Button_Highlighted
+    21300002: Options Highlighted
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -85,13 +85,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Blank_Button_Clicked
+      name: Options_Button_Highlighted
       rect:
         serializedVersion: 2
-        x: 57
-        y: 180
-        width: 383
-        height: 112
+        x: 52
+        y: 173
+        width: 387
+        height: 110
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -99,13 +99,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Clicked
+      name: Options Highlighted
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 526
-        height: 302
+        width: 525
+        height: 294
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}

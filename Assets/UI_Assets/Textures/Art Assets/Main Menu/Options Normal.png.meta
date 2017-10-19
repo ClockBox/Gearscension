@@ -1,11 +1,11 @@
 fileFormatVersion: 2
-guid: 061eacc4ae875a440afcb40589b5223c
-timeCreated: 1508449042
+guid: f9f4044b875a79245b45f3a401f7bbb5
+timeCreated: 1508449371
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: Blank_Button_Clicked
-    21300002: Clicked
+    21300000: Option_Button_Normal
+    21300002: Options Normal
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -85,13 +85,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Blank_Button_Clicked
+      name: Option_Button_Normal
       rect:
         serializedVersion: 2
-        x: 57
-        y: 180
-        width: 383
-        height: 112
+        x: 53
+        y: 176
+        width: 387
+        height: 109
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -99,13 +99,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Clicked
+      name: Options Normal
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 526
-        height: 302
+        width: 525
+        height: 294
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
