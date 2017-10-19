@@ -58,7 +58,9 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        Instance = this;
+        if (!Instance)
+            Instance = this;
+        else Destroy(gameObject);
     }
 
     private void Start()
@@ -148,41 +150,41 @@ public class GameManager : MonoBehaviour
         SceneManager.sceneUnloaded -= OnSceneUnloaded;
     }
 
-    private void LoadScene(string name)
+    public void LoadScene(string name)
     {
         SceneManager.LoadScene(name);
     }
-    private void LoadScene(int name)
+    public void LoadScene(int index)
     {
-        SceneManager.LoadScene(name);
+        SceneManager.LoadScene(index);
     }
-    private void LoadScene(Scene scene)
+    public void LoadScene(Scene scene)
     {
         LoadScene(scene.buildIndex);
     }
-    
-    private void AddScene(string name)
+
+    public void AddScene(string name)
     {
         SceneManager.LoadScene(name, LoadSceneMode.Additive);
     }
-    private void AddScene(int index)
+    public void AddScene(int index)
     {
         SceneManager.LoadScene(index, LoadSceneMode.Additive);
     }
-    private void AddScene(Scene scene)
+    public void AddScene(Scene scene)
     {
         AddScene(scene.buildIndex);
     }
 
-    private void UnloadScene(string name)
+    public void UnloadScene(string name)
     {
         SceneManager.UnloadSceneAsync(name);
     }
-    private void UnloadScene(int index)
+    public void UnloadScene(int index)
     {
         SceneManager.UnloadSceneAsync(index);
     }
-    private void UnloadScene(Scene scene)
+    public void UnloadScene(Scene scene)
     {
         SceneManager.UnloadSceneAsync(scene);
     }
