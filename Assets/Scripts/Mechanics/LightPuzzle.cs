@@ -286,5 +286,4 @@ public class LightPuzzle : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         allowChange = !allowChange;
     }
-
 }
