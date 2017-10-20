@@ -137,8 +137,8 @@ public class PlayerController : MonoBehaviour
         else
         {
             weapon.parent = anim.GetBoneTransform(HumanBodyBones.RightHand);
-            weapon.localPosition = new Vector3(-0.1f, 0.035f, 0);
-            weapon.localEulerAngles = new Vector3(90, 0, 90);
+            weapon.localPosition = new Vector3(0.1f, 0.02f, 0);
+            weapon.localEulerAngles = new Vector3(90, 0, -90);
         }
         yield return new WaitForSeconds(transitionTime - toggleTime);
     }
