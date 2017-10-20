@@ -33,9 +33,8 @@ public class LookDecision : AIDecisions {
 		//float dotRange= Vector3.Dot(manager.transform.forward, manager.player.transform.position - manager.transform.position);
 		//float dotX= Vector3.Dot(manager.transform.right, manager.player.transform.position - manager.transform.position);
 		//float dotY = Vector3.Dot(manager.transform.up, manager.player.transform.position - manager.transform.position);
-
 		float angle = Vector3.Angle(manager.player.transform.position - manager.transform.position, manager.transform.forward);
-		if (Vector3.Distance(manager.transform.position, manager.player.transform.position) <= manager.stats.detectionRange|| angle <= manager.stats.fovAngle)
+		if (Vector3.Distance(manager.transform.position, manager.player.transform.position) <= manager.stats.detectionRange || angle <= manager.stats.fovAngle)
 		{
 
 			for (int i = 0; i < manager.visionPoints.Length; i++)
@@ -45,13 +44,18 @@ public class LookDecision : AIDecisions {
 				RaycastHit hit;
 				Debug.DrawRay(manager.visionPoints[i].position, direction * manager.stats.lookRange, Color.green);
 
-				if (Physics.SphereCast(manager.visionPoints[i].position, manager.stats.castSphereRadius, direction, out hit, manager.stats.lookRange)
-					&& hit.collider.CompareTag("Player"))
-				{
+				if (Physics.Raycast(manager.visionPoints[i].position,  direction, out hit, manager.stats.lookRange))
+					{
+					Debug.Log(hit.collider.gameObject.name);
+
+					if (hit.collider.CompareTag("Player"))
+					{
 					manager.searchPosition = hit.collider.transform;
 					manager.pathAgent.speed = manager.stats.searchSpeed;
 					return true;
+					}
 				}
+
 			}
 
 		}

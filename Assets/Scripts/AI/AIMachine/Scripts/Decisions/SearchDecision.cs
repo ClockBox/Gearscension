@@ -15,7 +15,11 @@ public class SearchDecision : AIDecisions {
 
 		float angle = Vector3.Angle(manager.player.transform.position - manager.transform.position, manager.transform.forward);
 
-		if (Vector3.Distance(manager.transform.position, manager.player.transform.position) <= manager.stats.detectionRange|| angle <= manager.stats.fovAngle)
+		if (Vector3.Distance(manager.transform.position, manager.player.transform.position) <= manager.stats.detectionRange)
+		{
+			return true;
+		}
+		if (angle <= manager.stats.fovAngle)
 		{
 		
 			for (int i = 0; i < manager.visionPoints.Length; i++)
@@ -26,14 +30,18 @@ public class SearchDecision : AIDecisions {
 				Vector3 direction = (playerPos - manager.visionPoints[i].position).normalized;
 			   Debug.DrawRay(manager.visionPoints[i].position,direction * manager.stats.lookRange, Color.red);
 
-				if (Physics.SphereCast(manager.visionPoints[i].position, manager.stats.castSphereRadius, direction, out hit, manager.stats.lookRange)
-					&& hit.collider.CompareTag("Player"))
+				if (Physics.Raycast(manager.visionPoints[i].position, direction, out hit, manager.stats.lookRange))
 				{
-					if (manager.checkTimeElapsed(manager.stats.alertTimer))
+					Debug.Log(hit.collider.gameObject.name);
+
+					if (hit.collider.CompareTag("Player"))
 					{
-						manager.AlertOthers();
-						manager.pathAgent.speed = manager.stats.engageSpeed;
-						return true;
+						if (manager.checkTimeElapsed(manager.stats.alertTimer))
+						{
+							manager.AlertOthers();
+							manager.pathAgent.speed = manager.stats.engageSpeed;
+							return true;
+						}
 					}
 				}
 

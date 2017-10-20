@@ -25,7 +25,7 @@ public class Soldier : AIStateManager {
 			GameObject smoke = Instantiate(smokePrefab, exhaust.transform.position, exhaust.transform.rotation);
 			smoke.GetComponent<ParticleSystem>().Emit(1);
 			Destroy(smoke, 1f);
-			bulletRotation = -10;
+			bulletRotation = -20;
 			callOnce = true;
 		}
 		
@@ -34,8 +34,10 @@ public class Soldier : AIStateManager {
 			Rigidbody _bullet;
 			_bullet = Instantiate(bulletPrefab, gunPoint.transform.position, gunPoint.transform.rotation);
 			_bullet.transform.Rotate(0, bulletRotation, 0);
-			bulletRotation += 5;
-			_bullet.velocity = _bullet.transform.forward* bulletSpeed;
+			bulletRotation += 10;
+			//Vector3 direction = player.transform.position - transform.position;
+			//_bullet.velocity = direction.normalized* bulletSpeed;
+			_bullet.velocity = _bullet.transform.forward * bulletSpeed;
 			Destroy(_bullet.gameObject, 5);
 			shotFrequency = 0;
 		}

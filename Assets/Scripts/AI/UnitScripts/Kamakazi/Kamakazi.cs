@@ -10,13 +10,37 @@ public class Kamakazi : AIStateManager {
 	public float force;
 	public float proximity;
 	private bool exploded;
-
-
+	private Vector3 playerPos;
+	private bool heightReached;
+	private GameObject smoker;
 	public override void Die()
 	{
-		Destroy(gameObject);
+		if (isAlive)
+		{
+			Debug.Log("Kamakazi dead");
+
+			Rigidbody[] temp = GetComponentsInChildren<Rigidbody>();
+			if (temp.Length > 0)
+			{
+				for (int i = 0; i < temp.Length; i++)
+				{
+					temp[i].useGravity = true;
+					temp[i].constraints = RigidbodyConstraints.None;
+					temp[i].transform.parent = null;
+					temp[i].GetComponent<Collider>().enabled = true;
+
+				}
+			}
+
+			Destroy(gameObject);
+			isAlive = false;
+		}
 	}
-	public override void StartEvents() { }
+	public override void StartEvents() {
+
+		smoker = Instantiate(smokePrefab, exhaust.transform.position, transform.rotation);
+		smoker.transform.parent = transform;
+	}
 
 
 	public override void MeleeAttack()
@@ -32,10 +56,11 @@ public class Kamakazi : AIStateManager {
 			rb = GetComponent<Rigidbody>();
 			callOnce = true;
 			exploded = false;
-			
+			heightReached = false;
+			smoker.GetComponent<ParticleSystem>().Play();
 
 		}
-		StartCoroutine(LaunchExplode(1f));
+		StartCoroutine(LaunchExplode(2f));
 
 	}
 	IEnumerator LaunchExplode(float delayTimer)
@@ -45,26 +70,36 @@ public class Kamakazi : AIStateManager {
 
 
 		rb.constraints = RigidbodyConstraints.FreezeRotation;
-		if (transform.position.y <=maxHeight )
+		if (transform.position.y <= maxHeight && !heightReached)
 		{
-			rb.AddForce(transform.up * force, ForceMode.Impulse);
+			rb.AddForce(transform.up * force/10, ForceMode.Impulse);
 
 		}
-
-		else
+		else if (transform.position.y > maxHeight)
 		{
-			Vector3 target = player.transform.position - transform.position;
+			playerPos = player.transform.position;
+			playerPos = new Vector3(playerPos.x, playerPos.y - 2, playerPos.z);
+			smoker.GetComponent<ParticleSystem>().Play();
+
+			heightReached = true;
+		}
+
+		if(heightReached)
+
+		{
+			
+			Vector3 target = playerPos - transform.position;
 			target.Normalize();
 			rb.AddForce(target *force, ForceMode.Impulse);
-			rb.AddForce(transform.up * -force, ForceMode.Impulse);
+			//rb.AddForce(transform.up * -force, ForceMode.Impulse);
 
 		}
 
-		if (Vector3.Distance(transform.position, player.transform.position) <= proximity)
-		{
-			if(!exploded)
-			Explode();
-		}
+		//if (Vector3.Distance(transform.position, player.transform.position) <= proximity)
+		//{
+		//	if(!exploded)
+		//	Explode();
+		//}
 
 	}
 
@@ -75,6 +110,8 @@ public class Kamakazi : AIStateManager {
 		if (callOnce)
 		{
 			Explode().transform.parent = collision.transform;
+			Die();
+
 		}
 	} 
 
@@ -82,7 +119,6 @@ public class Kamakazi : AIStateManager {
 	{
 		GameObject newEffect = Instantiate(effectPrefab, transform.position, transform.rotation);
 		newEffect.transform.localScale = transform.localScale;
-		Invoke("Die", 0.5f);
 		exploded = true;
 		return newEffect;
 		

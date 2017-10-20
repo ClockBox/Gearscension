@@ -20,7 +20,7 @@ public class AttackChoiceDecision : AIDecisions {
 		else
 		{
 		
-			manager.pathAgent.speed = 0;
+			manager.pathAgent.speed = 2;
 			//manager.pathAgent.turnSpeed = 0;
 			//manager.pathAgent.enabled = false;
 			return false;
