@@ -10,6 +10,9 @@ public abstract class AIStateManager : MonoBehaviour  {
 	public AIStates alertedState;
 	public AIStates remainState;
 	public AIStates stunState;
+	public GameObject smokePrefab;
+	public GameObject firePrefab;
+	public Transform exhaust;
 
 	[HideInInspector]
 	public float setFrequency;

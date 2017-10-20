@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    #region Variables
     public static GameManager Instance;
 
     private static string mainMenuScene = "Main Menu";
@@ -67,6 +68,7 @@ public class GameManager : MonoBehaviour
     {
         gameOver = false;
     }
+    #endregion
 
     private void Update()
     {
@@ -78,7 +80,7 @@ public class GameManager : MonoBehaviour
             if (pause) UnloadScene(pauseMenuScene);
             else AddScene(pauseMenuScene);
         }
-        //else if (Input.GetKeyDown(KeyCode.F1))
+        //else if (Input.GetKeyDown(KeyCode.F1))0
         //    checkpoint = player.transform.transform;
         //else if (Input.GetKeyDown(KeyCode.F2))
         //    RespawnPlayer();

@@ -13,26 +13,42 @@ public class SearchDecision : AIDecisions {
 
 	private bool Search (AIStateManager manager) {
 
-		
-		for (int i = 0; i < manager.visionPoints.Length; i++)
+		float angle = Vector3.Angle(manager.player.transform.position - manager.transform.position, manager.transform.forward);
+
+		if (Vector3.Distance(manager.transform.position, manager.player.transform.position) <= manager.stats.detectionRange)
 		{
-
-			RaycastHit hit;
-			Vector3 playerPos = new Vector3(manager.player.transform.position.x, manager.player.transform.position.y + 1.25f, manager.player.transform.position.z);
-			Vector3 direction = (playerPos - manager.visionPoints[i].position).normalized;
-			Debug.DrawRay(manager.visionPoints[i].position,direction * manager.stats.lookRange, Color.red);
-
-			if (Physics.SphereCast(manager.visionPoints[i].position, manager.stats.castSphereRadius, direction, out hit, manager.stats.lookRange)
-				&& hit.collider.CompareTag("Player"))
+			return true;
+		}
+		if (angle <= manager.stats.fovAngle)
+		{
+		
+			for (int i = 0; i < manager.visionPoints.Length; i++)
 			{
-				if (manager.checkTimeElapsed(manager.stats.alertTimer))
+
+				RaycastHit hit;
+				Vector3 playerPos = new Vector3(manager.player.transform.position.x, manager.player.transform.position.y + 1.25f, manager.player.transform.position.z);
+				Vector3 direction = (playerPos - manager.visionPoints[i].position).normalized;
+			   Debug.DrawRay(manager.visionPoints[i].position,direction * manager.stats.lookRange, Color.red);
+
+				if (Physics.Raycast(manager.visionPoints[i].position, direction, out hit, manager.stats.lookRange))
 				{
-					manager.AlertOthers();
-					manager.pathAgent.speed = manager.stats.engageSpeed;
-					return true;
+					Debug.Log(hit.collider.gameObject.name);
+
+					if (hit.collider.CompareTag("Player"))
+					{
+						if (manager.checkTimeElapsed(manager.stats.alertTimer))
+						{
+							manager.AlertOthers();
+							manager.pathAgent.speed = manager.stats.engageSpeed;
+							return true;
+						}
+					}
 				}
+
+
 			}
 		}
 		return false;
+		
 	}
 }
