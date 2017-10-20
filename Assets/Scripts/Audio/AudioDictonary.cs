@@ -9,15 +9,26 @@ public class AudioDictonary : MonoBehaviour {
     [SerializeField]
     private Dictionary<string, AudioClip> AudioClipDictionary = new Dictionary<string, AudioClip>();
 
+    private AudioSource audioPlayer;
+    public AudioSource AudioPlayer
+    {
+        get { return audioPlayer; }
+        set { audioPlayer = value; }
+    }
+
     void Start()
     {
         GameManager.Instance.AudioManager = this;
         for (int i = 0; i < AudioClips.Count; i++)
         {
-            Debug.Log(Rename(AudioClips[i].name));
+            AudioClipDictionary.Add(Rename(AudioClips[i].name), AudioClips[i]);
         }
     }
 
+    public void playAudio(string name)
+    {
+        audioPlayer.PlayOneShot(AudioClipDictionary[name]);
+    }
 
     private string Rename(string n)
     {
