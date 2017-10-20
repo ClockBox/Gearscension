@@ -26,11 +26,10 @@ public class AreaCondition : Condition
             for (int i = 0; i < cols.Length - 1; i++)
             {
                 if (cols[i].gameObject == checkObject)
-                    ConditionMet = true;
-                else conditionIsMet = false;
+                    return conditionIsMet = true;
             }
         }
-        return conditionIsMet;
+        return conditionIsMet = false;
     }
 
     public void OnDrawGizmosSelected()
