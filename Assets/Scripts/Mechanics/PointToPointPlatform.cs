@@ -58,7 +58,6 @@ public class PointToPointPlatform : Platform
                 currentNode = (currentNode + 1) % movementNodes.Length;
                 if (!Loop)
                     move = false;
-                Debug.Log(currentNode);
             }
         }
     }
