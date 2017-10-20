@@ -4,13 +4,10 @@ using UnityEngine;
 
 public class StateManager : MonoBehaviour
 {
-    private StateTransitions transitions;
     public PlayerState State;
 
     protected void Start()
     {
-        transitions = GetComponent<StateTransitions>();
-
         //Initialize trigger Delegates
         SetTriggers(State);
         SetCollisions(State);
@@ -42,13 +39,6 @@ public class StateManager : MonoBehaviour
         State.InTransition = true;
         yield return StartCoroutine(State.EnterState());
         State.InTransition = false;
-    }
-
-    public IEnumerator TransitionTo(PlayerState newState)
-    {
-        if (transitions.Transitions[State.ToString()][newState.ToString()] == transitions.NullTransition)
-            Debug.LogError(gameObject.name + ": Transition not set for transition from: " + State.ToString() + "  to: " + newState.ToString());
-        yield return transitions.Transitions[State.ToString()][newState.ToString()](State, newState);
     }
 
     // Trigger Delegates

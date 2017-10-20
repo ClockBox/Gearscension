@@ -18,8 +18,14 @@ public class ClimbingNode : IKPositionNode
     public Transform leftFoot;
 
     [Space(10)]
-    public bool FreeHang;
+    public bool ForceFree;
     public bool IsEdge;
+
+    private bool freeHang;
+    public bool FreeHang
+    {
+       get { return freeHang; }
+    }
 
     protected override void Start ()
     {
@@ -62,7 +68,12 @@ public class ClimbingNode : IKPositionNode
     public override void Rotate()
     {
         if (!transform.gameObject.isStatic)
-            FreeHang = Vector3.Dot(-transform.forward, Vector3.up) < -0.5f;
+        {
+            if (ForceFree)
+                freeHang = true;
+            else
+                freeHang = Vector3.Dot(-transform.forward, Vector3.up) < -0.5f;
+        }
 
         m_active = Vector3.Dot(-transform.forward, Vector3.up) < 0.9f;
         col.enabled = m_active;

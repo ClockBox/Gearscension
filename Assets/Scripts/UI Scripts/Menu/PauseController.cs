@@ -14,7 +14,7 @@ public class PauseController : MonoBehaviour
 
     public void Continue()
     {
-        GM.Pause();
+        //GM.Pause();
     }
 
     public void Restart()

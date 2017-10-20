@@ -30,6 +30,7 @@ public class PlayerController : MonoBehaviour
     public Weapon[] weapons;
     private bool[] _hasWeapon = { false, false };
 
+    [SerializeField, Range(-1,3)]
     private int gunUpgrade = -1;
     private int[] ammoAmounts = new int[4];
     private int ammoType = 0;
@@ -116,51 +117,32 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Weapon Function
-    public IEnumerator ToggleWeapon(int WeaponType, float toggleTime, float transitionTime)
+    public IEnumerator ToggleSword(float toggleTime, float transitionTime)
     {
-        _hasWeapon[WeaponType] = !_hasWeapon[WeaponType];
+        _hasWeapon[SWORD] = !_hasWeapon[SWORD];
         anim.SetBool("hasSword", _hasWeapon[SWORD]);
-        anim.SetBool("aiming", _hasWeapon[GUN]);
-        if (WeaponType == 1)
-            IK.RightHand.weight = 0;
+        anim.SetBool("aiming", false);
+        IK.RightHand.weight = 0;
 
         yield return new WaitForSeconds(toggleTime);
 
-        Transform weapon = weapons[WeaponType].transform;
-        if (!_hasWeapon[WeaponType])
+        Transform weapon = weapons[SWORD].transform;
+        if (!_hasWeapon[SWORD])
         {
-            if (WeaponType == SWORD)
-            {
-                weapon.parent = SwordSheath;
-                weapon.rotation = SwordSheath.rotation;
-                weapon.localEulerAngles = new Vector3(0, 0, 90);
-                weapon.position = SwordSheath.position;
-            }
-            else if (WeaponType == GUN)
-            {
-                weapon.parent = GunHolster;
-                weapon.rotation = GunHolster.rotation;
-                weapon.position = GunHolster.position;
-            }
+            weapon.parent = SwordSheath;
+            weapon.rotation = SwordSheath.rotation;
+            weapon.localEulerAngles = new Vector3(0, 0, 90);
+            weapon.position = SwordSheath.position;
         }
         else
         {
-            if (WeaponType == SWORD)
-            {
-                weapon.parent = anim.GetBoneTransform(HumanBodyBones.RightHand);
-                weapon.localPosition = new Vector3(-0.1f, 0.035f, 0);
-                weapon.localEulerAngles = new Vector3(90, 0, 90);
-            }
-            else if (WeaponType == GUN)
-            {
-                weapon.parent = anim.GetBoneTransform(HumanBodyBones.LeftHand);
-                weapon.localPosition = new Vector3(-0.1f, 0.05f, -0.04f);
-                weapon.localEulerAngles = new Vector3(0, -90, 100);
-            }
-            else Debug.Log("Invalid WeaponType :" + weapon.gameObject.name);
+            weapon.parent = anim.GetBoneTransform(HumanBodyBones.RightHand);
+            weapon.localPosition = new Vector3(-0.1f, 0.035f, 0);
+            weapon.localEulerAngles = new Vector3(90, 0, 90);
         }
         yield return new WaitForSeconds(transitionTime - toggleTime);
     }
+
     public void DropWeapons()
     {
         for (int i = 0; i < weapons.Length; i++)
@@ -174,12 +156,12 @@ public class PlayerController : MonoBehaviour
     public void PickupGun()
     {
         weapons[0].gameObject.SetActive(true);
-        UpgradeGun();
+        UpgradeGun(0);
     }
 
-    public void UpgradeGun()
+    public void UpgradeGun(int upgrade)
     {
-        gunUpgrade++;
+        gunUpgrade = upgrade;
         GameManager.Instance.Hud.BulletUpgrade();
     }
 
