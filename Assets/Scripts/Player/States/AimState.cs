@@ -4,36 +4,40 @@ using UnityEngine;
 
 public class AimState : WalkingState
 {
-    float equipTime = 1.233f;
     float bulletScale = 1;
     float handToGunWeight;
-    
+
+    private Transform desiredPoint;
     private Transform sword;
+    private Transform gun;
 
     public AimState(StateManager manager,bool grounded) : base(manager,grounded) { }
 
     //Transitions
     public override IEnumerator EnterState()
     {
-        yield return base.EnterState();
         lookDirection = Camera.main.transform.forward;
         lookDirection = Vector3.ProjectOnPlane(lookDirection, Player.transform.up);
+        desiredPoint = Player.transform.GetChild(1);
 
         IK.HeadTrunSpeed = 5;
 
-        Player.StartCoroutine(Player.ToggleWeapon(0, 0, 1));
+        gun = Player.weapons[0].transform;
+        sword = Player.weapons[1].transform;
+
         Player.transform.GetChild(0).position -= Player.transform.right * 0.23f + Player.transform.up * 0.15f;
-        yield return ToggleGun();
+
+        yield return ToggleEquip(true);
+        yield return base.EnterState();
     }
     public override IEnumerator ExitState()
     {
         yield return base.ExitState();
 
         IK.HeadTrunSpeed = 1;
-
-        Player.StartCoroutine(Player.ToggleWeapon(0, 1, 1));
+        
         Player.transform.GetChild(0).position += Player.transform.right * 0.23f + Player.transform.up * 0.15f;
-        yield return ToggleGun();
+        yield return ToggleEquip(false);
     }
 
     //State Behaviour
@@ -58,27 +62,80 @@ public class AimState : WalkingState
     }
 
     //Actions
-    IEnumerator ToggleGun()
+    IEnumerator ToggleEquip(bool aiming)
     {
-        int start = !anim.GetBool("aiming") ? 1 : 0;
-        int end = anim.GetBool("aiming") ? 1 : 0;
-
-        IK.LeftHand.weight = end;
-
-        //Should be replaced by equip animation
-        elapsedTime = 0;
-        while (elapsedTime <= equipTime)
+        anim.SetBool("aiming", aiming);
+        if (aiming)
         {
-            base.UpdateMovement();
+            yield return ToggleArm(aiming);
+            yield return ToggleGun(aiming);
+            gun.parent = desiredPoint;
+        }
+        else
+        {
+            yield return ToggleGun(aiming);
+            yield return ToggleArm(aiming);
+            gun.parent = Player.GunHolster;
+        }
+        gun.localPosition = Vector3.zero;
+        gun.localRotation = Quaternion.identity;
+    }
+
+    private IEnumerator ToggleArm(bool aiming)
+    {
+        int start = !aiming ? 1 : 0;
+        int end = aiming ? 1 : 0;
+
+        elapsedTime = 0;
+        while (elapsedTime <= 1)
+        {
+            UpdateMovement();
             base.UpdateAnimator();
             base.UpdatePhysics();
-            base.UpdateIK();
+            UpdateIK();
 
-            CameraController.Zoom = Mathf.Lerp(start, end, elapsedTime * 2);
-            handToGunWeight = Mathf.Lerp(start, end, elapsedTime * 2);
+            IK.LeftHand.weight = Mathf.Lerp(start, end, elapsedTime);
+            CameraController.Zoom = Mathf.Lerp(start, end, elapsedTime);
 
-            elapsedTime += Time.deltaTime;
+            elapsedTime += Time.deltaTime * 3;
             yield return null;
+        }
+    }
+
+    private IEnumerator ToggleGun(bool aiming)
+    {
+        elapsedTime = 0;
+        while (elapsedTime <= 1)
+        {
+            if (aiming)
+            {
+                gun.position = Vector3.Lerp(Player.GunHolster.position, desiredPoint.position, elapsedTime);
+                gun.rotation = Quaternion.Lerp(Player.GunHolster.rotation, desiredPoint.rotation, elapsedTime);
+            }
+            else
+            {
+                gun.position = Vector3.Lerp(desiredPoint.position, Player.GunHolster.position, elapsedTime);
+                gun.rotation = Quaternion.Lerp(desiredPoint.rotation, Player.GunHolster.rotation, elapsedTime);
+            }
+
+            UpdateMovement();
+            base.UpdateAnimator();
+            base.UpdatePhysics();
+            UpdateIK();
+
+            elapsedTime += Time.deltaTime * 3;
+            yield return null;
+        }
+
+        if (aiming)
+        {
+            gun.position = desiredPoint.position;
+            gun.rotation = desiredPoint.rotation;
+        }
+        else
+        {
+            gun.position = Player.GunHolster.position;
+            gun.rotation = Player.GunHolster.rotation;
         }
     }
 
@@ -89,8 +146,7 @@ public class AimState : WalkingState
 
         InTransition = true;
         anim.SetBool("hook", true);
-
-        sword = Player.weapons[1].transform;
+        
         sword.parent = null;
 
         desiredDirection = node.transform.position - Player.transform.position;
@@ -138,13 +194,6 @@ public class AimState : WalkingState
         base.UpdateMovement();
 
         Player.transform.LookAt(Player.transform.position + lookDirection);
-       
-        //Should be replaced by equip animation
-        Vector3 desiredPoint = Player.transform.GetChild(0).position - Player.transform.up * 0.15f + Camera.main.transform.forward * 0.5f;
-
-        //Gun transform
-        Player.weapons[0].transform.position = Vector3.Lerp(Player.weapons[0].transform.position, desiredPoint, handToGunWeight);
-        Player.weapons[0].transform.rotation = Quaternion.Lerp(Player.weapons[0].transform.rotation, Camera.main.transform.rotation, handToGunWeight);
     }
     protected override void UpdateIK()
     {

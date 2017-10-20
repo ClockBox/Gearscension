@@ -30,6 +30,9 @@ public class Charger : AIStateManager {
 	{
 		if (!callOnce)
 		{
+			pathAgent.speed = 0;
+			pathAgent.turnSpeed = 0;
+			pathAgent.enabled = false;
 			rb = GetComponent<Rigidbody>();
 			StartCoroutine(Charge(player, waitTime));
 			callOnce = true;
@@ -41,20 +44,37 @@ public class Charger : AIStateManager {
 	{
 		yield return new WaitForSeconds(delayTime);
 		isCharging = true;
-		transform.LookAt(target.transform);
-		Vector3 dir = target.transform.position - transform.position;
+		Vector3 chargeTarget = new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z);
+		transform.LookAt(chargeTarget);
+		Vector3 dir = chargeTarget - transform.position;
 		dir = dir.normalized;
 		shieldEffect = Instantiate(chargeShield, shieldPoint.position, shieldPoint.rotation);
-		shieldEffect.transform.parent = gameObject.transform;
+		shieldEffect.transform.parent = shieldPoint.transform;
 		rb.AddForce(dir * force,ForceMode.Impulse);
 	}
+
+	//private void OnCollisionEnter(Collision collision)
+
+	//{
+	//	if (collision.gameObject.tag == "Player")
+	//	{
+
+	//		if (isCharging)
+	//		{
+	//			shieldEffect.GetComponent<ChargeShield>().Unping();
+	//			Destroy(shieldEffect.gameObject);
+	//			isCharging = false;
+	//		}
+	//	}
+	//}
 	public override void CollisionEvents()
 	{
-		if (isCharging)
-		{
-			Destroy(shieldEffect.gameObject);
-			isCharging = false;
-		}
+		//if (isCharging)
+		//{
+		//	shieldEffect.GetComponent<ChargeShield>().Unping();
+		//	Destroy(shieldEffect.gameObject);
+		//	isCharging = false;
+		//}
 
 	}
 }

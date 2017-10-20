@@ -24,7 +24,6 @@ public class SlidingPlatform : Platform
     private void Start()
     {
         platformStartPos = transform.position;
-        move = true;
         if (!move)
         {
             StartCoroutine(StopMoving()); 

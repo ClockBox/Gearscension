@@ -16,7 +16,7 @@ public class UnitPathFinding : MonoBehaviour {
 	public float turnDst = 2;
 	public float stoppingDst = 5;
 
-	Path path;
+	UnitPath path;
 
 	void Start()
 	{
@@ -33,7 +33,7 @@ public class UnitPathFinding : MonoBehaviour {
 	{
 		if (pathSuccessful)
 		{
-			path = new Path(waypoints, transform.position, turnDst, stoppingDst);
+			path = new UnitPath(waypoints, transform.position, turnDst, stoppingDst);
 
 			StopCoroutine("FollowPath");
 			StartCoroutine("FollowPath");

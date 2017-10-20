@@ -61,7 +61,7 @@ public class WalkingState : PlayerState
             yield return null;
         }
     }
-    private void Jump()
+    protected void Jump()
     {
         anim.SetBool("isGrounded", false);
         rb.velocity = -new Vector3(rb.velocity.x, 0, rb.velocity.z);
@@ -76,7 +76,7 @@ public class WalkingState : PlayerState
         moveY = Input.GetAxis("Vertical");
         
         if (Input.GetButton("Sprint"))
-        movementSpeed = 5;
+            movementSpeed = 5;
         else movementSpeed = 8;
 
         lookDirection = Camera.main.transform.forward;
@@ -108,7 +108,7 @@ public class WalkingState : PlayerState
     }
     protected override void UpdatePhysics()
     {
-        grounded = Physics.CheckCapsule(Player.transform.position, Player.transform.position - Vector3.up * 0.05f, 0.18f, LayerMask.GetMask("Ground", "Debris"));
+        grounded = Physics.CheckCapsule(Player.transform.position, Player.transform.position - Vector3.up * 0.05f, 0.15f, LayerMask.GetMask("Ground", "Default", "Debris"));
 
         if (grounded)
         {
@@ -131,12 +131,18 @@ public class WalkingState : PlayerState
             if (other.CompareTag("ClimbingNode") || other.CompareTag("HookNode"))
             {
                 if (Vector3.Dot(other.transform.forward, Player.transform.forward) > 0)
+                {
+                    moveDirection = Vector3.zero;
                     stateManager.ChangeState(new ClimbState(stateManager, other.GetComponent<ClimbingNode>()));
+                }
             }
             else if (grounded && other.CompareTag("ClimbingEdge") && moveDirection.magnitude < 5.5f)
             {
                 if (Vector3.Dot(other.transform.forward, Player.transform.forward) < 0)
+                {
+                    moveDirection = Vector3.zero;
                     stateManager.ChangeState(new ClimbState(stateManager, other.GetComponent<ClimbingEdge>()));
+                }
             }
         }
     }

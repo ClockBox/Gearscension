@@ -5,28 +5,15 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    #region Variables
     public static GameManager Instance;
 
-    private Transform checkpoint;
-    public Transform Checkpoint
-    {
-        get { return checkpoint; }
-        set { checkpoint = value; }
-    }
+    private static string mainMenuScene = "Main Menu";
+    private static string pauseMenuScene = "Pause Menu";
+    private static string levelCompleteScene = "Completed Level";
+    private static string gameOverScene = "Game Over";
+    private static string hudScene = "Hud";
 
-    // Bool
-    public static bool gameIsOver;
-
-    // Strings
-    private string mainMenuScene = "Main Menu";
-    private string pauseMenuScene = "Pause Menu";
-    private string levelCompleteScene = "Completed Level";
-    private string gameOverScene = "Game Over";
-    private string hudScene = "Hud";
-    
-    // Other
-    public SceneFader sceneFader;
-    
     private AudioDictonary audioManager;
     public AudioDictonary AudioManager
     {
@@ -40,7 +27,14 @@ public class GameManager : MonoBehaviour
         get { return player; }
         set { player = value; }
     }
-    
+
+    private Transform checkpoint;
+    public Transform Checkpoint
+    {
+        get { return checkpoint; }
+        set { checkpoint = value; }
+    }
+
     private PlayerHud hud;
     public PlayerHud Hud
     {
@@ -48,76 +42,87 @@ public class GameManager : MonoBehaviour
         set { hud = value; }
     }
 
+    private static bool gameOver;
+    public bool GameOver
+    {
+        get { return gameOver; }
+        set { gameOver = value; }
+    }
+    private static bool pause;
+    public bool Pause
+    {
+        get { return pause; }
+        set { pause = value; }
+    }
+    
+    public SceneFader sceneFader;
+
     private void Awake()
     {
         if (!Instance)
-        {
             Instance = this;
-            DontDestroyOnLoad(this);
-        }
-        else
-            Destroy(gameObject);
+        else Destroy(gameObject);
     }
 
     private void Start()
     {
-        gameIsOver = false;
+        gameOver = false;
     }
+    #endregion
 
     private void Update()
     {
-        if (gameIsOver)
+        if (gameOver)
             return;
 
-        if (Input.GetKeyDown(KeyCode.Escape))
-            Pause();
+        if (Input.GetButtonDown("Pause"))
+        {
+            if (pause) UnloadScene(pauseMenuScene);
+            else AddScene(pauseMenuScene);
+        }
+        //else if (Input.GetKeyDown(KeyCode.F1))0
+        //    checkpoint = player.transform.transform;
+        //else if (Input.GetKeyDown(KeyCode.F2))
+        //    RespawnPlayer();
     }
 
-    public void Pause()
+    public void TogglePause()
     {
+        pause = !pause;
         if (Time.timeScale == 1f)
         {
             Cursor.lockState = CursorLockMode.None;
-            SceneManager.LoadScene(pauseMenuScene, LoadSceneMode.Additive);
             Time.timeScale = 0f;
         }
         else if (Time.timeScale == 0f)
         {
             Cursor.lockState = CursorLockMode.Locked;
-            SceneManager.UnloadSceneAsync(pauseMenuScene);
             Time.timeScale = 1f;
         }
     }
 
     public void MainMenu()
     {
-        Pause();
         SceneManager.LoadScene(mainMenuScene);
     }
 
     public void Restart()
     {
-        if (gameIsOver)
+        if (gameOver)
         {
             SceneManager.UnloadSceneAsync(gameOverScene);
             sceneFader.FadeTo(SceneManager.GetActiveScene().name);
         }
-        else
-            Pause();
-
         sceneFader.FadeTo(SceneManager.GetActiveScene().name);
-
     }
 
     public void RespawnPlayer()
     {
         if (checkpoint)
-        {
             player.transform.position = checkpoint.position;
-            PlayerController.rb.velocity = Vector3.zero;
-        }
         else
             player.transform.position = Vector3.zero;
+        PlayerController.rb.velocity = Vector3.zero;
     }
 
     public void DestroyObject(GameObject referenceObject)
@@ -134,53 +139,89 @@ public class GameManager : MonoBehaviour
 #endif
     }
 
+    #region SceneManagment
     private void OnEnable()
     {
-        SceneManager.sceneLoaded += OnSceneChanged;
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        SceneManager.sceneUnloaded += OnSceneUnloaded;
     }
 
     private void OnDisable()
     {
-        SceneManager.sceneLoaded -= OnSceneChanged;
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+        SceneManager.sceneUnloaded -= OnSceneUnloaded;
     }
 
-    #region SceneManagment
-    private void LoadScene(string name)
+    public void LoadScene(string name)
     {
         SceneManager.LoadScene(name);
     }
-    private void LoadScene(Scene scene)
+    public void LoadScene(int index)
     {
-        LoadScene(scene.name);
+        SceneManager.LoadScene(index);
     }
-    
-    private void AddScene(string name)
+    public void LoadScene(Scene scene)
+    {
+        LoadScene(scene.buildIndex);
+    }
+
+    public void AddScene(string name)
     {
         SceneManager.LoadScene(name, LoadSceneMode.Additive);
     }
-
-    private void AddScene(Scene scene)
+    public void AddScene(int index)
     {
-        AddScene(scene.name);
+        SceneManager.LoadScene(index, LoadSceneMode.Additive);
+    }
+    public void AddScene(Scene scene)
+    {
+        AddScene(scene.buildIndex);
     }
 
-    private void OnSceneChanged(Scene scene, LoadSceneMode mode)
+    public void UnloadScene(string name)
     {
-        if (scene.buildIndex > 3)
+        SceneManager.UnloadSceneAsync(name);
+    }
+    public void UnloadScene(int index)
+    {
+        SceneManager.UnloadSceneAsync(index);
+    }
+    public void UnloadScene(Scene scene)
+    {
+        SceneManager.UnloadSceneAsync(scene);
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == pauseMenuScene)
+            TogglePause();
+
+        else if (scene.buildIndex > 3)
             SceneManager.LoadScene(hudScene, LoadSceneMode.Additive);
+        else
+        {
+            pause = false;
+            Cursor.lockState = CursorLockMode.None;
+            Time.timeScale = 1;
+        }
+    }
+
+    private void OnSceneUnloaded(Scene scene)
+    {
+        if (scene.name == pauseMenuScene)
+            TogglePause();
     }
 
     private void EndGame()
     {
         SceneManager.LoadScene(gameOverScene, LoadSceneMode.Additive);
-        gameIsOver = true;
+        gameOver = true;
     }
 
     private void WinLevel()
     {
         SceneManager.LoadScene(levelCompleteScene, LoadSceneMode.Additive);
-        gameIsOver = true;
-
+        gameOver = true;
     }
 
     #endregion  

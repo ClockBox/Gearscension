@@ -57,13 +57,15 @@ public class ClimbState : PlayerState
             elapsedTime = 0;
             while (elapsedTime <= 1)
             {
-                Player.transform.position = Vector3.MoveTowards(Player.transform.position, (currentNodes[1].PlayerPosition + currentNodes[0].PlayerPosition) / 2, 0.5f * elapsedTime);
+                Player.transform.position = Vector3.MoveTowards(Player.transform.position, currentNodes[0].PlayerPosition, 4 * Time.deltaTime);
+
                 IK.SetIKPositions(currentNodes[0].rightHand, currentNodes[1].leftHand, currentNodes[0].rightFoot, currentNodes[1].leftFoot);
 
                 IK.RightHand.weight = elapsedTime;
                 IK.LeftHand.weight = elapsedTime;
                 IK.RightFoot.weight = elapsedTime * braced;
                 IK.LeftFoot.weight = elapsedTime * braced;
+
 
                 elapsedTime += Time.deltaTime * 5;
                 yield return null;
@@ -234,7 +236,7 @@ public class ClimbState : PlayerState
              yield return BracedTransition(0);
 
         elapsedTime = 0;
-        while (elapsedTime < 1)
+        while (elapsedTime <= 1)
         {
             if (Input.GetButtonDown("Jump"))
             {
@@ -316,34 +318,31 @@ public class ClimbState : PlayerState
 
         rb.velocity = Vector3.zero;
 
-        Vector3 Offset = (currentNodes[1].transform.position + currentNodes[0].transform.position) / 2;
-        if (braced == 1)
-            Offset += -(currentNodes[1].transform.forward + currentNodes[0].transform.forward).normalized * 0.4f - Player.transform.up * 1.5f;
-        else
-            Offset += -Player.transform.up * 2f;
-
         Quaternion startRotation = Player.transform.rotation;
-        Vector3 startPosition = Player.transform.position;
+        Vector3 startpos = Player.transform.position;
+        Vector3 endPos = currentNodes[0].PlayerPosition;
 
         elapsedTime = 0;
         while (elapsedTime <= 1)
         {
-            //IK
+            Vector3 offset = currentNodes[0].PlayerPosition - endPos;
+
+            // IK
             IK.SetIKPositions(currentNodes[0].rightHand, currentNodes[0].leftHand, currentNodes[0].rightFoot, currentNodes[0].leftFoot);
-            IK.RightHand.weight = Mathf.Lerp(0, 1, elapsedTime);
-            IK.LeftHand.weight = Mathf.Lerp(0, 1, elapsedTime);
-            if (braced == 1)
+            IK.RightHand.weight = elapsedTime;
+            IK.LeftHand.weight = elapsedTime;
+            if (braced == 1)    
             {
-                IK.RightFoot.weight = Mathf.Lerp(0, 1, elapsedTime);
-                IK.LeftFoot.weight = Mathf.Lerp(0, 1, elapsedTime);
+                IK.RightFoot.weight = elapsedTime;
+                IK.LeftFoot.weight = elapsedTime;
             }
 
-            //rotation
+            // Rotation
             Player.transform.rotation = Quaternion.Lerp(startRotation, currentNodes[0].transform.rotation, elapsedTime * 3);
 
-            //position
-            Vector3 lerp1 = Vector3.Lerp(startPosition, Edge.transform.position, elapsedTime);
-            Vector3 lerp2 = Vector3.Lerp(Edge.transform.position, Offset, elapsedTime * 1.1f);
+            // Position
+            Vector3 lerp1 = Vector3.Lerp(startpos + offset, EdgeNode.transform.position, elapsedTime * 1.1f);
+            Vector3 lerp2 = Vector3.Lerp(EdgeNode.transform.position, endPos + offset, elapsedTime);
             Player.transform.position = Vector3.Lerp(lerp1, lerp2, elapsedTime);
 
             elapsedTime += Time.deltaTime/waitTime;
@@ -370,15 +369,26 @@ public class ClimbState : PlayerState
         IK.RightFoot.weight = 0;
         IK.LeftFoot.weight = 0;
 
+        Vector3 startpos = currentNodes[0].PlayerPosition;
+        Vector3 endPos = EdgeNode.transform.position + EdgeNode.transform.forward * 0.5f + Vector3.down * 0.2f;
+        
         rb.velocity = Vector3.zero;
 
         elapsedTime = 0;
         while (elapsedTime <= waitTime)
         {
+            Vector3 offset = currentNodes[0].PlayerPosition - startpos;
+
+            // IK
+            IK.SetIKPositions(currentNodes[0].rightHand, currentNodes[0].leftHand, currentNodes[0].rightFoot, currentNodes[0].leftFoot);
+
             IK.RightHand.weight = Mathf.Lerp(1, 0, elapsedTime);
             IK.LeftHand.weight = Mathf.Lerp(1, 0, elapsedTime);
 
-            Player.transform.position += anim.velocity * Time.deltaTime;
+            // Position
+            Vector3 lerp1 = Vector3.Lerp(startpos + offset, EdgeNode.transform.position, elapsedTime * 1.1f);
+            Vector3 lerp2 = Vector3.Lerp(EdgeNode.transform.position, endPos + offset, elapsedTime);
+            Player.transform.position = Vector3.Lerp(lerp1, lerp2, elapsedTime);
 
             elapsedTime += Time.deltaTime;
             yield return null;
