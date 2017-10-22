@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class UnequipedState : WalkingState
+public class UnequipedState : MoveState
 {
     public UnequipedState(StateManager manager, bool grounded) : base(manager, grounded) { }
 

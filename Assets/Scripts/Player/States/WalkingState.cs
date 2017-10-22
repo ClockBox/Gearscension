@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class WalkingState : PlayerState
+public class MoveState : PlayerState
 {
     protected Vector3 desiredDirection;
     protected Vector3 lookDirection;
@@ -10,11 +10,14 @@ public class WalkingState : PlayerState
     protected float movementSpeed = 5;
     protected float moveX = 0;
     protected float moveY = 0;
+    
+    protected ClimbingNode hookNode;
+    protected bool hooked = false;
 
-    float jumpForce = 7;
-    float fallTimer = 0;
+    private float jumpForce = 7;
+    private float fallTimer = 0;
 
-    public WalkingState(StateManager manager,bool isGrounded) : base(manager)
+    public MoveState(StateManager manager,bool isGrounded) : base(manager)
     {
         grounded = isGrounded;
     }
@@ -42,6 +45,9 @@ public class WalkingState : PlayerState
             else
                 canClimb = true;
         }
+
+        if (Input.GetButtonDown("Hook"))
+            Player.StartCoroutine(ThrowHook(Player.FindHookTarget("HookNode")));
 
         else if (grounded && Input.GetButtonDown("Roll"))
             yield return Dodge();
@@ -83,7 +89,7 @@ public class WalkingState : PlayerState
         lookDirection = Vector3.ProjectOnPlane(lookDirection, Player.transform.up);
 
         desiredDirection = Quaternion.FromToRotation(Player.transform.forward, lookDirection) * (Player.transform.right * moveX + Player.transform.forward * moveY);
-        moveDirection = Vector3.MoveTowards(moveDirection, desiredDirection * movementSpeed, 10 * Time.deltaTime);
+        moveDirection = Vector3.MoveTowards(moveDirection, desiredDirection * movementSpeed, 50 * Time.deltaTime);
 
         if (desiredDirection.magnitude > 0)
             moveDirection = Vector3.RotateTowards(moveDirection, desiredDirection + lookDirection * 0.01f, 20 * Time.deltaTime, 0);
@@ -108,7 +114,7 @@ public class WalkingState : PlayerState
     }
     protected override void UpdatePhysics()
     {
-        grounded = Physics.CheckCapsule(Player.transform.position, Player.transform.position - Vector3.up * 0.05f, 0.15f, LayerMask.GetMask("Ground", "Default", "Debris"));
+        grounded = Physics.CheckCapsule(Player.transform.position, Player.transform.position - Vector3.up * 0.05f, 0.15f, LayerMask.GetMask("Default", "Debris"));
 
         if (grounded)
         {
@@ -121,6 +127,94 @@ public class WalkingState : PlayerState
             rb.AddForce(-moveDirection / 4 * rb.mass);
         }
     }
+    
+    #region Hook Functions
+    protected IEnumerator ThrowHook(GameObject node)
+    {
+        if (!node)
+            yield break;
+
+        InTransition = true;
+        anim.SetBool("hook", true);
+
+        Transform sword = Player.weapons[1].transform;
+        sword.parent = null;
+
+        desiredDirection = node.transform.position - Player.transform.position;
+
+        elapsedTime = 0;
+        while (elapsedTime < 1)
+        {
+            sword.position = Vector3.Lerp(sword.position, node.transform.position - node.transform.forward * 0.3f + node.transform.right * 0.1f, elapsedTime);
+            sword.rotation = Quaternion.Lerp(sword.rotation, node.transform.rotation * new Quaternion(0, -1, 0, 1), elapsedTime);
+            elapsedTime += Time.deltaTime;
+
+            base.UpdateMovement();
+            base.UpdateAnimator();
+            base.UpdateIK();
+            base.UpdatePhysics();
+
+            yield return null;
+        }
+        sword.parent = node.transform;
+
+       CarryNode pullObject;
+         if (pullObject = node.GetComponentInParent<CarryNode>())
+            yield return HookPull(pullObject);
+        else
+            yield return HookTravel(node.GetComponent<ClimbingNode>());
+    }
+    protected IEnumerator HookTravel(ClimbingNode hook)
+    {
+        hookNode = hook;
+        if (hookNode)
+        {
+            IK.RightHand.position = hook.rightHand.position;
+            IK.RightHand.rotation = hook.rightHand.rotation;
+        }
+
+        anim.SetBool("climbing", true);
+
+        elapsedTime = 0;
+        while (elapsedTime < 1)
+        {
+            Player.transform.position = Vector3.Lerp(Player.transform.position, hook.PlayerPosition, elapsedTime);
+            Player.transform.rotation = Quaternion.Lerp(Player.transform.rotation, hook.transform.rotation, elapsedTime);
+            
+            IK.GlobalWeight = elapsedTime;
+            IK.SetIKPositions(Player.weapons[1].transform, hook.leftHand, hook.rightFoot, hook.leftFoot);
+            IK.RightFoot.weight = 0;
+            IK.LeftFoot.weight = 0;
+            IK.HeadWeight = 0;
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        hooked = true;
+        if (hook.FreeHang)
+            Player.transform.localEulerAngles = new Vector3(0, Player.transform.localEulerAngles.y, Player.transform.localEulerAngles.z);
+
+        rb.velocity = Vector3.zero;
+        InTransition = false;
+    }
+
+    protected IEnumerator HookPull(CarryNode pulledObject)
+    {
+        Vector3 startPos = pulledObject.transform.position;
+        Vector3 offsetPos = Player.transform.position + (Player.transform.up * 1.1f) + (Player.transform.forward * 0.3f);
+
+        elapsedTime = 0;
+        while (elapsedTime < 1)
+        {
+            pulledObject.transform.position = Vector3.Lerp(startPos, offsetPos, elapsedTime);
+            pulledObject.transform.rotation = Quaternion.Lerp(pulledObject.transform.rotation, Player.transform.rotation, elapsedTime);
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        InTransition = false;
+    }
+    #endregion
 
     //TriggerFucntions
     public override void OnTriggerEnter(Collider other)

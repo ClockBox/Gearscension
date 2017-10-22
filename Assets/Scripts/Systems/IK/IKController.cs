@@ -4,30 +4,30 @@ using System.Collections;
 [RequireComponent(typeof(Animator))]
 public class IKController : MonoBehaviour
 {
-    private Animator anim;
+    protected Animator anim;
 
-    private IKTarget _RightHand = new IKTarget();
-    private IKTarget _RightFoot = new IKTarget();
-    private IKTarget _LeftHand = new IKTarget();
-    private IKTarget _LeftFoot = new IKTarget();
+    protected IKTarget _RightHand = new IKTarget();
+    protected IKTarget _RightFoot = new IKTarget();
+    protected IKTarget _LeftHand = new IKTarget();
+    protected IKTarget _LeftFoot = new IKTarget();
 
-    private Vector3 _lookAtPosition;
-    private float _headWeight = 1;
-    private float _headTrunSpeed = 1;
+    protected Vector3 _lookAtPosition;
+    protected float _headWeight = 1;
+    protected float _headTrunSpeed = 1;
 
-    private Vector3 _RightElbow;
-    private Vector3 _LeftElbow;
-    private Vector3 _RightKnee;
-    private Vector3 _LeftKnee;
+    protected Vector3 _RightElbow;
+    protected Vector3 _LeftElbow;
+    protected Vector3 _RightKnee;
+    protected Vector3 _LeftKnee;
 
-    private Vector3 CameraForward;
+    protected Vector3 CameraForward;
 
     //Unity Functions
-    private void Start()
+    protected virtual void Start()
     {
         anim = GetComponent<Animator>();
     }
-    private void OnDrawGizmos()
+    protected virtual void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawCube(RightHand.position, Vector3.one* 0.1f);
@@ -35,7 +35,7 @@ public class IKController : MonoBehaviour
         Gizmos.DrawCube(RightFoot.position, Vector3.one * 0.1f);
         Gizmos.DrawCube(LeftFoot.position, Vector3.one * 0.1f);
     }
-    private void Update()
+    protected virtual void Update()
     {
         CameraForward = Camera.main.transform.forward;
         CameraForward.y = 0;
@@ -47,7 +47,7 @@ public class IKController : MonoBehaviour
         if (_RightHand.weight == 0 && _LeftHand.weight == 0 && _RightFoot.weight == 0 && _LeftFoot.weight == 0)
             SetBoneTransforms();
     }
-    private void OnAnimatorIK(int layerIndex)
+    protected virtual void OnAnimatorIK(int layerIndex)
     {
         if (layerIndex == 0)
         {

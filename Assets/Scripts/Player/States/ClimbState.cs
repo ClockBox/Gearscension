@@ -5,8 +5,7 @@ public class ClimbState : PlayerState
 {
     ClimbingNode[] currentNodes = new ClimbingNode[2];
     ClimbingEdge Edge = null;
-
-    Vector3 playerOffset;
+    
     Vector3 moveDirection;
     Vector3 lookDirection;
 
@@ -157,6 +156,7 @@ public class ClimbState : PlayerState
             move = (move + 1) % 2;
         return move;
     }
+
     private IKPositionNode FindNextNode()
     {
         IKPositionNode baseNode = currentNodes[movePolarity];

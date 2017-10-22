@@ -28,7 +28,6 @@ public class PlayerController : MonoBehaviour
     public Transform SwordSheath;
     public Transform GunHolster;
     public Weapon[] weapons;
-    private bool[] _hasWeapon = { false, false };
 
     [SerializeField, Range(-1,3)]
     private int gunUpgrade = -1;
@@ -97,10 +96,6 @@ public class PlayerController : MonoBehaviour
     {
         get { return gunUpgrade; }
     }
-    public bool HasWeapon(int index)
-    {
-        return _hasWeapon[index];
-    }
     
     public InputAxis RightTrigger
     {
@@ -117,32 +112,6 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Weapon Function
-    public IEnumerator ToggleSword(float toggleTime, float transitionTime)
-    {
-        _hasWeapon[SWORD] = !_hasWeapon[SWORD];
-        anim.SetBool("hasSword", _hasWeapon[SWORD]);
-        anim.SetBool("aiming", false);
-        IK.RightHand.weight = 0;
-
-        yield return new WaitForSeconds(toggleTime);
-
-        Transform weapon = weapons[SWORD].transform;
-        if (!_hasWeapon[SWORD])
-        {
-            weapon.parent = SwordSheath;
-            weapon.rotation = SwordSheath.rotation;
-            weapon.localEulerAngles = new Vector3(0, 0, 90);
-            weapon.position = SwordSheath.position;
-        }
-        else
-        {
-            weapon.parent = anim.GetBoneTransform(HumanBodyBones.RightHand);
-            weapon.localPosition = new Vector3(0.1f, 0.02f, 0);
-            weapon.localEulerAngles = new Vector3(90, 0, -90);
-        }
-        yield return new WaitForSeconds(transitionTime - toggleTime);
-    }
-
     public void DropWeapons()
     {
         for (int i = 0; i < weapons.Length; i++)
@@ -169,7 +138,7 @@ public class PlayerController : MonoBehaviour
     {
         GameObject[] targets = GameObject.FindGameObjectsWithTag(tag);
         GameObject temp = null;
-        float closestAngle = 0.5f;
+        float closestAngle = 0.8f;
         for (int i = 0; i < targets.Length; i++)
         {
             Vector3 checkDistance = targets[i].transform.position - Player.transform.position;
