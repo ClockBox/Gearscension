@@ -201,33 +201,11 @@ public class PushState : PlayerState
         {
             IK.RightHand.position = pushObject.transform.transform.position + RightHandOffset;
             IK.LeftHand.position = pushObject.transform.position + LeftHandOffset;
-
-            IK.RightFoot.weight = anim.GetFloat("RightFootWeight");
-            IK.LeftFoot.weight = anim.GetFloat("LeftFootWeight");
         }
     }
     protected override void UpdatePhysics()
     {
         rb.velocity = new Vector3(moveDirection.x, rb.velocity.y, moveDirection.z);
         rb.AddForce(Player.transform.up * -20f * rb.mass);
-
-        //Foot Raycasts
-        RaycastHit RightHit;
-        Transform RightFoot = anim.GetBoneTransform(HumanBodyBones.RightFoot);
-        if (Physics.Raycast(RightFoot.position + Player.transform.up * 0.1f, -Player.transform.up, out RightHit, 1f))
-        {
-            IK.RightFoot.position = RightHit.point + Player.transform.up * 0.12f;
-            IK.RightFoot.rotation = Quaternion.FromToRotation(Player.transform.up, RightHit.normal) * Player.transform.rotation;
-        }
-        else IK.RightFoot.weight = 0;
-
-        RaycastHit LeftHit;
-        Transform LeftFoot = anim.GetBoneTransform(HumanBodyBones.LeftFoot);
-        if (Physics.Raycast(LeftFoot.position + Player.transform.up * 0.1f, -Player.transform.up, out LeftHit, 1f))
-        {
-            IK.LeftFoot.position = LeftHit.point + Player.transform.up * 0.12f;
-            IK.LeftFoot.rotation = Quaternion.FromToRotation(Player.transform.up, LeftHit.normal) * Player.transform.rotation;
-        }
-        else IK.LeftFoot.weight = 0;
     }
 }
