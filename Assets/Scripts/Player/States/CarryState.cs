@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class CarryState : WalkingState
+public class CarryState : MoveState
 {
     Transform carryObject;
     CarryNode carryNode;

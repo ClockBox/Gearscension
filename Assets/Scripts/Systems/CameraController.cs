@@ -17,11 +17,11 @@ public class CameraController : MonoBehaviour
 
     private static float m_zoomed = 0;
 
-    private Camera thisCamera;
+    public static Camera MainCamera;
 
     private void Awake()
     {
-        thisCamera = GetComponent<Camera>();
+        MainCamera = GetComponent<Camera>();
         if (!camPivot)
             camPivot = GameManager.Instance.Player.transform.GetChild(0);
     }
@@ -42,7 +42,7 @@ public class CameraController : MonoBehaviour
 
             //Zoom
             distance = userDistance;
-            thisCamera.fieldOfView = Mathf.Lerp(normal, zoom, m_zoomed);
+            MainCamera.fieldOfView = Mathf.Lerp(normal, zoom, m_zoomed);
 
             //Set Position and Rotation
             Vector3 moveDirection = new Vector3(0, 0, distance);
@@ -54,7 +54,7 @@ public class CameraController : MonoBehaviour
             RaycastHit hit;
             if (Physics.SphereCast(camPivot.position, 0.2f, transform.position - camPivot.position, out hit, distance))
             {
-                if (hit.transform.root.gameObject != camPivot.parent.gameObject)
+                if (hit.transform.gameObject != camPivot.parent.gameObject)
                     transform.position = hit.point + hit.normal * 0.2f;
             }
 

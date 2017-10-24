@@ -1,12 +1,9 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class CombatState : WalkingState
+public class CombatState : MoveState
 {
-    private ClimbingNode hookNode;
     private Transform sword;
-
-    private bool hooked = false;
 
     public CombatState(StateManager manager, bool grounded) : base(manager, grounded) { }
     public CombatState(StateManager manager, ClimbingNode node) : base(manager, false)
@@ -30,21 +27,18 @@ public class CombatState : WalkingState
         }
 
         yield return base.EnterState();
-        yield return ToggleSword();
+        yield return ToggleSword(true);
     }
     public override IEnumerator ExitState()
     {
-        yield return ToggleSword();
+        yield return ToggleSword(false);
         yield return base.ExitState();
     }
 
     //State Behaviour
     protected override IEnumerator HandleInput()
     {
-        if (Input.GetButtonDown("Hook"))
-            Player.StartCoroutine(ThrowHook(Player.FindHookTarget("HookNode")));
-
-        else if (Input.GetButtonDown("Attack") || Player.RightTrigger.Down)
+        if (Input.GetButtonDown("Attack") || Player.RightTrigger.Down)
             yield return Attack();
 
         //else if (Player.GunUpgrades >= 0 && (Input.GetButton("Aim") || Player.LeftTrigger.Stay))
@@ -57,7 +51,10 @@ public class CombatState : WalkingState
 
             else if (Input.GetButtonDown("Equip"))
             {
-                IK.RightHand.Set(hookNode.rightHand);
+                IK.RightHand.weight = 0;
+                InTransition = true;
+                Player.weapons[1].transform.parent = anim.GetBoneTransform(HumanBodyBones.RightHand);
+
                 ClimbState temp = new ClimbState(stateManager, hookNode);
                 temp.transition = false;
                 stateManager.ChangeState(temp);
@@ -84,10 +81,10 @@ public class CombatState : WalkingState
     }
 
     //State Actions
-    private IEnumerator ToggleSword()
+    private IEnumerator ToggleSword(bool Equiped)
     {
         float waitTime = 1.25f;
-        Player.StartCoroutine(Player.ToggleSword(0.6f, waitTime));
+        Player.StartCoroutine(ToggleSword(Equiped, 0.6f, waitTime));
         elapsedTime = 0;
         while (elapsedTime < waitTime)
         {
@@ -101,6 +98,30 @@ public class CombatState : WalkingState
             elapsedTime += Time.deltaTime;
             yield return null;
         }
+    }
+    public IEnumerator ToggleSword(bool Equiped,float toggleTime, float transitionTime)
+    {
+        sword = Player.weapons[1].transform;
+        anim.SetBool("hasSword", Equiped);
+        anim.SetBool("aiming", false);
+        IK.RightHand.weight = 0;
+
+        yield return new WaitForSeconds(toggleTime);
+        
+        if (!Equiped)
+        {
+            sword.parent = Player.SwordSheath;
+            sword.rotation = Player.SwordSheath.rotation;
+            sword.localEulerAngles = new Vector3(0, 0, 90);
+            sword.position = Player.SwordSheath.position;
+        }
+        else
+        {
+            sword.parent = anim.GetBoneTransform(HumanBodyBones.RightHand);
+            sword.localPosition = new Vector3(0.1f, 0.02f, 0);
+            sword.localEulerAngles = new Vector3(90, 0, -90);
+        }
+        yield return new WaitForSeconds(transitionTime - toggleTime);
     }
 
     private void Drop()
@@ -119,79 +140,13 @@ public class CombatState : WalkingState
         while (elapsedTime < 0.5f)
         {
             UpdateIK();
-            if (hooked)
-            {
-                Player.transform.position = hookNode.PlayerPosition;
-                Player.transform.rotation = hookNode.transform.rotation;
-            }
-            else
-            {
-                UpdateMovement();
-                UpdateAnimator();
-            }
+            UpdateMovement();
+            UpdateAnimator();
 
             elapsedTime += Time.deltaTime;
             yield return null;
         }
         (Player.weapons[1] as Sword).Blade.enabled = false;
-    }
-    private IEnumerator ThrowHook(GameObject node)
-    {
-        if (!node)
-            yield break;
-
-        InTransition = true;
-        anim.SetBool("hook", true);
-        
-        sword = Player.weapons[1].transform;
-        sword.parent = null;
-
-        desiredDirection = node.transform.position - Player.transform.position;
-
-        if (hookNode)
-        {
-            IK.RightHand.position = hookNode.rightHand.position;
-            IK.RightHand.rotation = hookNode.rightHand.rotation;
-        }
-
-        elapsedTime = 0;
-        while (elapsedTime < 1)
-        {
-            sword.position = Vector3.Lerp(sword.position, node.transform.position - node.transform.forward * 0.3f, elapsedTime);
-            sword.rotation = Quaternion.Lerp(sword.rotation, Quaternion.FromToRotation(Vector3.up, node.transform.forward), elapsedTime);
-            elapsedTime += Time.deltaTime;
-
-            base.UpdateMovement();
-            base.UpdateAnimator();
-            base.UpdateIK();
-            base.UpdatePhysics();
-
-            yield return null;
-        }
-        yield return HookTravel(node.GetComponent<ClimbingNode>());
-    }
-    private IEnumerator HookTravel(ClimbingNode node)
-    {
-        hooked = true;
-        hookNode = node;
-
-        anim.SetBool("climbing", true);
-
-        elapsedTime = 0;
-        while (elapsedTime < 1)
-        {
-            Player.transform.position = Vector3.Lerp(Player.transform.position, node.PlayerPosition, elapsedTime);
-            Player.transform.rotation = Quaternion.Lerp(Player.transform.rotation, node.transform.rotation, elapsedTime);
-
-            IK.GlobalWeight = elapsedTime;
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-        if (node.FreeHang)
-            Player.transform.localEulerAngles = new Vector3(0, Player.transform.localEulerAngles.y, Player.transform.localEulerAngles.z);
-
-        rb.velocity = Vector3.zero;
-        InTransition = false;
     }
 
     //State Updates
@@ -217,10 +172,10 @@ public class CombatState : WalkingState
         {
             anim.ResetTrigger("hook");
             anim.SetBool("climbing", true);
-            if(hookNode.FreeHang)
-                anim.SetFloat("braced", 0);
+            if (hookNode.FreeHang)
+                anim.SetFloat("braced", Mathf.MoveTowards(anim.GetFloat("braced"), 0, 5 * Time.deltaTime));
             else
-                anim.SetFloat("braced", 1);
+                anim.SetFloat("braced", Mathf.MoveTowards(anim.GetFloat("braced"), 1, 5 * Time.deltaTime));
         }
     }
     protected override void UpdateIK()
@@ -229,8 +184,13 @@ public class CombatState : WalkingState
             base.UpdateIK();
         else
         {
-            IK.SetIKPositions(Player.weapons[1].Grip(1), hookNode.leftHand, hookNode.rightFoot, hookNode.leftFoot);
-            IK.HeadWeight = 1;
+            IK.SetIKPositions(Player.weapons[1].transform, hookNode.leftHand, hookNode.rightFoot, hookNode.leftFoot);
+            if (!hookNode.FreeHang)
+            {
+                IK.RightFoot.weight = Mathf.MoveTowards(IK.RightFoot.weight, 1, 3 * Time.deltaTime);
+                IK.LeftFoot.weight = IK.RightFoot.weight;
+            }
+            IK.HeadWeight = 0;
         }
     }
 
