@@ -35,22 +35,28 @@ public class MoveState : PlayerState
     //State Behaviour
     protected override IEnumerator HandleInput()
     {
-        if (!grounded && fallTimer > 3.0f)
-            stateManager.ChangeState(new FallState(stateManager));
-
-        else if (Input.GetButtonDown("Jump"))
-        {
-            if (grounded)
-                Jump();
-            else
-                canClimb = true;
-        }
-
         if (Input.GetButtonDown("Hook"))
             Player.StartCoroutine(ThrowHook(Player.FindHookTarget("HookNode")));
 
-        else if (grounded && Input.GetButtonDown("Roll"))
-            yield return Dodge();
+        if (grounded)
+        {
+            if (Input.GetButtonDown("Jump"))
+            {
+                jumpForce = 7;
+                Jump();
+            }
+
+            else if (Input.GetButtonDown("Roll"))
+                yield return Dodge();
+        }
+        else
+        {
+            if (Input.GetButtonDown("Jump"))
+                canClimb = true;
+
+            if (fallTimer > 3.0f)
+                stateManager.ChangeState(new FallState(stateManager));
+        }
     }
 
     //State Actions
@@ -124,7 +130,8 @@ public class MoveState : PlayerState
         else
         {
             rb.AddForce(Player.transform.up * -9.81f * rb.mass);
-            rb.AddForce(moveDirection / 3 * rb.mass);
+            rb.AddForce(moveDirection * rb.mass);
+            rb.velocity = Vector3.ClampMagnitude(rb.velocity, movementSpeed);
         }
     }
     
