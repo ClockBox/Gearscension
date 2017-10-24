@@ -124,7 +124,7 @@ public class MoveState : PlayerState
         else
         {
             rb.AddForce(Player.transform.up * -9.81f * rb.mass);
-            rb.AddForce(-moveDirection / 4 * rb.mass);
+            rb.AddForce(moveDirection / 3 * rb.mass);
         }
     }
     
