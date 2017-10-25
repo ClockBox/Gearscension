@@ -6,15 +6,15 @@ public class FallState : PlayerState
     public FallState(StateManager manager) : base(manager) { }
 
     //Transitions
-    public override IEnumerator EnterState()
+    public override IEnumerator EnterState(PlayerState prevState)
     {
         grounded = false;
         anim.SetTrigger("falling");
-        yield return base.EnterState();
+        yield return base.EnterState(prevState);
     }
-    public override IEnumerator ExitState()
+    public override IEnumerator ExitState(PlayerState nextState)
     {
-        yield return base.ExitState();
+        yield return base.ExitState(nextState);
         rb.velocity = Vector3.zero;
         yield return null;
     }

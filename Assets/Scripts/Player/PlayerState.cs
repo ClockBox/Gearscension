@@ -33,12 +33,12 @@ public class PlayerState
     }
     
     //Transitions
-    public virtual IEnumerator EnterState()
+    public virtual IEnumerator EnterState(PlayerState prevState)
     {
         yield return null;
         stateManager.StartState(this);
     }
-    public virtual IEnumerator ExitState()
+    public virtual IEnumerator ExitState(PlayerState nextState)
     {
         stopState = true;
         yield return null;

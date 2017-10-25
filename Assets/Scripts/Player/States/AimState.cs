@@ -12,7 +12,7 @@ public class AimState : MoveState
     public AimState(StateManager manager,bool grounded) : base(manager,grounded) { }
 
     //Transitions
-    public override IEnumerator EnterState()
+    public override IEnumerator EnterState(PlayerState prevState)
     {
         lookDirection = Camera.main.transform.forward;
         lookDirection = Vector3.ProjectOnPlane(lookDirection, Player.transform.up);
@@ -25,11 +25,11 @@ public class AimState : MoveState
         Player.transform.GetChild(0).position -= Player.transform.right * 0.23f + Player.transform.up * 0.15f;
 
         yield return ToggleEquip(true);
-        yield return base.EnterState();
+        yield return base.EnterState(prevState);
     }
-    public override IEnumerator ExitState()
+    public override IEnumerator ExitState(PlayerState nextState)
     {
-        yield return base.ExitState();
+        yield return base.ExitState(nextState);
 
         IK.HeadTrunSpeed = 1;
         
