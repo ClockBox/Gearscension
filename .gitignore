@@ -59,3 +59,18 @@ Assets/UI_Assets/Textures/Art Assets/Corel Auto-Preserve/Start_Screen_Start_pane
 Assets/UI_Assets/Textures/Art Assets/Corel Auto-Preserve/Start_Screen_Start_panel03.png.meta
 Assets/UI_Assets/Textures/Art Assets/Corel Auto-Preserve/UI_Startscreen_BG2.png.meta
 Assets/UI_Assets/Textures/Art Assets/Corel Auto-Preserve/UI_Startscreen_Bottom.png.meta
+Assets/Character_Assets/PlayerCharacter/Divit/Animation/AnimationClips/Climbing/climb_down_to_hang.fbm.meta
+Assets/Character_Assets/PlayerCharacter/Divit/Animation/AnimationClips/Climbing/hang_braced_climb.fbm.meta
+Assets/Character_Assets/PlayerCharacter/Divit/Animation/AnimationClips/Climbing/hang_braced_hop_down.fbm.meta
+Assets/Character_Assets/PlayerCharacter/Divit/Animation/AnimationClips/Climbing/hang_braced_hop_left.fbm.meta
+Assets/Character_Assets/PlayerCharacter/Divit/Animation/AnimationClips/Climbing/hang_braced_hop_right.fbm.meta
+Assets/Character_Assets/PlayerCharacter/Divit/Animation/AnimationClips/Climbing/hang_braced_idle.fbm.meta
+Assets/Character_Assets/PlayerCharacter/Divit/Animation/AnimationClips/Climbing/hang_free_climb.fbm.meta
+Assets/Character_Assets/PlayerCharacter/Divit/Animation/AnimationClips/Climbing/hang_free_idle.fbm.meta
+Assets/Character_Assets/PlayerCharacter/Divit/Animation/AnimationClips/Climbing/Materials.meta
+Assets/Character_Assets/PlayerCharacter/Divit/Animation/AnimationClips/Unarmed/falling_flat_impact.fbm.meta
+Assets/Character_Assets/PlayerCharacter/Divit/Animation/AnimationClips/Unarmed/getting_up.fbm.meta
+Assets/Character_Assets/PlayerCharacter/Divit/Animation/AnimationClips/Unarmed/idle.fbm.meta
+Assets/Character_Assets/PlayerCharacter/Divit/Animation/AnimationClips/Unarmed/Materials.meta
+Assets/Character_Assets/PlayerCharacter/Divit/Animation/AnimationClips/Unarmed/run.fbm.meta
+Assets/Character_Assets/PlayerCharacter/Divit/Animation/AnimationClips/Unarmed/walking.fbm.meta
