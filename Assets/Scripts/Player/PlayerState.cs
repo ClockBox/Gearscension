@@ -66,6 +66,7 @@ public class PlayerState
         }
         stateManager.StopCoroutine(HandleInput());
     }
+
     public virtual IEnumerator FixedUpdate()
     {
         while (!stopState)

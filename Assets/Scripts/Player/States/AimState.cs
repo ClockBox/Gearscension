@@ -5,8 +5,7 @@ using UnityEngine;
 public class AimState : MoveState
 {
     float bulletScale = 1;
-
-    private Transform desiredPoint;
+    
     private Transform gun;
 
     public AimState(StateManager manager,bool grounded) : base(manager,grounded) { }
@@ -16,7 +15,7 @@ public class AimState : MoveState
     {
         lookDirection = Camera.main.transform.forward;
         lookDirection = Vector3.ProjectOnPlane(lookDirection, Player.transform.up);
-        desiredPoint = Player.transform.GetChild(1);
+        Player.AimPoint = Player.transform.GetChild(1);
 
         IK.HeadTrunSpeed = 5;
 
@@ -51,8 +50,7 @@ public class AimState : MoveState
             (Player.weapons[0] as Gun).Shoot(bulletScale);
             bulletScale = 1;
         }
-        else
-            yield return base.HandleInput();
+        else yield return base.HandleInput();
     }
 
     //Actions
@@ -62,12 +60,12 @@ public class AimState : MoveState
         if (aiming)
         {
             yield return ToggleArm(aiming);
-            yield return ToggleGun(Player.GunHolster,desiredPoint);
-            gun.parent = desiredPoint;
+            yield return ToggleGun(Player.GunHolster, Player.AimPoint);
+            gun.parent = Player.AimPoint;
         }
         else
         {
-            yield return ToggleGun(desiredPoint, Player.GunHolster);
+            yield return ToggleGun(Player.AimPoint, Player.GunHolster);
             yield return ToggleArm(aiming);
             gun.parent = Player.GunHolster;
         }
@@ -83,7 +81,6 @@ public class AimState : MoveState
         elapsedTime = 0;
         while (elapsedTime <= 1)
         {
-            UpdateMovement();
             base.UpdateAnimator();
             base.UpdatePhysics();
             UpdateIK();
@@ -103,8 +100,7 @@ public class AimState : MoveState
         {
             gun.position = Vector3.Lerp(start.position, end.position, elapsedTime);
             gun.rotation = Quaternion.Lerp(start.rotation, end.rotation, elapsedTime);
-
-            UpdateMovement();
+            
             base.UpdateAnimator();
             base.UpdatePhysics();
             UpdateIK();
@@ -122,6 +118,7 @@ public class AimState : MoveState
         base.UpdateMovement();
 
         Player.transform.LookAt(Player.transform.position + lookDirection);
+        gun.position = Player.AimPoint.position + Vector3.up * -Player.AimPoint.rotation.z;
     }
     protected override void UpdateIK()
     {

@@ -70,6 +70,7 @@ public class MoveState : PlayerState
             yield return null;
         }
     }
+
     protected void Jump()
     {
         anim.SetBool("isGrounded", false);

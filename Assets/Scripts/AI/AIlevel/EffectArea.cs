@@ -8,43 +8,46 @@ public enum EffectType
     Ice
 
 }
-public class EffectArea : MonoBehaviour {
-
+public class EffectArea : MonoBehaviour
+{
     public EffectType type;
     public float lifeTime;
     public float effectRadius;
 
+    private float elapsedTime = 0.5f;
+
     void Start()
     {
-       
         Destroy(gameObject, lifeTime);
-    }
 
-    void FixedUpdate()
-    {
-        Collider[] cols;
-        cols = Physics.OverlapSphere(transform.position, effectRadius);
-        for (int i = 0; i < cols.Length; i++)
+        if (elapsedTime >= 0.5f)
         {
-            if (type == EffectType.Ice)
+            Collider[] cols;
+            cols = Physics.OverlapSphere(transform.position, effectRadius, LayerMask.GetMask("Debris", "Character"));
+            for (int i = 0; i < cols.Length; i++)
             {
-                if (cols[i].gameObject.tag == "Water")
+                GameObject TestObject = cols[i].gameObject;
+                if (type == EffectType.Ice)
                 {
-                    Debug.Log("FREEZE");
-                    cols[i].gameObject.GetComponent<WaterArea>().freeze();
+                    if (TestObject.CompareTag("Enemy") || TestObject.CompareTag("Water"))
+                    {
+                        Debug.Log("PK FREEZE!!!");
+                        TestObject.GetComponent<Freezable>().Freeze = true;
+                    }
+                }
+                else if (type == EffectType.Electric)
+                {
+                    if (TestObject.CompareTag("Generator"))
+                    {
+                        Debug.Log("POWER");
+                        TestObject.GetComponent<Generator>().generate();
+                    }
                 }
             }
-            else if (type == EffectType.Electric)
-            {
-                if (cols[i].gameObject.tag == "Generator")
-                {
-                    Debug.Log("POWER");
-                    cols[i].gameObject.GetComponent<Generator>().generate();
-                }
-            }
-
         }
+        else elapsedTime += Time.deltaTime;
     }
+
     private void OnDrawGizmos()
     {
         if (type == EffectType.Ice)

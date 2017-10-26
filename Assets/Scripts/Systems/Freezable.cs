@@ -38,15 +38,20 @@ public class Freezable : MonoBehaviour
 
     void OnFreeze()
     {
-        if (animator && colliderBounds)
+        if (colliderBounds)
         {
             Bounds bounds = colliderBounds.bounds;
-            colliderBounds.attachedRigidbody.velocity = Vector3.zero;
-            colliderBounds.attachedRigidbody.isKinematic = true;
+            if (colliderBounds.attachedRigidbody)
+            {
+                colliderBounds.attachedRigidbody.velocity = Vector3.zero;
+                colliderBounds.attachedRigidbody.isKinematic = true;
+            }
             colliderBounds.enabled = false;
-            animator.enabled = false;
 
-            IceBlock = Instantiate(IcePrefab, bounds.center, Quaternion.identity);
+            if(animator)
+                animator.enabled = false;
+
+            IceBlock = Instantiate(IcePrefab, bounds.center, transform.rotation);
             IceBlock.tag = "Pushable";
 
             Transform iceCube = IceBlock.transform.GetChild(0);
@@ -58,17 +63,20 @@ public class Freezable : MonoBehaviour
                 scripts[i].StopAllCoroutines();
                 scripts[i].enabled = false;
             }
-
             transform.parent = IceBlock.transform;
         }
     }
 
     void OnThaw()
     {
-        if (animator && colliderBounds)
+        if (colliderBounds)
         {
-            animator.enabled = true;
-            colliderBounds.attachedRigidbody.isKinematic = false;
+            if (animator)
+                animator.enabled = true;
+
+            if (colliderBounds.attachedRigidbody)
+                colliderBounds.attachedRigidbody.isKinematic = false;
+
             colliderBounds.enabled = true;
             
             for (int i = 0; i < scripts.Length; i++)
@@ -81,63 +89,65 @@ public class Freezable : MonoBehaviour
 
     void AddNodes(Transform iceCube)
     {
-        // X Axis
-        Instantiate(climbNodePrefab,
-            iceCube.position + new Vector3(0.3f * iceCube.localScale.x, 0, iceCube.localScale.z / 2) + Vector3.up * iceCube.localScale.y / 2,
-            new Quaternion(0, 1, 0, 0),
-            IceBlock.transform);
-        Instantiate(climbNodePrefab, 
-            iceCube.position - new Vector3(0.3f * iceCube.localScale.x, 0, iceCube.localScale.z / 2) + Vector3.up * iceCube.localScale.y / 2, 
-            Quaternion.identity,
-            IceBlock.transform);
-        for (float x = 1; x < iceCube.localScale.x; x += 0.5f)
+        if (climbNodePrefab)
         {
-            Instantiate(climbNodePrefab, 
-                iceCube.position + new Vector3(x * iceCube.localScale.x, 0, iceCube.localScale.z / 2) + Vector3.up * iceCube.localScale.y / 2,
+            // X Axis
+            Instantiate(climbNodePrefab,
+                iceCube.position + new Vector3(0.3f * iceCube.localScale.x, 0, iceCube.localScale.z / 2) + Vector3.up * iceCube.localScale.y / 2,
                 new Quaternion(0, 1, 0, 0),
                 IceBlock.transform);
             Instantiate(climbNodePrefab,
-                iceCube.position - new Vector3(x * iceCube.localScale.x, 0, iceCube.localScale.z / 2) + Vector3.up * iceCube.localScale.y / 2, 
-                Quaternion.identity, 
+                iceCube.position - new Vector3(0.3f * iceCube.localScale.x, 0, iceCube.localScale.z / 2) + Vector3.up * iceCube.localScale.y / 2,
+                Quaternion.identity,
                 IceBlock.transform);
-        }
-        Instantiate(climbNodePrefab, 
-            iceCube.position + new Vector3(-0.3f * iceCube.localScale.x, 0, iceCube.localScale.z / 2) + Vector3.up * iceCube.localScale.y / 2,
-            new Quaternion(0, 1, 0, 0),
-            IceBlock.transform);
-        Instantiate(climbNodePrefab, 
-            iceCube.position - new Vector3(-0.3f * iceCube.localScale.x, 0, iceCube.localScale.z / 2) + Vector3.up * iceCube.localScale.y / 2, 
-            Quaternion.identity, 
-            IceBlock.transform);
-
-        // Z Axis
-        Instantiate(climbNodePrefab,
-            iceCube.position + new Vector3(iceCube.localScale.x/2, 0, 0.3f * iceCube.localScale.z) + Vector3.up * iceCube.localScale.y / 2,
-            new Quaternion(0, -0.7071068f, 0, 0.7071068f),
-            IceBlock.transform);
-        Instantiate(climbNodePrefab,
-            iceCube.position - new Vector3(iceCube.localScale.x / 2, 0, 0.3f * iceCube.localScale.z) + Vector3.up * iceCube.localScale.y / 2,
-            new Quaternion(0, 0.7071068f, 0, 0.7071068f),
-            IceBlock.transform);
-        for (float z = 1; z < iceCube.localScale.z; z += 0.5f)
-        {
+            for (float x = 1; x < iceCube.localScale.x; x += 0.5f)
+            {
+                Instantiate(climbNodePrefab,
+                    iceCube.position + new Vector3(x * iceCube.localScale.x, 0, iceCube.localScale.z / 2) + Vector3.up * iceCube.localScale.y / 2,
+                    new Quaternion(0, 1, 0, 0),
+                    IceBlock.transform);
+                Instantiate(climbNodePrefab,
+                    iceCube.position - new Vector3(x * iceCube.localScale.x, 0, iceCube.localScale.z / 2) + Vector3.up * iceCube.localScale.y / 2,
+                    Quaternion.identity,
+                    IceBlock.transform);
+            }
             Instantiate(climbNodePrefab,
-                iceCube.position + new Vector3(iceCube.localScale.x / 2, 0, z * iceCube.localScale.z) + Vector3.up * iceCube.localScale.y / 2,
+                iceCube.position + new Vector3(-0.3f * iceCube.localScale.x, 0, iceCube.localScale.z / 2) + Vector3.up * iceCube.localScale.y / 2,
+                new Quaternion(0, 1, 0, 0),
+                IceBlock.transform);
+            Instantiate(climbNodePrefab,
+                iceCube.position - new Vector3(-0.3f * iceCube.localScale.x, 0, iceCube.localScale.z / 2) + Vector3.up * iceCube.localScale.y / 2,
+                Quaternion.identity,
+                IceBlock.transform);
+
+            // Z Axis
+            Instantiate(climbNodePrefab,
+                iceCube.position + new Vector3(iceCube.localScale.x / 2, 0, 0.3f * iceCube.localScale.z) + Vector3.up * iceCube.localScale.y / 2,
                 new Quaternion(0, -0.7071068f, 0, 0.7071068f),
                 IceBlock.transform);
             Instantiate(climbNodePrefab,
-                iceCube.position - new Vector3(iceCube.localScale.x / 2, 0, z * iceCube.localScale.z) + Vector3.up * iceCube.localScale.y / 2,
+                iceCube.position - new Vector3(iceCube.localScale.x / 2, 0, 0.3f * iceCube.localScale.z) + Vector3.up * iceCube.localScale.y / 2,
+                new Quaternion(0, 0.7071068f, 0, 0.7071068f),
+                IceBlock.transform);
+            for (float z = 1; z < iceCube.localScale.z; z += 0.5f)
+            {
+                Instantiate(climbNodePrefab,
+                    iceCube.position + new Vector3(iceCube.localScale.x / 2, 0, z * iceCube.localScale.z) + Vector3.up * iceCube.localScale.y / 2,
+                    new Quaternion(0, -0.7071068f, 0, 0.7071068f),
+                    IceBlock.transform);
+                Instantiate(climbNodePrefab,
+                    iceCube.position - new Vector3(iceCube.localScale.x / 2, 0, z * iceCube.localScale.z) + Vector3.up * iceCube.localScale.y / 2,
+                    new Quaternion(0, 0.7071068f, 0, 0.7071068f),
+                    IceBlock.transform);
+            }
+            Instantiate(climbNodePrefab,
+                iceCube.position + new Vector3(iceCube.localScale.x / 2, 0, -0.3f * iceCube.localScale.z) + Vector3.up * iceCube.localScale.y / 2,
+                new Quaternion(0, -0.7071068f, 0, 0.7071068f),
+                IceBlock.transform);
+            Instantiate(climbNodePrefab,
+                iceCube.position - new Vector3(iceCube.localScale.x / 2, 0, -0.3f * iceCube.localScale.z) + Vector3.up * iceCube.localScale.y / 2,
                 new Quaternion(0, 0.7071068f, 0, 0.7071068f),
                 IceBlock.transform);
         }
-        Instantiate(climbNodePrefab,
-            iceCube.position + new Vector3(iceCube.localScale.x / 2, 0, -0.3f * iceCube.localScale.z) + Vector3.up * iceCube.localScale.y / 2,
-            new Quaternion(0, -0.7071068f, 0, 0.7071068f),
-            IceBlock.transform);
-        Instantiate(climbNodePrefab,
-            iceCube.position - new Vector3(iceCube.localScale.x / 2, 0, -0.3f * iceCube.localScale.z) + Vector3.up * iceCube.localScale.y / 2,
-            new Quaternion(0, 0.7071068f, 0, 0.7071068f),
-            IceBlock.transform);
-
     }
 }

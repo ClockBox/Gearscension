@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
     //weapon info
     public Transform SwordSheath;
     public Transform GunHolster;
+    public Transform AimPoint;
     public Weapon[] weapons;
 
     [SerializeField, Range(-1,3)]
@@ -236,6 +237,8 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha0))
             TakeDamage(10);
         RechargeArmor();
+
+        AimPoint.rotation = CameraController.MainCamera.transform.rotation * new Quaternion(0, 0.7071068f, 0, 0.7071068f);
 
         //Switching Ammo Types
         if (Input.GetButtonDown("Ammo 1"))
