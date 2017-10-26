@@ -14,6 +14,8 @@ public class GameManager : MonoBehaviour
     private static string gameOverScene = "Game Over";
     private static string hudScene = "Hud";
 
+    public GameObject playerPrefab;
+
     private AudioDictonary audioManager;
     public AudioDictonary AudioManager
     {
@@ -86,7 +88,7 @@ public class GameManager : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.F1))
         {
             checkpoint = null;
-            respawnPoint = player.transform.transform.position;
+            respawnPoint = player.transform.position;
         }
         else if (Input.GetKeyDown(KeyCode.F2))
             RespawnPlayer();
@@ -95,6 +97,10 @@ public class GameManager : MonoBehaviour
             LoadScene("Floor_1");
         else if (Input.GetKeyDown(KeyCode.F6))
             LoadScene("Floor_2");
+        else if (Input.GetKeyDown(KeyCode.F7))
+            LoadScene("Floor_3");
+        else if (Input.GetKeyDown(KeyCode.F8))
+            LoadScene("Floor_4");
     }
 
     public void TogglePause()
@@ -136,6 +142,13 @@ public class GameManager : MonoBehaviour
         PlayerController.rb.velocity = Vector3.zero;
     }
 
+    public void SpawnPlayer()
+    {
+        if (!player)
+            return;
+        player = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity).GetComponent<PlayerController>();
+    }
+
     public void DestroyObject(GameObject referenceObject)
     {
         Destroy(referenceObject);
@@ -161,6 +174,11 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
         SceneManager.sceneUnloaded -= OnSceneUnloaded;
+    }
+
+    public void Continue()
+    {
+        LoadScene(PlayerPrefs.GetInt("ContinueScene"));
     }
 
     public void LoadScene(string name)
@@ -207,8 +225,12 @@ public class GameManager : MonoBehaviour
         if (scene.name == pauseMenuScene)
             TogglePause();
 
-        else if (scene.buildIndex > 3)
+        if (scene.buildIndex > 3)
+        {
             SceneManager.LoadScene(hudScene, LoadSceneMode.Additive);
+            PlayerPrefs.SetInt("ContinueScene", scene.buildIndex);
+            Debug.Log(PlayerPrefs.GetInt("ContinueScene"));
+        }
         else
         {
             pause = false;

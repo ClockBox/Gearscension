@@ -28,6 +28,9 @@ public class CameraController : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (!MainCamera)
+            MainCamera = GetComponent<Camera>();
+
         if (!camPivot)
             camPivot = GameManager.Instance.Player.transform.GetChild(0);
         else
