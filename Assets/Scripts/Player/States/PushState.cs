@@ -26,7 +26,7 @@ public class PushState : PlayerState
     }
     
     //Transitions
-    public override IEnumerator EnterState()
+    public override IEnumerator EnterState(PlayerState prevState)
     {
         anim.SetBool("pushing", true);
 
@@ -42,11 +42,11 @@ public class PushState : PlayerState
             elapsedTime += Time.deltaTime * 3;
             yield return null;
         }
-        yield return base.EnterState();
+        yield return base.EnterState(prevState);
     }
-    public override IEnumerator ExitState()
+    public override IEnumerator ExitState(PlayerState nextState)
     {
-        yield return base.ExitState();
+        yield return base.ExitState(nextState);
         anim.SetBool("pushing", false);
 
         elapsedTime = 0;

@@ -207,9 +207,17 @@ public class ConditionDrawer : PropertyDrawer
             EditorGUI.LabelField(InLine.NextRect(), "Area");
         }
         condition.triggerArea = EditorGUI.BoundsField(InLine.GetLine(0, pos.width / 2, 1), condition.triggerArea);
-        condition.checkObject = (GameObject)EditorGUI.ObjectField(InLine.GetLine(1, 0, 2), condition.checkObject, typeof(GameObject), true);
-        if (!condition.checkObject)
+
+        InLine.SetRect(pos, 0, 50, 6);
+        {
+            EditorGUI.LabelField(InLine.NextRect(), "UsePlayer");
+            condition.UsePlayer = EditorGUI.Toggle(InLine.NextRect(true), condition.UsePlayer);
+        }
+        if (!condition.UsePlayer)
+        {
+            condition.checkObject = (GameObject)EditorGUI.ObjectField(InLine.GetLine(1, 0, 2), condition.checkObject, typeof(GameObject), true);
             EditorGUILayout.HelpBox("CheckObject is null for AreaCondition", MessageType.Warning);
+        }
         InLine.Reset();
     }
 

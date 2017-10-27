@@ -10,9 +10,6 @@ public class MoveState : PlayerState
     protected float movementSpeed = 5;
     protected float moveX = 0;
     protected float moveY = 0;
-    
-    protected ClimbingNode hookNode;
-    protected bool hooked = false;
 
     private float jumpForce = 7;
     private float fallTimer = 0;
@@ -23,34 +20,40 @@ public class MoveState : PlayerState
     }
 
     //Transitions
-    public override IEnumerator EnterState()
+    public override IEnumerator EnterState(PlayerState prevState)
     {
         moveDirection = moveDirection.magnitude * Player.transform.forward;
         if (canClimb == false)
             moveDirection = Vector3.zero;
         anim.SetBool("isGrounded", grounded);
-        yield return base.EnterState();
+        yield return base.EnterState(prevState);
     }
 
     //State Behaviour
     protected override IEnumerator HandleInput()
     {
-        if (!grounded && fallTimer > 3.0f)
-            stateManager.ChangeState(new FallState(stateManager));
-
-        else if (Input.GetButtonDown("Jump"))
-        {
-            if (grounded)
-                Jump();
-            else
-                canClimb = true;
-        }
-
         if (Input.GetButtonDown("Hook"))
             Player.StartCoroutine(ThrowHook(Player.FindHookTarget("HookNode")));
 
-        else if (grounded && Input.GetButtonDown("Roll"))
-            yield return Dodge();
+        if (grounded)
+        {
+            if (Input.GetButtonDown("Jump"))
+            {
+                jumpForce = 7;
+                Jump();
+            }
+
+            else if (Input.GetButtonDown("Roll"))
+                yield return Dodge();
+        }
+        else
+        {
+            if (Input.GetButtonDown("Jump"))
+                canClimb = true;
+
+            if (fallTimer > 3.0f)
+                stateManager.ChangeState(new FallState(stateManager));
+        }
     }
 
     //State Actions
@@ -67,6 +70,7 @@ public class MoveState : PlayerState
             yield return null;
         }
     }
+
     protected void Jump()
     {
         anim.SetBool("isGrounded", false);
@@ -124,7 +128,8 @@ public class MoveState : PlayerState
         else
         {
             rb.AddForce(Player.transform.up * -9.81f * rb.mass);
-            rb.AddForce(moveDirection / 3 * rb.mass);
+            rb.AddForce(moveDirection * rb.mass);
+            rb.velocity = Vector3.ClampMagnitude(rb.velocity, movementSpeed);
         }
     }
     
@@ -166,8 +171,7 @@ public class MoveState : PlayerState
     }
     protected IEnumerator HookTravel(ClimbingNode hook)
     {
-        hookNode = hook;
-        if (hookNode)
+        if (hook)
         {
             IK.RightHand.position = hook.rightHand.position;
             IK.RightHand.rotation = hook.rightHand.rotation;
@@ -190,11 +194,11 @@ public class MoveState : PlayerState
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-        hooked = true;
         if (hook.FreeHang)
             Player.transform.localEulerAngles = new Vector3(0, Player.transform.localEulerAngles.y, Player.transform.localEulerAngles.z);
 
         rb.velocity = Vector3.zero;
+        stateManager.ChangeState(new HookState(stateManager, hook));
         InTransition = false;
     }
 
@@ -221,7 +225,6 @@ public class MoveState : PlayerState
     {
         if (!InTransition && canClimb)
         {
-
             if (other.CompareTag("ClimbingNode") || other.CompareTag("HookNode"))
             {
                 if (Vector3.Dot(other.transform.forward, Player.transform.forward) > 0)

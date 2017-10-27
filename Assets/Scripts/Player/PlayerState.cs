@@ -24,7 +24,7 @@ public class PlayerState
     //Constructor
     public PlayerState(StateManager manager)
     {
-        Player = PlayerController.Player;
+        Player = GameManager.Player;
         stateManager = PlayerController.StateM;
         IK = PlayerController.IK;
         rb = PlayerController.rb;
@@ -33,12 +33,12 @@ public class PlayerState
     }
     
     //Transitions
-    public virtual IEnumerator EnterState()
+    public virtual IEnumerator EnterState(PlayerState prevState)
     {
         yield return null;
         stateManager.StartState(this);
     }
-    public virtual IEnumerator ExitState()
+    public virtual IEnumerator ExitState(PlayerState nextState)
     {
         stopState = true;
         yield return null;
@@ -66,6 +66,7 @@ public class PlayerState
         }
         stateManager.StopCoroutine(HandleInput());
     }
+
     public virtual IEnumerator FixedUpdate()
     {
         while (!stopState)

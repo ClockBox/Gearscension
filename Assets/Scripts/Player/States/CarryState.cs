@@ -14,7 +14,7 @@ public class CarryState : MoveState
     }
 
     //Transitions
-    public override IEnumerator EnterState()
+    public override IEnumerator EnterState(PlayerState prevState)
     {
         IK.HeadTrunSpeed = 5;
         IK.RightHand.weight = 0.8f;
@@ -29,11 +29,11 @@ public class CarryState : MoveState
         carryObject.position = Player.transform.position + (Player.transform.up * 1.1f) + (Player.transform.forward * 0.3f);
         carryObject.rotation = Player.transform.rotation;
 
-        yield return base.EnterState();
+        yield return base.EnterState(prevState);
     }
-    public override IEnumerator ExitState()
+    public override IEnumerator ExitState(PlayerState nextState)
     {
-        yield return base.ExitState();
+        yield return base.ExitState(nextState);
         IK.HeadTrunSpeed = 1;
         IK.RightHand.weight = 0;
         IK.LeftHand.weight = 0;

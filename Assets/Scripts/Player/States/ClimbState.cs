@@ -3,25 +3,24 @@ using System.Collections;
 
 public class ClimbState : PlayerState
 {
-    ClimbingNode[] currentNodes = new ClimbingNode[2];
-    ClimbingEdge Edge = null;
+    protected ClimbingNode[] currentNodes = new ClimbingNode[2];
+    protected ClimbingEdge Edge = null;
     
-    Vector3 moveDirection;
-    Vector3 lookDirection;
+    protected Vector3 moveDirection;
+    protected Vector3 lookDirection;
 
-    float movementSpeed = 3f;
-    float moveX = 0;
-    float moveY = 0;
+    protected float movementSpeed = 3f;
+    protected float moveX = 0;
+    protected float moveY = 0;
 
-    const int NONE = -1;
-    const int RIGHT = 0;
-    const int LEFT = 1;
+    private const int NONE = -1;
+    private const int RIGHT = 0;
+    private const int LEFT = 1;
 
-    int nodeIndex;
-    int movePolarity = RIGHT;
+    private int nodeIndex;
+    private int movePolarity = RIGHT;
 
-    float braced;
-    public bool transition = true;
+    private float braced;
 
     public ClimbState(StateManager manager, ClimbingNode node) : base(manager)
     {
@@ -42,49 +41,52 @@ public class ClimbState : PlayerState
     }
 
     //Transitions
-    public override IEnumerator EnterState()
+    public override IEnumerator EnterState(PlayerState prevState)
     {
-        if (Edge)
-            yield return ClimbDown(Edge);
-
-        rb.velocity = Vector3.zero;
-        anim.SetBool("climbing", true);
-        UpdateAnimator();
-
-        if (transition)
+        if ((prevState as ClimbState) == null)
         {
-            elapsedTime = 0;
-            while (elapsedTime <= 1)
+            if (Edge)
+                yield return ClimbDown(Edge);
+
+            rb.velocity = Vector3.zero;
+            anim.SetBool("climbing", true);
+            UpdateAnimator();
+
+            if (!Edge)
             {
-                Player.transform.position = Vector3.MoveTowards(Player.transform.position, currentNodes[0].PlayerPosition, 4 * Time.deltaTime);
+                elapsedTime = 0;
+                while (elapsedTime <= 1)
+                {
+                    Player.transform.position = Vector3.MoveTowards(Player.transform.position, currentNodes[0].PlayerPosition, 4 * Time.deltaTime);
 
-                IK.SetIKPositions(currentNodes[0].rightHand, currentNodes[1].leftHand, currentNodes[0].rightFoot, currentNodes[1].leftFoot);
+                    IK.SetIKPositions(currentNodes[0].rightHand, currentNodes[1].leftHand, currentNodes[0].rightFoot, currentNodes[1].leftFoot);
 
-                IK.RightHand.weight = elapsedTime;
-                IK.LeftHand.weight = elapsedTime;
-                IK.RightFoot.weight = elapsedTime * braced;
-                IK.LeftFoot.weight = elapsedTime * braced;
+                    IK.RightHand.weight = elapsedTime;
+                    IK.LeftHand.weight = elapsedTime;
+                    IK.RightFoot.weight = elapsedTime * braced;
+                    IK.LeftFoot.weight = elapsedTime * braced;
 
 
-                elapsedTime += Time.deltaTime * 5;
-                yield return null;
+                    elapsedTime += Time.deltaTime * 5;
+                    yield return null;
+                }
             }
         }
         else UpdateIK();
 
         UpdateMovement();
-        yield return base.EnterState();
+        yield return base.EnterState(prevState);
     }
-    public override IEnumerator ExitState()
+    public override IEnumerator ExitState(PlayerState nextState)
     {
-        yield return base.ExitState();
+        yield return base.ExitState(nextState);
 
-        Player.transform.localEulerAngles = new Vector3(0, Player.transform.localEulerAngles.y, Player.transform.localEulerAngles.z);
-        elapsedTime = 0;
-        anim.SetBool("climbing", false);
-
-        if (transition)
+        if ((nextState as ClimbState) == null)
         {
+            Player.transform.localEulerAngles = new Vector3(0, Player.transform.localEulerAngles.y, Player.transform.localEulerAngles.z);
+            elapsedTime = 0;
+            anim.SetBool("climbing", false);
+            
             elapsedTime = 1;
             while (elapsedTime >= 0)
             {
@@ -98,7 +100,6 @@ public class ClimbState : PlayerState
                 yield return null;
             }
         }
-        else IK.GlobalWeight = 0;
     }
 
     //State Behaviour
@@ -111,8 +112,8 @@ public class ClimbState : PlayerState
         else if (Input.GetButtonDown("Jump"))
             Jump();
 
-        else if (Input.GetButtonDown("Equip") || Input.GetButtonDown("Attack") || Player.RightTrigger.Down)
-            stateManager.ChangeState(new CombatState(stateManager, currentNodes[0]));
+        else if (currentNodes[0] == currentNodes[1] && (Input.GetButtonDown("Equip") || Input.GetButtonDown("Attack") || Player.RightTrigger.Down))
+            stateManager.ChangeState(new HookState(stateManager, currentNodes[0]));
 
         else
         {
@@ -205,7 +206,7 @@ public class ClimbState : PlayerState
         }
     }
 
-    //Actions
+    //State Actions
     private void Jump()
     {
         if (braced == 1)
@@ -349,7 +350,6 @@ public class ClimbState : PlayerState
             yield return null;
         }
         col.enabled = true;
-        transition = false;
     }
     private IEnumerator ClimbUp(ClimbingEdge EdgeNode)
     {
@@ -395,7 +395,6 @@ public class ClimbState : PlayerState
         }
         Player.transform.LookAt(Player.transform.position + Vector3.ProjectOnPlane(Player.transform.forward, Vector3.up));
         col.enabled = true;
-        transition = false;
         stateManager.ChangeState(new UnequipedState(stateManager, true));
     }
 

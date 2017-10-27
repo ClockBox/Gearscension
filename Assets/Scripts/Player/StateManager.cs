@@ -31,14 +31,17 @@ public class StateManager : MonoBehaviour
         SetCollisions(newState);
 
         newState.InTransition = true;
-        yield return StartCoroutine(State.ExitState());
+        yield return StartCoroutine(State.ExitState(newState));
         newState.InTransition = false;
 
+        PlayerState prevState = State;
         State = newState;
 
         State.InTransition = true;
-        yield return StartCoroutine(State.EnterState());
+        yield return StartCoroutine(State.EnterState(prevState));
         State.InTransition = false;
+
+        prevState = null;
     }
 
     // Trigger Delegates

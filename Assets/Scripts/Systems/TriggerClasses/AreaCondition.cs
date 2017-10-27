@@ -7,6 +7,7 @@ public class AreaCondition : Condition
 {
     public GameObject checkObject;
     public bool UseColider;
+    public bool UsePlayer;
 
     public Bounds triggerArea = new Bounds(Vector3.zero, Vector3.one * 2);
     protected Collider[] cols;
@@ -19,6 +20,9 @@ public class AreaCondition : Condition
             transform.right * triggerArea.center.x +
             transform.up * triggerArea.center.y +
             transform.forward * triggerArea.center.z;
+
+        if (UsePlayer)
+            checkObject = GameManager.Player.gameObject;
 
         if (checkObject)
         {

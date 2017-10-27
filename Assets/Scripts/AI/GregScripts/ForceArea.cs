@@ -10,7 +10,9 @@ public class ForceArea : MonoBehaviour
 	public float pushForce;
     public float lifeTime;
     public bool applyConstantForce;
+
     private Rigidbody tempRB;
+    private float elapsedTime = 0.5f;
 
     void Start()
     {
@@ -24,8 +26,9 @@ public class ForceArea : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (applyConstantForce)
+        if (applyConstantForce && elapsedTime >= 0.5f)
             ApplyForce();
+        else elapsedTime += Time.deltaTime;
     }
 
     void ApplyForce()
@@ -42,11 +45,9 @@ public class ForceArea : MonoBehaviour
                     tempRB.isKinematic = false;
             }
             if (cols[i].gameObject == player)
-            
                 PlayerState.grounded = false;
 
-
-            cols[i].SendMessageUpwards("TakeDamage", 5,SendMessageOptions.DontRequireReceiver);
+            cols[i].GetComponent<AIStateManager>().TakeDamage(5);
         }
     }
     private void OnDrawGizmos()

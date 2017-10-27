@@ -6,10 +6,8 @@ using System.Collections.Generic;
 
 public class PlayerHud : MonoBehaviour
 {
-
     PlayerController PC;
-
-    // Int
+    
     private int ammo;
 
     [Header("Main Hud")]
@@ -46,8 +44,8 @@ public class PlayerHud : MonoBehaviour
 
     void Awake()
     {
-        GameManager.Instance.Hud = this;
-        PC = GameManager.Instance.Player;
+        GameManager.Hud = this;
+        PC = GameManager.Player;
 
         armorPieceOne = GameObject.Find("/Gear Hud/Armor 1");
         if (armorPieceOne != null)
@@ -109,7 +107,6 @@ public class PlayerHud : MonoBehaviour
             healthTwo.SetActive(false);
             healthThree.SetActive(false);
             healthFour.SetActive(false);
-            Debug.Log("Health Set to full");
         }
 
         else if (healthCount == 4)
@@ -122,7 +119,6 @@ public class PlayerHud : MonoBehaviour
             healthThree.SetActive(false);
 
             healthFive.SetActive(false);
-            Debug.Log("Four bars of health Remaining");
         }
 
         else if (healthCount == 3)
@@ -135,7 +131,6 @@ public class PlayerHud : MonoBehaviour
 
             healthFour.SetActive(false);
             healthFive.SetActive(false);
-            Debug.Log("Three bars of health remianing");
         }
 
         else if (healthCount == 2)
@@ -148,7 +143,6 @@ public class PlayerHud : MonoBehaviour
             healthThree.SetActive(false);
             healthFour.SetActive(false);
             healthFive.SetActive(false);
-            Debug.Log("Two bars of health remianing");
         }
 
         else if (healthCount == 1)
@@ -161,7 +155,6 @@ public class PlayerHud : MonoBehaviour
             healthThree.SetActive(false);
             healthFour.SetActive(false);
             healthFive.SetActive(false);
-            Debug.Log("One bars of health remianing");
         }
 
         else
@@ -173,7 +166,6 @@ public class PlayerHud : MonoBehaviour
             healthThree.SetActive(false);
             healthFour.SetActive(false);
             healthFive.SetActive(false);
-            Debug.Log("Player has Died");
         }
     }
 
@@ -184,21 +176,17 @@ public class PlayerHud : MonoBehaviour
         {
             animOne.SetBool("Destroyed", false);
             animTwo.SetBool("Destroyed", false);
-            Debug.Log("Full Armor plates");
         }
 
         else if (PC.Armor == 1)
         {
-            animOne.SetBool("Destroyed", false);
             animTwo.SetBool("Destroyed", true);
-            Debug.Log("1st Armor plate destroyed");
         }
 
         else
         {
             animOne.SetBool("Destroyed", true);
             animTwo.SetBool("Destroyed", true);
-            Debug.Log("2nd Armor plate Destroyed");
             HealthBar();
         }
     }
@@ -209,7 +197,6 @@ public class PlayerHud : MonoBehaviour
         ammoType[(currentType + 1) % 4].SetActive(false);
         ammoType[(currentType + 2) % 4].SetActive(false);
         ammoType[(currentType + 3) % 4].SetActive(false);
-        Debug.Log("Ammo type changed!");
 
         if ((currentType + 1) % 4 <= PC.GunUpgrades)
         {
@@ -231,13 +218,11 @@ public class PlayerHud : MonoBehaviour
             // Set Bottom Closed.
             animReelBot.SetBool("Active", false);
         }
-        Debug.Log((currentType + 1 % 3) + ":" + PC.GunUpgrades);
     }
 
     public void BulletUpgrade()
     {
         animReelMid.SetTrigger("Active");
-        Debug.Log("Ammo Hud Activated.");
         SetAmmo(ammo);
     }
 
