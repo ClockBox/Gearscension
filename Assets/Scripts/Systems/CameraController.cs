@@ -2,6 +2,8 @@
 
 public class CameraController : MonoBehaviour
 {
+    public static Camera MainCamera;
+
     private const float Y_ANGLE_MIN = 290;
     private const float Y_ANGLE_MAX = 410.0f;
     
@@ -17,13 +19,21 @@ public class CameraController : MonoBehaviour
 
     private static float m_zoomed = 0;
 
-    public static Camera MainCamera;
-
     private void Awake()
     {
-        MainCamera = GetComponent<Camera>();
+        if (!MainCamera)
+        {
+            MainCamera = GetComponent<Camera>();
+            DontDestroyOnLoad(this);
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
+
         if (!camPivot)
-            camPivot = GameManager.Instance.Player.transform.GetChild(0);
+            camPivot = GameManager.Player.transform.GetChild(0);
     }
 
     private void LateUpdate()
@@ -32,7 +42,7 @@ public class CameraController : MonoBehaviour
             MainCamera = GetComponent<Camera>();
 
         if (!camPivot)
-            camPivot = GameManager.Instance.Player.transform.GetChild(0);
+            camPivot = GameManager.Player.transform.GetChild(0);
         else
         {
             //Mouse Input

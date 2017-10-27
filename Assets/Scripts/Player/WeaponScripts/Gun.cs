@@ -11,7 +11,7 @@ public class Gun : Weapon
     {
         base.Start();
         bulletSpawn = transform.GetChild(0);
-        player = GameManager.Instance.Player;
+        player = GameManager.Player;
         if (player.GunUpgrades < 0)
             gameObject.SetActive(false);
     }

@@ -46,8 +46,6 @@ public class LookDecision : AIDecisions {
 
 				if (Physics.Raycast(manager.visionPoints[i].position,  direction, out hit, manager.stats.lookRange))
 					{
-					Debug.Log(hit.collider.gameObject.name);
-
 					if (hit.collider.CompareTag("Player"))
 					{
 					manager.searchPosition = hit.collider.transform;

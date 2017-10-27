@@ -44,8 +44,8 @@ public class PlayerHud : MonoBehaviour
 
     void Awake()
     {
-        GameManager.Instance.Hud = this;
-        PC = GameManager.Instance.Player;
+        GameManager.Hud = this;
+        PC = GameManager.Player;
 
         armorPieceOne = GameObject.Find("/Gear Hud/Armor 1");
         if (armorPieceOne != null)

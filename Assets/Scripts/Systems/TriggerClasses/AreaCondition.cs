@@ -22,7 +22,7 @@ public class AreaCondition : Condition
             transform.forward * triggerArea.center.z;
 
         if (UsePlayer)
-            checkObject = GameManager.Instance.Player.gameObject;
+            checkObject = GameManager.Player.gameObject;
 
         if (checkObject)
         {

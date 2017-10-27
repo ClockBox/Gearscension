@@ -24,7 +24,7 @@ public class PlayerState
     //Constructor
     public PlayerState(StateManager manager)
     {
-        Player = PlayerController.Player;
+        Player = GameManager.Player;
         stateManager = PlayerController.StateM;
         IK = PlayerController.IK;
         rb = PlayerController.rb;

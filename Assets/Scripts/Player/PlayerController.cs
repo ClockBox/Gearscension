@@ -31,7 +31,7 @@ public class PlayerController : MonoBehaviour
     public Weapon[] weapons;
 
     [SerializeField, Range(-1,3)]
-    private int gunUpgrade = -1;
+    private static int gunUpgrade = -1;
     private int[] ammoAmounts = new int[4];
     private int ammoType = 0;
 
@@ -48,11 +48,6 @@ public class PlayerController : MonoBehaviour
     private float _damageImmune = 0.5f;
 
     //Getters & Setters
-    public static PlayerController Player
-    {
-        get { return m_player; }
-        set { m_player = value; }
-    }
     public static StateManager StateM
     {
         get { return m_stateM; }
@@ -132,7 +127,7 @@ public class PlayerController : MonoBehaviour
     public void UpgradeGun(int upgrade)
     {
         gunUpgrade = upgrade;
-        GameManager.Instance.Hud.BulletUpgrade();
+        GameManager.Hud.BulletUpgrade();
     }
 
     public GameObject FindHookTarget(string tag)
@@ -142,10 +137,10 @@ public class PlayerController : MonoBehaviour
         float closestAngle = 0.8f;
         for (int i = 0; i < targets.Length; i++)
         {
-            Vector3 checkDistance = targets[i].transform.position - Player.transform.position;
+            Vector3 checkDistance = targets[i].transform.position - transform.position;
             if (checkDistance.magnitude < HookRange)
             {
-                float checkAngle = (Vector3.Dot(targets[i].transform.position - Player.transform.position, Camera.main.transform.forward));
+                float checkAngle = (Vector3.Dot(targets[i].transform.position - transform.position, Camera.main.transform.forward));
                 if (checkAngle > closestAngle)
                 {
                     closestAngle = checkAngle;
@@ -200,22 +195,22 @@ public class PlayerController : MonoBehaviour
     //Initialize Player
     private void Awake()
     {
-        if (!GameManager.Instance.Player)
-            GameManager.Instance.Player = this;
-        else Destroy(gameObject);
+        if (!GameManager.Player)
+            GameManager.Player = this;
+        else
+        {
+            StopAllCoroutines();
+            Destroy(gameObject);
+        }
     }
 
     private void Start ()
     {
-        if (!m_player)
-            m_player = this;
-        else
-        {
-            DestroyImmediate(gameObject);
-            return;
-        }
-
         Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
+        if (!GameManager.Player)
+            return;
 
         m_stateM = GetComponent<StateManager>();
         m_ik = GetComponent<IKController>();

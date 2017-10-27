@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     private static string gameOverScene = "Game Over";
     private static string hudScene = "Hud";
 
-    public GameObject playerPrefab;
+    private static int NextFloor;
 
     private AudioDictonary audioManager;
     public AudioDictonary AudioManager
@@ -23,15 +23,14 @@ public class GameManager : MonoBehaviour
         set { audioManager = value; }
     }
 
-    private PlayerController player;
-    public PlayerController Player
+    private static PlayerController player;
+    public static PlayerController Player
     {
         get { return player; }
         set { player = value; }
     }
 
     private Vector3 respawnPoint;
-
     private Transform checkpoint;
     public Transform Checkpoint
     {
@@ -39,8 +38,8 @@ public class GameManager : MonoBehaviour
         set { checkpoint = value; }
     }
 
-    private PlayerHud hud;
-    public PlayerHud Hud
+    private static PlayerHud hud;
+    public static PlayerHud Hud
     {
         get { return hud; }
         set { hud = value; }
@@ -52,7 +51,7 @@ public class GameManager : MonoBehaviour
         get { return gameOver; }
         set { gameOver = value; }
     }
-    private static bool pause;
+    private static bool pause = false;
     public bool Pause
     {
         get { return pause; }
@@ -64,19 +63,29 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         if (!Instance)
+        {
             Instance = this;
-        else Destroy(gameObject);
+            transform.GetChild(0).gameObject.SetActive(true);
+        }
+        else transform.GetChild(0).gameObject.SetActive(false);
     }
 
     private void Start()
     {
         gameOver = false;
+        NextFloor = 1;
     }
     #endregion
 
     private void Update()
     {
-        if (gameOver)
+        if (!Instance)
+        {
+            Instance = this;
+            transform.GetChild(0).gameObject.SetActive(true);
+        }
+
+        if (this != Instance || gameOver)
             return;
 
         if (Input.GetButtonDown("Pause"))
@@ -84,11 +93,12 @@ public class GameManager : MonoBehaviour
             if (pause) UnloadScene(pauseMenuScene);
             else AddScene(pauseMenuScene);
         }
+
         // - DevCodes
         else if (Input.GetKeyDown(KeyCode.F1))
         {
-            checkpoint = null;
-            respawnPoint = player.transform.position;
+            Instance.checkpoint = null;
+            Instance.respawnPoint = player.transform.position;
         }
         else if (Input.GetKeyDown(KeyCode.F2))
             RespawnPlayer();
@@ -105,15 +115,20 @@ public class GameManager : MonoBehaviour
 
     public void TogglePause()
     {
+        if (this != Instance)
+            return;
+
         pause = !pause;
         if (Time.timeScale == 1f)
         {
-            Cursor.lockState = CursorLockMode.None;
+            Cursor.lockState = CursorLockMode.Confined;
+            Cursor.visible = true;
             Time.timeScale = 0f;
         }
         else if (Time.timeScale == 0f)
         {
             Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
             Time.timeScale = 1f;
         }
     }
@@ -133,12 +148,12 @@ public class GameManager : MonoBehaviour
         sceneFader.FadeTo(SceneManager.GetActiveScene().name);
     }
 
-    public void RespawnPlayer()
+    public static void RespawnPlayer()
     {
-        if (checkpoint)
-            player.transform.position = checkpoint.position;
+        if (Instance.checkpoint)
+            player.transform.position = Instance.checkpoint.position;
         else
-            player.transform.position = respawnPoint;
+            player.transform.position = Instance.respawnPoint;
         PlayerController.rb.velocity = Vector3.zero;
     }
 
@@ -174,6 +189,14 @@ public class GameManager : MonoBehaviour
         LoadScene(PlayerPrefs.GetInt("ContinueScene"));
     }
 
+    public void AddNextFloor()
+    {
+        UnloadScene("Floor_" + NextFloor);
+        NextFloor++;
+        AddScene("Floor_" + NextFloor);
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName("Floor_" + NextFloor));
+    }
+
     public void LoadScene(string name)
     {
         SceneManager.LoadScene(name);
@@ -182,52 +205,46 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene(index);
     }
-    public void LoadScene(Scene scene)
-    {
-        LoadScene(scene.buildIndex);
-    }
 
     public void AddScene(string name)
     {
-        SceneManager.LoadScene(name, LoadSceneMode.Additive);
+        SceneManager.LoadSceneAsync(name, LoadSceneMode.Additive);
     }
     public void AddScene(int index)
     {
-        SceneManager.LoadScene(index, LoadSceneMode.Additive);
-    }
-    public void AddScene(Scene scene)
-    {
-        AddScene(scene.buildIndex);
+        SceneManager.LoadSceneAsync(index, LoadSceneMode.Additive);
     }
 
     public void UnloadScene(string name)
     {
-        SceneManager.UnloadSceneAsync(name);
+        if(SceneManager.GetSceneByName(name).isLoaded)
+            SceneManager.UnloadSceneAsync(name);
     }
     public void UnloadScene(int index)
     {
-        SceneManager.UnloadSceneAsync(index);
-    }
-    public void UnloadScene(Scene scene)
-    {
-        SceneManager.UnloadSceneAsync(scene);
+        if (SceneManager.GetSceneAt(index).isLoaded)
+            SceneManager.UnloadSceneAsync(index);
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        if (this != Instance)
+            return;
+
         if (scene.name == pauseMenuScene)
             TogglePause();
 
-        if (scene.buildIndex > 4)
+        else if (scene.buildIndex > 4)
         {
-            SceneManager.LoadScene(hudScene, LoadSceneMode.Additive);
+            if (!SceneManager.GetSceneByName(hudScene).isLoaded)
+                SceneManager.LoadScene(hudScene, LoadSceneMode.Additive);
             PlayerPrefs.SetInt("ContinueScene", scene.buildIndex);
-            Debug.Log(PlayerPrefs.GetInt("ContinueScene"));
         }
         else
         {
             pause = false;
-            Cursor.lockState = CursorLockMode.None;
+            Cursor.lockState = CursorLockMode.Confined;
+            Cursor.visible = true;
             Time.timeScale = 1;
         }
     }
