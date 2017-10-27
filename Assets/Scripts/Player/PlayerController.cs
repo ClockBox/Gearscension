@@ -120,8 +120,8 @@ public class PlayerController : MonoBehaviour
 
     public void PickupGun()
     {
-        weapons[0].gameObject.SetActive(true);
-        UpgradeGun(0);
+        GameManager.Player.weapons[0].gameObject.SetActive(true);
+        GameManager.Player.UpgradeGun(0);
     }
 
     public void UpgradeGun(int upgrade)
@@ -196,7 +196,10 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         if (!GameManager.Player)
+        {
             GameManager.Player = this;
+            DontDestroyOnLoad(this);
+        }
         else
         {
             StopAllCoroutines();
