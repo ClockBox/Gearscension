@@ -142,13 +142,6 @@ public class GameManager : MonoBehaviour
         PlayerController.rb.velocity = Vector3.zero;
     }
 
-    public void SpawnPlayer()
-    {
-        if (!player)
-            return;
-        player = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity).GetComponent<PlayerController>();
-    }
-
     public void DestroyObject(GameObject referenceObject)
     {
         Destroy(referenceObject);
@@ -225,7 +218,7 @@ public class GameManager : MonoBehaviour
         if (scene.name == pauseMenuScene)
             TogglePause();
 
-        if (scene.buildIndex > 3)
+        if (scene.buildIndex > 4)
         {
             SceneManager.LoadScene(hudScene, LoadSceneMode.Additive);
             PlayerPrefs.SetInt("ContinueScene", scene.buildIndex);
