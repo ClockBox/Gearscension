@@ -15,7 +15,8 @@ public class Soldier : AIStateManager {
 	public float meleeDamage;
 	private GameObject fireBurster;
 	private int choice;
-	private float bulletRotation;
+	private Quaternion bulletRotation;
+	private float rotationIncrement;
 	
 	public override void RangedAttack()
 	{
@@ -25,16 +26,17 @@ public class Soldier : AIStateManager {
 			GameObject smoke = Instantiate(smokePrefab, exhaust.transform.position, exhaust.transform.rotation);
 			smoke.GetComponent<ParticleSystem>().Emit(1);
 			Destroy(smoke, 1f);
-			bulletRotation = -20;
+			bulletRotation = Quaternion.LookRotation(player.transform.position-transform.position);
+			rotationIncrement = -30;
 			callOnce = true;
 		}
 		
 		if (shotFrequency >= shotInterval)
 		{
 			Rigidbody _bullet;
-			_bullet = Instantiate(bulletPrefab, gunPoint.transform.position, gunPoint.transform.rotation);
-			_bullet.transform.Rotate(0, bulletRotation, 0);
-			bulletRotation += 10;
+			_bullet = Instantiate(bulletPrefab, gunPoint.transform.position, bulletRotation);
+			_bullet.transform.Rotate(0, rotationIncrement, 0);
+			rotationIncrement += 10;
 			//Vector3 direction = player.transform.position - transform.position;
 			//_bullet.velocity = direction.normalized* bulletSpeed;
 			_bullet.velocity = _bullet.transform.forward * bulletSpeed;
