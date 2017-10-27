@@ -57,11 +57,11 @@ public abstract class AIStateManager : MonoBehaviour  {
 		setFrequency += Time.deltaTime;
 
 
-		//if (Input.GetKeyDown(KeyCode.G))
-		//{
-		//	TakeDamage(1);
-		//	Debug.Log(stats.armour);
-		//}
+		if (Input.GetKeyDown(KeyCode.G))
+		{
+			TakeDamage(1);
+			Debug.Log(stats.armour);
+		}
 	}
 	public void TransitionToState(AIStates nextState) {
 		if (nextState != remainState)
@@ -121,11 +121,12 @@ public abstract class AIStateManager : MonoBehaviour  {
 	}
 
 	public void TakeDamage(float damage) {
- 
-		stats.armour--;
+		if (stats.armour > 0){
+			stats.armour--;
 		if (stats.armour <= 0)
-		{
-			Stun();
+			{
+				Stun();
+			}
 		}
 	}
 
@@ -135,6 +136,8 @@ public abstract class AIStateManager : MonoBehaviour  {
 		stats.armour = 0;
 		pathAgent.speed = 0;
 		pathAgent.turnSpeed = 0;
+		if(GetComponentInChildren<AIBreakable>())
+		GetComponentInChildren<AIBreakable>().Breaks();
 		TransitionToState(stunState);
 	}
 
