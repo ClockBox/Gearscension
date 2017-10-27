@@ -23,7 +23,6 @@ public class BreakablePillar : MonoBehaviour
 
     void OnTriggerEnter(Collider col)
     {
-        Debug.Log(col.gameObject.tag);
         if(col.gameObject.tag == "Boss")
         {
             for(int i = 0; i < breakablePart.Length; i++)
