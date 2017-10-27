@@ -4,16 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Charger : AIStateManager {
-
-
-	Rigidbody rb;
-	public float force;
 	public float waitTime;
 	public Transform shieldPoint;
 	public GameObject chargeShield;
-	private bool isCharging=false;
 	private GameObject shieldEffect;
-
+	public float force;
 	public override void StartEvents() { }
 
 	public override void Die()
@@ -33,48 +28,27 @@ public class Charger : AIStateManager {
 			pathAgent.speed = 0;
 			pathAgent.turnSpeed = 0;
 			pathAgent.enabled = false;
-			rb = GetComponent<Rigidbody>();
-			StartCoroutine(Charge(player, waitTime));
+			
+			transform.LookAt(player.transform);
+			shieldEffect = Instantiate(chargeShield, shieldPoint.position, shieldPoint.rotation);
+			shieldEffect.transform.parent = this.transform;
+			StartCoroutine(Charge(player.transform.position,waitTime));
 			callOnce = true;
 		}
 		
 	}
 
-	IEnumerator Charge(GameObject target, float delayTime)
+	IEnumerator Charge(Vector3 target, float delayTime)
 	{
 		yield return new WaitForSeconds(delayTime);
-		isCharging = true;
-		Vector3 chargeTarget = new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z);
-		transform.LookAt(chargeTarget);
-		Vector3 dir = chargeTarget - transform.position;
-		dir = dir.normalized;
-		shieldEffect = Instantiate(chargeShield, shieldPoint.position, shieldPoint.rotation);
-		shieldEffect.transform.parent = shieldPoint.transform;
-		rb.AddForce(dir * force,ForceMode.Impulse);
+		Vector3 dir = (target - transform.position).normalized;
+		GetComponent<Rigidbody>().AddForce(dir * force, ForceMode.Impulse);
+
 	}
 
-	//private void OnCollisionEnter(Collision collision)
-
-	//{
-	//	if (collision.gameObject.tag == "Player")
-	//	{
-
-	//		if (isCharging)
-	//		{
-	//			shieldEffect.GetComponent<ChargeShield>().Unping();
-	//			Destroy(shieldEffect.gameObject);
-	//			isCharging = false;
-	//		}
-	//	}
-	//}
 	public override void CollisionEvents()
 	{
-		//if (isCharging)
-		//{
-		//	shieldEffect.GetComponent<ChargeShield>().Unping();
-		//	Destroy(shieldEffect.gameObject);
-		//	isCharging = false;
-		//}
+		
 
 	}
 }
