@@ -28,6 +28,8 @@ public class GameManager : MonoBehaviour
         set { player = value; }
     }
 
+    private Vector3 respawnPoint;
+
     private Transform checkpoint;
     public Transform Checkpoint
     {
@@ -80,10 +82,19 @@ public class GameManager : MonoBehaviour
             if (pause) UnloadScene(pauseMenuScene);
             else AddScene(pauseMenuScene);
         }
-        //else if (Input.GetKeyDown(KeyCode.F1))0
-        //    checkpoint = player.transform.transform;
-        //else if (Input.GetKeyDown(KeyCode.F2))
-        //    RespawnPlayer();
+        // - DevCodes
+        else if (Input.GetKeyDown(KeyCode.F1))
+        {
+            checkpoint = null;
+            respawnPoint = player.transform.transform.position;
+        }
+        else if (Input.GetKeyDown(KeyCode.F2))
+            RespawnPlayer();
+
+        else if (Input.GetKeyDown(KeyCode.F5))
+            LoadScene("Floor_1");
+        else if (Input.GetKeyDown(KeyCode.F6))
+            LoadScene("Floor_2");
     }
 
     public void TogglePause()
@@ -121,7 +132,7 @@ public class GameManager : MonoBehaviour
         if (checkpoint)
             player.transform.position = checkpoint.position;
         else
-            player.transform.position = Vector3.zero;
+            player.transform.position = respawnPoint;
         PlayerController.rb.velocity = Vector3.zero;
     }
 
