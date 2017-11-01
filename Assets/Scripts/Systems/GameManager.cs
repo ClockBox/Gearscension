@@ -139,7 +139,7 @@ public class GameManager : MonoBehaviour
     }
 
     private void SpawnPlayer()
-    {
+    {   
         Player = Instantiate(playerPrefab, LevelSpawn.position, LevelSpawn.rotation).GetComponent<PlayerController>();
     }
 
