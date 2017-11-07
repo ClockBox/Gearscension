@@ -53,6 +53,9 @@ public class PlayerState
     {
         while (!stopState)
         {
+            while (GameManager.Instance.Pause)
+                yield return null;
+
             UpdateMovement();
             UpdateAnimator();
             UpdateIK();
@@ -71,6 +74,9 @@ public class PlayerState
     {
         while (!stopState)
         {
+            while (GameManager.Instance.Pause)
+                yield return null;
+
             if (this != stateManager.State)
             {
                 Debug.LogWarning("RogueState: " + this + "\tCurrent State:" + stateManager.State);

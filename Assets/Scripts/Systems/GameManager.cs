@@ -14,6 +14,8 @@ public class GameManager : MonoBehaviour
     private static string gameOverScene = "Game Over";
     private static string hudScene = "Hud";
 
+    public GameObject playerPrefab;
+    public Transform LevelSpawn;
     private static int NextFloor;
 
     private AudioDictonary audioManager;
@@ -68,6 +70,9 @@ public class GameManager : MonoBehaviour
             transform.GetChild(0).gameObject.SetActive(true);
         }
         else transform.GetChild(0).gameObject.SetActive(false);
+
+        if (!Player)
+            SpawnPlayer();
     }
 
     private void Start()
@@ -133,9 +138,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void MainMenu()
-    {
-        SceneManager.LoadScene(mainMenuScene);
+    private void SpawnPlayer()
+    {   
+        Player = Instantiate(playerPrefab, LevelSpawn.position, LevelSpawn.rotation).GetComponent<PlayerController>();
     }
 
     public void Restart()
@@ -148,12 +153,12 @@ public class GameManager : MonoBehaviour
         sceneFader.FadeTo(SceneManager.GetActiveScene().name);
     }
 
-    public static void RespawnPlayer()
+    public void RespawnPlayer()
     {
-        if (Instance.checkpoint)
-            player.transform.position = Instance.checkpoint.position;
+        if (checkpoint)
+            player.transform.position = checkpoint.position;
         else
-            player.transform.position = Instance.respawnPoint;
+            player.transform.position = respawnPoint;
         PlayerController.rb.velocity = Vector3.zero;
     }
 
@@ -172,6 +177,11 @@ public class GameManager : MonoBehaviour
     }
 
     #region SceneManagment
+    public void MainMenu()
+    {
+        SceneManager.LoadScene(mainMenuScene);
+    }
+
     private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;

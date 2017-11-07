@@ -40,7 +40,7 @@ public class EffectArea : MonoBehaviour
                     if (TestObject.CompareTag("Generator"))
                     {
                         Debug.Log("POWER");
-                        TestObject.GetComponent<Generator>().generate();
+                        TestObject.GetComponent<Generator>().Activate();
                     }
                 }
             }
