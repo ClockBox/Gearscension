@@ -130,7 +130,6 @@ public class MoveState : PlayerState
             rb.AddForce(Player.transform.up * -9.81f * rb.mass);
             Vector3 airMovement = Vector3.ClampMagnitude(moveDirection, movementSpeed);
             airMovement.y = rb.velocity.y;
-            airMovement.x /= 2;
             rb.velocity = Vector3.MoveTowards(rb.velocity, airMovement, movementSpeed);
             movementSpeed -= Time.deltaTime;
         }

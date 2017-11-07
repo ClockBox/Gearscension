@@ -31,7 +31,7 @@ public class PlayerController : MonoBehaviour
     public Weapon[] weapons;
 
     [SerializeField, Range(-1,3)]
-    private static int gunUpgrade = -1;
+    private int gunUpgrade = -1;
     private int[] ammoAmounts = new int[4];
     private int ammoType = 0;
 
