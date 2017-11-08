@@ -5,25 +5,20 @@ using UnityEngine;
 public class ChandelierTrap : MonoBehaviour
 {
     public GameObject[] breakablePart;
-    private Rigidbody rb;
+    private Rigidbody temp;
 
     private void Start()
     {
         
     }
 
-    void OnTriggerEnter(Collider col)
+    public void DropChandelier()
     {
-        if (col.gameObject.tag == "Boss")
+        for (int i = 0; i < breakablePart.Length; i++)
         {
-            for (int i = 0; i < breakablePart.Length; i++)
-            {
-                breakablePart[i].GetComponent<Rigidbody>().useGravity = true;
-                breakablePart[i].GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
-
-                breakablePart[i].transform.parent = null;
-                breakablePart[i].GetComponent<Collider>().enabled = true;
-            }
+            temp = breakablePart[i].AddComponent<Rigidbody>();
+            temp.useGravity = true;
+            temp.constraints = RigidbodyConstraints.None;
         }
     }
 }
