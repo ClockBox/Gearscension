@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: 303878bfdc6139e4db14fd5e9887df2c
-timeCreated: 1508874628
-licenseType: Pro
+timeCreated: 1509574702
+licenseType: Free
 ModelImporter:
   serializedVersion: 21
   fileIDToRecycleName:
@@ -378,6 +378,7 @@ ModelImporter:
     4300044: Blade
     4300046: Sword Sheathed
     9500000: //RootNode
+    11100000: //RootNode
     13700000: Arm_Left
     13700002: Boot_Cuffs
     13700004: Boots
@@ -1332,7 +1333,7 @@ ModelImporter:
     - name: JNT_L_MiddleA
       parentName: JNT_L_Hand
       position: {x: 0.008638494, y: -0.11098055, z: 0.001308832}
-      rotation: {x: 0.40783536, y: 0.53850174, z: 0.5408181, w: 0.5012007}
+      rotation: {x: 0.39497823, y: 0.5476501, z: 0.550745, w: 0.4906644}
       scale: {x: 1.0000019, y: 1.0000005, z: 0.9999981}
     - name: JNT_L_MiddleB
       parentName: JNT_L_MiddleA
@@ -1372,7 +1373,7 @@ ModelImporter:
     - name: JNT_L_PointerA
       parentName: JNT_L_Hand
       position: {x: 0.0015694128, y: -0.1061942, z: 0.025665242}
-      rotation: {x: 0.36412695, y: 0.53721344, z: 0.52416545, w: 0.5514199}
+      rotation: {x: 0.3576267, y: 0.53739, z: 0.52972215, w: 0.55019057}
       scale: {x: 1.0000015, y: 1.0000008, z: 0.99999905}
     - name: JNT_L_PointerB
       parentName: JNT_L_PointerA

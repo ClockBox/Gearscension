@@ -31,7 +31,7 @@ public class PlayerController : MonoBehaviour
     public Weapon[] weapons;
 
     [SerializeField, Range(-1,3)]
-    private static int gunUpgrade = -1;
+    private int gunUpgrade = -1;
     private int[] ammoAmounts = new int[4];
     private int ammoType = 0;
 
@@ -120,8 +120,8 @@ public class PlayerController : MonoBehaviour
 
     public void PickupGun()
     {
-        weapons[0].gameObject.SetActive(true);
-        UpgradeGun(0);
+        GameManager.Player.weapons[0].gameObject.SetActive(true);
+        GameManager.Player.UpgradeGun(0);
     }
 
     public void UpgradeGun(int upgrade)
@@ -196,7 +196,10 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         if (!GameManager.Player)
+        {
             GameManager.Player = this;
+            DontDestroyOnLoad(this);
+        }
         else
         {
             StopAllCoroutines();

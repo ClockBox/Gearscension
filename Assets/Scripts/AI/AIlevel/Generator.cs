@@ -1,35 +1,34 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
-public class Generator : MonoBehaviour {
-    GameObject[] levers;
-    private void Start()
-    {
-        levers = GameObject.FindGameObjectsWithTag("Levers");
-    }
- 
-	public void generate()
-    {
-        GetClosest(levers).GetComponent<Lever>().Activated = true;
+public class Generator : MonoBehaviour
+{
+    public UnityEvent OnActivate;
+    public UnityEvent OnDeactivate;
 
-    }
-
-    GameObject GetClosest(GameObject[] levers)
+    private bool active = false;
+    public bool Active
     {
-        GameObject cLever = null;
-        float minDist = Mathf.Infinity;
-        Vector3 Pos = transform.position;
-        foreach(GameObject l in levers)
+        get { return active; }
+        set
         {
-            float dist = Vector3.Distance(l.transform.position, Pos);
-            if (dist < minDist)
-            {
-                cLever = l;
-                minDist = dist;
-            }
-            
+            active = value;
+            if (active) OnActivate.Invoke();
+            else OnDeactivate.Invoke();
         }
-        return cLever;
+    }
+	public void Activate()
+    {
+        active = true;
+    }
+    public void Deactivate()
+    {
+        active = true;
+    }
+    public void Invert()
+    {
+        active = !active;
     }
 }
