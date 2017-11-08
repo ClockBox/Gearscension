@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 8e465ac5c85bd6a45afeb2cdf9adbe6e
-timeCreated: 1510097971
+guid: f487b5a3176463343ba7d5c8f96d6834
+timeCreated: 1510097973
 licenseType: Pro
 ModelImporter:
   serializedVersion: 21
@@ -9,7 +9,7 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Moulding_02
+    4300000: Wall_Brass01
   materials:
     importMaterials: 1
     materialName: 0

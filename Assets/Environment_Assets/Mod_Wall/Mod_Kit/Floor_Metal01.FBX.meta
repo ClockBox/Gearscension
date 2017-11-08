@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 8e465ac5c85bd6a45afeb2cdf9adbe6e
+guid: 76be1d52793a1154daf9f02238695e3b
 timeCreated: 1510097971
 licenseType: Pro
 ModelImporter:
@@ -9,7 +9,7 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Moulding_02
+    4300000: Floor_MetalPlate03
   materials:
     importMaterials: 1
     materialName: 0

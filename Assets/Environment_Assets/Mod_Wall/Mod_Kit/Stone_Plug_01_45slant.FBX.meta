@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 8e465ac5c85bd6a45afeb2cdf9adbe6e
-timeCreated: 1510097971
+guid: b1d0f0b05da13614da5f866fb0585290
+timeCreated: 1510097972
 licenseType: Pro
 ModelImporter:
   serializedVersion: 21
@@ -9,7 +9,7 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Moulding_02
+    4300000: Wall_Stone45_01
   materials:
     importMaterials: 1
     materialName: 0

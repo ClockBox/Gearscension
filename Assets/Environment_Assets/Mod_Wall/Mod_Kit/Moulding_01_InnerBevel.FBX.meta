@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 8e465ac5c85bd6a45afeb2cdf9adbe6e
-timeCreated: 1510097971
+guid: aedca135bfa5d38468f9c7cbeb349926
+timeCreated: 1510097972
 licenseType: Pro
 ModelImporter:
   serializedVersion: 21
@@ -9,7 +9,7 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Moulding_02
+    4300000: Moulding90degreeInnerBevel
   materials:
     importMaterials: 1
     materialName: 0

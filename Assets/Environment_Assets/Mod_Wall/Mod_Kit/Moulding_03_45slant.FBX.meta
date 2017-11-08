@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 8e465ac5c85bd6a45afeb2cdf9adbe6e
+guid: 8c6bba3d2d0466b43a238abe36ed9a04
 timeCreated: 1510097971
 licenseType: Pro
 ModelImporter:
@@ -9,7 +9,7 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Moulding_02
+    4300000: Moulding45_Cont.01
   materials:
     importMaterials: 1
     materialName: 0

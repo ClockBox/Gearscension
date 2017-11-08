@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 8e465ac5c85bd6a45afeb2cdf9adbe6e
-timeCreated: 1510097971
+guid: 44a400e9f5a2c2541b295c0e86181c26
+timeCreated: 1510097970
 licenseType: Pro
 ModelImporter:
   serializedVersion: 21
@@ -9,7 +9,7 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Moulding_02
+    4300000: Wall_Metal90degreeOuterBevel
   materials:
     importMaterials: 1
     materialName: 0
