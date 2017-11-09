@@ -71,7 +71,7 @@ public class GameManager : MonoBehaviour
         }
         else transform.GetChild(0).gameObject.SetActive(false);
 
-        if (!Player)
+        if (!Player && SceneManager.GetActiveScene().buildIndex > 4)
             SpawnPlayer();
     }
 
@@ -138,6 +138,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void DestroyObject(GameObject referenceObject)
+    {
+        Destroy(referenceObject);
+    }
+
+    #region Player Managment
     private void SpawnPlayer()
     {   
         Player = Instantiate(playerPrefab, LevelSpawn.position, LevelSpawn.rotation).GetComponent<PlayerController>();
@@ -162,11 +168,6 @@ public class GameManager : MonoBehaviour
         PlayerController.rb.velocity = Vector3.zero;
     }
 
-    public void DestroyObject(GameObject referenceObject)
-    {
-        Destroy(referenceObject);
-    }
-
     public void Quit()
     {
 #if UNITY_EDITOR
@@ -175,6 +176,7 @@ public class GameManager : MonoBehaviour
         Application.Quit();
 #endif
     }
+    #endregion
 
     #region SceneManagment
     public void MainMenu()
@@ -276,6 +278,5 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(levelCompleteScene, LoadSceneMode.Additive);
         gameOver = true;
     }
-
     #endregion  
 }

@@ -133,15 +133,10 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void PickupGun()
-    {
-        GameManager.Player.weapons[0].gameObject.SetActive(true);
-        GameManager.Player.UpgradeGun(0);
-    }
-
     public void UpgradeGun(int upgrade)
     {
-        gunUpgrade = upgrade;
+        GameManager.Player.weapons[0].gameObject.SetActive(true);
+        GameManager.Player.gunUpgrade = upgrade;
         GameManager.Hud.BulletUpgrade();
     }
 
@@ -220,7 +215,7 @@ public class PlayerController : MonoBehaviour
             StopAllCoroutines();
             Destroy(gameObject);
         }
-
+        
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 

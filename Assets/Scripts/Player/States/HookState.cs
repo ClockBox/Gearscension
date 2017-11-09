@@ -20,10 +20,7 @@ public class HookState : ClimbState
         IK.GlobalWeight = 1;
 
         if (sword.transform.parent == Player.SwordSheath)
-        {
-            Debug.Log("Here");
             yield return ToggleSword(true);
-        }
     }
     public override IEnumerator ExitState(PlayerState nextState)
     {

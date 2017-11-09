@@ -31,7 +31,6 @@ public class CameraController : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
         if (!camPivot)
             camPivot = GameManager.Player.transform.GetChild(0);
     }
