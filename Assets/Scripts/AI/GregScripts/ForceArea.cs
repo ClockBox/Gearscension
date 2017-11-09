@@ -14,6 +14,8 @@ public class ForceArea : MonoBehaviour
     private Rigidbody tempRB;
     private float elapsedTime = 0.5f;
 
+    private ChandelierTrap cT;
+
     void Start()
     {
         if (!player)
@@ -37,6 +39,12 @@ public class ForceArea : MonoBehaviour
         cols = Physics.OverlapSphere(transform.position, pushRadius, LayerMask.GetMask("Debris", "Character"));
         for (int i = 0; i < cols.Length; i++)
         {
+            if(cols[i].tag ==("Chandelier"))
+            {
+                cT = cols[i].GetComponent<ChandelierTrap>();
+                cT.DropChandelier();
+            }
+
             if (!cols[i].isTrigger)
             {
                 tempRB = cols[i].GetComponent<Rigidbody>();
