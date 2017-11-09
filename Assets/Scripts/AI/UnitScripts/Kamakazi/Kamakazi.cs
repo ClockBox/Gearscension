@@ -51,7 +51,7 @@ public class Kamakazi : AIStateManager {
 	{
 		if (!callOnce)
 		{
-			pathAgent.turnSpeed = 0;
+			pathAgent.angularSpeed = 0;
 			pathAgent.enabled = false;
 			rb = GetComponent<Rigidbody>();
 			callOnce = true;
@@ -123,8 +123,6 @@ public class Kamakazi : AIStateManager {
 		return newEffect;
 		
 	}
-	public override void CollisionEvents()
-	{
-	}
+	
 
 }

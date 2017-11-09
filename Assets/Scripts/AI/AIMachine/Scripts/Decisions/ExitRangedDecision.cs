@@ -15,7 +15,7 @@ public class ExitRangedDecision : AIDecisions{
 		{
 			manager.pathAgent.enabled = true;
 			manager.pathAgent.speed = manager.stats.engageSpeed;
-			manager.pathAgent.turnSpeed = manager.stats.turnSpeed;
+			manager.pathAgent.angularSpeed = manager.stats.turnSpeed;
 			manager.setFrequency = 0;
 			return true;
 		}

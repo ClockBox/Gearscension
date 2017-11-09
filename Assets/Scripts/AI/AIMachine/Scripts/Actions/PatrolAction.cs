@@ -22,7 +22,7 @@ public class PatrolAction : AIActions {
 
 			manager.pathTarget = manager.patrolPoints[manager.pathIndex];
 
-			manager.pathAgent.travel(manager.pathTarget.position);
+			manager.pathAgent.destination=manager.pathTarget.position;
 		}
 	}
 

@@ -26,7 +26,7 @@ public class Charger : AIStateManager {
 		if (!callOnce)
 		{
 			pathAgent.speed = 0;
-			pathAgent.turnSpeed = 0;
+			pathAgent.angularSpeed = 0;
 			pathAgent.enabled = false;
 			
 			transform.LookAt(player.transform);
@@ -46,9 +46,5 @@ public class Charger : AIStateManager {
 
 	}
 
-	public override void CollisionEvents()
-	{
-		
-
-	}
+	
 }

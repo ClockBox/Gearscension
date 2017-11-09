@@ -54,7 +54,6 @@ public class ForceArea : MonoBehaviour
             }
             if (cols[i].gameObject == player)
                 PlayerState.grounded = false;
-
             cols[i].GetComponent<AIStateManager>().TakeDamage(5);
         }
     }

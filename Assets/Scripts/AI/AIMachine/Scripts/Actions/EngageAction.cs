@@ -18,6 +18,6 @@ public class EngageAction : AIActions {
 		//	manager.pathAgent.speed = manager.stats.engageSpeed;
 		//}
 
-		manager.pathAgent.travel(manager.player.transform.position);
+		manager.pathAgent.destination =manager.player.transform.position;
 	}
 }

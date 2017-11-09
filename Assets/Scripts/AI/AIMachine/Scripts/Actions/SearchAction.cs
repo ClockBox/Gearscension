@@ -10,6 +10,6 @@ public class SearchAction : AIActions {
 		Search(manager);
 	}
 	private void Search (AIStateManager manager) {
-		manager.pathAgent.travel(manager.searchPosition.position);
+		manager.pathAgent.destination=manager.searchPosition.position;
 	}
 }
