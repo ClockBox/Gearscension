@@ -39,7 +39,7 @@ public class ForceArea : MonoBehaviour
         cols = Physics.OverlapSphere(transform.position, pushRadius, LayerMask.GetMask("Debris", "Character"));
         for (int i = 0; i < cols.Length; i++)
         {
-            if(cols[i].tag ==("Chandelier"))
+            if (cols[i].tag == ("Chandelier"))
             {
                 cT = cols[i].GetComponent<ChandelierTrap>();
                 cT.DropChandelier();
