@@ -30,6 +30,11 @@ public class AudioDictonary : MonoBehaviour {
         audioPlayer.PlayOneShot(AudioClipDictionary[name]);
     }
 
+    public void playAudio(AudioSource ap, string name)
+    {
+        ap.PlayOneShot(AudioClipDictionary[name]);
+    }
+
     private string Rename(string n)
     {
         string name = "";
