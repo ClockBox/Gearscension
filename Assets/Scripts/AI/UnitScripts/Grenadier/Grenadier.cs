@@ -54,10 +54,13 @@ public class Grenadier : AIStateManager {
 
 	public override void Die()
 	{
+		if (isAlive)
+		{
+			isAlive = false;
+			Destroy(gameObject, 1f);
+		}
 	}
-	public override void CollisionEvents()
-	{
-	}
+	
 
 	private Vector3 CalculateVelocityArc(float angle, Vector3 displacement)
 	{

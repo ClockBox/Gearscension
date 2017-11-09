@@ -16,7 +16,7 @@ public class EndSearchDecision : AIDecisions {
 			if (manager.checkTimeElapsed(manager.stats.alertTimer))
 			{
 				manager.pathAgent.speed = manager.stats.patrolSpeed;
-				manager.pathAgent.travel(manager.pathTarget.position);
+				manager.pathAgent.destination=manager.pathTarget.position;
 				return true;
 			}
 		}

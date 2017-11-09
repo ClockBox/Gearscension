@@ -14,8 +14,8 @@ public class StunDecision : AIDecisions {
 		if (manager.checkTimeElapsed(manager.stats.stunDuration))
 		{
 			manager.pathAgent.speed = manager.stats.engageSpeed;
-			manager.pathAgent.turnSpeed = manager.stats.turnSpeed;
-			manager.stats.armour =1;
+			manager.pathAgent.angularSpeed = manager.stats.turnSpeed;
+			manager.stats.armour =5;
 			return true;
 		}
 		else

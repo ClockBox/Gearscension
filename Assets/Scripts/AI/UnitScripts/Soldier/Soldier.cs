@@ -17,7 +17,7 @@ public class Soldier : AIStateManager {
 	private int choice;
 	private Quaternion bulletRotation;
 	private float rotationIncrement;
-	
+	private Animator anim;
 	public override void RangedAttack()
 	{
 		if (!callOnce)
@@ -59,9 +59,10 @@ public class Soldier : AIStateManager {
 
 		if (attackFrequency >= attackInterval)
 		{
-			pathAgent.travel(player.transform.position);
+			pathAgent.destination=player.transform.position;
 			if (Vector3.Distance(transform.position, player.transform.position) <= meleeRange)
 			{
+				anim.SetTrigger("Attack");
 				fireBurster.GetComponent<ParticleSystem>().Emit(2);
 				player.gameObject.SendMessage("TakeDamage", meleeDamage, SendMessageOptions.DontRequireReceiver);
 			}
@@ -76,12 +77,13 @@ public class Soldier : AIStateManager {
 		if (isAlive)
 		{
 			Debug.Log("Soldier dead");
-
+			GetComponent<CapsuleCollider>().enabled = false;
 			Rigidbody[] temp = GetComponentsInChildren<Rigidbody>();
 			if (temp.Length > 0)
 			{
 				for (int i = 0; i < temp.Length; i++)
 				{
+					temp[i].mass = 80;
 					temp[i].useGravity = true;
 					temp[i].constraints = RigidbodyConstraints.None;
 					temp[i].transform.parent = null;
@@ -96,13 +98,12 @@ public class Soldier : AIStateManager {
 	}
 
 	public override void StartEvents() {
+		
 		fireBurster = Instantiate(firePrefab, transform.position, transform.rotation);
 		fireBurster.transform.parent = transform;
+		anim = GetComponent<Animator>();
 		
 	}
-	public override void CollisionEvents()
-	{
-		
-	}
+	
 
 }
