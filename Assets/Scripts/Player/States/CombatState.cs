@@ -62,6 +62,9 @@ public class CombatState : MoveState
         
         if (!Equiped)
         {
+            GameManager.Instance.AudioManager.AudioPlayer = Player.SFX;
+            GameManager.Instance.AudioManager.playAudio("sfxswordsheath");
+
             sword.parent = Player.SwordSheath;
             sword.rotation = Player.SwordSheath.rotation;
             sword.localEulerAngles = new Vector3(0, 0, 90);
@@ -69,6 +72,9 @@ public class CombatState : MoveState
         }
         else
         {
+            GameManager.Instance.AudioManager.AudioPlayer = Player.SFX;
+            GameManager.Instance.AudioManager.playAudio("sfxsworddraw");
+
             sword.parent = anim.GetBoneTransform(HumanBodyBones.RightHand);
             sword.localPosition = new Vector3(0.1f, 0.02f, 0);
             sword.localEulerAngles = new Vector3(90, 0, -90);

@@ -60,12 +60,20 @@ public class AimState : MoveState
         if (aiming)
         {
             yield return ToggleArm(aiming);
+
+            GameManager.Instance.AudioManager.AudioPlayer = Player.SFX;
+            GameManager.Instance.AudioManager.playAudio("sfxgundraw");
+
             yield return ToggleGun(Player.GunHolster, Player.AimPoint);
             gun.parent = Player.AimPoint;
         }
         else
         {
             yield return ToggleGun(Player.AimPoint, Player.GunHolster);
+
+            GameManager.Instance.AudioManager.AudioPlayer = Player.SFX;
+            GameManager.Instance.AudioManager.playAudio("sfxgunputaway");
+
             yield return ToggleArm(aiming);
             gun.parent = Player.GunHolster;
         }

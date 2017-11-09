@@ -12,7 +12,7 @@ public class UnequipedState : MoveState
             stateManager.ChangeState(new CombatState(stateManager, grounded));
 
         else if (Player.GunUpgrades >= 0 && (Input.GetButton("Aim") || Player.LeftTrigger.Stay))
-            stateManager.ChangeState(new AimState(stateManager,grounded));
+            stateManager.ChangeState(new AimState(stateManager, grounded));
 
         else yield return base.HandleInput();
     }
