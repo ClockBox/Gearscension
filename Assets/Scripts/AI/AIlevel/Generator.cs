@@ -8,8 +8,10 @@ public class Generator : MonoBehaviour
     public UnityEvent OnActivate;
     public UnityEvent OnDeactivate;
 
+    public GameObject[] lights;
+
     private bool active = false;
-    public bool Active
+    private bool Active
     {
         get { return active; }
         set
@@ -21,14 +23,23 @@ public class Generator : MonoBehaviour
     }
 	public void Activate()
     {
-        active = true;
+        Active = true;
+        ToggleLights();
     }
     public void Deactivate()
     {
-        active = true;
+        Active = false;
+        ToggleLights();
     }
     public void Invert()
     {
-        active = !active;
+        Active = !active;
+        ToggleLights();
+    }
+
+    public void ToggleLights()
+    {
+        for (int i = 0; i < lights.Length; i++)
+            lights[i].SetActive(!lights[i].activeSelf);
     }
 }
