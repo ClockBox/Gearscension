@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 7aba71f7f0d331540a85f04a885c95c4
-timeCreated: 1508865009
+guid: fbc35c8b2c3197d40bcc0403e978a7ba
+timeCreated: 1510261708
 licenseType: Free
 ModelImporter:
   serializedVersion: 21
@@ -23,10 +23,10 @@ ModelImporter:
     3300002: pillar_J_bodymiddle
     3300004: pillar_J_bodyup
     3300006: pillar_J_glass
-    4300000: pillar_J_bodydown
-    4300002: pillar_J_bodyup
+    4300000: pillar_J_bodyup
+    4300002: pillar_J_glass
     4300004: pillar_J_bodymiddle
-    4300006: pillar_J_glass
+    4300006: pillar_J_bodydown
   materials:
     importMaterials: 1
     materialName: 0
