@@ -25,7 +25,7 @@ public class EffectArea : MonoBehaviour
         if (elapsedTime >= 0.5f)
         {
             Collider[] cols;
-            cols = Physics.OverlapSphere(transform.position, effectRadius, LayerMask.GetMask("Debris", "Character"));
+            cols = Physics.OverlapSphere(transform.position, effectRadius, LayerMask.GetMask("Debris", "Character", "Default"));
             TestObjects = new List<GameObject>();
             for (int i = 0; i < cols.Length; i++)
             {
@@ -36,7 +36,7 @@ public class EffectArea : MonoBehaviour
 
                 if (type == EffectType.Ice)
                 {
-                    if (TestObject.CompareTag("Enemy") || TestObject.CompareTag("Water"))
+                    if (TestObject.CompareTag("Enemy") || TestObject.CompareTag("Water") || TestObject.CompareTag("Freezable"))
                     {
                         Debug.Log("PK FREEZE!!!");
                         TestObject.GetComponent<Freezable>().Freeze = true;
@@ -46,7 +46,7 @@ public class EffectArea : MonoBehaviour
                 {
                     if (TestObject.CompareTag("Generator"))
                     {
-                        Debug.Log("POWER");
+                        Debug.Log("POWER OVERWHELMING");
                         TestObject.GetComponent<Generator>().Activate();
                     }
                 }

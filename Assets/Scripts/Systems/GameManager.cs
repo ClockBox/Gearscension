@@ -77,6 +77,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        checkpoint = LevelSpawn;
         gameOver = false;
         NextFloor = 1;
     }
@@ -256,7 +257,7 @@ public class GameManager : MonoBehaviour
         {
             pause = false;
             Cursor.lockState = CursorLockMode.Confined;
-            Cursor.visible = true;
+            Cursor.visible = false;
             Time.timeScale = 1;
         }
     }

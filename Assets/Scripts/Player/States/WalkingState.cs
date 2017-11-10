@@ -103,7 +103,7 @@ public class MoveState : PlayerState
         lookDirection = Vector3.ProjectOnPlane(lookDirection, Player.transform.up);
 
         desiredDirection = Quaternion.FromToRotation(Player.transform.forward, lookDirection) * (Player.transform.right * moveX + Player.transform.forward * moveY);
-        moveDirection = Vector3.MoveTowards(moveDirection, desiredDirection * movementSpeed, grounded ? 50 : 10 * Time.deltaTime);
+        moveDirection = Vector3.MoveTowards(moveDirection, desiredDirection * movementSpeed, (grounded ? 30 : 10) * Time.deltaTime);
 
         if (moveDirection.magnitude > movementSpeed)
             moveDirection = moveDirection.normalized * movementSpeed;
