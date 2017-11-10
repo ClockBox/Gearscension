@@ -16,26 +16,35 @@ public class ChandelierBehaviour : MonoBehaviour
     [SerializeField]
     private GameObject explosion;
 
+    private AIStateManager aiSM;
+
     private Rigidbody temp;
     private bool broken = false;
     
     private void OnTriggerEnter(Collider other)
     {
+        if(other.gameObject.tag == "Enemy")
+        {
+            aiSM = other.GetComponent<AIStateManager>();
+            aiSM.Die();
+        }
+
         if(other.gameObject.tag != "Projectile" && other.gameObject.tag != "Chandelier")
         {
             for(int i = 0; i < breakableParts.Length; i++)
             {
-                if (breakableParts[i].GetComponent<Rigidbody>() == null)
-                {
-                    temp = breakableParts[i].AddComponent<Rigidbody>();
-                    temp.gameObject.transform.parent = null;
-                    Destroy(temp.gameObject, 20.0f);
-                }
+                if(breakableParts[i] != null)
+                    if (breakableParts[i].GetComponent<Rigidbody>() == null)
+                    {
+                        temp = breakableParts[i].AddComponent<Rigidbody>();
+                        temp.gameObject.transform.parent = null;
+                        Destroy(temp.gameObject, 20.0f);
+                    }
 
-                else
-                {
-                    temp = breakableParts[i].GetComponent<Rigidbody>();
-                }
+                    else
+                    {
+                        temp = breakableParts[i].GetComponent<Rigidbody>();
+                    }
             }
         }
     }
@@ -60,7 +69,7 @@ public class ChandelierBehaviour : MonoBehaviour
                 Destroy(spawnedCrystal.gameObject, 20.0f);
             }
             GameObject crystalExplode = Instantiate(explosion,
-                bigCrystal.transform.position,
+                bigCrystal.transform.position + new Vector3(0,-1f,0),
                 bigCrystal.transform.rotation) as GameObject;
             Destroy(crystalExplode.gameObject, 5.0f);
             Destroy(bigCrystal.gameObject);

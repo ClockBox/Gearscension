@@ -1,27 +1,37 @@
 fileFormatVersion: 2
-guid: a2961e1bbbd400c409788257bd16f826
-timeCreated: 1508865010
+guid: 599e643422cea9644ab4b4a3553ecb8c
+timeCreated: 1510261707
 licenseType: Free
 ModelImporter:
   serializedVersion: 21
   fileIDToRecycleName:
     100000: //RootNode
     100002: pillar_H_bodydown
-    100004: pillar_H_bodyup
-    100006: pillar_H_glass
+    100004: pillar_H_bodymiddle
+    100006: pillar_H_bodymiddle2
+    100008: pillar_H_bodyup
+    100010: pillar_H_glass
     400000: //RootNode
     400002: pillar_H_bodydown
-    400004: pillar_H_bodyup
-    400006: pillar_H_glass
+    400004: pillar_H_bodymiddle
+    400006: pillar_H_bodymiddle2
+    400008: pillar_H_bodyup
+    400010: pillar_H_glass
     2300000: pillar_H_bodydown
-    2300002: pillar_H_bodyup
-    2300004: pillar_H_glass
+    2300002: pillar_H_bodymiddle
+    2300004: pillar_H_bodymiddle2
+    2300006: pillar_H_bodyup
+    2300008: pillar_H_glass
     3300000: pillar_H_bodydown
-    3300002: pillar_H_bodyup
-    3300004: pillar_H_glass
-    4300000: pillar_H_bodydown
-    4300002: pillar_H_bodyup
-    4300004: pillar_H_glass
+    3300002: pillar_H_bodymiddle
+    3300004: pillar_H_bodymiddle2
+    3300006: pillar_H_bodyup
+    3300008: pillar_H_glass
+    4300000: pillar_H_bodyup
+    4300002: pillar_H_glass
+    4300004: pillar_H_bodymiddle2
+    4300006: pillar_H_bodydown
+    4300008: pillar_H_bodymiddle
   materials:
     importMaterials: 1
     materialName: 0

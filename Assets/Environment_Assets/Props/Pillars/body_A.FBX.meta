@@ -1,22 +1,27 @@
 fileFormatVersion: 2
-guid: 42733ded537ee0041808915989a0d848
-timeCreated: 1508865009
+guid: 9eba2f4c2012af14592ccd2c32ffef09
+timeCreated: 1510261708
 licenseType: Free
 ModelImporter:
   serializedVersion: 21
   fileIDToRecycleName:
     100000: //RootNode
     100002: pillar_A_bodydown
-    100004: pillar_A_bodyup
+    100004: pillar_A_bodymiddle
+    100006: pillar_A_bodyup
     400000: //RootNode
     400002: pillar_A_bodydown
-    400004: pillar_A_bodyup
+    400004: pillar_A_bodymiddle
+    400006: pillar_A_bodyup
     2300000: pillar_A_bodydown
-    2300002: pillar_A_bodyup
+    2300002: pillar_A_bodymiddle
+    2300004: pillar_A_bodyup
     3300000: pillar_A_bodydown
-    3300002: pillar_A_bodyup
-    4300000: pillar_A_bodydown
-    4300002: pillar_A_bodyup
+    3300002: pillar_A_bodymiddle
+    3300004: pillar_A_bodyup
+    4300000: pillar_A_bodyup
+    4300002: pillar_A_bodydown
+    4300004: pillar_A_bodymiddle
   materials:
     importMaterials: 1
     materialName: 0

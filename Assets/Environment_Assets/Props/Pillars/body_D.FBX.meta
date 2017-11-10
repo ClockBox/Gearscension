@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: f5b733590005c364e838717813ad9694
-timeCreated: 1508865010
+guid: 18ccc8ed597ee6d4ba341efb26e7aacf
+timeCreated: 1510261706
 licenseType: Free
 ModelImporter:
   serializedVersion: 21
@@ -15,8 +15,8 @@ ModelImporter:
     2300002: pillar_D_bodyup
     3300000: pillar_D_bodydown
     3300002: pillar_D_bodyup
-    4300000: pillar_D_bodydown
-    4300002: pillar_D_bodyup
+    4300000: pillar_D_bodyup
+    4300002: pillar_D_bodydown
   materials:
     importMaterials: 1
     materialName: 0
