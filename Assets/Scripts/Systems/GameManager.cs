@@ -252,12 +252,13 @@ public class GameManager : MonoBehaviour
             if (!SceneManager.GetSceneByName(hudScene).isLoaded)
                 SceneManager.LoadScene(hudScene, LoadSceneMode.Additive);
             PlayerPrefs.SetInt("ContinueScene", scene.buildIndex);
+            Cursor.visible = true;
         }
         else
         {
             pause = false;
             Cursor.lockState = CursorLockMode.Confined;
-            Cursor.visible = false;
+            Cursor.visible = true;
             Time.timeScale = 1;
         }
     }
