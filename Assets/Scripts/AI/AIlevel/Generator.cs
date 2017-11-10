@@ -1,35 +1,45 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
-public class Generator : MonoBehaviour {
-    GameObject[] levers;
-    private void Start()
-    {
-        levers = GameObject.FindGameObjectsWithTag("Levers");
-    }
- 
-	public void generate()
-    {
-        GetClosest(levers).GetComponent<Lever>().Activated = true;
+public class Generator : MonoBehaviour
+{
+    public UnityEvent OnActivate;
+    public UnityEvent OnDeactivate;
 
-    }
+    public GameObject[] lights;
 
-    GameObject GetClosest(GameObject[] levers)
+    private bool active = false;
+    private bool Active
     {
-        GameObject cLever = null;
-        float minDist = Mathf.Infinity;
-        Vector3 Pos = transform.position;
-        foreach(GameObject l in levers)
+        get { return active; }
+        set
         {
-            float dist = Vector3.Distance(l.transform.position, Pos);
-            if (dist < minDist)
-            {
-                cLever = l;
-                minDist = dist;
-            }
-            
+            active = value;
+            if (active) OnActivate.Invoke();
+            else OnDeactivate.Invoke();
         }
-        return cLever;
+    }
+	public void Activate()
+    {
+        Active = true;
+        ToggleLights();
+    }
+    public void Deactivate()
+    {
+        Active = false;
+        ToggleLights();
+    }
+    public void Invert()
+    {
+        Active = !active;
+        ToggleLights();
+    }
+
+    public void ToggleLights()
+    {
+        for (int i = 0; i < lights.Length; i++)
+            lights[i].SetActive(!lights[i].activeSelf);
     }
 }

@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 9c0d6942bf66dcf468d6ad5d76504244
-timeCreated: 1508865010
+guid: f2597075e3be4a3428df507f728f85dc
+timeCreated: 1510261708
 licenseType: Free
 ModelImporter:
   serializedVersion: 21
@@ -19,9 +19,9 @@ ModelImporter:
     3300000: pillar_G_bodydown
     3300002: pillar_G_bodyup
     3300004: pillar_G_glass
-    4300000: pillar_G_bodydown
-    4300002: pillar_G_bodyup
-    4300004: pillar_G_glass
+    4300000: pillar_G_bodyup
+    4300002: pillar_G_glass
+    4300004: pillar_G_bodydown
   materials:
     importMaterials: 1
     materialName: 0

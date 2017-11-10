@@ -84,19 +84,26 @@ public class MoveState : PlayerState
     {
         moveX = Input.GetAxis("Horizontal");
         moveY = Input.GetAxis("Vertical");
-        
-        if (Input.GetButton("Sprint"))
-            movementSpeed = 5;
-        else movementSpeed = 8;
+
+        if (grounded)
+        {
+            if (Input.GetButton("Sprint"))
+                movementSpeed = 5;
+            else movementSpeed = 8;
+        }
+
+        //if (moveDirection.magnitude > 0 && grounded)
+        //{
+        //    GameManager.Instance.AudioManager.AudioPlayer = Player.SFX;
+        //    GameManager.Instance.AudioManager.playAudio("sfxfootstepsrunningconcrete");
+        //    Player.SFX.
+        //}
 
         lookDirection = Camera.main.transform.forward;
         lookDirection = Vector3.ProjectOnPlane(lookDirection, Player.transform.up);
 
         desiredDirection = Quaternion.FromToRotation(Player.transform.forward, lookDirection) * (Player.transform.right * moveX + Player.transform.forward * moveY);
-        moveDirection = Vector3.MoveTowards(moveDirection, desiredDirection * movementSpeed, 50 * Time.deltaTime);
-
-        if (desiredDirection.magnitude > 0)
-            moveDirection = Vector3.RotateTowards(moveDirection, desiredDirection + lookDirection * 0.01f, 20 * Time.deltaTime, 0);
+        moveDirection = Vector3.MoveTowards(moveDirection, desiredDirection * movementSpeed, (grounded ? 30 : 10) * Time.deltaTime);
 
         if (moveDirection.magnitude > movementSpeed)
             moveDirection = moveDirection.normalized * movementSpeed;
@@ -118,7 +125,13 @@ public class MoveState : PlayerState
     }
     protected override void UpdatePhysics()
     {
-        grounded = Physics.CheckCapsule(Player.transform.position, Player.transform.position - Vector3.up * 0.05f, 0.15f, LayerMask.GetMask("Default", "Debris"));
+        bool groundcheck = Physics.CheckCapsule(Player.transform.position, Player.transform.position - Vector3.up * 0.05f, 0.15f, LayerMask.GetMask("Default", "Debris"));
+        if (grounded != groundcheck)
+        {
+            GameManager.Instance.AudioManager.AudioPlayer = Player.SFX;
+            GameManager.Instance.AudioManager.playAudio("sfxjumplandingconcrete");
+        }
+        grounded = groundcheck;
 
         if (grounded)
         {
@@ -128,8 +141,10 @@ public class MoveState : PlayerState
         else
         {
             rb.AddForce(Player.transform.up * -9.81f * rb.mass);
-            rb.AddForce(moveDirection * rb.mass);
-            rb.velocity = Vector3.ClampMagnitude(rb.velocity, movementSpeed);
+            Vector3 airMovement = Vector3.ClampMagnitude(moveDirection, movementSpeed);
+            airMovement.y = rb.velocity.y;
+            rb.velocity = Vector3.MoveTowards(rb.velocity, airMovement, movementSpeed);
+            movementSpeed -= Time.deltaTime;
         }
     }
     

@@ -38,6 +38,7 @@ public class ChargeShield : MonoBehaviour {
 		if (hitPlayer)
 		{
 			target.transform.position = transform.position;
+			PlayerState.grounded = false;
 		}
 	
 	}

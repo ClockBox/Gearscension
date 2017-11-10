@@ -17,6 +17,8 @@ public class FallState : PlayerState
         yield return base.ExitState(nextState);
         rb.velocity = Vector3.zero;
         yield return null;
+        GameManager.Instance.AudioManager.AudioPlayer = Player.SFX;
+        GameManager.Instance.AudioManager.playAudio("sfxbodyfallconcrete2");
     }
 
     //State Behaviour

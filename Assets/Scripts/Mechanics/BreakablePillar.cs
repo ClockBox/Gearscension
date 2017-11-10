@@ -4,36 +4,31 @@ using UnityEngine;
 
 public class BreakablePillar : MonoBehaviour
 {
-    public GameObject[] breakablePart;
+    [SerializeField]
+    private GameObject[] breakablePart;
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.U))
-        {
-            for (int i = 0; i < breakablePart.Length; i++)
-            {
-                breakablePart[i].GetComponent<Rigidbody>().useGravity = true;
-                breakablePart[i].GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
-
-                breakablePart[i].transform.parent = null;
-                breakablePart[i].GetComponent<Collider>().enabled = true;
-            }
-        }
-    }
-
+    private Rigidbody temp;
+    private MeshCollider meshCol;
+    
     void OnTriggerEnter(Collider col)
     {
-        Debug.Log(col.gameObject.tag);
         if(col.gameObject.tag == "Boss")
         {
             for(int i = 0; i < breakablePart.Length; i++)
             {
-                breakablePart[i].GetComponent<Rigidbody>().useGravity = true;
-                breakablePart[i].GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+                if(breakablePart[i].GetComponent<Rigidbody>() == null)
+                    temp = breakablePart[i].AddComponent<Rigidbody>();
+
+                meshCol = breakablePart[i].AddComponent<MeshCollider>();
+                meshCol.convex = true;
+                meshCol.inflateMesh = true;
+                temp.constraints = RigidbodyConstraints.None;
+                temp.useGravity = true;
 
                 breakablePart[i].transform.parent = null;
-                breakablePart[i].GetComponent<Collider>().enabled = true;
             }
+
+            transform.gameObject.GetComponent<BoxCollider>().enabled = false;
         }
     }
 }

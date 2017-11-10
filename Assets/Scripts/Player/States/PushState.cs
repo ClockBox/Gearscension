@@ -194,6 +194,8 @@ public class PushState : PlayerState
         Vector3 speed = rb.velocity;
         speed.y = 0;
         anim.SetFloat("Speed", speed.magnitude);
+        float project = -Vector3.Project(moveDirection, Player.transform.forward).z;
+        anim.SetFloat("Z", project);
     }
     protected override void UpdateIK()
     {

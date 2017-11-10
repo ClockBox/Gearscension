@@ -19,6 +19,10 @@ public class PlayerController : MonoBehaviour
     private float elapsedTime = 0;
     private float HookRange = 15;
 
+    // Audio
+    private AudioSource m_SFX;
+    private AudioSource m_Voice;
+
     // trigger inputs variables
     private InputAxis rightTriggerState = new InputAxis("RightTrigger",AxisType.Trigger);
     private InputAxis leftTriggerState = new InputAxis("LeftTrigger", AxisType.Trigger);
@@ -31,7 +35,7 @@ public class PlayerController : MonoBehaviour
     public Weapon[] weapons;
 
     [SerializeField, Range(-1,3)]
-    private static int gunUpgrade = -1;
+    private int gunUpgrade = -1;
     private int[] ammoAmounts = new int[4];
     private int ammoType = 0;
 
@@ -67,6 +71,17 @@ public class PlayerController : MonoBehaviour
     {
         get { return m_anim; }
         set { m_anim = value; }
+    }
+
+    public AudioSource SFX
+    {
+        get { return m_SFX; }
+        set { m_SFX = value; }
+    }
+    public AudioSource Voice
+    {
+        get { return m_Voice; }
+        set { m_Voice = value; }
     }
 
     public int AmmoType
@@ -118,15 +133,10 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void PickupGun()
-    {
-        weapons[0].gameObject.SetActive(true);
-        UpgradeGun(0);
-    }
-
     public void UpgradeGun(int upgrade)
     {
-        gunUpgrade = upgrade;
+        GameManager.Player.weapons[0].gameObject.SetActive(true);
+        GameManager.Player.gunUpgrade = upgrade;
         GameManager.Hud.BulletUpgrade();
     }
 
@@ -196,16 +206,16 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         if (!GameManager.Player)
+        {
             GameManager.Player = this;
+            DontDestroyOnLoad(this);
+        }
         else
         {
             StopAllCoroutines();
             Destroy(gameObject);
         }
-    }
-
-    private void Start ()
-    {
+        
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
@@ -217,6 +227,12 @@ public class PlayerController : MonoBehaviour
         m_rb = GetComponent<Rigidbody>();
         m_anim = GetComponent<Animator>();
 
+        m_SFX = transform.GetChild(2).GetComponent<AudioSource>();
+        m_Voice = transform.GetChild(3).GetComponent<AudioSource>();
+    }
+
+    private void Start ()
+    {
         //Initialize states
         m_stateM.State = new UnequipedState(m_stateM, true);
 
@@ -225,6 +241,12 @@ public class PlayerController : MonoBehaviour
     }
     private void Update()
     {
+        if (Input.GetButtonDown("Cowbell"))
+        {
+            GameManager.Instance.AudioManager.AudioPlayer = SFX;
+            GameManager.Instance.AudioManager.playAudio("sfxcowbell");
+        }
+
         if (_damageImmune > 0)
             _damageImmune -= Time.deltaTime;
 

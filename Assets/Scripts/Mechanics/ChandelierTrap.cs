@@ -4,16 +4,26 @@ using UnityEngine;
 
 public class ChandelierTrap : MonoBehaviour
 {
-    RigidbodyConstraints rbc;
-    Rigidbody rb;
-    
-    private void OnTriggerEnter(Collider other)
+    [SerializeField]
+    private GameObject breakablePart;
+
+    private Rigidbody temp;
+    private bool activated = false;
+    private float gravity;
+
+    public void Update()
     {
-        if(other.gameObject.tag == "Projectile")
-        {
-            rb = GetComponent<Rigidbody>();
-            rb.constraints = RigidbodyConstraints.None;
-            rb.useGravity = true;
-        }
+        
+    }
+
+    public void DropChandelier()
+    {
+        if (activated)
+            return;
+
+        temp = breakablePart.AddComponent<Rigidbody>();
+        temp.gameObject.transform.parent = null;
+        Destroy(temp.gameObject, 30.0f);
+        activated = true;
     }
 }

@@ -14,6 +14,8 @@ public class GameManager : MonoBehaviour
     private static string gameOverScene = "Game Over";
     private static string hudScene = "Hud";
 
+    public GameObject playerPrefab;
+    public Transform LevelSpawn;
     private static int NextFloor;
 
     private AudioDictonary audioManager;
@@ -68,10 +70,14 @@ public class GameManager : MonoBehaviour
             transform.GetChild(0).gameObject.SetActive(true);
         }
         else transform.GetChild(0).gameObject.SetActive(false);
+
+        if (!Player && SceneManager.GetActiveScene().buildIndex > 4)
+            SpawnPlayer();
     }
 
     private void Start()
     {
+        checkpoint = LevelSpawn;
         gameOver = false;
         NextFloor = 1;
     }
@@ -133,9 +139,15 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void MainMenu()
+    public void DestroyObject(GameObject referenceObject)
     {
-        SceneManager.LoadScene(mainMenuScene);
+        Destroy(referenceObject);
+    }
+
+    #region Player Managment
+    private void SpawnPlayer()
+    {   
+        Player = Instantiate(playerPrefab, LevelSpawn.position, LevelSpawn.rotation).GetComponent<PlayerController>();
     }
 
     public void Restart()
@@ -148,18 +160,13 @@ public class GameManager : MonoBehaviour
         sceneFader.FadeTo(SceneManager.GetActiveScene().name);
     }
 
-    public static void RespawnPlayer()
+    public void RespawnPlayer()
     {
-        if (Instance.checkpoint)
-            player.transform.position = Instance.checkpoint.position;
+        if (checkpoint)
+            player.transform.position = checkpoint.position;
         else
-            player.transform.position = Instance.respawnPoint;
+            player.transform.position = respawnPoint;
         PlayerController.rb.velocity = Vector3.zero;
-    }
-
-    public void DestroyObject(GameObject referenceObject)
-    {
-        Destroy(referenceObject);
     }
 
     public void Quit()
@@ -170,8 +177,14 @@ public class GameManager : MonoBehaviour
         Application.Quit();
 #endif
     }
+    #endregion
 
     #region SceneManagment
+    public void MainMenu()
+    {
+        SceneManager.LoadScene(mainMenuScene);
+    }
+
     private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -239,6 +252,7 @@ public class GameManager : MonoBehaviour
             if (!SceneManager.GetSceneByName(hudScene).isLoaded)
                 SceneManager.LoadScene(hudScene, LoadSceneMode.Additive);
             PlayerPrefs.SetInt("ContinueScene", scene.buildIndex);
+            Cursor.visible = true;
         }
         else
         {
@@ -266,6 +280,5 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(levelCompleteScene, LoadSceneMode.Additive);
         gameOver = true;
     }
-
     #endregion  
 }

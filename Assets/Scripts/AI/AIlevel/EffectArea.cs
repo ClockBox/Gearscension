@@ -16,6 +16,8 @@ public class EffectArea : MonoBehaviour
 
     private float elapsedTime = 0.5f;
 
+    List<GameObject> TestObjects;
+
     void Start()
     {
         Destroy(gameObject, lifeTime);
@@ -23,13 +25,21 @@ public class EffectArea : MonoBehaviour
         if (elapsedTime >= 0.5f)
         {
             Collider[] cols;
-            cols = Physics.OverlapSphere(transform.position, effectRadius, LayerMask.GetMask("Debris", "Character"));
+            cols = Physics.OverlapSphere(transform.position, effectRadius, LayerMask.GetMask("Debris", "Character", "Default"));
+            TestObjects = new List<GameObject>();
             for (int i = 0; i < cols.Length; i++)
             {
                 GameObject TestObject = cols[i].gameObject;
+                if (TestObjects.Contains(TestObject))
+                    return;
+                else TestObjects.Add(TestObject);
+
+                if (cols[i].tag == "Chandelier")
+                    cols[i].GetComponent<ChandelierTrap>().DropChandelier();
+
                 if (type == EffectType.Ice)
                 {
-                    if (TestObject.CompareTag("Enemy") || TestObject.CompareTag("Water"))
+                    if (TestObject.CompareTag("Enemy") || TestObject.CompareTag("Water") || TestObject.CompareTag("Freezable"))
                     {
                         Debug.Log("PK FREEZE!!!");
                         TestObject.GetComponent<Freezable>().Freeze = true;
@@ -39,8 +49,8 @@ public class EffectArea : MonoBehaviour
                 {
                     if (TestObject.CompareTag("Generator"))
                     {
-                        Debug.Log("POWER");
-                        TestObject.GetComponent<Generator>().generate();
+                        Debug.Log("POWER OVERWHELMING");
+                        TestObject.GetComponent<Generator>().Activate();
                     }
                 }
             }

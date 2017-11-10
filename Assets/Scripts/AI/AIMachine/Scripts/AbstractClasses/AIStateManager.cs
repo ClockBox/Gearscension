@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.AI;
 using UnityEngine;
+
 
 public abstract class AIStateManager : MonoBehaviour  {
 	public Transform[] patrolPoints;
@@ -21,7 +23,7 @@ public abstract class AIStateManager : MonoBehaviour  {
 	[HideInInspector]
 	public AIStats stats;
 	[HideInInspector]
-	public UnitPathFinding pathAgent;
+	public NavMeshAgent pathAgent;
 	[HideInInspector]
 	public Transform pathTarget;
 	[HideInInspector]
@@ -35,6 +37,7 @@ public abstract class AIStateManager : MonoBehaviour  {
 	[HideInInspector]
 	public bool isAlive;
 
+	private bool isAttacked = false;
 
 
 
@@ -42,10 +45,10 @@ public abstract class AIStateManager : MonoBehaviour  {
 	{
 		player = GameObject.FindGameObjectWithTag("Player");
 		stats = GetComponent<AIStats>();
-		pathAgent = GetComponent<UnitPathFinding>();
+		pathAgent = GetComponent<NavMeshAgent>();
 		pathIndex = 0;
 		pathTarget = patrolPoints[pathIndex];
-		pathAgent.travel(pathTarget.position);
+		pathAgent.destination = pathTarget.position;
 		setFrequency = stats.attackFrequency;
 		isAlive = true;
 		StartEvents();
@@ -93,7 +96,6 @@ public abstract class AIStateManager : MonoBehaviour  {
 
 	public abstract void Die();
 
-	public abstract void CollisionEvents();
 
 	public void Alerted() {
 		TransitionToState(alertedState);
@@ -135,23 +137,26 @@ public abstract class AIStateManager : MonoBehaviour  {
 		Debug.Log("Stunned");
 		stats.armour = 0;
 		pathAgent.speed = 0;
-		pathAgent.turnSpeed = 0;
+		pathAgent.angularSpeed = 0;
 		if(GetComponentInChildren<AIBreakable>())
 		GetComponentInChildren<AIBreakable>().Breaks();
 		TransitionToState(stunState);
 	}
 
-	public void OnFreeze() {
-
-
-	}
-	public void OnThaw() {
-
-
-	}
-
-	private void OnCollisionEnter(Collision collision)
+	private void OnTriggerEnter(Collider other)
 	{
-		CollisionEvents();
-	} 
+		if (other.CompareTag("Sword")&&isAttacked==false)
+		{
+			Debug.Log("HIT by sword");
+			TakeDamage(5f);
+			isAttacked = true;
+			Invoke("ResetAttacked", 0.8f);
+		}
+	}
+	private void ResetAttacked()
+	{
+		isAttacked = false;
+	}
+
+
 }
