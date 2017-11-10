@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Freezable : MonoBehaviour
 {
@@ -40,12 +41,11 @@ public class Freezable : MonoBehaviour
     {
         if (colliderBounds)
         {
+            NavMeshAgent agent;
+            if (agent = GetComponent<NavMeshAgent>())
+                agent.enabled = false;
+
             Bounds bounds = colliderBounds.bounds;
-            if (colliderBounds.attachedRigidbody)
-            {
-                colliderBounds.attachedRigidbody.velocity = Vector3.zero;
-                colliderBounds.attachedRigidbody.isKinematic = true;
-            }
             colliderBounds.enabled = false;
 
             if(animator)
@@ -56,6 +56,8 @@ public class Freezable : MonoBehaviour
 
             Transform iceCube = IceBlock.transform.GetChild(0);
             iceCube.localScale = bounds.extents * 2;
+            BoxCollider boxCollider = iceCube.transform.parent.GetComponent<BoxCollider>();
+            boxCollider.size = bounds.size;
             AddNodes(iceCube);
 
             for (int i = 0; i < scripts.Length; i++)
@@ -64,6 +66,13 @@ public class Freezable : MonoBehaviour
                 scripts[i].enabled = false;
             }
             transform.parent = IceBlock.transform;
+
+            if (colliderBounds.attachedRigidbody)
+            {
+                colliderBounds.attachedRigidbody.velocity = Vector3.zero;
+                colliderBounds.attachedRigidbody.isKinematic = true;
+                Physics.IgnoreCollision(colliderBounds, boxCollider);
+            }
         }
     }
 
@@ -71,6 +80,10 @@ public class Freezable : MonoBehaviour
     {
         if (colliderBounds)
         {
+            NavMeshAgent agent;
+            if (agent = GetComponent<NavMeshAgent>())
+                agent.enabled = true;
+
             if (animator)
                 animator.enabled = true;
 

@@ -16,6 +16,8 @@ public class EffectArea : MonoBehaviour
 
     private float elapsedTime = 0.5f;
 
+    List<GameObject> TestObjects;
+
     void Start()
     {
         Destroy(gameObject, lifeTime);
@@ -24,9 +26,14 @@ public class EffectArea : MonoBehaviour
         {
             Collider[] cols;
             cols = Physics.OverlapSphere(transform.position, effectRadius, LayerMask.GetMask("Debris", "Character"));
+            TestObjects = new List<GameObject>();
             for (int i = 0; i < cols.Length; i++)
             {
                 GameObject TestObject = cols[i].gameObject;
+                if (TestObjects.Contains(TestObject))
+                    return;
+                else TestObjects.Add(TestObject);
+
                 if (type == EffectType.Ice)
                 {
                     if (TestObject.CompareTag("Enemy") || TestObject.CompareTag("Water"))
