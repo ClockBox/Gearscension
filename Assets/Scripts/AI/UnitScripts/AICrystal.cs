@@ -13,4 +13,13 @@ public class AICrystal : MonoBehaviour {
 			destroyed = true;
 		}
 	}
+
+	private void OnTriggerEnter(Collider other)
+	{
+		if (other.CompareTag("Sword"))
+		{
+			
+			TakeDamage(5f);
+		}
+	}
 }
