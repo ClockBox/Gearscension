@@ -7,13 +7,14 @@ public class AIBreakable : MonoBehaviour {
 	public AICrystal crystalPrefab;
 	public Transform crystalSpawn;
 	private bool destroyed=false;
+	public AIStateManager ownerUnit;
 	private void Update()
 	{
 		if (durability <= 0)
 		{
 			if (!destroyed)
 			{
-				if (gameObject.transform.parent)
+				if (gameObject.transform.parent.GetComponent<AIStateManager>())
 					gameObject.transform.parent.GetComponent<AIStateManager>().Stun();
 
 				Breaks();
@@ -53,18 +54,21 @@ public class AIBreakable : MonoBehaviour {
 
 	public void Breaks()
 	{
-		if (crystalPrefab)
+		if (!destroyed)
 		{
-			AICrystal crystal = Instantiate(crystalPrefab, crystalSpawn.position, crystalSpawn.rotation);
-			crystal.gameObject.transform.parent = transform.parent;
-			crystal.gameObject.GetComponent<BoxCollider>().enabled = true;
+			if (crystalPrefab)
+			{
+				AICrystal crystal = Instantiate(crystalPrefab, crystalSpawn.position, crystalSpawn.rotation);
+				crystal.gameObject.transform.parent = ownerUnit.transform;
+				crystal.gameObject.GetComponent<BoxCollider>().enabled = true;
 
+			}
+			transform.parent = null;
+			GetComponent<BoxCollider>().enabled = true;
+			GetComponent<Rigidbody>().useGravity = true;
+			GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+			destroyed = true;
 		}
-		transform.parent = null;
-		GetComponent<BoxCollider>().enabled = true;
-		GetComponent<Rigidbody>().useGravity = true;
-		GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
-		destroyed = true;
 
 	}
 }
