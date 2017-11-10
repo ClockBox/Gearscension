@@ -62,12 +62,12 @@ public class PlayerController : MonoBehaviour
         get { return m_ik; }
         set { m_ik = value; }
     }
-    public static Rigidbody rb
+    public static Rigidbody RB
     {
         get { return m_rb; }
         set { m_rb = value; }
     }
-    public static Animator anim
+    public static Animator Anim
     {
         get { return m_anim; }
         set { m_anim = value; }

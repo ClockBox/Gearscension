@@ -166,7 +166,7 @@ public class GameManager : MonoBehaviour
             player.transform.position = checkpoint.position;
         else
             player.transform.position = respawnPoint;
-        PlayerController.rb.velocity = Vector3.zero;
+        PlayerController.RB.velocity = Vector3.zero;
     }
 
     public void Quit()
@@ -252,7 +252,6 @@ public class GameManager : MonoBehaviour
             if (!SceneManager.GetSceneByName(hudScene).isLoaded)
                 SceneManager.LoadScene(hudScene, LoadSceneMode.Additive);
             PlayerPrefs.SetInt("ContinueScene", scene.buildIndex);
-            Cursor.visible = true;
         }
         else
         {
