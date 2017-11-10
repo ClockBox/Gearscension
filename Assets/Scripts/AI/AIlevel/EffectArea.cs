@@ -34,6 +34,9 @@ public class EffectArea : MonoBehaviour
                     return;
                 else TestObjects.Add(TestObject);
 
+                if (cols[i].tag == "Chandelier")
+                    cols[i].GetComponent<ChandelierTrap>().DropChandelier();
+
                 if (type == EffectType.Ice)
                 {
                     if (TestObject.CompareTag("Enemy") || TestObject.CompareTag("Water") || TestObject.CompareTag("Freezable"))
