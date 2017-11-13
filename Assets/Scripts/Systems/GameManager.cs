@@ -59,8 +59,6 @@ public class GameManager : MonoBehaviour
         get { return pause; }
         set { pause = value; }
     }
-    
-    public SceneFader sceneFader;
 
     private void Awake()
     {
@@ -148,16 +146,6 @@ public class GameManager : MonoBehaviour
     private void SpawnPlayer()
     {   
         Player = Instantiate(playerPrefab, LevelSpawn.position, LevelSpawn.rotation).GetComponent<PlayerController>();
-    }
-
-    public void Restart()
-    {
-        if (gameOver)
-        {
-            SceneManager.UnloadSceneAsync(gameOverScene);
-            sceneFader.FadeTo(SceneManager.GetActiveScene().name);
-        }
-        sceneFader.FadeTo(SceneManager.GetActiveScene().name);
     }
 
     public void RespawnPlayer()

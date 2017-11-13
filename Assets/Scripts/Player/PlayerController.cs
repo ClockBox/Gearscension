@@ -202,6 +202,12 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
 
+    public void PlaySound(string soundName)
+    {
+        GameManager.Instance.AudioManager.AudioPlayer = m_SFX;
+        GameManager.Instance.AudioManager.playAudio("sfxjumplandingconcrete");
+    }
+
     //Initialize Player
     private void Awake()
     {

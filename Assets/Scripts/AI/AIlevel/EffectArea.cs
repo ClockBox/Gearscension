@@ -39,7 +39,7 @@ public class EffectArea : MonoBehaviour
 
                 if (type == EffectType.Ice)
                 {
-                    if (TestObject.CompareTag("Enemy") || TestObject.CompareTag("Water") || TestObject.CompareTag("Freezable"))
+                    if (TestObject.CompareTag("Enemy") || TestObject.CompareTag("Freezable"))
                     {
                         Debug.Log("PK FREEZE!!!");
                         TestObject.GetComponent<Freezable>().Freeze = true;
