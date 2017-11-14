@@ -45,9 +45,4 @@ public class IceCube : MonoBehaviour
             }
         }
     }
-	
-	void Update ()
-    {
-		
-	}
 }
