@@ -3,32 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class Generator : MonoBehaviour
+public class Generator : ElectricalSwitch
 {
-    public UnityEvent OnActivate;
-    public UnityEvent OnDeactivate;
-
-    private bool active = false;
-    public bool Active
+    private void OnTriggerStay(Collider other)
     {
-        get { return active; }
-        set
-        {
-            active = value;
-            if (active) OnActivate.Invoke();
-            else OnDeactivate.Invoke();
-        }
-    }
-	public void Activate()
-    {
-        active = true;
-    }
-    public void Deactivate()
-    {
-        active = true;
-    }
-    public void Invert()
-    {
-        active = !active;
+        if (!active && other.CompareTag("Player") && Input.GetButtonDown("Action"))
+            Active = true;
     }
 }

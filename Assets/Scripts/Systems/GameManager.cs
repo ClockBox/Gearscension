@@ -59,8 +59,6 @@ public class GameManager : MonoBehaviour
         get { return pause; }
         set { pause = value; }
     }
-    
-    public SceneFader sceneFader;
 
     private void Awake()
     {
@@ -150,23 +148,13 @@ public class GameManager : MonoBehaviour
         Player = Instantiate(playerPrefab, LevelSpawn.position, LevelSpawn.rotation).GetComponent<PlayerController>();
     }
 
-    public void Restart()
-    {
-        if (gameOver)
-        {
-            SceneManager.UnloadSceneAsync(gameOverScene);
-            sceneFader.FadeTo(SceneManager.GetActiveScene().name);
-        }
-        sceneFader.FadeTo(SceneManager.GetActiveScene().name);
-    }
-
     public void RespawnPlayer()
     {
         if (checkpoint)
             player.transform.position = checkpoint.position;
         else
             player.transform.position = respawnPoint;
-        PlayerController.rb.velocity = Vector3.zero;
+        PlayerController.RB.velocity = Vector3.zero;
     }
 
     public void Quit()
@@ -257,7 +245,7 @@ public class GameManager : MonoBehaviour
         {
             pause = false;
             Cursor.lockState = CursorLockMode.Confined;
-            Cursor.visible = false;
+            Cursor.visible = true;
             Time.timeScale = 1;
         }
     }

@@ -1,0 +1,244 @@
+fileFormatVersion: 2
+guid: d194dfdddecf1784f8431f9c770d7436
+timeCreated: 1510696778
+licenseType: Pro
+ModelImporter:
+  serializedVersion: 21
+  fileIDToRecycleName:
+    100000: body
+    100002: crystal
+    100004: eye_A
+    100006: eye_B
+    100008: eye_C
+    100010: glass
+    100012: head
+    100014: left_arm
+    100016: left_cannon
+    100018: left_foot
+    100020: left_left_finger
+    100022: left_leg
+    100024: left_middle_finger
+    100026: left_right_finger
+    100028: left_shoulder
+    100030: left_tube
+    100032: //RootNode
+    100034: power_core
+    100036: propeller
+    100038: right_arm
+    100040: right_cannon
+    100042: right_foot
+    100044: right_left_finger
+    100046: right_leg
+    100048: right_middle_finger
+    100050: right_right_finger
+    100052: right_shoulder
+    100054: right_tube
+    100056: tap_a
+    100058: tap_b
+    100060: tube_a
+    100062: tube_b
+    100064: tube_c
+    400000: body
+    400002: crystal
+    400004: eye_A
+    400006: eye_B
+    400008: eye_C
+    400010: glass
+    400012: head
+    400014: left_arm
+    400016: left_cannon
+    400018: left_foot
+    400020: left_left_finger
+    400022: left_leg
+    400024: left_middle_finger
+    400026: left_right_finger
+    400028: left_shoulder
+    400030: left_tube
+    400032: //RootNode
+    400034: power_core
+    400036: propeller
+    400038: right_arm
+    400040: right_cannon
+    400042: right_foot
+    400044: right_left_finger
+    400046: right_leg
+    400048: right_middle_finger
+    400050: right_right_finger
+    400052: right_shoulder
+    400054: right_tube
+    400056: tap_a
+    400058: tap_b
+    400060: tube_a
+    400062: tube_b
+    400064: tube_c
+    2300000: body
+    2300002: crystal
+    2300004: eye_A
+    2300006: eye_B
+    2300008: eye_C
+    2300010: glass
+    2300012: head
+    2300014: left_arm
+    2300016: left_cannon
+    2300018: left_foot
+    2300020: left_left_finger
+    2300022: left_leg
+    2300024: left_middle_finger
+    2300026: left_right_finger
+    2300028: left_shoulder
+    2300030: left_tube
+    2300032: power_core
+    2300034: propeller
+    2300036: right_arm
+    2300038: right_cannon
+    2300040: right_foot
+    2300042: right_left_finger
+    2300044: right_leg
+    2300046: right_middle_finger
+    2300048: right_right_finger
+    2300050: right_shoulder
+    2300052: right_tube
+    2300054: tap_a
+    2300056: tap_b
+    2300058: tube_a
+    2300060: tube_b
+    2300062: tube_c
+    3300000: body
+    3300002: crystal
+    3300004: eye_A
+    3300006: eye_B
+    3300008: eye_C
+    3300010: glass
+    3300012: head
+    3300014: left_arm
+    3300016: left_cannon
+    3300018: left_foot
+    3300020: left_left_finger
+    3300022: left_leg
+    3300024: left_middle_finger
+    3300026: left_right_finger
+    3300028: left_shoulder
+    3300030: left_tube
+    3300032: power_core
+    3300034: propeller
+    3300036: right_arm
+    3300038: right_cannon
+    3300040: right_foot
+    3300042: right_left_finger
+    3300044: right_leg
+    3300046: right_middle_finger
+    3300048: right_right_finger
+    3300050: right_shoulder
+    3300052: right_tube
+    3300054: tap_a
+    3300056: tap_b
+    3300058: tube_a
+    3300060: tube_b
+    3300062: tube_c
+    4300000: right_leg
+    4300002: propeller
+    4300004: body
+    4300006: left_shoulder
+    4300008: right_shoulder
+    4300010: left_cannon
+    4300012: right_cannon
+    4300014: eye_A
+    4300016: left_leg
+    4300018: eye_B
+    4300020: eye_C
+    4300022: crystal
+    4300024: power_core
+    4300026: tap_b
+    4300028: tube_c
+    4300030: tube_b
+    4300032: tube_a
+    4300034: tap_a
+    4300036: head
+    4300038: glass
+    4300040: left_arm
+    4300042: right_arm
+    4300044: left_tube
+    4300046: right_tube
+    4300048: right_foot
+    4300050: right_middle_finger
+    4300052: right_left_finger
+    4300054: right_right_finger
+    4300056: left_foot
+    4300058: left_middle_finger
+    4300060: left_left_finger
+    4300062: left_right_finger
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
