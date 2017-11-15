@@ -39,10 +39,11 @@ public class EffectArea : MonoBehaviour
 
                 if (type == EffectType.Ice)
                 {
-                    if (TestObject.CompareTag("Enemy") || TestObject.CompareTag("Water") || TestObject.CompareTag("Freezable"))
+                    if (TestObject.CompareTag("Enemy") || TestObject.CompareTag("Freezable"))
                     {
-                        Debug.Log("PK FREEZE!!!");
-                        TestObject.GetComponent<Freezable>().Freeze = true;
+                        Freezable temp;
+                        if (temp = TestObject.GetComponent<Freezable>())
+                            temp.Freeze = true;
                     }
                 }
                 else if (type == EffectType.Electric)

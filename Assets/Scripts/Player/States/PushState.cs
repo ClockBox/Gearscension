@@ -3,15 +3,12 @@ using System.Collections;
 
 public class PushState : PlayerState
 {
+    HandNode pushNode;
     Rigidbody pushObject;
 
     Vector3 desiredDirection;
     Vector3 lookDirection;
     Vector3 moveDirection;
-
-    Vector3 ReferencePoint;
-    Vector3 PlayerOffset;
-    Vector3 ObjectOffset;
 
     Vector3 RightHandOffset;
     Vector3 LeftHandOffset;
@@ -20,9 +17,10 @@ public class PushState : PlayerState
     float moveX = 0;
     float moveY = 0;
 
-    public PushState(StateManager manager, GameObject pushObject) : base(manager)
+    public PushState(StateManager manager, HandNode pushNode) : base(manager)
     {
-        this.pushObject = pushObject.GetComponent<Rigidbody>();
+        this.pushNode = pushNode;
+        this.pushObject = pushNode.rb;
     }
     
     //Transitions
@@ -30,11 +28,15 @@ public class PushState : PlayerState
     {
         anim.SetBool("pushing", true);
 
-        elapsedTime = 0;
         rb.velocity = Vector3.zero;
+        lookDirection = pushNode.transform.forward;
+        Player.transform.LookAt(Player.transform.position + lookDirection);
         pushObject.isKinematic = false;
-        FindHandPositions();
 
+        IK.RightHand.Set(pushNode.rightHand);
+        IK.LeftHand.Set(pushNode.leftHand);
+
+        elapsedTime = 0;
         while (elapsedTime <= 1)
         {
             IK.RightHand.weight = Mathf.Lerp(0, 1, elapsedTime);
@@ -62,98 +64,47 @@ public class PushState : PlayerState
         IK.GlobalWeight = 0;
     }
 
-    //Actions
-    IEnumerator PullObject()
-    {
-        elapsedTime = 0;
-        Vector3 startPos = pushObject.transform.position;
-        Vector3 endPos = Player.transform.position - ObjectOffset;
-
-        RaycastHit hit;
-        if (pushObject.SweepTest(endPos - startPos, out hit, (endPos - startPos).magnitude))
-        {
-            if (hit.collider.gameObject != Player.gameObject)
-            {
-                yield return ResetPlayer();
-                yield break;
-            }
-        }
-        while (elapsedTime <= 0.5f)
-        {
-            pushObject.position = Vector3.Lerp(startPos, endPos, elapsedTime * 2);
-            UpdateIK();
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-    }
-    IEnumerator ResetPlayer()
-    {
-        elapsedTime = 0;
-        Vector3 startPos = Player.transform.position;
-        Vector3 endPos = pushObject.transform.position + ObjectOffset;
-        while (elapsedTime <= 0.5f)
-        {
-            rb.position = Vector3.Lerp(startPos, endPos, elapsedTime * 2);
-            UpdateIK();
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-    }
-
     //State Behaviour
     protected override IEnumerator HandleInput()
     {
         if (Input.GetButtonDown("Action"))
             stateManager.ChangeState(new UnequipedState(stateManager, true));
 
-        else if (pushObject.velocity.y < -1)
-            stateManager.ChangeState(new UnequipedState(stateManager, true));
+        else if (!grounded)
+            stateManager.ChangeState(new UnequipedState(stateManager, false));
 
-        else if (PlayerOffset.magnitude > 0.5f)
+        else if (pushObject.velocity.y < -0.5f)
         {
-            moveDirection = Vector3.zero;
-            yield return PullObject();
+            Debug.Log(pushObject.velocity.y);
+            stateManager.ChangeState(new UnequipedState(stateManager, true));
         }
+
+        else if (Player.transform.InverseTransformDirection(rb.velocity).z < -0.1f)
+            yield return MoveBack();
 
         yield break;
     }
-    void FindHandPositions()
+
+    private IEnumerator MoveBack()
     {
-        //RayCast- Right Hand
-        Vector3 rightRayStart = Player.transform.up * 1.4f + Player.transform.right * 0.5f;
-        rightRayStart.y = Mathf.Clamp(rightRayStart.y, 0.5f, (pushObject.transform.position.y - Player.transform.position.y) + pushObject.transform.localScale.y / 2);
-        Vector3 rightRayDirection = Player.transform.forward - Player.transform.right * 0.5f;
-        RaycastHit rightHit;
-
-        if (Physics.Raycast(Player.transform.position + rightRayStart, rightRayDirection, out rightHit, 1f))
+        Vector3 startPos = pushObject.position;
+        moveDirection = -Player.transform.forward * 1;
+        anim.SetFloat("Z", -2);
+        float distance = 1f;
+        float time = 1f;
+        float Pi = 3.14159f;
+        elapsedTime = 0;
+        while (elapsedTime < time)
         {
-            IK.RightHand.position = (rightHit.point - Player.transform.up * 0.1f - Player.transform.forward * 0.1f);
-            IK.RightHand.rotation = Quaternion.FromToRotation(Player.transform.up, rightHit.normal) * Player.transform.rotation;
-            IK.RightHand.weight = 1f;
+            UpdateIK();
+            float moveForce = -(distance / 2 * Mathf.Cos(Pi * elapsedTime / time)) + distance / 2;
+            pushObject.position = startPos + -Player.transform.forward * moveForce;
+            elapsedTime += Time.deltaTime;
+            yield return null;
         }
-        else IK.RightHand.weight = 0f;
-
-        //RayCast- left Hand
-        Vector3 leftRayStart = Player.transform.up * 1.4f - Player.transform.right * 0.5f;
-        leftRayStart.y = Mathf.Clamp(leftRayStart.y, 1, (pushObject.transform.position.y - Player.transform.position.y) + pushObject.transform.localScale.y / 2);
-        Vector3 leftRayDirection = Player.transform.forward + Player.transform.right * 0.5f;
-        RaycastHit leftHit;
-
-        if (Physics.Raycast(Player.transform.position + leftRayStart, leftRayDirection, out leftHit, 1f))
-        {
-            IK.LeftHand.position = (leftHit.point - Player.transform.up * 0.1f - Player.transform.forward * 0.1f);
-            IK.LeftHand.rotation = Quaternion.FromToRotation(Player.transform.up, leftHit.normal) * Player.transform.rotation;
-            IK.LeftHand.weight = 1f;
-        }
-        else IK.LeftHand.weight = 0f;
-
-        RightHandOffset = IK.RightHand.position - pushObject.transform.position;
-        LeftHandOffset = IK.LeftHand.position - pushObject.transform.position;
-
-        ObjectOffset = Player.transform.position - pushObject.transform.position;
-
-        ReferencePoint = pushObject.transform.position + (RightHandOffset + LeftHandOffset) / 2;
-        ReferencePoint.y = Player.transform.position.y;
+        pushObject.velocity = Vector3.zero;
+        rb.velocity = Vector3.zero;
+        moveDirection = Vector3.zero;
     }
 
     //State Updates
@@ -163,51 +114,36 @@ public class PushState : PlayerState
         {
             moveX = Input.GetAxis("Horizontal");
             moveY = Input.GetAxis("Vertical");
-
-            if (Mathf.Abs(moveY) >= Mathf.Abs(moveX))
-                moveX = 0;
-            else moveY = 0;
-
             movementSpeed = 2;
 
             lookDirection = Camera.main.transform.forward;
             lookDirection = Vector3.ProjectOnPlane(lookDirection, Player.transform.up);
 
             desiredDirection = Quaternion.FromToRotation(Player.transform.forward, lookDirection) * (Player.transform.right * moveX + Player.transform.forward * moveY);
+            desiredDirection = Vector3.ProjectOnPlane(desiredDirection, pushNode.transform.right);
             moveDirection = Vector3.MoveTowards(moveDirection, desiredDirection * movementSpeed, 10 * Time.deltaTime);
-
-            if (desiredDirection.magnitude > 0)
-                moveDirection = Vector3.RotateTowards(moveDirection, desiredDirection + lookDirection * 0.01f, 20 * Time.deltaTime, 0);
-
-            if (moveDirection.magnitude > movementSpeed)
-                moveDirection = moveDirection.normalized * movementSpeed;
-
-            ReferencePoint = pushObject.transform.position + (RightHandOffset + LeftHandOffset) / 2;
-            ReferencePoint.y = Player.transform.position.y;
-
-            PlayerOffset = Player.transform.position - ReferencePoint;
-            PlayerOffset.y = 0;
         }
     }
     protected override void UpdateAnimator()
     {
         Vector3 speed = rb.velocity;
         speed.y = 0;
-        anim.SetFloat("Speed", speed.magnitude);
-        float project = -Vector3.Project(moveDirection, Player.transform.forward).z;
-        anim.SetFloat("Z", project);
+        anim.SetFloat("Speed", rb.velocity.magnitude);
+        anim.SetFloat("Z", Player.transform.InverseTransformDirection(rb.velocity).z);
     }
     protected override void UpdateIK()
     {
-        if (pushObject)
+        if (pushNode)
         {
-            IK.RightHand.position = pushObject.transform.transform.position + RightHandOffset;
-            IK.LeftHand.position = pushObject.transform.position + LeftHandOffset;
+            IK.RightHand.Set(pushNode.rightHand);
+            IK.LeftHand.Set(pushNode.leftHand);
         }
     }
     protected override void UpdatePhysics()
     {
+        bool grounded = Physics.CheckCapsule(Player.transform.position, Player.transform.position - Vector3.up * 0.05f, 0.15f, LayerMask.GetMask("Default", "Debris"));
         rb.velocity = new Vector3(moveDirection.x, rb.velocity.y, moveDirection.z);
         rb.AddForce(Player.transform.up * -20f * rb.mass);
+        rb.AddForce(Player.transform.InverseTransformVector(pushObject.transform.position - Player.transform.position).x * Player.transform.right * rb.mass * rb.mass);
     }
 }

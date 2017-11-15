@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class UnequipedState : MoveState
@@ -21,10 +22,10 @@ public class UnequipedState : MoveState
     {
         if (Input.GetButtonDown("Action") && !InTransition)
         {
-            if (other.CompareTag("CarryNode"))
-                stateManager.ChangeState(new CarryState(stateManager, other.GetComponent<CarryNode>(), grounded));
-            else if (other.CompareTag("Pushable"))
-                stateManager.ChangeState(new PushState(stateManager, other.gameObject));
+            if (other.CompareTag("Pushable"))
+                stateManager.ChangeState(new PushState(stateManager, other.GetComponent<HandNode>()));
+            else if (other.CompareTag("CarryNode"))
+                stateManager.ChangeState(new CarryState(stateManager, other.GetComponent<HandNode>(), grounded));
         }
     }
 }

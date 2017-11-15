@@ -92,13 +92,6 @@ public class MoveState : PlayerState
             else movementSpeed = 8;
         }
 
-        //if (moveDirection.magnitude > 0 && grounded)
-        //{
-        //    GameManager.Instance.AudioManager.AudioPlayer = Player.SFX;
-        //    GameManager.Instance.AudioManager.playAudio("sfxfootstepsrunningconcrete");
-        //    Player.SFX.
-        //}
-
         lookDirection = Camera.main.transform.forward;
         lookDirection = Vector3.ProjectOnPlane(lookDirection, Player.transform.up);
 
@@ -125,13 +118,7 @@ public class MoveState : PlayerState
     }
     protected override void UpdatePhysics()
     {
-        bool groundcheck = Physics.CheckCapsule(Player.transform.position, Player.transform.position - Vector3.up * 0.05f, 0.15f, LayerMask.GetMask("Default", "Debris"));
-        if (grounded != groundcheck)
-        {
-            GameManager.Instance.AudioManager.AudioPlayer = Player.SFX;
-            GameManager.Instance.AudioManager.playAudio("sfxjumplandingconcrete");
-        }
-        grounded = groundcheck;
+        grounded = Physics.CheckCapsule(Player.transform.position, Player.transform.position - Vector3.up * 0.05f, 0.15f, LayerMask.GetMask("Default", "Debris"));
 
         if (grounded)
         {
@@ -178,8 +165,8 @@ public class MoveState : PlayerState
         }
         sword.parent = node.transform;
 
-       CarryNode pullObject;
-         if (pullObject = node.GetComponentInParent<CarryNode>())
+        HandNode pullObject;
+         if (pullObject = node.GetComponentInParent<HandNode>())
             yield return HookPull(pullObject);
         else
             yield return HookTravel(node.GetComponent<ClimbingNode>());
@@ -217,7 +204,7 @@ public class MoveState : PlayerState
         InTransition = false;
     }
 
-    protected IEnumerator HookPull(CarryNode pulledObject)
+    protected IEnumerator HookPull(HandNode pulledObject)
     {
         Vector3 startPos = pulledObject.transform.position;
         Vector3 offsetPos = Player.transform.position + (Player.transform.up * 1.1f) + (Player.transform.forward * 0.3f);
@@ -242,18 +229,22 @@ public class MoveState : PlayerState
         {
             if (other.CompareTag("ClimbingNode") || other.CompareTag("HookNode"))
             {
-                if (Vector3.Dot(other.transform.forward, Player.transform.forward) > 0)
+                ClimbingNode temp;
+                if (temp = other.GetComponent<ClimbingNode>())
                 {
-                    moveDirection = Vector3.zero;
-                    stateManager.ChangeState(new ClimbState(stateManager, other.GetComponent<ClimbingNode>()));
+                    Debug.Log(temp.insideWall);
+                    if (!temp.insideWall && Vector3.Dot(other.transform.forward, Player.transform.forward) > 0)
+                        stateManager.ChangeState(new ClimbState(stateManager, temp));
                 }
             }
             else if (grounded && other.CompareTag("ClimbingEdge") && moveDirection.magnitude < 5.5f)
             {
-                if (Vector3.Dot(other.transform.forward, Player.transform.forward) < 0)
+                ClimbingEdge temp;
+                if (temp = other.GetComponent<ClimbingEdge>())
                 {
-                    moveDirection = Vector3.zero;
-                    stateManager.ChangeState(new ClimbState(stateManager, other.GetComponent<ClimbingEdge>()));
+                    Debug.Log(temp.insideWall);
+                    if (!temp.insideWall && Vector3.Dot(other.transform.forward, Player.transform.forward) < 0)
+                        stateManager.ChangeState(new ClimbState(stateManager, temp));
                 }
             }
         }

@@ -27,8 +27,8 @@ public class PlayerState
         Player = GameManager.Player;
         stateManager = PlayerController.StateM;
         IK = PlayerController.IK;
-        rb = PlayerController.rb;
-        anim = PlayerController.anim;
+        rb = PlayerController.RB;
+        anim = PlayerController.Anim;
         elapsedTime = 0;
     }
     

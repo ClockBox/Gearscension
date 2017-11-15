@@ -371,6 +371,7 @@ ModelImporter:
     4300046: Sword Sheathed
     4300048: pCube1
     7400000: Divit_Pull
+    7400002: Divit_Pull_Idle
     9500000: //RootNode
     13700000: Arm_Left
     13700002: Boot_Cuffs
@@ -428,8 +429,36 @@ ModelImporter:
     - serializedVersion: 16
       name: Divit_Pull
       takeName: Take 001
-      firstFrame: 1
+      firstFrame: 19
       lastFrame: 79
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 1
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Divit_Pull_Idle
+      takeName: Take 001
+      firstFrame: 1
+      lastFrame: 4
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

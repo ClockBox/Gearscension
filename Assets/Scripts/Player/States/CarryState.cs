@@ -4,11 +4,11 @@ using UnityEngine;
 public class CarryState : MoveState
 {
     Transform carryObject;
-    CarryNode carryNode;
+    HandNode carryNode;
 
     Vector3 OffsetPosition;
 
-    public CarryState(StateManager manager, CarryNode carryObject, bool grounded) : base(manager, grounded)
+    public CarryState(StateManager manager, HandNode carryObject, bool grounded) : base(manager, grounded)
     {
         this.carryNode = carryObject;
     }

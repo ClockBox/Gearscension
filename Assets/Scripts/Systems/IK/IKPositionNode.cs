@@ -7,6 +7,7 @@ public class IKPositionNode : MonoBehaviour
     protected Collider col;
     protected Renderer rend;
     protected bool m_active = true;
+    public bool insideWall = false;
 
     public IKPositionNode[] neighbours;
     public float[] distances;
@@ -45,5 +46,29 @@ public class IKPositionNode : MonoBehaviour
     {
         get { return m_rotation; }
         set { m_rotation = value; }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (!other.CompareTag("Player"))
+            insideWall = true;
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (!Physics.CheckBox(transform.position + col.bounds.center, col.bounds.extents, transform.rotation))
+            insideWall = false;
+    }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        if (!other.gameObject.CompareTag("Player"))
+            insideWall = true;
+    }
+
+    private void OnCollisionExit(Collision other)
+    {
+        if (!Physics.CheckBox(transform.position + col.bounds.center, col.bounds.extents, transform.rotation))
+            insideWall = false;
     }
 }
