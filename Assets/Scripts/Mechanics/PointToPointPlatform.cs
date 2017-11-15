@@ -79,19 +79,22 @@ public class PointToPointPlatform : Platform
     private void Update()
     {
         if (move)
+            elapsedMoveTime += Time.deltaTime / moveSpeed;
+        else elapsedMoveTime -= Time.deltaTime / moveSpeed;
+        if (elapsedMoveTime >= 1)
         {
-            transform.position = Vector3.Lerp(nodes[currentMoveNode].position, nodes[nextMoveNode].position, elapsedMoveTime);
-            if (elapsedMoveTime >= 1)
-            {
-                currentMoveNode = (currentMoveNode + 1) % nodes.Length;
-                nextMoveNode = (currentMoveNode + 1) % nodes.Length;
+            currentMoveNode = (currentMoveNode + 1) % nodes.Length;
+            nextMoveNode = (currentMoveNode + 1) % nodes.Length;
 
-                if (!loopMovement)
-                    MoveAndRotate = false;
-                elapsedMoveTime = 0;
-            }
-            else elapsedMoveTime += Time.deltaTime / moveSpeed;
+            if (!loopMovement)
+                MoveAndRotate = false;
+            elapsedMoveTime = 0;
         }
+        else if (elapsedMoveTime > 0)
+            transform.position = Vector3.Lerp(nodes[currentMoveNode].position, nodes[nextMoveNode].position, elapsedMoveTime);
+        else if(elapsedMoveTime < 0)
+            elapsedMoveTime = 0;
+
         if (rotate)
         {
             transform.rotation = Quaternion.Lerp(nodes[currentRotationNode].rotation, nodes[nextRotationNode].rotation, elapsedRotationTime);
@@ -105,6 +108,18 @@ public class PointToPointPlatform : Platform
                 elapsedRotationTime = 0;
             }
             else elapsedRotationTime += Time.deltaTime / rotationSpeed;
+        }
+    }
+
+    public void MoveTo(int nodeIndex)
+    {
+        Debug.Log("MoveTo: " + elapsedMoveTime);
+        if (nodeIndex == currentMoveNode)
+            move = false;
+        else
+        {
+            nextMoveNode = (nodeIndex) % nodes.Length;
+            move = true;
         }
     }
 

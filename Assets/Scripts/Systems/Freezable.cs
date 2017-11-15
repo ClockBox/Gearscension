@@ -7,14 +7,15 @@ public class Freezable : MonoBehaviour
 {
     public GameObject IcePrefab;
     public Collider colliderBounds;
-    public Animator animator;
 
-    private Rigidbody rb;
-    private GameObject iceBlock;
-    private Transform parent;
-    private MonoBehaviour[] scripts;
+    public bool climbable;
+    public bool pushable;
 
-    private bool pk_freeze;
+    protected Rigidbody rb;
+    protected IceCube iceBlock;
+    protected Transform parent;
+
+    protected bool pk_freeze;
     public bool Freeze
     {
         get { return pk_freeze; }
@@ -25,48 +26,37 @@ public class Freezable : MonoBehaviour
             else OnThaw();
         }
     }
-    public void ToggleFreeze()
+    protected void ToggleFreeze()
     {
         Freeze = !Freeze;
     }
 
-    private void Awake()
+    protected virtual void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        scripts = GetComponents<MonoBehaviour>();
         if (transform.parent)
             parent = transform.parent;
     }
 
-    private void FixedUpdate()
+    protected void FixedUpdate()
     {
         if (rb) rb.AddForce(Vector3.down * 9.81f * rb.mass);
     }
 
-    void OnFreeze()
+    protected virtual void OnFreeze()
     {
         if (colliderBounds)
         {
-            NavMeshAgent agent;
-            if (agent = GetComponent<NavMeshAgent>())
-                agent.enabled = false;
-
             Bounds bounds = colliderBounds.bounds;
             colliderBounds.enabled = false;
 
-            if (animator)
-                animator.enabled = false;
-
-            iceBlock = Instantiate(IcePrefab, bounds.center, Quaternion.identity);
+            iceBlock = Instantiate(IcePrefab, bounds.center, Quaternion.identity).GetComponent<IceCube>();
+            iceBlock.pushable = pushable;
+            iceBlock.climbable = climbable;
 
             Transform iceCube = iceBlock.transform.GetChild(0);
+            iceCube.tag = tag;
             iceCube.localScale = bounds.extents * 2;
-
-            for (int i = 0; i < scripts.Length; i++)
-            {
-                scripts[i].StopAllCoroutines();
-                scripts[i].enabled = false;
-            }
             transform.parent = iceBlock.transform;
 
             if (colliderBounds.attachedRigidbody)
@@ -77,27 +67,17 @@ public class Freezable : MonoBehaviour
         }
     }
 
-    void OnThaw()
+    protected virtual void OnThaw()
     {
         if (colliderBounds)
         {
-            NavMeshAgent agent;
-            if (agent = GetComponent<NavMeshAgent>())
-                agent.enabled = true;
-
-            if (animator)
-                animator.enabled = true;
-
             if (colliderBounds.attachedRigidbody)
                 colliderBounds.attachedRigidbody.isKinematic = false;
 
             colliderBounds.enabled = true;
 
-            for (int i = 0; i < scripts.Length; i++)
-                scripts[i].enabled = true;
-
             transform.parent = parent;
-            Destroy(iceBlock);
+            Destroy(iceBlock.gameObject);
         }
     }
 }
