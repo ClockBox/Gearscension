@@ -57,7 +57,7 @@ public class Freezable : MonoBehaviour
             if (animator)
                 animator.enabled = false;
 
-            iceBlock = Instantiate(IcePrefab, bounds.center, transform.rotation);
+            iceBlock = Instantiate(IcePrefab, bounds.center, Quaternion.identity);
 
             Transform iceCube = iceBlock.transform.GetChild(0);
             iceCube.localScale = bounds.extents * 2;

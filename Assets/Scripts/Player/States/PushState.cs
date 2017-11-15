@@ -69,11 +69,11 @@ public class PushState : PlayerState
     {
         if (Input.GetButtonDown("Action"))
             stateManager.ChangeState(new UnequipedState(stateManager, true));
-        
-        else if(rb.velocity.y < 0)
+
+        else if (rb.velocity.y < -0.5f)
             stateManager.ChangeState(new UnequipedState(stateManager, false));
 
-        else if (pushObject.velocity.y < -0.1f)
+        else if (pushObject.velocity.y < -0.5f)
             stateManager.ChangeState(new UnequipedState(stateManager, true));
 
         else if (Player.transform.InverseTransformDirection(rb.velocity).z < -0.1f)
