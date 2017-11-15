@@ -70,11 +70,14 @@ public class PushState : PlayerState
         if (Input.GetButtonDown("Action"))
             stateManager.ChangeState(new UnequipedState(stateManager, true));
 
-        else if (rb.velocity.y < -0.5f)
+        else if (!grounded)
             stateManager.ChangeState(new UnequipedState(stateManager, false));
 
         else if (pushObject.velocity.y < -0.5f)
+        {
+            Debug.Log(pushObject.velocity.y);
             stateManager.ChangeState(new UnequipedState(stateManager, true));
+        }
 
         else if (Player.transform.InverseTransformDirection(rb.velocity).z < -0.1f)
             yield return MoveBack();

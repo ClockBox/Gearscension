@@ -6,16 +6,16 @@ public class Platform : MonoBehaviour
 {
     protected void OnTriggerStay(Collider col)
     {
-        if (col.gameObject.tag == "Player")
+        if (col.gameObject.tag == "Player" || col.gameObject.tag == "Enemy")
         {
-            col.gameObject.transform.parent = GetComponentInChildren<Transform>();
+            col.attachedRigidbody.gameObject.transform.parent = GetComponentInChildren<Transform>();
         }
     }
     protected void OnTriggerExit(Collider col)
     {
-        if (col.gameObject.tag == "Player")
+        if (col.gameObject.tag == "Player" || col.gameObject.tag == "Enemy")
         {
-            col.gameObject.transform.parent = null;
+            col.attachedRigidbody.gameObject.transform.parent = null;
         }
     }
 }

@@ -19,19 +19,21 @@ public class PressurePlate : ElectricalSwitch
 
     public override void Activate()
     {
+        Debug.Log("Activate");
         base.Activate();
         if (lp) lp.CheckPuzzlePiece(gameObject);
     }
 
     public override void Deactivate()
     {
+        Debug.Log("Deactivate");
         base.Deactivate();
         if (lp) lp.DisengagePuzzlePiece(gameObject);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Enemy") || other.gameObject.CompareTag("Player"))
+        if (other.CompareTag("Enemy") || other.CompareTag("Player"))
         {
             weightedObject = other.gameObject;
             Active = true;
@@ -42,7 +44,7 @@ public class PressurePlate : ElectricalSwitch
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.GetComponent<PushableObject>())
+        if (!weightedObject || other.gameObject == weightedObject.gameObject)
         {
             weightedObject = null;
             Active = false;
