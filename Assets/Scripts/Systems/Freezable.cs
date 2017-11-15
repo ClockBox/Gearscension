@@ -60,11 +60,6 @@ public class Freezable : MonoBehaviour
             iceBlock = Instantiate(IcePrefab, bounds.center, Quaternion.identity);
 
             Transform iceCube = iceBlock.transform.GetChild(0);
-            if (CompareTag("Enemy"))
-            {
-                SphereCollider temp = iceCube.gameObject.GetComponent<SphereCollider>();
-                temp.radius = 0.55f;
-            }
             iceCube.localScale = bounds.extents * 2;
 
             for (int i = 0; i < scripts.Length; i++)
