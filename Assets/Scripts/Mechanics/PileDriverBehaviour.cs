@@ -8,54 +8,42 @@ public class PileDriverBehaviour : MonoBehaviour
     private GameObject piston;
     [SerializeField]
     private float moveSpeed;
-    [SerializeField]
-    private Transform extendedPos;
-
-    float z;
-
+    
+    private Rigidbody pistonRB;
+    
     private Vector3 startPos;
     private Vector3 inTransitPos;
 
     private void Start()
     {
         startPos = piston.transform.position;
-        inTransitPos =  extendedPos.position - piston.transform.position;
-        StartCoroutine(Extend());
+        pistonRB = piston.GetComponent<Rigidbody>();
     }
 
     private void Update()
     {
-        
+        if(Input.GetKeyDown(KeyCode.P))
+        {
+            StartCoroutine(Extend());
+        }
     }
 
     IEnumerator Extend()
     {
-        yield return new WaitForSeconds(2.0f);
-        Rigidbody temp = piston.AddComponent<Rigidbody>();
-        temp.constraints = RigidbodyConstraints.FreezePositionY;
-        temp.useGravity = false;
-        temp.AddForce(piston.transform.forward * 100, ForceMode.Impulse);
+        pistonRB.AddForce(piston.transform.forward * moveSpeed * Time.deltaTime, ForceMode.Impulse);
+        
+        yield return new WaitForSeconds(0.4f);
+        pistonRB.velocity = Vector3.zero;
 
-        yield return new WaitForEndOfFrame();
-        yield return new WaitForEndOfFrame();
+        yield return new WaitForSeconds(1.0f);
+        StartCoroutine(Retract());
 
-        Debug.Log("Vel: " + temp.velocity);
-
-        while (temp.velocity.z > 0.01f)
-        {
-            z = piston.transform.position.z;
-
-            Mathf.Clamp(z, -14.5f, 21.5f);
-            piston.transform.position = new Vector3(piston.transform.position.x, piston.transform.position.y, z);
-            yield return null;
-        }
         yield return null;
     }
     IEnumerator Retract()
     {
-        while (inTransitPos.magnitude > 0.01f)
-        {
-            yield return null;
-        }
+        piston.transform.position = startPos;
+        
+        yield return null;
     }
 }
