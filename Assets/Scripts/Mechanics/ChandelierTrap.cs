@@ -10,12 +10,7 @@ public class ChandelierTrap : MonoBehaviour
     private Rigidbody temp;
     private bool activated = false;
     private float gravity;
-
-    public void Update()
-    {
-        
-    }
-
+    
     public void DropChandelier()
     {
         if (activated)
@@ -23,7 +18,7 @@ public class ChandelierTrap : MonoBehaviour
 
         temp = breakablePart.AddComponent<Rigidbody>();
         temp.gameObject.transform.parent = null;
-        Destroy(temp.gameObject, 30.0f);
+        Destroy(temp.gameObject, 22.0f);
         activated = true;
     }
 }
