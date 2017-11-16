@@ -32,6 +32,9 @@ public class HookState : ClimbState
     //State Behaviour
     protected override IEnumerator HandleInput()
     {
+        if (Input.GetButtonDown("Hook"))
+            Player.StartCoroutine(ThrowHook(Player.FindHookTarget("HookNode")));
+
         if (Input.GetButtonDown("Attack") || Player.RightTrigger.Down)
             yield return Attack();
 
@@ -153,4 +156,89 @@ public class HookState : ClimbState
         }
         else IK.RightHand.weight = 0;
     }
+
+    #region Hook Functions
+    protected IEnumerator ThrowHook(GameObject node)
+    {
+        if (!node)
+            yield break;
+
+        InTransition = true;
+        anim.SetBool("hook", true);
+
+        Transform sword = Player.weapons[1].transform;
+        sword.parent = null;
+
+        elapsedTime = 0;
+        while (elapsedTime < 1)
+        {
+            sword.position = Vector3.Lerp(sword.position, node.transform.position - node.transform.forward * 0.3f + node.transform.right * 0.1f, elapsedTime);
+            sword.rotation = Quaternion.Lerp(sword.rotation, node.transform.rotation * new Quaternion(0, -1, 0, 1), elapsedTime);
+            elapsedTime += Time.deltaTime;
+
+            base.UpdateMovement();
+            base.UpdateAnimator();
+            base.UpdateIK();
+            base.UpdatePhysics();
+
+            yield return null;
+        }
+        sword.parent = node.transform;
+
+        HandNode pullObject;
+        if (pullObject = node.GetComponentInParent<HandNode>())
+            yield return HookPull(pullObject);
+        else
+            yield return HookTravel(node.GetComponent<ClimbingNode>());
+    }
+    protected IEnumerator HookTravel(ClimbingNode hook)
+    {
+        if (hook)
+        {
+            IK.RightHand.position = hook.rightHand.position;
+            IK.RightHand.rotation = hook.rightHand.rotation;
+        }
+
+        anim.SetBool("climbing", true);
+
+        elapsedTime = 0;
+        while (elapsedTime < 1)
+        {
+            Player.transform.position = Vector3.Lerp(Player.transform.position, hook.PlayerPosition, elapsedTime);
+            Player.transform.rotation = Quaternion.Lerp(Player.transform.rotation, hook.transform.rotation, elapsedTime);
+
+            IK.GlobalWeight = elapsedTime;
+            IK.SetIKPositions(Player.weapons[1].transform, hook.leftHand, hook.rightFoot, hook.leftFoot);
+            IK.RightFoot.weight = 0;
+            IK.LeftFoot.weight = 0;
+            IK.HeadWeight = 0;
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        if (hook.FreeHang)
+            Player.transform.localEulerAngles = new Vector3(0, Player.transform.localEulerAngles.y, Player.transform.localEulerAngles.z);
+
+        rb.velocity = Vector3.zero;
+        stateManager.ChangeState(new HookState(stateManager, hook));
+        InTransition = false;
+    }
+
+    protected IEnumerator HookPull(HandNode pulledObject)
+    {
+        Vector3 startPos = pulledObject.transform.position;
+        Vector3 offsetPos = Player.transform.position + (Player.transform.up * 1.1f) + (Player.transform.forward * 0.3f);
+
+        elapsedTime = 0;
+        while (elapsedTime < 1)
+        {
+            pulledObject.transform.position = Vector3.Lerp(startPos, offsetPos, elapsedTime);
+            pulledObject.transform.rotation = Quaternion.Lerp(pulledObject.transform.rotation, Player.transform.rotation, elapsedTime);
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        InTransition = false;
+    }
+    #endregion
 }
