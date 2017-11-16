@@ -58,13 +58,6 @@ public abstract class AIStateManager : MonoBehaviour  {
 	{
 		currentState.UpdateState(this);
 		setFrequency += Time.deltaTime;
-
-
-		if (Input.GetKeyDown(KeyCode.G))
-		{
-			TakeDamage(1);
-			Debug.Log(stats.armour);
-		}
 	}
 	public void TransitionToState(AIStates nextState) {
 		if (nextState != remainState)
@@ -94,7 +87,29 @@ public abstract class AIStateManager : MonoBehaviour  {
 		}
 	}
 
-	public abstract void Die();
+	public void Die()
+	{
+		if (isAlive)
+		{
+			GetComponent<CapsuleCollider>().enabled = false;
+			Rigidbody[] temp = GetComponentsInChildren<Rigidbody>();
+			if (temp.Length > 0)
+			{
+				for (int i = 0; i < temp.Length; i++)
+				{
+					temp[i].mass = 80;
+					temp[i].useGravity = true;
+					temp[i].constraints = RigidbodyConstraints.None;
+					temp[i].transform.parent = null;
+					temp[i].GetComponent<Collider>().enabled = true;
+
+				}
+			}
+
+			Destroy(gameObject, 1f);
+			isAlive = false;
+		}
+	}
 
 
 	public void Alerted() {

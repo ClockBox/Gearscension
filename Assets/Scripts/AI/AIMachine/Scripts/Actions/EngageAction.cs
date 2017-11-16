@@ -19,5 +19,13 @@ public class EngageAction : AIActions {
 		//}
 
 		manager.pathAgent.destination =manager.player.transform.position;
+		if (Vector3.Distance(manager.transform.position, manager.player.transform.position) <= manager.stats.pursuitDistance)
+		{
+			manager.pathAgent.isStopped = true;
+		}
+		else
+		{
+			manager.pathAgent.isStopped = false;
+		}
 	}
 }

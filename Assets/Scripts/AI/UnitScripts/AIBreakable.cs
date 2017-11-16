@@ -7,7 +7,7 @@ public class AIBreakable : MonoBehaviour {
 	public AICrystal crystalPrefab;
 	public Transform crystalSpawn;
 	private bool destroyed=false;
-	public AIStateManager ownerUnit;
+	public Transform ownerUnit;
 	private void Update()
 	{
 		if (durability <= 0)
@@ -67,6 +67,7 @@ public class AIBreakable : MonoBehaviour {
 			GetComponent<BoxCollider>().enabled = true;
 			GetComponent<Rigidbody>().useGravity = true;
 			GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+			GetComponent<Rigidbody>().AddForce(new Vector3(1,5,0), ForceMode.Impulse);
 			destroyed = true;
 		}
 

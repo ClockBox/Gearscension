@@ -13,29 +13,7 @@ public class Kamakazi : AIStateManager {
 	private Vector3 playerPos;
 	private bool heightReached;
 	private GameObject smoker;
-	public override void Die()
-	{
-		if (isAlive)
-		{
-			Debug.Log("Kamakazi dead");
 
-			Rigidbody[] temp = GetComponentsInChildren<Rigidbody>();
-			if (temp.Length > 0)
-			{
-				for (int i = 0; i < temp.Length; i++)
-				{
-					temp[i].useGravity = true;
-					temp[i].constraints = RigidbodyConstraints.None;
-					temp[i].transform.parent = null;
-					temp[i].GetComponent<Collider>().enabled = true;
-
-				}
-			}
-
-			Destroy(gameObject);
-			isAlive = false;
-		}
-	}
 	public override void StartEvents() {
 
 		smoker = Instantiate(smokePrefab, exhaust.transform.position, transform.rotation);

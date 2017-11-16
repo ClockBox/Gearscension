@@ -12,6 +12,7 @@ public class RangedAction : AIActions {
 
 	private void Ranged(AIStateManager manager)
 	{
+		manager.transform.LookAt(manager.player.transform);
 		manager.RangedAttack();
 	}
 }

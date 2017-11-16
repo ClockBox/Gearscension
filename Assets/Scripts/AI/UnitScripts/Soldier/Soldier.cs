@@ -14,10 +14,9 @@ public class Soldier : AIStateManager {
 	public float meleeRange;
 	public float meleeDamage;
 	private GameObject fireBurster;
-	private int choice;
-	private Quaternion bulletRotation;
-	private float rotationIncrement;
 	private Animator anim;
+	public float predictionMagnitude;
+	private Vector3 lastPlayerPosition;
 	public override void RangedAttack()
 	{
 		if (!callOnce)
@@ -26,20 +25,16 @@ public class Soldier : AIStateManager {
 			GameObject smoke = Instantiate(smokePrefab, exhaust.transform.position, exhaust.transform.rotation);
 			smoke.GetComponent<ParticleSystem>().Emit(1);
 			Destroy(smoke, 1f);
-			bulletRotation = Quaternion.LookRotation(player.transform.position-transform.position);
-			rotationIncrement = -30;
+			lastPlayerPosition = player.transform.position;
 			callOnce = true;
 		}
 		
 		if (shotFrequency >= shotInterval)
 		{
 			Rigidbody _bullet;
-			_bullet = Instantiate(bulletPrefab, gunPoint.transform.position, bulletRotation);
-			_bullet.transform.Rotate(0, rotationIncrement, 0);
-			rotationIncrement += 10;
-			//Vector3 direction = player.transform.position - transform.position;
-			//_bullet.velocity = direction.normalized* bulletSpeed;
-			_bullet.velocity = _bullet.transform.forward * bulletSpeed;
+			_bullet = Instantiate(bulletPrefab, gunPoint.transform.position, gunPoint.transform.rotation);
+			Vector3 bulletDirection = (PredictPosition(lastPlayerPosition, player.transform.position) - _bullet.transform.position).normalized;
+			_bullet.velocity =bulletDirection* bulletSpeed;
 			Destroy(_bullet.gameObject, 5);
 			shotFrequency = 0;
 		}
@@ -59,7 +54,12 @@ public class Soldier : AIStateManager {
 
 		if (attackFrequency >= attackInterval)
 		{
-			pathAgent.destination=player.transform.position;
+			if (Vector3.Distance(transform.position, player.transform.position)>5f) 
+				{
+					pathAgent.speed = 8;
+				}
+
+				pathAgent.destination=player.transform.position;
 			if (Vector3.Distance(transform.position, player.transform.position) <= meleeRange)
 			{
 				anim.SetTrigger("Attack");
@@ -72,30 +72,7 @@ public class Soldier : AIStateManager {
 
 	}
 
-	public override void Die()
-	{
-		if (isAlive)
-		{
-			Debug.Log("Soldier dead");
-			GetComponent<CapsuleCollider>().enabled = false;
-			Rigidbody[] temp = GetComponentsInChildren<Rigidbody>();
-			if (temp.Length > 0)
-			{
-				for (int i = 0; i < temp.Length; i++)
-				{
-					temp[i].mass = 80;
-					temp[i].useGravity = true;
-					temp[i].constraints = RigidbodyConstraints.None;
-					temp[i].transform.parent = null;
-					temp[i].GetComponent<BoxCollider>().enabled = true;
-
-				}
-			}
-			
-			Destroy(gameObject, 1f);
-			isAlive = false;
-		}
-	}
+	
 
 	public override void StartEvents() {
 		
@@ -103,6 +80,12 @@ public class Soldier : AIStateManager {
 		fireBurster.transform.parent = transform;
 		anim = GetComponent<Animator>();
 		
+	}
+
+	private Vector3 PredictPosition(Vector3 lastPos, Vector3 currentPos)
+	{
+		Vector3 target = (currentPos + (currentPos - lastPos).normalized * predictionMagnitude);
+		return target;
 	}
 	
 
