@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     private static string levelCompleteScene = "Completed Level";
     private static string gameOverScene = "Game Over";
     private static string hudScene = "Hud";
+    private static string elevatorScene = "Elevator";
 
     public GameObject playerPrefab;
     public Transform LevelSpawn;
@@ -116,23 +117,46 @@ public class GameManager : MonoBehaviour
             LoadScene("Floor_4");
     }
 
+    public void OnApplicationFocus(bool focus)
+    {
+        if (this != Instance)
+            return;
+
+        if (!focus && !pause)
+            AddScene(pauseMenuScene);
+    }
+
     public void TogglePause()
     {
         if (this != Instance)
             return;
 
         pause = !pause;
-        if (Time.timeScale == 1f)
+        Time.timeScale = pause ? 0 : 1;
+        ToggleCursor(pause);
+    }
+
+    public void TogglePause(bool pause)
+    {
+        if (this != Instance)
+            return;
+
+        GameManager.pause = pause;
+        Time.timeScale = pause ? 0 : 1;
+        ToggleCursor(pause);
+    }
+
+    public void ToggleCursor(bool value)
+    {
+        if (value)
         {
             Cursor.lockState = CursorLockMode.Confined;
             Cursor.visible = true;
-            Time.timeScale = 0f;
         }
-        else if (Time.timeScale == 0f)
+        else
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-            Time.timeScale = 1f;
         }
     }
 
@@ -238,11 +262,17 @@ public class GameManager : MonoBehaviour
         if (scene.name == pauseMenuScene)
             TogglePause();
 
+        else if (scene.name == hudScene || scene.name == elevatorScene)
+        {
+            ToggleCursor(pause);
+        }
         else if (scene.buildIndex > 4)
         {
-            Cursor.visible = false;
+            ToggleCursor(false);
+
             if (!SceneManager.GetSceneByName(hudScene).isLoaded)
                 SceneManager.LoadScene(hudScene, LoadSceneMode.Additive);
+
             currentFloor = scene.buildIndex;
             PlayerPrefs.SetInt("ContinueScene", currentFloor);
             SceneManager.SetActiveScene(SceneManager.GetSceneByBuildIndex(currentFloor));
@@ -250,9 +280,9 @@ public class GameManager : MonoBehaviour
         else
         {
             pause = false;
-            Cursor.lockState = CursorLockMode.Confined;
-            Cursor.visible = true;
+            ToggleCursor(true);
             Time.timeScale = 1;
+            Destroy(player.gameObject);
         }
     }
 

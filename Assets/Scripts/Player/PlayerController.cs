@@ -219,11 +219,8 @@ public class PlayerController : MonoBehaviour
         else
         {
             StopAllCoroutines();
-            Destroy(gameObject);
+            DestroyImmediate(gameObject);
         }
-        
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
 
         if (!GameManager.Player)
             return;
