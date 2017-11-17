@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 public class CameraController : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class CameraController : MonoBehaviour
     private const float Y_ANGLE_MAX = 410.0f;
     
     private Transform camPivot;
+    private Vector3 shakeOffset;
 
     private float distance = 3.0f;
     private float userDistance = 3.0f;
@@ -18,6 +20,7 @@ public class CameraController : MonoBehaviour
     private float sensitivity = 3.0f;
 
     private static float m_zoomed = 0;
+    private static bool shake = false;
 
     private void Awake()
     {
@@ -58,6 +61,7 @@ public class CameraController : MonoBehaviour
 
             //Set Position and Rotation
             Vector3 moveDirection = new Vector3(0, 0, distance);
+            if (shake) moveDirection += shakeOffset;
             Quaternion rotation = Quaternion.Euler(currentY, currentX, 0);
             transform.position = camPivot.position + rotation * moveDirection;
             transform.LookAt(camPivot.position);
@@ -80,5 +84,18 @@ public class CameraController : MonoBehaviour
     {
         get { return m_zoomed; }
         set { m_zoomed = value; }
+    }
+
+    public IEnumerator ShakeCamera(float shakeTime,float intensity)
+    {
+        shake = true;
+        float elapstedTime = 0;
+        while (elapstedTime < shakeTime)
+        {
+            shakeOffset = new Vector3(Mathf.Cos(elapstedTime), 0, -Mathf.Cos(elapstedTime));
+            elapstedTime += Time.deltaTime;
+            yield return null;
+        }
+        shake = false;
     }
 }

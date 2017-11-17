@@ -141,7 +141,7 @@ public class PushState : PlayerState
     }
     protected override void UpdatePhysics()
     {
-        bool grounded = Physics.CheckCapsule(Player.transform.position, Player.transform.position - Vector3.up * 0.05f, 0.15f, LayerMask.GetMask("Default", "Debris"));
+        grounded = Physics.CheckCapsule(Player.transform.position, Player.transform.position - Vector3.up * 0.05f, 0.15f, LayerMask.GetMask("Default", "Debris"));
         rb.velocity = new Vector3(moveDirection.x, rb.velocity.y, moveDirection.z);
         rb.AddForce(Player.transform.up * -20f * rb.mass);
         rb.AddForce(Player.transform.InverseTransformVector(pushObject.transform.position - Player.transform.position).x * Player.transform.right * rb.mass * rb.mass);

@@ -11,10 +11,7 @@ public class Charger : AIStateManager {
 	public float force;
 	public override void StartEvents() { }
 
-	public override void Die()
-	{
 
-	}
 
 	public override void MeleeAttack()
 	{

@@ -13,10 +13,11 @@ public class GameManager : MonoBehaviour
     private static string levelCompleteScene = "Completed Level";
     private static string gameOverScene = "Game Over";
     private static string hudScene = "Hud";
+    private static string elevatorScene = "Elevator";
 
     public GameObject playerPrefab;
     public Transform LevelSpawn;
-    private static int NextFloor;
+    private static int currentFloor;
 
     private AudioDictonary audioManager;
     public AudioDictonary AudioManager
@@ -77,7 +78,6 @@ public class GameManager : MonoBehaviour
     {
         checkpoint = LevelSpawn;
         gameOver = false;
-        NextFloor = 1;
     }
     #endregion
 
@@ -117,23 +117,46 @@ public class GameManager : MonoBehaviour
             LoadScene("Floor_4");
     }
 
+    public void OnApplicationFocus(bool focus)
+    {
+        if (this != Instance)
+            return;
+
+        if (!focus && !pause)
+            AddScene(pauseMenuScene);
+    }
+
     public void TogglePause()
     {
         if (this != Instance)
             return;
 
         pause = !pause;
-        if (Time.timeScale == 1f)
+        Time.timeScale = pause ? 0 : 1;
+        ToggleCursor(pause);
+    }
+
+    public void TogglePause(bool pause)
+    {
+        if (this != Instance)
+            return;
+
+        GameManager.pause = pause;
+        Time.timeScale = pause ? 0 : 1;
+        ToggleCursor(pause);
+    }
+
+    public void ToggleCursor(bool value)
+    {
+        if (value)
         {
             Cursor.lockState = CursorLockMode.Confined;
             Cursor.visible = true;
-            Time.timeScale = 0f;
         }
-        else if (Time.timeScale == 0f)
+        else
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-            Time.timeScale = 1f;
         }
     }
 
@@ -192,10 +215,8 @@ public class GameManager : MonoBehaviour
 
     public void AddNextFloor()
     {
-        UnloadScene("Floor_" + NextFloor);
-        NextFloor++;
-        AddScene("Floor_" + NextFloor);
-        SceneManager.SetActiveScene(SceneManager.GetSceneByName("Floor_" + NextFloor));
+        UnloadScene(SceneManager.GetSceneByBuildIndex(currentFloor));
+        AddScene(currentFloor + 1);
     }
 
     public void LoadScene(string name)
@@ -209,6 +230,7 @@ public class GameManager : MonoBehaviour
 
     public void AddScene(string name)
     {
+        Debug.Log(name);
         SceneManager.LoadSceneAsync(name, LoadSceneMode.Additive);
     }
     public void AddScene(int index)
@@ -226,6 +248,11 @@ public class GameManager : MonoBehaviour
         if (SceneManager.GetSceneAt(index).isLoaded)
             SceneManager.UnloadSceneAsync(index);
     }
+    public void UnloadScene(Scene scene)
+    {
+        if (scene.isLoaded)
+            SceneManager.UnloadSceneAsync(scene);
+    }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
@@ -235,18 +262,27 @@ public class GameManager : MonoBehaviour
         if (scene.name == pauseMenuScene)
             TogglePause();
 
+        else if (scene.name == hudScene || scene.name == elevatorScene)
+        {
+            ToggleCursor(pause);
+        }
         else if (scene.buildIndex > 4)
         {
+            ToggleCursor(false);
+
             if (!SceneManager.GetSceneByName(hudScene).isLoaded)
                 SceneManager.LoadScene(hudScene, LoadSceneMode.Additive);
-            PlayerPrefs.SetInt("ContinueScene", scene.buildIndex);
+
+            currentFloor = scene.buildIndex;
+            PlayerPrefs.SetInt("ContinueScene", currentFloor);
+            SceneManager.SetActiveScene(SceneManager.GetSceneByBuildIndex(currentFloor));
         }
         else
         {
             pause = false;
-            Cursor.lockState = CursorLockMode.Confined;
-            Cursor.visible = true;
+            ToggleCursor(true);
             Time.timeScale = 1;
+            Destroy(player.gameObject);
         }
     }
 

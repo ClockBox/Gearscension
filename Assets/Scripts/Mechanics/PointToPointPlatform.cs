@@ -57,18 +57,18 @@ public class PointToPointPlatform : Platform
     }
 
     [SerializeField]
-    private float moveSpeed;
-    public float MoveSpeed
+    private float moveTime;
+    public float MoveTime
     {
-        get { return moveSpeed; }
-        set { moveSpeed = value; }
+        get { return moveTime; }
+        set { moveTime = value; }
     }
     [SerializeField]
-    private float rotationSpeed;
-    public float RotationSpeed
+    private float rotationTime;
+    public float RotationTime
     {
-        get { return rotationSpeed; }
-        set { rotationSpeed = value; }
+        get { return rotationTime; }
+        set { rotationTime = value; }
     }
 
     private void Start()
@@ -78,16 +78,17 @@ public class PointToPointPlatform : Platform
 
     private void Update()
     {
+        // Movement
         if (move)
-            elapsedMoveTime += Time.deltaTime / moveSpeed;
-        else elapsedMoveTime -= Time.deltaTime / moveSpeed;
+            elapsedMoveTime += Time.deltaTime / moveTime;
+        else elapsedMoveTime -= Time.deltaTime / moveTime;
         if (elapsedMoveTime >= 1)
         {
             currentMoveNode = (currentMoveNode + 1) % nodes.Length;
             nextMoveNode = (currentMoveNode + 1) % nodes.Length;
 
             if (!loopMovement)
-                MoveAndRotate = false;
+                move = false;
             elapsedMoveTime = 0;
         }
         else if (elapsedMoveTime > 0)
@@ -95,31 +96,44 @@ public class PointToPointPlatform : Platform
         else if(elapsedMoveTime < 0)
             elapsedMoveTime = 0;
 
+        // Rotation
         if (rotate)
+            elapsedRotationTime += Time.deltaTime / rotationTime;
+        else elapsedRotationTime -= Time.deltaTime / rotationTime;
+        if (elapsedRotationTime >= 1)
         {
-            transform.rotation = Quaternion.Lerp(nodes[currentRotationNode].rotation, nodes[nextRotationNode].rotation, elapsedRotationTime);
-            if (elapsedRotationTime >= 1)
-            {
-                currentRotationNode = (currentRotationNode + 1) % nodes.Length;
-                nextRotationNode = (currentRotationNode + 1) % nodes.Length;
+            currentRotationNode = (currentRotationNode + 1) % nodes.Length;
+            nextRotationNode = (currentRotationNode + 1) % nodes.Length;
 
-                if (!loopRotation)
-                    MoveAndRotate = false;
-                elapsedRotationTime = 0;
-            }
-            else elapsedRotationTime += Time.deltaTime / rotationSpeed;
+            if (!loopRotation)
+                rotate = false;
+            elapsedRotationTime = 0;
         }
+        else if(elapsedRotationTime > 0)
+            transform.rotation = Quaternion.Lerp(nodes[currentRotationNode].rotation, nodes[nextRotationNode].rotation, elapsedRotationTime);
+        else if (elapsedRotationTime < 0)
+            elapsedRotationTime = 0;
     }
 
     public void MoveTo(int nodeIndex)
     {
-        Debug.Log("MoveTo: " + elapsedMoveTime);
-        if (nodeIndex == currentMoveNode)
+        if (currentMoveNode == nodeIndex)
             move = false;
         else
         {
             nextMoveNode = (nodeIndex) % nodes.Length;
             move = true;
+        }
+    }
+
+    public void RotateTo(int nodeIndex)
+    {
+        if (currentRotationNode == nodeIndex)
+            rotate = false;
+        else
+        {
+            nextRotationNode = (nodeIndex) % nodes.Length;
+            rotate = true;
         }
     }
 

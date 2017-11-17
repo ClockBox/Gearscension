@@ -8,24 +8,14 @@ public class gregAttacks : MonoBehaviour {
 	public GameObject explosive;
 	public GameObject killFloor;
 	public Transform killFloorPos;
-
-
-    public Transform rightFootMagnetPos;
+	public Transform rightFootMagnetPos;
     public Transform leftFootExplodePos;
-    GameObject player;
+	private GameObject player;
+	private Animator anim;
 
 
-
-    //Animator anim;
-	
-        /*
-         Attack HitBoxes:
-
-        1: Left Foot
-        2: Right Foot
-         */
 	void Start () {
-		//anim = GetComponent<Animator>();
+		anim = GetComponent<Animator>();
 		player = GameObject.FindGameObjectWithTag("Player");
 	}
 

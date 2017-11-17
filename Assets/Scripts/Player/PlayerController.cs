@@ -205,7 +205,7 @@ public class PlayerController : MonoBehaviour
     public void PlaySound(string soundName)
     {
         GameManager.Instance.AudioManager.AudioPlayer = m_SFX;
-        GameManager.Instance.AudioManager.playAudio("sfxjumplandingconcrete");
+        GameManager.Instance.AudioManager.playAudio(soundName);
     }
 
     //Initialize Player
@@ -219,11 +219,8 @@ public class PlayerController : MonoBehaviour
         else
         {
             StopAllCoroutines();
-            Destroy(gameObject);
+            DestroyImmediate(gameObject);
         }
-        
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
 
         if (!GameManager.Player)
             return;

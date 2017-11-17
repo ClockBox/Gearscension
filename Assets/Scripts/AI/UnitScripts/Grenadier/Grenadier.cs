@@ -49,17 +49,19 @@ public class Grenadier : AIStateManager {
 	}
 	public override void MeleeAttack()
 	{
-
-	}
-
-	public override void Die()
-	{
-		if (isAlive)
+		if (!callOnce)
 		{
-			isAlive = false;
-			Destroy(gameObject, 1f);
+			pathAgent.isStopped = true;
+			GetComponent<Rigidbody>().isKinematic = false;
+			GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation;
+			StartCoroutine(Melee());
+			callOnce = true;
 		}
+		
+
 	}
+
+
 	
 
 	private Vector3 CalculateVelocityArc(float angle, Vector3 displacement)
@@ -72,6 +74,20 @@ public class Grenadier : AIStateManager {
 		horizontalDistance += height / Mathf.Tan(angleRad);
 		float velocityStart = Mathf.Sqrt(horizontalDistance * Physics.gravity.magnitude / Mathf.Sin(2 * angleRad));
 		return velocityStart * displacement.normalized;
+
+	}
+
+	IEnumerator Melee()
+	{
+		while (Vector3.Distance(transform.position, player.transform.position) <= 10)
+		{
+			Vector3 direction = (patrolPoints[pathIndex].position - transform.position).normalized;
+			GetComponent<Rigidbody>().AddForce(direction * 50);
+			yield return null;
+		}
+		
+		GetComponent<Rigidbody>().isKinematic = true;
+		GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
 
 	}
 }

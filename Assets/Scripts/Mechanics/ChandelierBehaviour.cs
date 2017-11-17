@@ -67,13 +67,21 @@ public class ChandelierBehaviour : MonoBehaviour
                 spawnedCrystal.transform.parent = null;
                 spawnedCrystal.tag = "Chandelier";
                 Destroy(spawnedCrystal.gameObject, 20.0f);
+                StartCoroutine(AddConstraints(temp.gameObject.GetComponent<Rigidbody>()));
             }
             GameObject crystalExplode = Instantiate(explosion,
                 bigCrystal.transform.position + new Vector3(0,-1f,0),
                 bigCrystal.transform.rotation) as GameObject;
+
             Destroy(crystalExplode.gameObject, 5.0f);
             Destroy(bigCrystal.gameObject);
             broken = true;
         }
+    }
+
+    IEnumerator AddConstraints(Rigidbody rb)
+    {
+        yield return new WaitForSeconds(6);
+        rb.constraints = RigidbodyConstraints.FreezeAll;
     }
 }
