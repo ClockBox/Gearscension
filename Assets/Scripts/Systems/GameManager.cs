@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
 
     public GameObject playerPrefab;
     public Transform LevelSpawn;
-    private static int NextFloor;
+    private static int currentFloor;
 
     private AudioDictonary audioManager;
     public AudioDictonary AudioManager
@@ -77,7 +77,6 @@ public class GameManager : MonoBehaviour
     {
         checkpoint = LevelSpawn;
         gameOver = false;
-        NextFloor = 1;
     }
     #endregion
 
@@ -192,10 +191,8 @@ public class GameManager : MonoBehaviour
 
     public void AddNextFloor()
     {
-        UnloadScene("Floor_" + NextFloor);
-        NextFloor++;
-        AddScene("Floor_" + NextFloor);
-        SceneManager.SetActiveScene(SceneManager.GetSceneByName("Floor_" + NextFloor));
+        UnloadScene(SceneManager.GetSceneByBuildIndex(currentFloor));
+        AddScene(currentFloor + 1);
     }
 
     public void LoadScene(string name)
@@ -209,6 +206,7 @@ public class GameManager : MonoBehaviour
 
     public void AddScene(string name)
     {
+        Debug.Log(name);
         SceneManager.LoadSceneAsync(name, LoadSceneMode.Additive);
     }
     public void AddScene(int index)
@@ -226,6 +224,11 @@ public class GameManager : MonoBehaviour
         if (SceneManager.GetSceneAt(index).isLoaded)
             SceneManager.UnloadSceneAsync(index);
     }
+    public void UnloadScene(Scene scene)
+    {
+        if (scene.isLoaded)
+            SceneManager.UnloadSceneAsync(scene);
+    }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
@@ -237,9 +240,12 @@ public class GameManager : MonoBehaviour
 
         else if (scene.buildIndex > 4)
         {
+            Cursor.visible = false;
             if (!SceneManager.GetSceneByName(hudScene).isLoaded)
                 SceneManager.LoadScene(hudScene, LoadSceneMode.Additive);
-            PlayerPrefs.SetInt("ContinueScene", scene.buildIndex);
+            currentFloor = scene.buildIndex;
+            PlayerPrefs.SetInt("ContinueScene", currentFloor);
+            SceneManager.SetActiveScene(SceneManager.GetSceneByBuildIndex(currentFloor));
         }
         else
         {

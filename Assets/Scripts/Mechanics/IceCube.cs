@@ -11,11 +11,9 @@ public class IceCube : MonoBehaviour
     public GameObject pushNodePrefab;
 
     private Collider cubeBounds;
-    private Rigidbody rb;
 
     void Start ()
     {
-        rb = GetComponent<Rigidbody>();
         cubeBounds = transform.GetChild(0).GetComponent<Collider>();
         Vector3 extents = cubeBounds.bounds.extents;
         if (extents.x > extents.z)
