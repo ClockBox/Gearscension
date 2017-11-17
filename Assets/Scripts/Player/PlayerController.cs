@@ -205,7 +205,7 @@ public class PlayerController : MonoBehaviour
     public void PlaySound(string soundName)
     {
         GameManager.Instance.AudioManager.AudioPlayer = m_SFX;
-        GameManager.Instance.AudioManager.playAudio("sfxjumplandingconcrete");
+        GameManager.Instance.AudioManager.playAudio(soundName);
     }
 
     //Initialize Player
