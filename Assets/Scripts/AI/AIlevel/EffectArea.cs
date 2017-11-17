@@ -53,7 +53,13 @@ public class EffectArea : MonoBehaviour
                         Debug.Log("POWER OVERWHELMING");
                         TestObject.GetComponent<Generator>().Activate();
                     }
-                }
+					if (TestObject.CompareTag("Enemy"))
+					{
+						Debug.Log("STUN");
+						TestObject.GetComponent<AIStateManager>().TransitionToState(TestObject.GetComponent<AIStateManager>().stunState);
+					}
+
+				}
             }
         }
         else elapsedTime += Time.deltaTime;
