@@ -257,8 +257,8 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha0))
             TakeDamage(10);
         RechargeArmor();
-        
-        if(AimPoint) AimPoint.rotation = CameraController.MainCamera.transform.rotation * new Quaternion(0, 0.7071068f, 0, 0.7071068f);
+
+        if (AimPoint) AimPoint.rotation = CameraController.MainCamera.transform.rotation * new Quaternion(0, 0.7071068f, 0, 0.7071068f);
 
         //Switching Ammo Types
         if (Input.GetButtonDown("Ammo 1"))

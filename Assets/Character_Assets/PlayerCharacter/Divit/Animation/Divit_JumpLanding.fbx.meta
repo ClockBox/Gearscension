@@ -400,17 +400,11 @@ ModelImporter:
     resampleCurves: 1
     optimizeGameObjects: 0
     motionNodeName: 
-    rigImportErrors: 
+    rigImportErrors: "Copied Avatar Rig Configuration mis-match. Transform hierarchy
+      does not match:\n\tTransform 'transform1' not found in HumanDescription.\n"
     rigImportWarnings: 
     animationImportErrors: 
-    animationImportWarnings: "\nClip 'Take 001' has import animation warnings that
-      might lower retargeting quality:\nNote: Activate translation DOF on avatar to
-      improve retargeting quality.\n\t'JNT_SpineC' has translation animation that
-      will be discarded.\n\t'JNT_NeckB' is inbetween humanoid transforms and has rotation
-      animation that will be discarded.\n\t'JNT_L_Hand' is inbetween humanoid transforms
-      and has rotation animation that will be discarded.\n\t'JNT_R_Hand' is inbetween
-      humanoid transforms and has rotation animation that will be discarded.\n\t'JNT_L_Foot'
-      is inbetween humanoid transforms and has rotation animation that will be discarded.\n"
+    animationImportWarnings: 
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     animationCompression: 3
@@ -912,13 +906,13 @@ ModelImporter:
         length: 0
         modified: 0
     skeleton:
-    - name: Divit_JampLanding(Clone)
+    - name: Divit_JumpLanding(Clone)
       parentName: 
       position: {x: 0, y: 0, z: 0}
       rotation: {x: 0, y: 0, z: 0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: Bone001eere
-      parentName: Divit_JampLanding(Clone)
+      parentName: Divit_JumpLanding(Clone)
       position: {x: -0.5535007, y: 0.9509831, z: -0.055617798}
       rotation: {x: 0.6707944, y: 0.36815718, z: -0.43709606, w: -0.4726967}
       scale: {x: 0.32437164, y: 0.32437164, z: 0.32437164}
@@ -938,7 +932,7 @@ ModelImporter:
       rotation: {x: -0.0067025274, y: -0.17350683, z: 0.0020458188, w: 0.9848077}
       scale: {x: 1.0000002, y: 1.0000001, z: 1}
     - name: Bone001eere001
-      parentName: Divit_JampLanding(Clone)
+      parentName: Divit_JumpLanding(Clone)
       position: {x: -0.5424877, y: 0.941919, z: -0.07359431}
       rotation: {x: 0.7044176, y: 0.52215785, z: -0.31932104, w: -0.35941783}
       scale: {x: 0.35575464, y: 0.3557546, z: 0.35575458}
@@ -958,7 +952,7 @@ ModelImporter:
       rotation: {x: -0.006702517, y: -0.1735067, z: 0.0020458514, w: 0.9848078}
       scale: {x: 1.0000002, y: 1.0000001, z: 1}
     - name: Bone001eere002
-      parentName: Divit_JampLanding(Clone)
+      parentName: Divit_JumpLanding(Clone)
       position: {x: -0.5322385, y: 0.94342804, z: -0.090851456}
       rotation: {x: 0.6473088, y: 0.6556456, z: -0.26233324, w: -0.2868822}
       scale: {x: 0.32437167, y: 0.32437164, z: 0.32437167}
@@ -978,7 +972,7 @@ ModelImporter:
       rotation: {x: -0.0067025195, y: -0.17350678, z: 0.0020458507, w: 0.9848078}
       scale: {x: 1.0000002, y: 1.0000002, z: 1.0000001}
     - name: Bone001eere003
-      parentName: Divit_JampLanding(Clone)
+      parentName: Divit_JumpLanding(Clone)
       position: {x: -0.5139534, y: 0.94536406, z: -0.09960202}
       rotation: {x: 0.63308966, y: 0.77234125, z: -0.028976602, w: -0.042975962}
       scale: {x: 0.2695964, y: 0.26959637, z: 0.26959637}
@@ -998,7 +992,7 @@ ModelImporter:
       rotation: {x: -0.0067025395, y: -0.17350681, z: 0.0020458174, w: 0.9848078}
       scale: {x: 1.0000001, y: 1.0000001, z: 1}
     - name: Bone001eere004
-      parentName: Divit_JampLanding(Clone)
+      parentName: Divit_JumpLanding(Clone)
       position: {x: -0.51943845, y: 0.9934278, z: -0.021032294}
       rotation: {x: -0.175159, y: 0.06849575, z: 0.68906915, w: 0.6998653}
       scale: {x: 0.36073405, y: 0.37144613, z: 0.37144607}
@@ -1008,7 +1002,7 @@ ModelImporter:
       rotation: {x: 0.004394596, y: -0.13045214, z: 0.03338009, w: 0.9908828}
       scale: {x: 0.9999999, y: 1, z: 1}
     - name: CTRL_L_Hand
-      parentName: Divit_JampLanding(Clone)
+      parentName: Divit_JumpLanding(Clone)
       position: {x: -0, y: 0, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
@@ -1163,7 +1157,7 @@ ModelImporter:
       rotation: {x: 0, y: 0.25292304, z: -0, w: 0.9674864}
       scale: {x: 1, y: 1, z: 1}
     - name: Divit
-      parentName: Divit_JampLanding(Clone)
+      parentName: Divit_JumpLanding(Clone)
       position: {x: -0, y: 0, z: -0.11842629}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
@@ -1273,17 +1267,17 @@ ModelImporter:
       rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071068}
       scale: {x: 2.54, y: 2.54, z: 2.54}
     - name: group7
-      parentName: Divit_JampLanding(Clone)
+      parentName: Divit_JumpLanding(Clone)
       position: {x: -0, y: 0, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: -1, y: 1, z: 1}
     - name: group10
-      parentName: Divit_JampLanding(Clone)
+      parentName: Divit_JumpLanding(Clone)
       position: {x: -0, y: 0, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: -1, y: 1, z: 1}
     - name: IKS_Neck
-      parentName: Divit_JampLanding(Clone)
+      parentName: Divit_JumpLanding(Clone)
       position: {x: 0.046420388, y: 1.5977262, z: 0.3044958}
       rotation: {x: -0.4072233, y: 0.62435776, z: -0.36851317, w: 0.5554679}
       scale: {x: 1, y: 1, z: 1}
@@ -1293,7 +1287,7 @@ ModelImporter:
       rotation: {x: 1.2722545e-15, y: -3.9943443e-17, z: -0.06119559, w: 0.9981258}
       scale: {x: 1, y: 1, z: 1}
     - name: Rig05:_UNKNOWN_REF_NODE_fosterParent1
-      parentName: Divit_JampLanding(Clone)
+      parentName: Divit_JumpLanding(Clone)
       position: {x: -0, y: 0, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
@@ -1318,7 +1312,7 @@ ModelImporter:
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 0.1007069, y: 0.18274021, z: 0.10655877}
     - name: Sword
-      parentName: Divit_JampLanding(Clone)
+      parentName: Divit_JumpLanding(Clone)
       position: {x: -0, y: 0, z: -0.11842629}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
@@ -1338,7 +1332,7 @@ ModelImporter:
       rotation: {x: 0.41408947, y: 0.61069167, z: 0.53893733, w: 0.40636462}
       scale: {x: 0.05691143, y: 0.056911435, z: 0.056911435}
     - name: JNT_Root
-      parentName: Divit_JampLanding(Clone)
+      parentName: Divit_JumpLanding(Clone)
       position: {x: -0.00018275861, y: 1.0487688, z: -0.13969961}
       rotation: {x: -0.3187284, y: 0.631199, z: -0.3187284, w: 0.63119906}
       scale: {x: 1.0000005, y: 0.9999999, z: 0.99999976}
@@ -1754,7 +1748,8 @@ ModelImporter:
     hasTranslationDoF: 0
     hasExtraRoot: 1
     skeletonHasParents: 1
-  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 8fde1e556bb082148bfe5875300fbdf9,
+    type: 3}
   animationType: 3
   humanoidOversampling: 1
   additionalBone: 0

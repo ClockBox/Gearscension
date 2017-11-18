@@ -4,9 +4,8 @@ using UnityEngine;
 
 public class AimState : MoveState
 {
-    float bulletScale = 1;
-    
     private Transform gun;
+    private float shootCooldown = 0;
 
     public AimState(StateManager manager,bool grounded) : base(manager,grounded) { }
 
@@ -42,15 +41,15 @@ public class AimState : MoveState
         if ((!Input.GetButton("Aim") && !Player.LeftTrigger.Stay) || Input.GetButtonDown("Roll"))
             stateManager.ChangeState(new UnequipedState(stateManager, grounded));
 
-        if (Input.GetButton("Attack"))
-            bulletScale += Time.deltaTime;
-
-        else if (Input.GetButtonUp("Attack") || Player.RightTrigger.Up)
+        else if (shootCooldown <= 0 && (Input.GetButtonUp("Attack") || Player.RightTrigger.Up))
         {
-            (Player.weapons[0] as Gun).Shoot(bulletScale);
-            bulletScale = 1;
+            (Player.weapons[0] as Gun).Shoot();
+            shootCooldown = 1;
         }
+
         else yield return base.HandleInput();
+
+        shootCooldown -= Time.deltaTime;
     }
 
     //Actions
@@ -65,7 +64,7 @@ public class AimState : MoveState
             GameManager.Instance.AudioManager.playAudio("sfxgundraw");
 
             yield return ToggleGun(Player.GunHolster, Player.AimPoint);
-            gun.parent = Player.AimPoint;
+            gun.parent = Player.AimPoint; 
         }
         else
         {
@@ -108,7 +107,8 @@ public class AimState : MoveState
         {
             gun.position = Vector3.Lerp(start.position, end.position, elapsedTime);
             gun.rotation = Quaternion.Lerp(start.rotation, end.rotation, elapsedTime);
-            
+
+            base.UpdateMovement();
             base.UpdateAnimator();
             base.UpdatePhysics();
             UpdateIK();

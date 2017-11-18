@@ -400,17 +400,11 @@ ModelImporter:
     resampleCurves: 1
     optimizeGameObjects: 0
     motionNodeName: 
-    rigImportErrors: 
+    rigImportErrors: "Copied Avatar Rig Configuration mis-match. Transform hierarchy
+      does not match:\n\tTransform 'transform1' not found in HumanDescription.\n"
     rigImportWarnings: 
     animationImportErrors: 
-    animationImportWarnings: "\nClip 'Take 001' has import animation warnings that
-      might lower retargeting quality:\nNote: Activate translation DOF on avatar to
-      improve retargeting quality.\n\t'JNT_SpineC' has translation animation that
-      will be discarded.\n\t'JNT_NeckB' is inbetween humanoid transforms and has rotation
-      animation that will be discarded.\n\t'JNT_L_Hand' is inbetween humanoid transforms
-      and has rotation animation that will be discarded.\n\t'JNT_R_Hand' is inbetween
-      humanoid transforms and has rotation animation that will be discarded.\n\t'JNT_L_Foot'
-      is inbetween humanoid transforms and has rotation animation that will be discarded.\n"
+    animationImportWarnings: 
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     animationCompression: 3
@@ -1747,7 +1741,8 @@ ModelImporter:
     hasTranslationDoF: 0
     hasExtraRoot: 1
     skeletonHasParents: 1
-  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 8fde1e556bb082148bfe5875300fbdf9,
+    type: 3}
   animationType: 3
   humanoidOversampling: 1
   additionalBone: 0

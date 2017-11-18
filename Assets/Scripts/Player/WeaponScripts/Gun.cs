@@ -16,13 +16,9 @@ public class Gun : Weapon
             gameObject.SetActive(false);
     }
 	
-	public void Shoot (float BulletScale)
+	public void Shoot ()
     {
-        if (BulletScale < 2)
-            BulletScale = 1;
-
         GameObject bullet = Instantiate(Bullet[player.AmmoType], bulletSpawn.position, bulletSpawn.rotation) as GameObject;
-        bullet.transform.localScale = bullet.transform.localScale * BulletScale;
-        bullet.GetComponent<Rigidbody>().AddForce((bullet.transform.forward * 100) / (BulletScale * BulletScale), ForceMode.Impulse);
+        bullet.GetComponent<Rigidbody>().AddForce((bullet.transform.forward * 100), ForceMode.Impulse);
     }
 }

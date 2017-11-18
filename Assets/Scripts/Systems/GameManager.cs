@@ -75,7 +75,7 @@ public class GameManager : MonoBehaviour
     }
 
     private void Start()
-    {
+    {   
         checkpoint = LevelSpawn;
         gameOver = false;
     }
