@@ -25,9 +25,10 @@ public class FreezableEnemy : Freezable
             if (animator)
                 animator.enabled = false;
 
-            SphereCollider temp = iceBlock.transform.GetChild(0).gameObject.AddComponent<SphereCollider>();
-            temp.radius = 0.51f;
-
+            CapsuleCollider temp = iceBlock.transform.GetChild(0).gameObject.AddComponent<CapsuleCollider>();
+            temp.height = 1.1f;
+            temp.radius = 0.5f;
+                
             for (int i = 0; i < scripts.Length; i++)
             {
                 scripts[i].StopAllCoroutines();
