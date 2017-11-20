@@ -148,9 +148,10 @@ public class PlayerController : MonoBehaviour
         for (int i = 0; i < targets.Length; i++)
         {
             Vector3 checkDistance = targets[i].transform.position - transform.position;
-            if (checkDistance.magnitude < HookRange)
+            if (checkDistance.magnitude < HookRange && Vector3.Dot(targets[i].transform.forward, Camera.main.transform.forward) > 0.5f)
             {
-                float checkAngle = (Vector3.Dot(targets[i].transform.position - transform.position, Camera.main.transform.forward));
+                float checkAngle = Vector3.Dot((targets[i].transform.position - transform.position).normalized, Camera.main.transform.forward);
+                Debug.Log(checkAngle, targets[i]);
                 if (checkAngle > closestAngle)
                 {
                     closestAngle = checkAngle;
