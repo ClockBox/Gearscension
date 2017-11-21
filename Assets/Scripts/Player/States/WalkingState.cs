@@ -241,7 +241,6 @@ public class MoveState : PlayerState
                 ClimbingEdge temp;
                 if (temp = other.GetComponent<ClimbingEdge>())
                 {
-                    Debug.Log(temp.insideWall);
                     if (!temp.insideWall && Vector3.Dot(other.transform.forward, Player.transform.forward) < 0)
                         stateManager.ChangeState(new ClimbState(stateManager, temp));
                 }

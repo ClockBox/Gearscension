@@ -36,7 +36,10 @@ public class FreezableEnemy : Freezable
             }
 
             if (colliderBounds.attachedRigidbody)
+            {
                 colliderBounds.attachedRigidbody.isKinematic = false;
+                colliderBounds.attachedRigidbody.velocity = Vector3.zero;
+            }
 
             transform.parent = iceBlock.transform;
         }

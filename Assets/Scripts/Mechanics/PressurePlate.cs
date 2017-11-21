@@ -37,8 +37,8 @@ public class PressurePlate : ElectricalSwitch
         {
             weightedObject = other.gameObject;
             Active = true;
-            if (other.gameObject.CompareTag("Enemy"))
-                StartCoroutine(MoveOverTime(other, transform.position - other.transform.position));
+            //if (other.gameObject.CompareTag("Enemy"))
+                //StartCoroutine(MoveOverTime(other, transform.position - other.transform.position));
         }
     }
 
