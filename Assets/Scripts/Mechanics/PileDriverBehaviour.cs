@@ -5,19 +5,20 @@ using UnityEngine;
 public class PileDriverBehaviour : MonoBehaviour
 {
     [SerializeField]
-    private GameObject piston;
+    private GameObject extendedPos;
     [SerializeField]
     private float moveSpeed;
-    
+    [SerializeField]
+    private float time;
+    [SerializeField]
     private Rigidbody pistonRB;
-    
+
     private Vector3 startPos;
     private Vector3 inTransitPos;
 
     private void Start()
     {
-        startPos = piston.transform.position;
-        pistonRB = piston.GetComponent<Rigidbody>();
+        startPos = pistonRB.transform.position;
     }
 
     private void Update()
@@ -28,13 +29,21 @@ public class PileDriverBehaviour : MonoBehaviour
         }
     }
 
+    public void StartExtend()
+    {
+        StartCoroutine(Extend());
+    }
+
     IEnumerator Extend()
     {
-        pistonRB.AddForce(piston.transform.forward * moveSpeed * Time.deltaTime, ForceMode.Impulse);
+        float elapsedTime = 0;
+        while (elapsedTime < time)
+        {
+            elapsedTime += Time.deltaTime;
+            pistonRB.transform.position = Vector3.MoveTowards(pistonRB.transform.position, extendedPos.transform.position, moveSpeed * Time.deltaTime);
+            yield return null;
+        }
         
-        yield return new WaitForSeconds(0.4f);
-        pistonRB.velocity = Vector3.zero;
-
         yield return new WaitForSeconds(1.0f);
         StartCoroutine(Retract());
 
@@ -42,8 +51,13 @@ public class PileDriverBehaviour : MonoBehaviour
     }
     IEnumerator Retract()
     {
-        piston.transform.position = startPos;
-        
+        float elapsedTime = 0;
+        while (elapsedTime < (time * 5))
+        {
+            elapsedTime += Time.deltaTime;
+            pistonRB.transform.position = Vector3.MoveTowards(pistonRB.transform.position, startPos, (moveSpeed / 5) * Time.deltaTime);
+            yield return null;
+        }
         yield return null;
     }
 }
