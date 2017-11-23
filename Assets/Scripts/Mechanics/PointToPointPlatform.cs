@@ -73,7 +73,14 @@ public class PointToPointPlatform : Platform
 
     private void Start()
     {
-        Reset();
+        currentMoveNode = 0;
+        nextMoveNode = 1;
+
+        currentRotationNode = 0;
+        nextRotationNode = 1;
+
+        transform.position = nodes[currentMoveNode].position;
+        transform.rotation = nodes[currentRotationNode].rotation;
     }
 
     private void Update()
