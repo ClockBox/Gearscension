@@ -39,18 +39,17 @@ public class ForceArea : MonoBehaviour
         cols = Physics.OverlapSphere(transform.position, pushRadius, LayerMask.GetMask("Debris", "Character"));
         for (int i = 0; i < cols.Length; i++)
         {
-            if(cols[i].tag ==("Chandelier"))
+            if (cols[i].tag == ("Chandelier"))
             {
                 cT = cols[i].GetComponent<ChandelierTrap>();
                 cT.DropChandelier();
             }
 
-            if (!cols[i].isTrigger)
+            tempRB = cols[i].attachedRigidbody;
+            if (!cols[i].isTrigger && tempRB)
             {
-                tempRB = cols[i].GetComponent<Rigidbody>();
+                tempRB.isKinematic = false;
                 tempRB.AddExplosionForce(pushForce, transform.position, pushRadius);
-                if (tempRB.CompareTag("Pushable"))
-                    tempRB.isKinematic = false;
             }
             if (cols[i].gameObject == player)
                 PlayerState.grounded = false;

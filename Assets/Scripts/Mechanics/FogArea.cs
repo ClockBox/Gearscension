@@ -20,7 +20,6 @@ public class FogArea : MonoBehaviour
         bounds.y = 1;
         for (int i = 0; i < fogLayers.Length; i++)
         {
-            Debug.Log(fogLayers[i]);
             var newshape = fogLayers[i].shape;
             newshape.scale = bounds * 2;
             var newMain = fogLayers[i].main;

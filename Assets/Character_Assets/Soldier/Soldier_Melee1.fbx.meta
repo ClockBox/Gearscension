@@ -33,6 +33,28 @@ ModelImporter:
     100050: nurbsCircle5
     100052: nurbsCircle6
     100054: //RootNode
+    100056: Axle_LP
+    100058: BarrelClasp_LP
+    100060: Body_LP001
+    100062: BotBarrel_LP
+    100064: BotBarrelWire_LP
+    100066: Elbows_LP
+    100068: Exaust_LP
+    100070: Gun
+    100072: GunArm_LP
+    100074: Head_LP
+    100076: Hoods_LP
+    100078: joint1
+    100080: joint2
+    100082: joint3
+    100084: joint4
+    100086: joint5
+    100088: LeftWheel_LP
+    100090: nurbsCircle3
+    100092: RightBarrelWire_LP
+    100094: RightWheel_LP
+    100096: Shoulders_LP
+    100098: TopBarrel_LP
     400000: Arm_LP
     400002: Body_LP
     400004: CTRL_Hand
@@ -61,18 +83,72 @@ ModelImporter:
     400050: nurbsCircle5
     400052: nurbsCircle6
     400054: //RootNode
+    400056: Axle_LP
+    400058: BarrelClasp_LP
+    400060: Body_LP001
+    400062: BotBarrel_LP
+    400064: BotBarrelWire_LP
+    400066: Elbows_LP
+    400068: Exaust_LP
+    400070: Gun
+    400072: GunArm_LP
+    400074: Head_LP
+    400076: Hoods_LP
+    400078: joint1
+    400080: joint2
+    400082: joint3
+    400084: joint4
+    400086: joint5
+    400088: LeftWheel_LP
+    400090: nurbsCircle3
+    400092: RightBarrelWire_LP
+    400094: RightWheel_LP
+    400096: Shoulders_LP
+    400098: TopBarrel_LP
     2300000: Arm_LP
     2300002: Body_LP
     2300004: Elbow_LP
     2300006: Hood_LP
     2300008: Main_LP
     2300010: Main_LP1
+    2300012: Axle_LP
+    2300014: BarrelClasp_LP
+    2300016: Body_LP001
+    2300018: BotBarrel_LP
+    2300020: BotBarrelWire_LP
+    2300022: Elbows_LP
+    2300024: Exaust_LP
+    2300026: Gun
+    2300028: GunArm_LP
+    2300030: Head_LP
+    2300032: Hoods_LP
+    2300034: LeftWheel_LP
+    2300036: RightBarrelWire_LP
+    2300038: RightWheel_LP
+    2300040: Shoulders_LP
+    2300042: TopBarrel_LP
     3300000: Arm_LP
     3300002: Body_LP
     3300004: Elbow_LP
     3300006: Hood_LP
     3300008: Main_LP
     3300010: Main_LP1
+    3300012: Axle_LP
+    3300014: BarrelClasp_LP
+    3300016: Body_LP001
+    3300018: BotBarrel_LP
+    3300020: BotBarrelWire_LP
+    3300022: Elbows_LP
+    3300024: Exaust_LP
+    3300026: Gun
+    3300028: GunArm_LP
+    3300030: Head_LP
+    3300032: Hoods_LP
+    3300034: LeftWheel_LP
+    3300036: RightBarrelWire_LP
+    3300038: RightWheel_LP
+    3300040: Shoulders_LP
+    3300042: TopBarrel_LP
     4300000: Arm_LP
     4300002: Elbow_LP
     4300004: Body_LP
@@ -80,6 +156,22 @@ ModelImporter:
     4300008: Hood_LP
     4300010: Main_LP1
     4300012: Hand_LP
+    4300014: Gun
+    4300016: Elbows_LP
+    4300018: Hoods_LP
+    4300020: Head_LP
+    4300022: Body_LP001
+    4300024: Exaust_LP
+    4300026: GunArm_LP
+    4300028: RightBarrelWire_LP
+    4300030: Shoulders_LP
+    4300032: Axle_LP
+    4300034: LeftWheel_LP
+    4300036: RightWheel_LP
+    4300038: BarrelClasp_LP
+    4300040: BotBarrel_LP
+    4300042: TopBarrel_LP
+    4300044: BotBarrelWire_LP
     7400000: Take 001
     9500000: //RootNode
     13700000: Hand_LP
