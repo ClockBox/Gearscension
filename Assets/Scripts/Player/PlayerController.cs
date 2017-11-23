@@ -189,7 +189,6 @@ public class PlayerController : MonoBehaviour
             {
                 _currentArmor++;
                 elapsedTime = 0;
-                Debug.Log("Health: " + _currentHealth + ",  \tArmor: " + _currentArmor);
             }
         }
     }
