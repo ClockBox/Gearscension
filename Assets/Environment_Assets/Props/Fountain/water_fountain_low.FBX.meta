@@ -1,0 +1,161 @@
+fileFormatVersion: 2
+guid: 3228c294552e166489425ba8a2119437
+timeCreated: 1511461965
+licenseType: Pro
+ModelImporter:
+  serializedVersion: 21
+  fileIDToRecycleName:
+    100000: Base_Wheel_low
+    100002: Center_Pillar_low
+    100004: Center_Pillar_parts_low
+    100006: Gear_011
+    100008: Gear_012
+    100010: Gear_013
+    100012: Gear_014
+    100014: Gear_015
+    100016: Gear_016
+    100018: Gear_017
+    100020: Gear_018
+    100022: Gear_019
+    100024: Gear_020
+    100026: Middle_Wheel_low
+    100028: Top_Wheel_low
+    100030: //RootNode
+    400000: Base_Wheel_low
+    400002: Center_Pillar_low
+    400004: Center_Pillar_parts_low
+    400006: Gear_011
+    400008: Gear_012
+    400010: Gear_013
+    400012: Gear_014
+    400014: Gear_015
+    400016: Gear_016
+    400018: Gear_017
+    400020: Gear_018
+    400022: Gear_019
+    400024: Gear_020
+    400026: Middle_Wheel_low
+    400028: Top_Wheel_low
+    400030: //RootNode
+    2300000: Base_Wheel_low
+    2300002: Center_Pillar_low
+    2300004: Center_Pillar_parts_low
+    2300006: Gear_011
+    2300008: Gear_012
+    2300010: Gear_013
+    2300012: Gear_014
+    2300014: Gear_015
+    2300016: Gear_016
+    2300018: Gear_017
+    2300020: Gear_018
+    2300022: Gear_019
+    2300024: Gear_020
+    2300026: Middle_Wheel_low
+    2300028: Top_Wheel_low
+    3300000: Base_Wheel_low
+    3300002: Center_Pillar_low
+    3300004: Center_Pillar_parts_low
+    3300006: Gear_011
+    3300008: Gear_012
+    3300010: Gear_013
+    3300012: Gear_014
+    3300014: Gear_015
+    3300016: Gear_016
+    3300018: Gear_017
+    3300020: Gear_018
+    3300022: Gear_019
+    3300024: Gear_020
+    3300026: Middle_Wheel_low
+    3300028: Top_Wheel_low
+    4300000: Top_Wheel_low
+    4300002: Center_Pillar_parts_low
+    4300004: Middle_Wheel_low
+    4300006: Base_Wheel_low
+    4300008: Gear_011
+    4300010: Gear_012
+    4300012: Gear_013
+    4300014: Gear_014
+    4300016: Gear_015
+    4300018: Gear_016
+    4300020: Gear_017
+    4300022: Gear_018
+    4300024: Gear_019
+    4300026: Gear_020
+    4300028: Center_Pillar_low
+    7400000: Take 001
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 0.5
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

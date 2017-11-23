@@ -42,6 +42,135 @@ ModelImporter:
     100068: nurbsCircle7
     100070: Rig05:_UNKNOWN_REF_NODE_fosterParent1
     100072: Rig05:CTRL_Main01
+    100074: Arm_Left
+    100076: Blade
+    100078: Bone001eere
+    100080: Bone001eere001
+    100082: Bone001eere002
+    100084: Bone001eere003
+    100086: Bone001eere004
+    100088: Bone002
+    100090: Bone003
+    100092: Bone004
+    100094: Bone005
+    100096: Bone006
+    100098: Bone007
+    100100: Bone008
+    100102: Bone009
+    100104: Bone010
+    100106: Bone011
+    100108: Bone012
+    100110: Bone013
+    100112: Bone014
+    100114: Boot_Cuffs
+    100116: Boots
+    100118: Box001
+    100120: clasps_Temp
+    100122: CLS_AbsA
+    100124: CLS_Chest
+    100126: CLS_Neck
+    100128: cluster1Handle
+    100130: cluster2Handle
+    100132: Collar
+    100134: curve2
+    100136: Divit
+    100138: Eye
+    100140: Eye 1
+    100142: Glove
+    100144: Goggles
+    100146: group10
+    100148: group2
+    100150: group4
+    100152: group6
+    100154: group7
+    100156: group8
+    100158: group9
+    100160: Hair
+    100162: Harness
+    100164: Head_Arm
+    100166: Hilt
+    100168: Hose
+    100170: IKS_Head
+    100172: IKS_Neck
+    100174: Jacket
+    100176: JNT_Chest
+    100178: JNT_Head
+    100180: JNT_HeadTip
+    100182: JNT_L_Ankle
+    100184: JNT_L_Elbow
+    100186: JNT_L_Foot
+    100188: JNT_L_FootTip
+    100190: JNT_L_Hand
+    100192: JNT_L_Hip
+    100194: JNT_L_Knee
+    100196: JNT_L_MiddleA
+    100198: JNT_L_MiddleB
+    100200: JNT_L_MiddleC
+    100202: JNT_L_MiddleTip
+    100204: JNT_L_PinkyA
+    100206: JNT_L_PinkyB
+    100208: JNT_L_PinkyC
+    100210: JNT_L_PinkyTip
+    100212: JNT_L_PointerA
+    100214: JNT_L_PointerB
+    100216: JNT_L_PointerC
+    100218: JNT_L_PointerTip
+    100220: JNT_L_RingA
+    100222: JNT_L_RingB
+    100224: JNT_L_RingC
+    100226: JNT_L_RingTip
+    100228: JNT_L_Shoulder
+    100230: JNT_L_ThumbA
+    100232: JNT_L_ThumbB
+    100234: JNT_L_ThumbC
+    100236: JNT_L_ThumbTip
+    100238: JNT_L_Wrist
+    100240: JNT_NeckA
+    100242: JNT_NeckB
+    100244: JNT_R_Ankle
+    100246: JNT_R_Elbow
+    100248: JNT_R_Foot
+    100250: JNT_R_FootTip
+    100252: JNT_R_Hand
+    100254: JNT_R_Hip
+    100256: JNT_R_Knee
+    100258: JNT_R_MiddleA
+    100260: JNT_R_MiddleB
+    100262: JNT_R_MiddleC
+    100264: JNT_R_MiddleTip
+    100266: JNT_R_PinkyA
+    100268: JNT_R_PinkyB
+    100270: JNT_R_PinkyC
+    100272: JNT_R_PinkyTip
+    100274: JNT_R_PointerA
+    100276: JNT_R_PointerB
+    100278: JNT_R_PointerC
+    100280: JNT_R_PointerTip
+    100282: JNT_R_RingA
+    100284: JNT_R_RingB
+    100286: JNT_R_RingC
+    100288: JNT_R_RingTip
+    100290: JNT_R_Shoulder
+    100292: JNT_R_ThumbA
+    100294: JNT_R_ThumbB
+    100296: JNT_R_ThumbC
+    100298: JNT_R_ThumbTip
+    100300: JNT_R_Wrist
+    100302: JNT_Root
+    100304: JNT_SpineA
+    100306: JNT_SpineB
+    100308: JNT_SpineC
+    100310: JNY_L_Clavicle
+    100312: JNY_R_Clavicle
+    100314: Pants
+    100316: Scarf
+    100318: Shirt
+    100320: Sphere001
+    100322: Sphere002
+    100324: Straps
+    100326: Sword
+    100328: Sword Sheathed
+    100330: transform1
     400000: CTRL_AbsA
     400002: CTRL_Chest
     400004: CTRL_Head
@@ -79,8 +208,188 @@ ModelImporter:
     400068: nurbsCircle7
     400070: Rig05:_UNKNOWN_REF_NODE_fosterParent1
     400072: Rig05:CTRL_Main01
+    400074: Arm_Left
+    400076: Blade
+    400078: Bone001eere
+    400080: Bone001eere001
+    400082: Bone001eere002
+    400084: Bone001eere003
+    400086: Bone001eere004
+    400088: Bone002
+    400090: Bone003
+    400092: Bone004
+    400094: Bone005
+    400096: Bone006
+    400098: Bone007
+    400100: Bone008
+    400102: Bone009
+    400104: Bone010
+    400106: Bone011
+    400108: Bone012
+    400110: Bone013
+    400112: Bone014
+    400114: Boot_Cuffs
+    400116: Boots
+    400118: Box001
+    400120: clasps_Temp
+    400122: CLS_AbsA
+    400124: CLS_Chest
+    400126: CLS_Neck
+    400128: cluster1Handle
+    400130: cluster2Handle
+    400132: Collar
+    400134: curve2
+    400136: Divit
+    400138: Eye
+    400140: Eye 1
+    400142: Glove
+    400144: Goggles
+    400146: group10
+    400148: group2
+    400150: group4
+    400152: group6
+    400154: group7
+    400156: group8
+    400158: group9
+    400160: Hair
+    400162: Harness
+    400164: Head_Arm
+    400166: Hilt
+    400168: Hose
+    400170: IKS_Head
+    400172: IKS_Neck
+    400174: Jacket
+    400176: JNT_Chest
+    400178: JNT_Head
+    400180: JNT_HeadTip
+    400182: JNT_L_Ankle
+    400184: JNT_L_Elbow
+    400186: JNT_L_Foot
+    400188: JNT_L_FootTip
+    400190: JNT_L_Hand
+    400192: JNT_L_Hip
+    400194: JNT_L_Knee
+    400196: JNT_L_MiddleA
+    400198: JNT_L_MiddleB
+    400200: JNT_L_MiddleC
+    400202: JNT_L_MiddleTip
+    400204: JNT_L_PinkyA
+    400206: JNT_L_PinkyB
+    400208: JNT_L_PinkyC
+    400210: JNT_L_PinkyTip
+    400212: JNT_L_PointerA
+    400214: JNT_L_PointerB
+    400216: JNT_L_PointerC
+    400218: JNT_L_PointerTip
+    400220: JNT_L_RingA
+    400222: JNT_L_RingB
+    400224: JNT_L_RingC
+    400226: JNT_L_RingTip
+    400228: JNT_L_Shoulder
+    400230: JNT_L_ThumbA
+    400232: JNT_L_ThumbB
+    400234: JNT_L_ThumbC
+    400236: JNT_L_ThumbTip
+    400238: JNT_L_Wrist
+    400240: JNT_NeckA
+    400242: JNT_NeckB
+    400244: JNT_R_Ankle
+    400246: JNT_R_Elbow
+    400248: JNT_R_Foot
+    400250: JNT_R_FootTip
+    400252: JNT_R_Hand
+    400254: JNT_R_Hip
+    400256: JNT_R_Knee
+    400258: JNT_R_MiddleA
+    400260: JNT_R_MiddleB
+    400262: JNT_R_MiddleC
+    400264: JNT_R_MiddleTip
+    400266: JNT_R_PinkyA
+    400268: JNT_R_PinkyB
+    400270: JNT_R_PinkyC
+    400272: JNT_R_PinkyTip
+    400274: JNT_R_PointerA
+    400276: JNT_R_PointerB
+    400278: JNT_R_PointerC
+    400280: JNT_R_PointerTip
+    400282: JNT_R_RingA
+    400284: JNT_R_RingB
+    400286: JNT_R_RingC
+    400288: JNT_R_RingTip
+    400290: JNT_R_Shoulder
+    400292: JNT_R_ThumbA
+    400294: JNT_R_ThumbB
+    400296: JNT_R_ThumbC
+    400298: JNT_R_ThumbTip
+    400300: JNT_R_Wrist
+    400302: JNT_Root
+    400304: JNT_SpineA
+    400306: JNT_SpineB
+    400308: JNT_SpineC
+    400310: JNY_L_Clavicle
+    400312: JNY_R_Clavicle
+    400314: Pants
+    400316: Scarf
+    400318: Shirt
+    400320: Sphere001
+    400322: Sphere002
+    400324: Straps
+    400326: Sword
+    400328: Sword Sheathed
+    400330: transform1
+    2300000: Blade
+    2300002: Hilt
+    2300004: Sword Sheathed
+    3300000: Blade
+    3300002: Hilt
+    3300004: Sword Sheathed
+    4300000: Arm_Left
+    4300002: Boot_Cuffs
+    4300004: Boots
+    4300006: Box001
+    4300008: clasps_Temp
+    4300010: Collar
+    4300012: Eye
+    4300014: Eye
+    4300016: Glove
+    4300018: Goggles
+    4300020: Hair
+    4300022: Harness
+    4300024: Head_Arm
+    4300026: Hose
+    4300028: Jacket
+    4300030: Pants
+    4300032: Scarf
+    4300034: Shirt
+    4300036: Sphere001
+    4300038: Sphere002
+    4300040: Straps
+    4300042: Hilt
+    4300044: Blade
+    4300046: Sword Sheathed
     7400000: Take 001
     9500000: //RootNode
+    13700000: Arm_Left
+    13700002: Boot_Cuffs
+    13700004: Boots
+    13700006: Box001
+    13700008: clasps_Temp
+    13700010: Collar
+    13700012: Eye
+    13700014: Eye 1
+    13700016: Glove
+    13700018: Goggles
+    13700020: Hair
+    13700022: Harness
+    13700024: Head_Arm
+    13700026: Hose
+    13700028: Jacket
+    13700030: Pants
+    13700032: Scarf
+    13700034: Shirt
+    13700036: Sphere001
+    13700038: Sphere002
+    13700040: Straps
   materials:
     importMaterials: 1
     materialName: 0
@@ -91,8 +400,8 @@ ModelImporter:
     resampleCurves: 1
     optimizeGameObjects: 0
     motionNodeName: 
-    rigImportErrors: "Copied Avatar Rig Configuration mis-match. Transform hierarchy
-      does not match:\n\tTransform 'JNT_SpineA' for human bone 'Hips' not found\n"
+    rigImportErrors: "Invalid Avatar Rig Configuration. Missing or invalid transform:\n\tRequired
+      human bone 'LeftUpperLeg' not found\n"
     rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
@@ -136,273 +445,8 @@ ModelImporter:
   copyAvatar: 0
   humanDescription:
     serializedVersion: 2
-    human:
-    - boneName: Rig05:CTRL_Main01
-      humanName: Hips
-      limit:
-        min: {x: 0, y: 0, z: 0}
-        max: {x: 0, y: 0, z: 0}
-        value: {x: 0, y: 0, z: 0}
-        length: 0
-        modified: 0
-    - boneName: CTRL_AbsA
-      humanName: Spine
-      limit:
-        min: {x: 0, y: 0, z: 0}
-        max: {x: 0, y: 0, z: 0}
-        value: {x: 0, y: 0, z: 0}
-        length: 0
-        modified: 0
-    - boneName: CTRL_Chest
-      humanName: Chest
-      limit:
-        min: {x: 0, y: 0, z: 0}
-        max: {x: 0, y: 0, z: 0}
-        value: {x: 0, y: 0, z: 0}
-        length: 0
-        modified: 0
-    - boneName: curve1
-      humanName: Neck
-      limit:
-        min: {x: 0, y: 0, z: 0}
-        max: {x: 0, y: 0, z: 0}
-        value: {x: 0, y: 0, z: 0}
-        length: 0
-        modified: 0
-    - boneName: CTRL_Head
-      humanName: Head
-      limit:
-        min: {x: 0, y: 0, z: 0}
-        max: {x: 0, y: 0, z: 0}
-        value: {x: 0, y: 0, z: 0}
-        length: 0
-        modified: 0
-    - boneName: GRPL_Shoulders
-      humanName: LeftShoulder
-      limit:
-        min: {x: 0, y: 0, z: 0}
-        max: {x: 0, y: 0, z: 0}
-        value: {x: 0, y: 0, z: 0}
-        length: 0
-        modified: 0
-    - boneName: CTRL_L_Clavicle
-      humanName: LeftUpperArm
-      limit:
-        min: {x: 0, y: 0, z: 0}
-        max: {x: 0, y: 0, z: 0}
-        value: {x: 0, y: 0, z: 0}
-        length: 0
-        modified: 0
-    - boneName: nurbsCircle2
-      humanName: RightUpperArm
-      limit:
-        min: {x: 0, y: 0, z: 0}
-        max: {x: 0, y: 0, z: 0}
-        value: {x: 0, y: 0, z: 0}
-        length: 0
-        modified: 0
-    - boneName: nurbsCircle3
-      humanName: RightLowerArm
-      limit:
-        min: {x: 0, y: 0, z: 0}
-        max: {x: 0, y: 0, z: 0}
-        value: {x: 0, y: 0, z: 0}
-        length: 0
-        modified: 0
-    - boneName: nurbsCircle4
-      humanName: RightHand
-      limit:
-        min: {x: 0, y: 0, z: 0}
-        max: {x: 0, y: 0, z: 0}
-        value: {x: 0, y: 0, z: 0}
-        length: 0
-        modified: 0
-    skeleton:
-    - name: Divit_SwordSwing01(Clone)
-      parentName: 
-      position: {x: 0, y: 0, z: 0}
-      rotation: {x: 0, y: 0, z: 0, w: 1}
-      scale: {x: 1, y: 1, z: 1}
-    - name: CTRL_L_Hand
-      parentName: Divit_SwordSwing01(Clone)
-      position: {x: -0, y: 0, z: 0}
-      rotation: {x: 0, y: -0, z: -0, w: 1}
-      scale: {x: 1, y: 1, z: 1}
-    - name: CTRL_L_Leg
-      parentName: CTRL_L_Hand
-      position: {x: -0.16557021, y: 0.047358196, z: 0.063597776}
-      rotation: {x: 0, y: -0.08443253, z: -0, w: 0.9964292}
-      scale: {x: 1, y: 1, z: 1}
-    - name: Leglock_L_A
-      parentName: CTRL_L_Leg
-      position: {x: 0.0026375866, y: -0.012329201, z: -0.051364228}
-      rotation: {x: 0.011832765, y: 0.70700777, z: 0.011832765, w: 0.70700777}
-      scale: {x: 1, y: 1, z: 1}
-    - name: Leglock_L_B
-      parentName: Leglock_L_A
-      position: {x: -0.19765387, y: 0.008509413, z: 0.00060124125}
-      rotation: {x: 0.0022461081, y: 0.9999975, z: -6.1094653e-17, w: -6.136972e-17}
-      scale: {x: 1, y: 1, z: 1}
-    - name: IKS_L_FootTip
-      parentName: Leglock_L_B
-      position: {x: 5.3290704e-17, y: -3.6859404e-16, z: -1.3453508e-10}
-      rotation: {x: -0.06506196, y: 0.99788123, z: 5.1186566e-10, w: 0.000000015221909}
-      scale: {x: 1, y: 1, z: 1}
-    - name: Leglock_L_C
-      parentName: Leglock_L_B
-      position: {x: -0.08794325, y: -0.011516775, z: -0.0000000029056189}
-      rotation: {x: 0, y: -0, z: -0.23439865, w: 0.97214055}
-      scale: {x: 1, y: 1, z: 1}
-    - name: IKS_L_Foot
-      parentName: Leglock_L_C
-      position: {x: 2.1316282e-16, y: -3.0198067e-16, z: 7.0709195e-11}
-      rotation: {x: 0.0074734366, y: 0.9999721, z: 0.000000008338985, w: 0.000000012744798}
-      scale: {x: 1, y: 1, z: 1}
-    - name: Leglock_L_D
-      parentName: Leglock_L_C
-      position: {x: -0.088169046, y: 0.001317962, z: -0.000000002406585}
-      rotation: {x: -0.17568678, y: 0.6849337, z: 0.17568678, w: 0.6849337}
-      scale: {x: 1, y: 1, z: 1}
-    - name: IKS_L_Leg
-      parentName: Leglock_L_D
-      position: {x: 3.5527136e-17, y: 0, z: 0}
-      rotation: {x: 2.7755576e-17, y: -1.24558585e-17, z: 2.1981436e-17, w: 1}
-      scale: {x: 1, y: 1, z: 1}
-    - name: CTRL_R_Leg
-      parentName: CTRL_L_Hand
-      position: {x: 0.16751483, y: 0.047358196, z: -0.15365188}
-      rotation: {x: 0, y: 0.08191554, z: -0, w: 0.9966393}
-      scale: {x: 1, y: 1, z: 1}
-    - name: Leglock_R_A
-      parentName: CTRL_R_Leg
-      position: {x: -0.012207794, y: -0.012329199, z: -0.051363926}
-      rotation: {x: 0.70700777, y: -0.011832765, z: 0.70700777, w: -0.011832765}
-      scale: {x: 1, y: 1, z: 1}
-    - name: Leglock_R_B
-      parentName: Leglock_R_A
-      position: {x: 0.19765353, y: -0.008509424, z: -0.000601}
-      rotation: {x: 0.0022461081, y: 0.9999975, z: -6.1094653e-17, w: -6.136972e-17}
-      scale: {x: 1, y: 1, z: 1}
-    - name: IKS_R_FootTip
-      parentName: Leglock_R_B
-      position: {x: -0.000000010840171, y: 0.000000023158611, z: 0.0000000024771216}
-      rotation: {x: -0.06506196, y: 0.99788123, z: -7.163259e-10, w: -0.00000002130224}
-      scale: {x: 1, y: 1, z: 1}
-    - name: Leglock_R_C
-      parentName: Leglock_R_B
-      position: {x: 0.08794284, y: 0.011516832, z: 5.3290704e-17}
-      rotation: {x: 0, y: -0, z: -0.23439865, w: 0.97214055}
-      scale: {x: 1, y: 1, z: 1}
-    - name: IKS_R_Foot
-      parentName: Leglock_R_C
-      position: {x: 0.0000006578674, y: 0.00000027755866, z: -0.0000000013019203}
-      rotation: {x: 0.0074734366, y: 0.9999721, z: -0.000000011669957, w: -0.00000001783566}
-      scale: {x: 1, y: 1, z: 1}
-    - name: Leglock_R_D
-      parentName: Leglock_R_C
-      position: {x: 0.088169076, y: -0.0013180557, z: -1.2434498e-16}
-      rotation: {x: -0.17568678, y: 0.6849337, z: 0.17568678, w: 0.6849337}
-      scale: {x: 1, y: 1, z: 1}
-    - name: IKS_R_Leg
-      parentName: Leglock_R_D
-      position: {x: 0.0000000034075887, y: -0.0000000037603676, z: 0.00000023051919}
-      rotation: {x: 1, y: 2.3428008e-15, z: -1.4190004e-15, w: 6.123234e-17}
-      scale: {x: 1, y: 1, z: 1}
-    - name: Rig05:CTRL_Main01
-      parentName: CTRL_L_Hand
-      position: {x: -0, y: 1.0353717, z: -0.06380646}
-      rotation: {x: 0, y: 0, z: 0.014727126, w: 0.9998916}
-      scale: {x: 1, y: 1, z: 1}
-    - name: CTRL_AbsA
-      parentName: Rig05:CTRL_Main01
-      position: {x: -0, y: 0.15428442, z: 0.02587025}
-      rotation: {x: 0, y: -0, z: -0, w: 1}
-      scale: {x: 1.1779283, y: 1, z: 1.1779283}
-    - name: CTRL_Chest
-      parentName: CTRL_AbsA
-      position: {x: 0.015265609, y: 0.08578234, z: -0.015363569}
-      rotation: {x: 0.046064053, y: 0.037929993, z: -0.003210266, w: 0.99821293}
-      scale: {x: 0.8489481, y: 1, z: 0.8489481}
-    - name: curve1
-      parentName: CTRL_Chest
-      position: {x: 1.8762769e-15, y: 0.2564407, z: -0.0030663153}
-      rotation: {x: 0, y: -0, z: -0, w: 1}
-      scale: {x: 1, y: 1, z: 1}
-    - name: CTRL_Head
-      parentName: curve1
-      position: {x: 1.9539925e-16, y: 0.13723867, z: 0.023038184}
-      rotation: {x: 0, y: -0, z: -0, w: 1}
-      scale: {x: 1, y: 1, z: 1}
-    - name: GRPL_Shoulders
-      parentName: CTRL_Chest
-      position: {x: 1.7608137e-15, y: 0.16104527, z: -0.034573033}
-      rotation: {x: 0, y: -0, z: -0, w: 1}
-      scale: {x: 1, y: 1, z: 1}
-    - name: CTRL_L_Clavicle
-      parentName: GRPL_Shoulders
-      position: {x: -0.18051127, y: 0.0046598515, z: 0.005156628}
-      rotation: {x: 0, y: -0, z: -0, w: 1}
-      scale: {x: 1, y: 1, z: 1}
-    - name: CTRL_R_Clavicle
-      parentName: GRPL_Shoulders
-      position: {x: 0.180511, y: 0.004661327, z: 0.0051567107}
-      rotation: {x: 0, y: -0, z: -0, w: 1}
-      scale: {x: 1, y: 1, z: 1}
-    - name: nurbsCircle2
-      parentName: CTRL_Chest
-      position: {x: 0.17207898, y: 0.1386373, z: -0.028120922}
-      rotation: {x: -0.18555251, y: -0.062902786, z: 0.4379832, w: 0.87737346}
-      scale: {x: 1, y: 1, z: 1}
-    - name: nurbsCircle3
-      parentName: nurbsCircle2
-      position: {x: 0.16845365, y: -0.2378549, z: -0.05829268}
-      rotation: {x: 0.13594283, y: -0.22022822, z: -0.040876992, w: 0.9650638}
-      scale: {x: 1, y: 1, z: 1}
-    - name: nurbsCircle4
-      parentName: nurbsCircle3
-      position: {x: 0.11822188, y: -0.16692777, z: -0.040910125}
-      rotation: {x: 0.03697341, y: -0.36040592, z: -0.09511944, w: 0.92719626}
-      scale: {x: 1, y: 1, z: 1}
-    - name: nurbsCircle5
-      parentName: CTRL_Chest
-      position: {x: -0.1720785, y: 0.13864037, z: -0.028121121}
-      rotation: {x: 0, y: 0, z: 0.18418159, w: 0.9828923}
-      scale: {x: 1, y: 1, z: 1}
-    - name: nurbsCircle6
-      parentName: nurbsCircle5
-      position: {x: -0.1792596, y: -0.24196516, z: -0.027563615}
-      rotation: {x: -0.14169091, y: 0, z: -0, w: 0.98991096}
-      scale: {x: 1, y: 1, z: 1}
-    - name: nurbsCircle7
-      parentName: nurbsCircle6
-      position: {x: -0.118580624, y: -0.18501231, z: 0.034598656}
-      rotation: {x: -0.15397419, y: 0, z: -0, w: 0.9880749}
-      scale: {x: 1, y: 1, z: 1}
-    - name: Rig05:_UNKNOWN_REF_NODE_fosterParent1
-      parentName: Divit_SwordSwing01(Clone)
-      position: {x: -0, y: 0, z: 0}
-      rotation: {x: 0, y: -0, z: -0, w: 1}
-      scale: {x: 1, y: 1, z: 1}
-    - name: CTRL_L_ElbowSpot
-      parentName: Rig05:_UNKNOWN_REF_NODE_fosterParent1
-      position: {x: -0.3606752, y: 1.2317168, z: -0.6381199}
-      rotation: {x: 0, y: -0, z: -0, w: 1}
-      scale: {x: 0.088534586, y: 0.16065264, z: 0.09367915}
-    - name: CTRL_L_Knee
-      parentName: Rig05:_UNKNOWN_REF_NODE_fosterParent1
-      position: {x: -0.23376325, y: 0.60338116, z: 0.5126632}
-      rotation: {x: 0, y: -0, z: -0, w: 1}
-      scale: {x: 0.1007069, y: 0.18274021, z: 0.10655877}
-    - name: CTRL_R_ElbowSpot
-      parentName: Rig05:_UNKNOWN_REF_NODE_fosterParent1
-      position: {x: 0.34381393, y: 1.2220322, z: -0.6127857}
-      rotation: {x: 0, y: -0, z: -0, w: 1}
-      scale: {x: 0.088534586, y: 0.16065264, z: 0.09367915}
-    - name: CTRL_R_Knee
-      parentName: Rig05:_UNKNOWN_REF_NODE_fosterParent1
-      position: {x: 0.22344902, y: 0.6033816, z: 0.29618952}
-      rotation: {x: 0, y: -0, z: -0, w: 1}
-      scale: {x: 0.1007069, y: 0.18274021, z: 0.10655877}
+    human: []
+    skeleton: []
     armTwist: 0.5
     foreArmTwist: 0.5
     upperLegTwist: 0.5
@@ -415,9 +459,8 @@ ModelImporter:
     hasTranslationDoF: 0
     hasExtraRoot: 1
     skeletonHasParents: 1
-  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 8fde1e556bb082148bfe5875300fbdf9,
-    type: 3}
-  animationType: 3
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
   humanoidOversampling: 1
   additionalBone: 0
   userData: 
