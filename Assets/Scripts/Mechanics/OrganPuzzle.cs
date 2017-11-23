@@ -4,15 +4,14 @@ using UnityEngine;
 
 public class OrganPuzzle : MonoBehaviour
 {
+    private AudioDictonary aD;
     private void Start()
     {
-        
+        aD = FindObjectOfType<AudioDictonary>();
     }
 
     private void Update()
     {
         
     }
-
-
 }
