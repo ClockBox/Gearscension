@@ -151,8 +151,11 @@ public abstract class AIStateManager : MonoBehaviour  {
 	{
 		Debug.Log("Stunned");
 		stats.armour = 0;
-		pathAgent.speed = 0;
-		pathAgent.angularSpeed = 0;
+		if (pathAgent.enabled)
+		{
+			pathAgent.speed = 0;
+			pathAgent.angularSpeed = 0;
+		}
 		if(GetComponentInChildren<AIBreakable>())
 		GetComponentInChildren<AIBreakable>().Breaks();
 		TransitionToState(stunState);
