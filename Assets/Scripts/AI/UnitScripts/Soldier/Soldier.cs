@@ -27,6 +27,7 @@ public class Soldier : AIStateManager {
 			Destroy(smoke, 1f);
 			lastPlayerPosition = player.transform.position;
 			callOnce = true;
+
 		}
 		
 		if (shotFrequency >= shotInterval)
