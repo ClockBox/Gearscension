@@ -85,7 +85,7 @@ public class CinemachineController : MonoBehaviour
 
         //Camera Raycast
         RaycastHit hit;
-        if (Physics.SphereCast(cameraPivot.transform.position, 0.2f, freelook.transform.position - cameraPivot.transform.position, out hit, 3.5f, 15))
+        if (Physics.SphereCast(cameraPivot.transform.position, 0.2f, freelook.transform.position - cameraPivot.transform.position, out hit, 3.5f, LayerMask.NameToLayer("Ground")))
         {
             Debug.Log(hit.transform.gameObject);
             if (hit.transform.gameObject != player )
@@ -93,7 +93,7 @@ public class CinemachineController : MonoBehaviour
                 topRigTransposer.m_Radius = 2f;
                 topRigTransposer.m_Radius = Mathf.Lerp(middleRigTransposer.m_Radius, 0.5f, Time.deltaTime * speed);
                 middleRigTransposer.m_Radius = Mathf.Lerp(middleRigTransposer.m_Radius, 0.8f, Time.deltaTime * speed);
-                //bottomRigTransposer.m_Radius = Mathf.Lerp(middleRigTransposer.m_Radius, 0.5f, Time.deltaTime * speed);
+                bottomRigTransposer.m_Radius = Mathf.Lerp(middleRigTransposer.m_Radius, 0.5f, Time.deltaTime * speed);
             }
         }
         else
@@ -155,7 +155,7 @@ public class CinemachineController : MonoBehaviour
         topRigTransposer.m_HeightOffset = 3.95f;
 
         middleRigTransposer.m_Radius = 3f;
-        middleRigTransposer.m_HeightOffset = 2f;
+        middleRigTransposer.m_HeightOffset = 3.2f;
 
         bottomRigTransposer.m_Radius = 2f;
         middleRigTransposer.m_HeightOffset = 0.8f;
