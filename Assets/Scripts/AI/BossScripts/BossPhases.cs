@@ -4,13 +4,13 @@ using UnityEngine.AI;
 using UnityEngine;
 
 public abstract class BossPhases {
-	public Animator anim;
-	public NavMeshAgent nmAgent;
-	public GameObject player;
+	protected Animator anim;
+	protected NavMeshAgent nmAgent;
+	protected GameObject player;
 	public BossPhases(Grim boss) {
-		anim = boss.GetComponentInChildren<Animator>();
-		nmAgent = boss.GetComponent<NavMeshAgent>();
-		player = boss.player;
+		anim = boss.GetComponent<Animator>();
+		nmAgent = boss.GetComponentInParent<NavMeshAgent>();
+		player = GameObject.FindGameObjectWithTag("Player");
 		Initialize(boss);
 	}
 
@@ -34,17 +34,39 @@ public class BossPhaseOne : BossPhases
 
 	public override void HandleUpdate(Grim boss)
 	{
-		nmAgent.SetDestination(player.transform.position);		
+		PhaseOne(boss);
+	}
+
+	private void PhaseOne(Grim boss)
+	{
+		nmAgent.SetDestination(player.transform.position);
 
 		if (Vector3.Distance(boss.transform.position, player.transform.position) <= 5f)
 		{
 			nmAgent.isStopped = true;
-						
+			if(!boss.isAttacking)
+			boss.StartCoroutine(AttackSequencing());
+
 		}
 		else
 		{
 			nmAgent.isStopped = false;
 		}
+	}
+	IEnumerator AttackSequencing()
+	{
+		int num = Random.Range(0, 2);
+		if (num == 0)
+		{
+			anim.SetTrigger("P1LAttack");
+		}
+		else
+		{
+			anim.SetTrigger("P1RAttack");
+		}
+	
+		yield return new WaitForSeconds(2f);
+		Debug.Log(player.transform.position+""+nmAgent.speed);
 	}
 
 
@@ -63,6 +85,11 @@ public class BossPhaseTwo : BossPhases
 
 	public override void HandleUpdate(Grim boss)
 	{
+		PhaseTwo(boss);
+	}
+
+	private void PhaseTwo(Grim boss)
+	{
 	}
 }
 
@@ -76,6 +103,10 @@ public class BossPhaseThree : BossPhases
 	{
 	}
 	public override void HandleUpdate(Grim boss)
+	{
+		PhaseThree(boss);	
+	}
+	private void PhaseThree(Grim boss)
 	{
 	}
 }

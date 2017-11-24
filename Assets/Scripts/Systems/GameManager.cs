@@ -282,7 +282,7 @@ public class GameManager : MonoBehaviour
             pause = false;
             ToggleCursor(true);
             Time.timeScale = 1;
-            Destroy(player.gameObject);
+            if(player) Destroy(player.gameObject);
         }
     }
 

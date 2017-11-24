@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class OrganPuzzle : MonoBehaviour {
+public class OrganPuzzle : MonoBehaviour
+{
+    private AudioDictonary aD;
+    private void Start()
+    {
+        aD = FindObjectOfType<AudioDictonary>();
+    }
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    private void Update()
+    {
+        
+    }
 }

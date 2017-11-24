@@ -33,7 +33,7 @@ public class PressurePlate : ElectricalSwitch
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Enemy") || other.CompareTag("Player"))
+        if (!weightedObject && (other.CompareTag("Enemy") || other.CompareTag("Player")))
         {
             weightedObject = other.gameObject;
             Active = true;
