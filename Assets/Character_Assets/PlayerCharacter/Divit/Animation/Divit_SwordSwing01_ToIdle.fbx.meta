@@ -367,7 +367,7 @@ ModelImporter:
     4300042: Hilt
     4300044: Blade
     4300046: Sword Sheathed
-    7400000: Take 001
+    7400000: Divit_SwordSwing_ToIdle
     9500000: //RootNode
     13700000: Arm_Left
     13700002: Boot_Cuffs
@@ -400,11 +400,17 @@ ModelImporter:
     resampleCurves: 1
     optimizeGameObjects: 0
     motionNodeName: 
-    rigImportErrors: "Copied Avatar Rig Configuration mis-match. Transform hierarchy
-      does not match:\n\tTransform 'transform1' not found in HumanDescription.\n"
+    rigImportErrors: 
     rigImportWarnings: 
     animationImportErrors: 
-    animationImportWarnings: 
+    animationImportWarnings: "\nClip 'Take 001' has import animation warnings that
+      might lower retargeting quality:\nNote: Activate translation DOF on avatar to
+      improve retargeting quality.\n\t'JNT_SpineC' has translation animation that
+      will be discarded.\n\t'JNT_NeckB' is inbetween humanoid transforms and has rotation
+      animation that will be discarded.\n\t'JNT_L_Hand' is inbetween humanoid transforms
+      and has rotation animation that will be discarded.\n\t'JNT_R_Hand' is inbetween
+      humanoid transforms and has rotation animation that will be discarded.\n\t'JNT_R_Foot'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n"
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     animationCompression: 3
@@ -414,7 +420,35 @@ ModelImporter:
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Divit_SwordSwing_ToIdle
+      takeName: Take 001
+      firstFrame: 111
+      lastFrame: 120
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 1
   meshes:
     lODScreenPercentages: []
