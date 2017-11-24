@@ -93,7 +93,6 @@ public class PushState : PlayerState
         elapsedTime = 0;
         while (elapsedTime < time && Player.transform.InverseTransformDirection(rb.velocity).z < -0.1f)
         {
-            Debug.Log(Player.transform.InverseTransformDirection(rb.velocity).z);
             UpdateIK();
             float moveForce = -(distance / 2 * Mathf.Cos(Pi * elapsedTime / time)) + distance / 2;
             pushObject.position = startPos + -Player.transform.forward * moveForce;

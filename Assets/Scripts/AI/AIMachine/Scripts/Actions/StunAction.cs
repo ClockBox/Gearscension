@@ -12,9 +12,9 @@ public class StunAction : AIActions {
 
 	private void Stun(AIStateManager manager)
 	{
-		if (!manager.pathAgent.isStopped)
+		if (manager.pathAgent.enabled&& !manager.pathAgent.isStopped)
 		{
-			manager.pathAgent.isStopped = true;
+				manager.pathAgent.isStopped = true;
 		}
 	}
 }
