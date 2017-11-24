@@ -14,6 +14,7 @@ public class Grenadier : AIStateManager {
 	private float shotFrequency;
 	private int choice;
 	private Rigidbody grenadePrefab;
+	private Vector3 hopDirection;
 	private Vector3 hopTarget;
 
 	public override void StartEvents() { }
@@ -63,19 +64,44 @@ public class Grenadier : AIStateManager {
 			RaycastHit hit;
 			if (Physics.Raycast(gunPoint.position, transform.TransformDirection(Vector3.forward), out hit, Mathf.Infinity, mask))
 			{
+				hopDirection = transform.forward;
 				hopTarget = hit.transform.position;
 			}
 
 			RaycastHit hit2;
 			if (Physics.Raycast(gunPoint.position, transform.TransformDirection(Vector3.back), out hit2, Mathf.Infinity, mask))
 			{
-				if(Vector3.Distance(hit2.transform.position,transform.position)>Vector3.Distance(hopTarget,transform.position))
-				hopTarget = hit2.transform.position;
+				if (Vector3.Distance(hit2.transform.position, transform.position) > Vector3.Distance(hit.transform.position, transform.position))
+				{
+					hopDirection = transform.forward * -1;
+					hopTarget = hit2.transform.position;
+				}
+				
 			}
 
-			Vector3 direction = (hopTarget - transform.position).normalized;
-			GetComponent<Rigidbody>().AddForce(direction * 200);
-			GetComponent<Rigidbody>().AddForce(transform.up * 800);
+			RaycastHit hit3;
+			if (Physics.Raycast(gunPoint.position, transform.TransformDirection(Vector3.right), out hit3, Mathf.Infinity, mask))
+			{
+				if (Vector3.Distance(hit3.transform.position, transform.position) > Vector3.Distance(hopTarget, transform.position))
+				{
+					hopDirection = transform.right;
+					hopTarget = hit3.transform.position;
+				}
+
+			}
+
+			RaycastHit hit4;
+			if (Physics.Raycast(gunPoint.position, transform.TransformDirection(Vector3.right), out hit4, Mathf.Infinity, mask))
+			{
+				if (Vector3.Distance(hit4.transform.position, transform.position) > Vector3.Distance(hopTarget, transform.position))
+				{
+					hopDirection = transform.right*-1;
+					hopTarget = hit3.transform.position;
+				}
+
+			}
+			GetComponent<Rigidbody>().AddForce(hopDirection * 450);
+			GetComponent<Rigidbody>().AddForce(transform.up * 550);
 			callOnce = true;
 		}
 		
