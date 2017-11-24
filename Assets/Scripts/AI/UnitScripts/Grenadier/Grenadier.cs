@@ -14,6 +14,7 @@ public class Grenadier : AIStateManager {
 	private float shotFrequency;
 	private int choice;
 	private Rigidbody grenadePrefab;
+	private Vector3 hopTarget;
 
 	public override void StartEvents() { }
 
@@ -51,10 +52,30 @@ public class Grenadier : AIStateManager {
 	{
 		if (!callOnce)
 		{
-			pathAgent.isStopped = true;
+			pathAgent.enabled = false;
 			GetComponent<Rigidbody>().isKinematic = false;
 			GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation;
-			StartCoroutine(Melee());
+
+
+			LayerMask mask = LayerMask.GetMask("Character");
+			mask = ~mask;
+			hopTarget = transform.position;
+			RaycastHit hit;
+			if (Physics.Raycast(gunPoint.position, transform.TransformDirection(Vector3.forward), out hit, Mathf.Infinity, mask))
+			{
+				hopTarget = hit.transform.position;
+			}
+
+			RaycastHit hit2;
+			if (Physics.Raycast(gunPoint.position, transform.TransformDirection(Vector3.back), out hit2, Mathf.Infinity, mask))
+			{
+				if(Vector3.Distance(hit2.transform.position,transform.position)>Vector3.Distance(hopTarget,transform.position))
+				hopTarget = hit2.transform.position;
+			}
+
+			Vector3 direction = (hopTarget - transform.position).normalized;
+			GetComponent<Rigidbody>().AddForce(direction * 200);
+			GetComponent<Rigidbody>().AddForce(transform.up * 800);
 			callOnce = true;
 		}
 		
@@ -77,17 +98,6 @@ public class Grenadier : AIStateManager {
 
 	}
 
-	IEnumerator Melee()
-	{
-		while (Vector3.Distance(transform.position, player.transform.position) <= 10)
-		{
-			Vector3 direction = (patrolPoints[pathIndex].position - transform.position).normalized;
-			GetComponent<Rigidbody>().AddForce(direction * 50);
-			yield return null;
-		}
-		
-		GetComponent<Rigidbody>().isKinematic = true;
-		GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
 
-	}
+
 }

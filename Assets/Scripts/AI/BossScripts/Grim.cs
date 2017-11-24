@@ -24,11 +24,10 @@ public class Grim : MonoBehaviour {
 	private NavMeshAgent nmAgent;
 	private float setAttackSpeed;
 	private Animator anim;
-	private GameObject player;
+	public GameObject player;
 
 	void Start () {
 		canAttack = true;
-		currentPhase = new BossPhaseOne();
 		anim = gameObject.GetComponentInChildren<Animator>();
 
 		if (!anim)
@@ -57,10 +56,14 @@ public class Grim : MonoBehaviour {
 		else
 			Debug.Log("Grim attackspeed not set or set below zero");
 
+
+		currentPhase = new BossPhaseOne(this);
+
+
 	}
-	
+
 	void Update () {
-		currentPhase.HandleUpdates(this);
+		currentPhase.HandleUpdate(this);
 	}
 
 

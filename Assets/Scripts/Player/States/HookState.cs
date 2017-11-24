@@ -175,11 +175,9 @@ public class HookState : ClimbState
             sword.position = Vector3.Lerp(sword.position, node.transform.position - node.transform.forward * 0.3f + node.transform.right * 0.1f, elapsedTime);
             sword.rotation = Quaternion.Lerp(sword.rotation, node.transform.rotation * new Quaternion(0, -1, 0, 1), elapsedTime);
             elapsedTime += Time.deltaTime;
-
-            base.UpdateMovement();
+            
             base.UpdateAnimator();
             base.UpdateIK();
-            base.UpdatePhysics();
 
             yield return null;
         }

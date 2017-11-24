@@ -122,7 +122,7 @@ public class GameManager : MonoBehaviour
         if (this != Instance)
             return;
 
-        if (!focus && !pause)
+        if (!focus && !pause && !Application.isEditor)
             AddScene(pauseMenuScene);
     }
 

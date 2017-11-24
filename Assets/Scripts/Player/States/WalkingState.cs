@@ -118,7 +118,7 @@ public class MoveState : PlayerState
     }
     protected override void UpdatePhysics()
     {
-        grounded = Physics.CheckCapsule(Player.transform.position, Player.transform.position - Vector3.up * 0.05f, 0.15f, LayerMask.GetMask("Default", "Debris"));
+        grounded = Physics.CheckCapsule(Player.transform.position, Player.transform.position - Vector3.up * 0.05f, 0.15f, LayerMask.GetMask("Default", "Debris", "Gound"));
 
         if (grounded)
         {
@@ -150,16 +150,14 @@ public class MoveState : PlayerState
         desiredDirection = node.transform.position - Player.transform.position;
 
         elapsedTime = 0;
-        while (elapsedTime < 1)
+        while (elapsedTime < 1.5f)
         {
             sword.position = Vector3.Lerp(sword.position, node.transform.position - node.transform.forward * 0.3f + node.transform.right * 0.1f, elapsedTime);
             sword.rotation = Quaternion.Lerp(sword.rotation, node.transform.rotation * new Quaternion(0, -1, 0, 1), elapsedTime);
             elapsedTime += Time.deltaTime;
-
-            base.UpdateMovement();
+            
             base.UpdateAnimator();
             base.UpdateIK();
-            base.UpdatePhysics();
 
             yield return null;
         }
@@ -241,7 +239,6 @@ public class MoveState : PlayerState
                 ClimbingEdge temp;
                 if (temp = other.GetComponent<ClimbingEdge>())
                 {
-                    Debug.Log(temp.insideWall);
                     if (!temp.insideWall && Vector3.Dot(other.transform.forward, Player.transform.forward) < 0)
                         stateManager.ChangeState(new ClimbState(stateManager, temp));
                 }

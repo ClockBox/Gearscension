@@ -8,6 +8,7 @@ public class IKPositionNode : MonoBehaviour
     protected Renderer rend;
     protected bool m_active = true;
     public bool insideWall = false;
+    public bool siblingNodes = false;
 
     public IKPositionNode[] neighbours;
     public float[] distances;

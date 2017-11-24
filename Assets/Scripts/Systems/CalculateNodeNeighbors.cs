@@ -45,40 +45,48 @@ public class CalculateNodeNeighbors : MonoBehaviour
             if (checkNode && (checkNode != currentNode))
             {
                 if (currentNode as ClimbingEdge)
-                {
                     currentNode.neighbours[0] = transform.parent.GetComponent<IKPositionNode>();
-                }
                 else
                 {
-                    for (int i = 0; i < CompareDirection.Length; i++)
+                    if (currentNode.siblingNodes && !(checkNode as ClimbingEdge))
                     {
-                        Vector3 relativeDirection = Quaternion.AngleAxis(checkNode.transform.eulerAngles.y - transform.eulerAngles.y, transform.up) * CompareDirection[i];
-
-                        float compareAngle = 22.5f + 45f * (1f - (checkNode.transform.position - transform.position).magnitude);
-                        if (Vector3.Angle(relativeDirection, checkNode.transform.position - transform.position) < compareAngle)
-                        {
-                            float newDistance = (checkNode.transform.position - transform.position).magnitude;
-                            if (currentNode.neighbours[i] != null)
-                            {
-                                if (newDistance < currentNode.distances[i])
-                                {
-                                    currentNode.neighbours[i] = checkNode;
-                                    currentNode.distances[i] = newDistance;
-                                }
-                            }
-                            else
-                            {
-                                currentNode.neighbours[i] = checkNode;
-                                currentNode.distances[i] = newDistance;
-                            }
-                        }
+                        if (currentNode.transform.parent == checkNode.transform.parent)
+                            DetermineNeighbour(checkNode);
                     }
+                    else DetermineNeighbour(checkNode);
                 }
             }
         }
     }
 
-    void ResetNodes()
+    private void DetermineNeighbour(IKPositionNode checkNode)
+    {
+        for (int i = 0; i < CompareDirection.Length; i++)
+        {
+            Vector3 relativeDirection = Quaternion.AngleAxis(checkNode.transform.eulerAngles.y - transform.eulerAngles.y, transform.up) * CompareDirection[i];
+
+            float compareAngle = 22.5f + 45f * (1f - (checkNode.transform.position - transform.position).magnitude);
+            if (Vector3.Angle(relativeDirection, checkNode.transform.position - transform.position) < compareAngle)
+            {
+                float newDistance = (checkNode.transform.position - transform.position).magnitude;
+                if (currentNode.neighbours[i] != null)
+                {
+                    if (newDistance < currentNode.distances[i])
+                    {
+                        currentNode.neighbours[i] = checkNode;
+                        currentNode.distances[i] = newDistance;
+                    }
+                }
+                else
+                {
+                    currentNode.neighbours[i] = checkNode;
+                    currentNode.distances[i] = newDistance;
+                }
+            }
+        }
+    }
+
+    private void ResetNodes()
     {
         for (int i = 0; i < currentNode.neighbours.Length; i++)
         {

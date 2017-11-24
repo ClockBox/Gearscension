@@ -29,10 +29,11 @@ public class IceCube : MonoBehaviour
             {
                 for (int i = (int)-extents.x; i < extents.x; i++)
                 {
-                    Instantiate(climbNodePrefab,
+                    IKPositionNode node = Instantiate(climbNodePrefab,
                         transform.position + rotation * new Vector3(extents.x, extents.y, i),
                         rotation * Quaternion.Euler(0, -90, 0),
-                        transform);
+                        transform).GetComponent<IKPositionNode>();
+                    node.siblingNodes = true;
                 }
             }
 

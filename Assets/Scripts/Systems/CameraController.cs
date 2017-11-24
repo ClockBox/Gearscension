@@ -43,6 +43,9 @@ public class CameraController : MonoBehaviour
         if (!MainCamera)
             MainCamera = GetComponent<Camera>();
 
+        if (GameManager.Instance.Pause)
+            return;
+
         if (!camPivot)
             camPivot = GameManager.Player.transform.GetChild(0);
         else
