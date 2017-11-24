@@ -732,6 +732,51 @@ ModelImporter:
     4300248: TailJoint_Tip01
     4300250: TailBallI01
     4300252: TailJointA01
+    6400000: ArmUp_L01
+    6400002: ArmUp_R01
+    6400004: ElbosSpikes_R01
+    6400006: Elbow_Lo1
+    6400008: Elbow_R01
+    6400010: ElbowSpikes_L01
+    6400012: Forearm_L01
+    6400014: Forearm_R01
+    6400016: GunWire_R01
+    6400018: Shoulder_L001
+    6400020: Shoulder_R01
+    6400022: ShoulderBox)R01
+    6400024: ShoulderBox_L01
+    6400026: SHoulderGem_R002
+    6400028: SHoulderGem_R01
+    6400030: ShoulderRotate_L01
+    6400032: ShoulderRotate_R01
+    6400034: ShoulderWire_L01
+    6400036: ShoulerWire_R01
+    6400038: TailBallA01
+    6400040: TailBallB01
+    6400042: TailBallC01
+    6400044: TailBallD01
+    6400046: TailBallE01
+    6400048: TailBallF01
+    6400050: TailBallG01
+    6400052: TailBallH01
+    6400054: TailBallI01
+    6400056: TailJoint_Tip01
+    6400058: TailJointA01
+    6400060: TailJointB01
+    6400062: TailJointC01
+    6400064: TailJointD01
+    6400066: TailJointE01
+    6400068: TailJointF01
+    6400070: TailJointG01
+    6400072: TailJointH01
+    6400074: TailJointI01
+    6400076: TailProngs01
+    6400078: Wrist_L01
+    6400080: Wrist_L01 1
+    6400082: Wrist_R01
+    6400084: WristGear_L01
+    6400086: WristGear_L01 1
+    6400088: WristGear_R01
     7400000: Take 001
     9500000: //RootNode
     13700000: AnkleJoint_L01

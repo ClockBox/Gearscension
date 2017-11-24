@@ -14,6 +14,7 @@ public class ExitMeleeDecision : AIDecisions {
 	{
 		if (manager.checkTimeElapsed(manager.stats.meleeAttackDuration))
 		{
+			manager.pathAgent.enabled = true;
 			manager.pathAgent.isStopped = false;
 			//manager.pathAgent.enabled = true;
 			manager.pathAgent.speed = manager.stats.engageSpeed;
