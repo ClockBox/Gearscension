@@ -51,6 +51,12 @@ public class PressurePlate : ElectricalSwitch
         }
     }
 
+    private void OnTriggerStay(Collider other)
+    {
+        if (!weightedObject)
+            weightedObject = other.gameObject;
+    }
+
     private IEnumerator MoveOverTime(Collider col, Vector3 _toFrom)
     {
         while (_toFrom.magnitude > 0.01f)
