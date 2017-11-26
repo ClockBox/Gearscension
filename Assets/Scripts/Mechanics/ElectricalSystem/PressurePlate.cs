@@ -8,8 +8,7 @@ public class PressurePlate : ElectricalSwitch
 {
     public GameObject weightedObject;
     public UnityEvent OnActiveStay;
-
-    private float moveSpeed;
+    
     private LightPuzzle lp;
 
     private void Awake()
@@ -31,10 +30,17 @@ public class PressurePlate : ElectricalSwitch
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Enemy") || other.CompareTag("Player"))
+        if (other.CompareTag("Player"))
         {
-            weightedObject = other.gameObject;
+            weightedObject = other.attachedRigidbody.gameObject;
             Active = true;
+        }
+
+        else if (other.CompareTag("Enemy"))
+        {
+            weightedObject = other.attachedRigidbody.gameObject;
+            Active = true;
+            StartCoroutine(MoveOverTime(other.transform.position, transform.position));
         }
     }
 
@@ -47,22 +53,19 @@ public class PressurePlate : ElectricalSwitch
         }
     }
 
-    private IEnumerator MoveOverTime(Collider col, Vector3 _toFrom)
+    private IEnumerator MoveOverTime(Vector3 fromPoint, Vector3 toPoint)
     {
-        while (_toFrom.magnitude > 0.01f)
-        {
-            weightedObject.transform.Translate(_toFrom * Time.deltaTime * moveSpeed);
-            _toFrom = transform.position - col.transform.position;
-            yield return null;
-        }
+        float startY = fromPoint.y;
+        float moveSpeed = 1;
+        float elapsedTime = 0;
 
-        Vector3 endPos = (transform.position - new Vector3(0, 0.1f, 0)) - col.transform.position;
-        Debug.Log(endPos.magnitude);
+        fromPoint.y = 0;
+        toPoint.y = 0;
 
-        while (endPos.magnitude > 0.01f)
+        while (elapsedTime < moveSpeed && weightedObject)
         {
-            weightedObject.transform.Translate(endPos * Time.deltaTime * 2f);
-            endPos = (transform.position - new Vector3(0, 0.1f, 0)) - col.transform.position;
+            weightedObject.transform.position = Vector3.Lerp(fromPoint, toPoint, elapsedTime) + Vector3.up * startY;
+            elapsedTime += Time.deltaTime;
             yield return null;
         }
     }
