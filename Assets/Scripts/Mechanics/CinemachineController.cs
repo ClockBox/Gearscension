@@ -7,6 +7,8 @@ using UnityEngine.Timeline;
 public class CinemachineController : MonoBehaviour
 {
     [SerializeField]
+    private float radius;
+    [SerializeField]
     private GameObject player;
     [SerializeField]
     private GameObject cameraPivot;
@@ -51,6 +53,11 @@ public class CinemachineController : MonoBehaviour
             freelook.m_Priority = 11;
         }
 
+        if (Input.GetJoystickNames().Length > 0)
+            freelook.m_XAxis.m_MaxSpeed = 15000f;
+        else
+            freelook.m_XAxis.m_MaxSpeed = 3000;
+
         topRig = freelook.GetRig(0);
         middleRig = freelook.GetRig(1);
         bottomRig = freelook.GetRig(2);
@@ -85,22 +92,25 @@ public class CinemachineController : MonoBehaviour
 
         //Camera Raycast
         RaycastHit hit;
-        if (Physics.SphereCast(cameraPivot.transform.position, 0.2f, freelook.transform.position - cameraPivot.transform.position, out hit, 3.5f, LayerMask.NameToLayer("Ground")))
+        if (Physics.SphereCast(cameraPivot.transform.position, radius, freelook.transform.position - cameraPivot.transform.position, out hit, 3.0f, LayerMask.NameToLayer("Ground")))
         {
             Debug.Log(hit.transform.gameObject);
             if (hit.transform.gameObject != player )
             {
-                topRigTransposer.m_Radius = 2f;
-                topRigTransposer.m_Radius = Mathf.Lerp(middleRigTransposer.m_Radius, 0.5f, Time.deltaTime * speed);
+                topRigTransposer.m_Radius = Mathf.Lerp(topRigTransposer.m_Radius, 0.5f, Time.deltaTime * speed);
                 middleRigTransposer.m_Radius = Mathf.Lerp(middleRigTransposer.m_Radius, 0.8f, Time.deltaTime * speed);
-                bottomRigTransposer.m_Radius = Mathf.Lerp(middleRigTransposer.m_Radius, 0.5f, Time.deltaTime * speed);
+                bottomRigTransposer.m_Radius = Mathf.Lerp(bottomRigTransposer.m_Radius, 0.5f, Time.deltaTime * speed);
+
+                //middleComposer.m_TrackedObjectOffset = new Vector3(0, Mathf.Lerp(bottomComposer.m_TrackedObjectOffset.y, 2f, Time.deltaTime * speed), 0);
             }
         }
         else
         {
             topRigTransposer.m_Radius = Mathf.Lerp(topRigTransposer.m_Radius, 2f, Time.deltaTime * speed);
             middleRigTransposer.m_Radius = Mathf.Lerp(middleRigTransposer.m_Radius, 3.3f, Time.deltaTime * speed);
-            bottomRigTransposer.m_Radius = Mathf.Lerp(bottomRigTransposer.m_Radius, 2.3f, Time.deltaTime * speed);
+            bottomRigTransposer.m_Radius = Mathf.Lerp(bottomRigTransposer.m_Radius, 2f, Time.deltaTime * speed);
+
+            //middleComposer.m_TrackedObjectOffset = new Vector3(0, Mathf.Lerp(bottomComposer.m_TrackedObjectOffset.y, 0.5f, Time.deltaTime * speed), 0);
         }
     }
 
@@ -151,13 +161,13 @@ public class CinemachineController : MonoBehaviour
         bottomRigTransposer = bottomRig.GetCinemachineComponent<CinemachineOrbitalTransposer>();
         
         //Setting Rig
-        topRigTransposer.m_Radius = 2f;
+        topRigTransposer.m_Radius = 1.8f;
         topRigTransposer.m_HeightOffset = 3.95f;
 
-        middleRigTransposer.m_Radius = 3f;
-        middleRigTransposer.m_HeightOffset = 3.2f;
+        middleRigTransposer.m_Radius = 3.4f;
+        middleRigTransposer.m_HeightOffset = 2.4f;
 
-        bottomRigTransposer.m_Radius = 2f;
-        middleRigTransposer.m_HeightOffset = 0.8f;
+        bottomRigTransposer.m_Radius = 1.8f;
+        bottomRigTransposer.m_HeightOffset = 0.4f;
     }
 }
