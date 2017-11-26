@@ -111,7 +111,7 @@ public class PushState : PlayerState
         {
             moveX = Input.GetAxis("Horizontal");
             moveY = Input.GetAxis("Vertical");
-            movementSpeed = 2;
+            movementSpeed = 2f;
 
             lookDirection = Camera.main.transform.forward;
             lookDirection = Vector3.ProjectOnPlane(lookDirection, Player.transform.up);
