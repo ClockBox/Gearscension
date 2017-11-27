@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: 8fde1e556bb082148bfe5875300fbdf9
-timeCreated: 1510251086
-licenseType: Pro
+timeCreated: 1511735350
+licenseType: Free
 ModelImporter:
   serializedVersion: 21
   fileIDToRecycleName:
@@ -446,7 +446,7 @@ ModelImporter:
   humanDescription:
     serializedVersion: 2
     human:
-    - boneName: JNT_SpineA
+    - boneName: JNT_Root
       humanName: Hips
       limit:
         min: {x: 0, y: 0, z: 0}

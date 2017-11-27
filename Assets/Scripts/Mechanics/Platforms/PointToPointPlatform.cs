@@ -36,7 +36,14 @@ public class PointToPointPlatform : Platform
     public bool Move
     {
         get { return move; }
-        set { move = value; }
+        set
+        {
+            move = value;
+            //if(move)
+            //    PlaySound(StartSound);
+            //else
+            //    PlaySound(StopSound);
+        }
     }
 
     [SerializeField]
@@ -44,7 +51,14 @@ public class PointToPointPlatform : Platform
     public bool Rotate
     {
         get { return rotate; }
-        set { rotate = value; }
+        set
+        {
+            rotate = value;
+            //if(move)
+            //    PlaySound(StartSound);
+            //else
+            //    PlaySound(StopSound);
+        }
     }
 
     public bool MoveAndRotate
@@ -53,6 +67,11 @@ public class PointToPointPlatform : Platform
         {
             move = value;
             rotate = value;
+
+            //if(move || rotate)
+            //    PlaySound(StartSound);
+            //else
+            //    PlaySound(StopSound);
         }
     }
 
@@ -71,6 +90,18 @@ public class PointToPointPlatform : Platform
         set { rotationTime = value; }
     }
 
+    #region MyRegion
+
+    private AudioSource SFX_Source;
+    public AudioClip StartSound;
+    public AudioClip StopSound;
+
+    public void PlaySound(string soundName)
+    {
+        GameManager.Instance.AudioManager.playAudio(SFX_Source, soundName);
+    }
+    #endregion
+
     private void Start()
     {
         currentMoveNode = 0;
@@ -83,7 +114,7 @@ public class PointToPointPlatform : Platform
         transform.rotation = nodes[currentRotationNode].rotation;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         // Movement
         if (move)
@@ -95,7 +126,7 @@ public class PointToPointPlatform : Platform
             nextMoveNode = (currentMoveNode + 1) % nodes.Length;
 
             if (!loopMovement)
-                move = false;
+                Move = false;
             elapsedMoveTime = 0;
         }
         else if (elapsedMoveTime > 0)
@@ -113,7 +144,7 @@ public class PointToPointPlatform : Platform
             nextRotationNode = (currentRotationNode + 1) % nodes.Length;
 
             if (!loopRotation)
-                rotate = false;
+                Rotate = false;
             elapsedRotationTime = 0;
         }
         else if(elapsedRotationTime > 0)
@@ -125,22 +156,22 @@ public class PointToPointPlatform : Platform
     public void MoveTo(int nodeIndex)
     {
         if (currentMoveNode == nodeIndex)
-            move = false;
+            Move = false;
         else
         {
             nextMoveNode = (nodeIndex) % nodes.Length;
-            move = true;
+            Move = true;
         }
     }
 
     public void RotateTo(int nodeIndex)
     {
         if (currentRotationNode == nodeIndex)
-            rotate = false;
+            Rotate = false;
         else
         {
             nextRotationNode = (nodeIndex) % nodes.Length;
-            rotate = true;
+            Rotate = true;
         }
     }
 
@@ -152,8 +183,8 @@ public class PointToPointPlatform : Platform
         currentRotationNode = 0;
         nextRotationNode = 1;
 
-        move = false;
-        rotate = false;
+        Move = false;
+        Rotate = false;
 
         transform.position = nodes[currentMoveNode].position;
         transform.rotation = nodes[currentRotationNode].rotation;
