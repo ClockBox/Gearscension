@@ -83,7 +83,7 @@ public class PointToPointPlatform : Platform
         transform.rotation = nodes[currentRotationNode].rotation;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         // Movement
         if (move)
