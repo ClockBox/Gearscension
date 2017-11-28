@@ -79,7 +79,7 @@ public class PlayerState
 
             if (this != stateManager.State)
             {
-                Debug.LogWarning("RogueState: " + this + "\tCurrent State:" + stateManager.State);
+                Debug.LogWarning("RogueState: " + this + "\t\tCurrent State:" + stateManager.State);
                 stopState = true;
                 yield break;
             }
