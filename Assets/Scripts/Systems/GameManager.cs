@@ -122,8 +122,11 @@ public class GameManager : MonoBehaviour
         if (this != Instance)
             return;
 
-        if (!focus && !pause && !Application.isEditor)
-            AddScene(pauseMenuScene);
+        if (SceneManager.GetActiveScene().buildIndex > 4)
+        {
+            if (!focus && !pause && !Application.isEditor)
+                AddScene(pauseMenuScene);
+        }
     }
 
     public void TogglePause()

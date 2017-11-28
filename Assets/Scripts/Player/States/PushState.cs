@@ -28,6 +28,9 @@ public class PushState : PlayerState
     {
         anim.SetBool("pushing", true);
 
+        IceCube ice = pushNode.transform.parent.GetComponent<IceCube>();
+        if (ice) ice.pushing = true;
+
         rb.velocity = Vector3.zero;
         lookDirection = pushNode.transform.forward;
         Player.transform.LookAt(Player.transform.position + lookDirection);
@@ -50,6 +53,9 @@ public class PushState : PlayerState
     {
         yield return base.ExitState(nextState);
         anim.SetBool("pushing", false);
+
+        IceCube ice = pushNode.transform.parent.GetComponent<IceCube>();
+        if (ice) ice.pushing = false;
 
         elapsedTime = 0;
         pushObject.isKinematic = true;
@@ -111,7 +117,7 @@ public class PushState : PlayerState
         {
             moveX = Input.GetAxis("Horizontal");
             moveY = Input.GetAxis("Vertical");
-            movementSpeed = 2;
+            movementSpeed = 2f;
 
             lookDirection = Camera.main.transform.forward;
             lookDirection = Vector3.ProjectOnPlane(lookDirection, Player.transform.up);

@@ -19,7 +19,13 @@ public class Bullet : MonoBehaviour
 	}
     private void OnCollisionEnter(Collision other)
     {
-        SpawnEffectArea().transform.parent = other.transform;
+        if (other.collider.attachedRigidbody)
+        {
+            if (other.collider.attachedRigidbody.gameObject.CompareTag("Enemy"))
+                SpawnEffectArea();
+        }
+        else
+            SpawnEffectArea().transform.parent = other.transform;
         Destroy(gameObject);
     }
 

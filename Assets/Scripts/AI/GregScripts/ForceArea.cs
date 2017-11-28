@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class ForceArea : MonoBehaviour
 {
-    static GameObject player;
-
 	public float pushRadius;
 	public float pushForce;
     public float lifeTime;
@@ -18,8 +16,6 @@ public class ForceArea : MonoBehaviour
 
     void Start()
     {
-        if (!player)
-            player = GameObject.FindGameObjectWithTag("Player");
         Destroy(gameObject, lifeTime);
 
         if (!applyConstantForce)
@@ -48,10 +44,10 @@ public class ForceArea : MonoBehaviour
             tempRB = cols[i].attachedRigidbody;
             if (!cols[i].isTrigger && tempRB)
             {
-                tempRB.isKinematic = false;
+                //tempRB.isKinematic = false;
                 tempRB.AddExplosionForce(pushForce, transform.position, pushRadius);
             }
-            if (cols[i].gameObject == player)
+            if (cols[i].gameObject == GameManager.Player)
                 PlayerState.grounded = false;
 
             AIStateManager temp;

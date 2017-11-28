@@ -174,8 +174,6 @@ public class PlayerController : MonoBehaviour
             else
                 _currentHealth -= damage;
 
-            Debug.Log("Health: " + _currentHealth + ",  \tArmor: " + _currentArmor);
-
             if (Health <= 0)
                 Die();
         }
