@@ -27,7 +27,8 @@ public class BreakObject : MonoBehaviour
                 breakablePart[i].transform.parent = null;
                 Destroy(breakablePart[i].gameObject, 5);
             }
+            GetComponent<Collider>().enabled = false;
         }
-        GetComponent<Collider>().enabled = false;
+        
     }
 }
