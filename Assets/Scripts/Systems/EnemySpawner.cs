@@ -26,11 +26,12 @@ public class EnemySpawner : MonoBehaviour
             canSpawn = false;
             anim.SetTrigger("Open");
             var temp = Instantiate(enemyPrefab, spawnPoint.transform.position, spawnPoint.transform.rotation);
+            Debug.Log(temp.name, temp);
+            temp.tag = "Enemy";
             var enemy = new ComponentContainer(temp);
             enemy.Deactivate();
             enemy.rb.isKinematic = false;
             enemy.rb.AddForce(enemy.rb.mass * spawnPoint.transform.forward * spawnforce, ForceMode.Impulse);
-            Debug.Log(enemy.rb.velocity);
 
             StartCoroutine(TurnOnEnemy(enemy));
         }
@@ -41,6 +42,7 @@ public class EnemySpawner : MonoBehaviour
         yield return new WaitForSeconds(activationDelay);
         enemy.Activate();
         enemy.rb.isKinematic = true;
+        yield return new WaitForSeconds(1);
         canSpawn = true;
     }
 

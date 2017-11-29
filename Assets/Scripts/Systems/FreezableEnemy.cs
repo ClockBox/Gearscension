@@ -40,6 +40,8 @@ public class FreezableEnemy : Freezable
                 colliderBounds.attachedRigidbody.isKinematic = false;
                 colliderBounds.attachedRigidbody.velocity = Vector3.zero;
             }
+            colliderBounds.enabled = true;
+            colliderBounds.isTrigger = true;
 
             transform.parent = iceBlock.transform;
         }
@@ -50,6 +52,8 @@ public class FreezableEnemy : Freezable
         base.OnThaw();
         if (colliderBounds)
         {
+            colliderBounds.isTrigger = false;
+
             NavMeshAgent agent;
             if (agent = GetComponent<NavMeshAgent>())
                 agent.enabled = true;

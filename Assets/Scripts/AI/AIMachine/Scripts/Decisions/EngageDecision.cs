@@ -13,11 +13,10 @@ public class EngageDecision : AIDecisions {
 
 	private bool Engage (AIStateManager manager) {
 
+        if (!manager.player)
+            return true;
 		if (Vector3.Distance(manager.transform.position, manager.player.transform.position) <= manager.stats.rangedRange&&manager.setFrequency >=manager.stats.attackFrequency)
-		{
-
 			return true;
-		}
 		else
 	     return false;
 	}

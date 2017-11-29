@@ -11,19 +11,20 @@ public class PatrolAction : AIActions {
 	}
 	private void Patrol(AIStateManager manager)
 	{
+        if (!manager.pathTarget)
+            return;
+        else if ((Vector3.Distance(manager.pathTarget.position, manager.transform.position)) <= manager.stats.stopDistance)
+        {
+            manager.pathIndex++;
 
-		if ((Vector3.Distance(manager.pathTarget.position, manager.transform.position)) <= manager.stats.stopDistance)
-		{
-			manager.pathIndex++;
 
+            if (manager.pathIndex >= manager.patrolPoints.Length)
+                manager.pathIndex = 0;
 
-			if (manager.pathIndex >= manager.patrolPoints.Length)
-				manager.pathIndex = 0;
+            manager.pathTarget = manager.patrolPoints[manager.pathIndex];
 
-			manager.pathTarget = manager.patrolPoints[manager.pathIndex];
-
-			manager.pathAgent.destination=manager.pathTarget.position;
-		}
+            manager.pathAgent.destination = manager.pathTarget.position;
+        }
 	}
 
 }
