@@ -70,7 +70,7 @@ public class GameManager : MonoBehaviour
         }
         else transform.GetChild(0).gameObject.SetActive(false);
 
-        if (!Player && SceneManager.GetActiveScene().buildIndex > 4)
+        if (!Player && SceneManager.GetActiveScene().buildIndex > 3)
             SpawnPlayer();
     }
 
@@ -122,8 +122,11 @@ public class GameManager : MonoBehaviour
         if (this != Instance)
             return;
 
-        if (!focus && !pause && !Application.isEditor)
-            AddScene(pauseMenuScene);
+        if (SceneManager.GetActiveScene().buildIndex > 4)
+        {
+            if (!focus && !pause && !Application.isEditor)
+                AddScene(pauseMenuScene);
+        }
     }
 
     public void TogglePause()

@@ -10,15 +10,19 @@ public class CombatState : MoveState
     //Transitions
     public override IEnumerator EnterState(PlayerState prevState)
     {
-        yield return base.EnterState(prevState);
+        Debug.Log("CombatState : EnterState");
+
         if (prevState as HookState == null)
             yield return ToggleSword(true);
+        yield return base.EnterState(prevState);
     }
     public override IEnumerator ExitState(PlayerState nextState)
     {
-        if(nextState as HookState == null)
-            yield return ToggleSword(false);
+        Debug.Log("CombatState : ExitState");
+
         yield return base.ExitState(nextState);
+        if (nextState as HookState == null)
+            yield return ToggleSword(false);
     }
 
     //State Behaviour
@@ -27,8 +31,8 @@ public class CombatState : MoveState
         if (Input.GetButtonDown("Attack") || Player.RightTrigger.Down)
             yield return Attack();
 
-        //else if (Player.GunUpgrades >= 0 && (Input.GetButton("Aim") || Player.LeftTrigger.Stay))
-            //stateManager.ChangeState(new AimState(stateManager, grounded));
+        else if (Player.GunUpgrades >= 0 && (Input.GetButton("Aim") || Player.LeftTrigger.Stay))
+            stateManager.ChangeState(new AimState(stateManager, grounded));
 
         if (Input.GetButtonDown("Equip"))
             stateManager.ChangeState(new UnequipedState(stateManager, grounded));
@@ -39,13 +43,17 @@ public class CombatState : MoveState
     //State Actions
     private IEnumerator ToggleSword(bool Equiped)
     {
-        float waitTime = 1.25f;
+        float waitTime = 1.0f;
         Player.StartCoroutine(ToggleSword(Equiped, 0.6f, waitTime));
         elapsedTime = 0;
         while (elapsedTime < waitTime)
         {
             if (Input.GetButtonDown("Jump") && grounded)
                     Jump();
+
+            UpdateAnimator();
+            UpdateMovement();
+            UpdatePhysics();
 
             elapsedTime += Time.deltaTime;
             yield return null;

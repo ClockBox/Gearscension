@@ -13,8 +13,8 @@ public class PlayerState
     public static bool grounded = true;
 
     private bool stopState = false;
-    private bool inTransition = false;
     protected float elapsedTime;
+    private bool inTransition = false;
     public bool InTransition
     {
         get {return inTransition; }
@@ -79,7 +79,7 @@ public class PlayerState
 
             if (this != stateManager.State)
             {
-                Debug.LogWarning("RogueState: " + this + "\tCurrent State:" + stateManager.State);
+                Debug.LogWarning("RogueState: " + this + "\t\tCurrent State:" + stateManager.State);
                 stopState = true;
                 yield break;
             }

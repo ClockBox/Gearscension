@@ -174,8 +174,6 @@ public class PlayerController : MonoBehaviour
             else
                 _currentHealth -= damage;
 
-            Debug.Log("Health: " + _currentHealth + ",  \tArmor: " + _currentArmor);
-
             if (Health <= 0)
                 Die();
         }
@@ -242,6 +240,7 @@ public class PlayerController : MonoBehaviour
         //Start states
         m_stateM.StartState(m_stateM.State);
     }
+
     private void Update()
     {
         if (Input.GetButtonDown("Cowbell"))
@@ -288,5 +287,16 @@ public class PlayerController : MonoBehaviour
             ammoType = (ammoType + ammoAxis.RawValue) % 4;
             if (ammoType < 0) ammoType += 4;
         }
+    }
+
+    public void PausePlayer()
+    {
+        RB.velocity = Vector3.zero;
+        StateM.State.InTransition = true;
+    }
+
+    public void UnPausePlayer()
+    {
+        StateM.State.InTransition = false;
     }
 }

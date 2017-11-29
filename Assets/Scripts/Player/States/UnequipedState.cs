@@ -20,6 +20,7 @@ public class UnequipedState : MoveState
 
     public override void OnTriggerStay(Collider other)
     {
+        base.OnTriggerStay(other);
         if (Input.GetButtonDown("Action") && !InTransition)
         {
             if (other.CompareTag("Pushable"))
