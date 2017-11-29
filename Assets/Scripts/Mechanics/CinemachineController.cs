@@ -61,15 +61,11 @@ public class CinemachineController : MonoBehaviour
             if (Input.GetJoystickNames().Length > 0)
                 freelook.m_XAxis.m_MaxSpeed = 150f;
             else
-                freelook.m_XAxis.m_MaxSpeed = 5000;
+                freelook.m_XAxis.m_MaxSpeed = 200;
             
             topRig = freelook.GetRig(0);
             middleRig = freelook.GetRig(1);
             bottomRig = freelook.GetRig(2);
-
-            topRig.LookAt = GameManager.Player.transform;
-            middleRig.LookAt = cameraPivot.transform;
-            bottomRig.LookAt = cameraPivot.transform;
 
             topComposer = topRig.GetCinemachineComponent<CinemachineComposer>();
             middleComposer = middleRig.GetCinemachineComponent<CinemachineComposer>();
@@ -83,7 +79,7 @@ public class CinemachineController : MonoBehaviour
             middleComposer.m_DeadZoneWidth = 0;
             bottomComposer.m_DeadZoneWidth = 0;
             
-            topComposer.m_TrackedObjectOffset = new Vector3(0, 2f, 0);
+            topComposer.m_TrackedObjectOffset = new Vector3(0, 0, 0);
             middleComposer.m_TrackedObjectOffset = new Vector3(0, -0.3f, 0);
             bottomComposer.m_TrackedObjectOffset = new Vector3(0, 0, 0);
 
@@ -95,5 +91,10 @@ public class CinemachineController : MonoBehaviour
             cC.m_MinimumDistanceFromTarget = 0.1f;
             cC.m_Strategy = CinemachineCollider.ResolutionStrategy.PullCameraForward;
         }
+    }
+
+    private void Update()
+    {
+        freelook.m_XAxis.Value += Input.GetAxisRaw("Horizontal");
     }
 }
