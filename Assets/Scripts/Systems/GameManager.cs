@@ -70,7 +70,7 @@ public class GameManager : MonoBehaviour
         }
         else transform.GetChild(0).gameObject.SetActive(false);
 
-        if (!Player && SceneManager.GetActiveScene().buildIndex > 4)
+        if (!Player && SceneManager.GetActiveScene().buildIndex > 3)
             SpawnPlayer();
     }
 
