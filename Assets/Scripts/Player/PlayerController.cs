@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour
 
     private float elapsedTime = 0;
     private float HookRange = 15;
-
+    private CinemachineController cC;
     // Audio
     private AudioSource m_SFX;
     private AudioSource m_Voice;
@@ -235,6 +235,7 @@ public class PlayerController : MonoBehaviour
 
     private void Start ()
     {
+        cC = GetComponent<CinemachineController>();
         //Initialize states
         m_stateM.State = new UnequipedState(m_stateM, true);
 
@@ -257,7 +258,7 @@ public class PlayerController : MonoBehaviour
             TakeDamage(10);
         RechargeArmor();
 
-        if (AimPoint) AimPoint.rotation = CameraController.MainCamera.transform.rotation * new Quaternion(0, 0.7071068f, 0, 0.7071068f);
+        if (AimPoint) AimPoint.rotation = cC.freelook.transform.rotation * new Quaternion(0, 0.7071068f, 0, 0.7071068f);
 
         //Switching Ammo Types
         if (Input.GetButtonDown("Ammo 1"))
