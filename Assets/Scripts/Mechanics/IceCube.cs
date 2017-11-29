@@ -64,7 +64,6 @@ public class IceCube : MonoBehaviour
             Collider[] cols = Physics.OverlapBox(transform.position, cubeBounds.bounds.extents + Vector3.one, Quaternion.identity, ~Physics.IgnoreRaycastLayer);
             for (int i = 0; i < cols.Length; i++)
             {
-                Debug.Log(cols[i].gameObject.name, cols[i].gameObject);
                 if (cols[i].transform.root != transform && !cols[i].isTrigger)
                 {
                     rb.isKinematic = true;

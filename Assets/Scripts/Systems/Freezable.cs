@@ -55,7 +55,6 @@ public class Freezable : MonoBehaviour
             iceBlock.climbable = climbable;
 
             Transform iceCube = iceBlock.transform.GetChild(0);
-            iceCube.tag = tag;
             iceCube.localScale = bounds.extents * 2;
             transform.parent = iceBlock.transform;
 

@@ -12,11 +12,14 @@ public class EngageAction : AIActions {
 
 	private void Engage(AIStateManager manager)
 	{
-		//if (!manager.pathAgent.enabled)
-		//{
-		//	manager.pathAgent.enabled = true;
-		//	manager.pathAgent.speed = manager.stats.engageSpeed;
-		//}
+        //if (!manager.pathAgent.enabled)
+        //{
+        //	manager.pathAgent.enabled = true;
+        //	manager.pathAgent.speed = manager.stats.engageSpeed;
+        //}
+
+        if (!manager.player)
+            return;
 
 		manager.pathAgent.destination =manager.player.transform.position;
 		if (Vector3.Distance(manager.transform.position, manager.player.transform.position) <= manager.stats.pursuitDistance)
