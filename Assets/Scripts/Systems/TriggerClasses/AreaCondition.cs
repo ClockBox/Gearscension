@@ -21,8 +21,9 @@ public class AreaCondition : Condition
             transform.up * triggerArea.center.y +
             transform.forward * triggerArea.center.z;
 
-        if (UsePlayer)
+        if (UsePlayer && GameManager.Player)
             checkObject = GameManager.Player.gameObject;
+        else return false;
 
         if (checkObject)
         {

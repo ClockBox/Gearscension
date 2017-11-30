@@ -239,6 +239,7 @@ public class PlayerController : MonoBehaviour
         //Start states
         m_stateM.StartState(m_stateM.State);
     }
+
     private void Update()
     {
         if (Input.GetButtonDown("Cowbell"))
@@ -285,5 +286,16 @@ public class PlayerController : MonoBehaviour
             ammoType = (ammoType + ammoAxis.RawValue) % 4;
             if (ammoType < 0) ammoType += 4;
         }
+    }
+
+    public void PausePlayer()
+    {
+        RB.velocity = Vector3.zero;
+        StateM.State.InTransition = true;
+    }
+
+    public void UnPausePlayer()
+    {
+        StateM.State.InTransition = false;
     }
 }

@@ -41,8 +41,8 @@ public class HookState : ClimbState
         else if (Input.GetButtonDown("Jump"))
             Jump();
 
-        //else if (!currentNodes[0] && !currentNodes[1])
-        //    stateManager.ChangeState(new UnequipedState(stateManager, false));
+        else if (!currentNodes[0] && !currentNodes[1])
+            stateManager.ChangeState(new UnequipedState(stateManager, false));
 
         else if (Input.GetButtonDown("Equip"))
         {

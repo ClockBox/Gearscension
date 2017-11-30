@@ -72,6 +72,45 @@ public class MoveState : PlayerState
         }
     }
 
+    private IEnumerator ActivateLever(Lever lever)
+    {
+        Debug.Log("ActivateLever: Start");
+        
+        rb.isKinematic = true;
+        IK.HeadWeight = 0;
+
+        Quaternion startRot = Player.transform.rotation;
+        Vector3 startpos = Player.transform.position;
+
+        elapsedTime = 0;
+        while (elapsedTime < 0.5f)
+        {
+            Player.transform.position = Vector3.Lerp(startpos, lever.standPoint.position, elapsedTime);
+            Player.transform.rotation = Quaternion.Lerp(startRot, lever.standPoint.rotation, elapsedTime);
+            UpdateAnimator();
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        Player.transform.position = lever.standPoint.position;
+        Player.transform.rotation = lever.standPoint.rotation;
+        anim.SetTrigger("LeverPull");
+        lever.GetComponent<Animator>().SetTrigger("Activate");
+
+        elapsedTime = 0;
+        while (elapsedTime < 2f)
+        {
+            UpdateAnimator();
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        lever.Activate();
+
+        rb.isKinematic = false;
+        IK.HeadWeight = 1;
+        Debug.Log("ActivateLever: Done");
+    }
+
     protected void Jump()
     {
         anim.SetBool("isGrounded", false);
@@ -224,26 +263,40 @@ public class MoveState : PlayerState
     //TriggerFucntions
     public override void OnTriggerEnter(Collider other)
     {
-        if (!InTransition && canClimb)
+        if (!InTransition)
         {
-            if (other.CompareTag("ClimbingNode") || other.CompareTag("HookNode"))
+            if (canClimb)
             {
-                ClimbingNode temp;
-                if (temp = other.GetComponent<ClimbingNode>())
+                if (other.CompareTag("ClimbingNode") || other.CompareTag("HookNode"))
                 {
-                    if (!temp.insideWall && Vector3.Dot(other.transform.forward, Player.transform.forward) > 0)
-                        stateManager.ChangeState(new ClimbState(stateManager, temp));
+                    ClimbingNode temp;
+                    if (temp = other.GetComponent<ClimbingNode>())
+                    {
+                        if (!temp.insideWall && Vector3.Dot(other.transform.forward, Player.transform.forward) > 0)
+                            stateManager.ChangeState(new ClimbState(stateManager, temp));
+                    }
+                }
+                else if (grounded && other.CompareTag("ClimbingEdge") && moveDirection.magnitude < 5.5f)
+                {
+                    ClimbingEdge temp;
+                    if (temp = other.GetComponent<ClimbingEdge>())
+                    {
+                        if (!temp.insideWall && Vector3.Dot(other.transform.forward, Player.transform.forward) < 0)
+                            stateManager.ChangeState(new ClimbState(stateManager, temp));
+                    }
                 }
             }
-            else if (grounded && other.CompareTag("ClimbingEdge") && moveDirection.magnitude < 5.5f)
-            {
-                ClimbingEdge temp;
-                if (temp = other.GetComponent<ClimbingEdge>())
-                {
-                    if (!temp.insideWall && Vector3.Dot(other.transform.forward, Player.transform.forward) < 0)
-                        stateManager.ChangeState(new ClimbState(stateManager, temp));
-                }
-            }
+        }
+    }
+
+    public override void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("Levers"))
+           Debug.Log(other);
+        if (other.CompareTag("Levers") && Input.GetButtonDown("Action"))
+        {
+            Debug.Log("Lever Pulled");
+            Player.StartCoroutine(ActivateLever(other.GetComponent<Lever>()));
         }
     }
 }

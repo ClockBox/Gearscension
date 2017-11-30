@@ -43,12 +43,15 @@ public abstract class AIStateManager : MonoBehaviour  {
 
 	public void Start()
 	{
-		player = GameObject.FindGameObjectWithTag("Player");
+        player = GameManager.Player.gameObject;
 		stats = GetComponent<AIStats>();
 		pathAgent = GetComponent<NavMeshAgent>();
 		pathIndex = 0;
-		pathTarget = patrolPoints[pathIndex];
-		pathAgent.destination = pathTarget.position;
+        if (patrolPoints.Length > 0)
+        {
+            pathTarget = patrolPoints[pathIndex];
+            pathAgent.destination = pathTarget.position;
+        }
 		setFrequency = stats.attackFrequency;
 		isAlive = true;
 		StartEvents();

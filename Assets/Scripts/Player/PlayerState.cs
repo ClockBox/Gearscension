@@ -13,8 +13,8 @@ public class PlayerState
     public static bool grounded = true;
 
     private bool stopState = false;
-    private bool inTransition = false;
     protected float elapsedTime;
+    private bool inTransition = false;
     public bool InTransition
     {
         get {return inTransition; }
