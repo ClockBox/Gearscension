@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
 
     public GameObject playerPrefab;
     public Transform LevelSpawn;
-    private static int currentFloor;
+    private static int currentFloor = 4;
 
     private AudioDictonary audioManager;
     public AudioDictonary AudioManager
@@ -269,14 +269,15 @@ public class GameManager : MonoBehaviour
         {
             ToggleCursor(pause);
         }
-        else if (scene.buildIndex > 4)
+        else if (scene.buildIndex > 3)
         {
             ToggleCursor(false);
 
             if (!SceneManager.GetSceneByName(hudScene).isLoaded)
                 SceneManager.LoadScene(hudScene, LoadSceneMode.Additive);
 
-            currentFloor = scene.buildIndex;
+            if(scene.name != elevatorScene)
+                currentFloor = scene.buildIndex;
             PlayerPrefs.SetInt("ContinueScene", currentFloor);
             SceneManager.SetActiveScene(SceneManager.GetSceneByBuildIndex(currentFloor));
         }
