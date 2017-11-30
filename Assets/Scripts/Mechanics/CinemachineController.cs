@@ -7,15 +7,13 @@ using UnityEngine.Timeline;
 public class CinemachineController : MonoBehaviour
 {
     [SerializeField]
-    private GameObject player;
+    private float radius;
     [SerializeField]
     private GameObject cameraPivot;
-    private CinemachineFreeLook freelook;
+    public CinemachineFreeLook freelook;
     private CinemachineVirtualCamera topRig;
     private CinemachineVirtualCamera middleRig;
     private CinemachineVirtualCamera bottomRig;
-    [SerializeField]
-    private CinemachineVirtualCamera organVCam;
 
     private CinemachineOrbitalTransposer topRigTransposer;
     private CinemachineOrbitalTransposer middleRigTransposer;
@@ -24,6 +22,8 @@ public class CinemachineController : MonoBehaviour
     private CinemachineComposer topComposer;
     private CinemachineComposer middleComposer;
     private CinemachineComposer bottomComposer;
+
+    private CinemachineCollider cC;
 
     [SerializeField]
     private TimelinePlayable timelineBase;
@@ -36,128 +36,65 @@ public class CinemachineController : MonoBehaviour
     
 	void Start ()
     {
-        if (player == null)
-            player = GameManager.Player.gameObject;
-
-        if (organVCam == null)
-            organVCam = GameObject.Find("CM_OrganCam").GetComponent<CinemachineVirtualCamera>();
-
-
         if (freelook == null)
         {
             freelook = new GameObject("Freelook").AddComponent<CinemachineFreeLook>();
-            freelook.m_LookAt = player.transform;
-            freelook.m_Follow = player.transform;
+            freelook.m_LookAt = cameraPivot.transform;
+            freelook.m_Follow = GameManager.Player.transform;
             freelook.m_Priority = 11;
-        }
 
-        topRig = freelook.GetRig(0);
-        middleRig = freelook.GetRig(1);
-        bottomRig = freelook.GetRig(2);
+            freelook.m_Lens.FieldOfView = 50;
+            freelook.m_Lens.NearClipPlane = 0.01f;
 
-        freelook.m_YAxis.m_MaxSpeed = 4;
-        freelook.m_YAxis.m_AccelTime = 1;
-        freelook.m_YAxis.m_DecelTime = 1;
-        
-        topComposer = topRig.GetCinemachineComponent<CinemachineComposer>();
-        middleComposer = middleRig.GetCinemachineComponent<CinemachineComposer>();
-        bottomComposer = bottomRig.GetCinemachineComponent<CinemachineComposer>();
+            freelook.m_YAxis.m_MaxSpeed = 3;
+            freelook.m_YAxis.m_AccelTime = 1;
+            freelook.m_YAxis.m_DecelTime = 1;
 
-        ResetFreelookDefaults();
-    }
+            freelook.m_Orbits[0].m_Height = 3.5f;
+            freelook.m_Orbits[1].m_Height = 2.4f;
+            freelook.m_Orbits[2].m_Height = 0.7f;
 
-    void Update()
-    {
-        //m_elapsedTime -= Time.deltaTime;
+            freelook.m_Orbits[0].m_Radius = 1.75f;
+            freelook.m_Orbits[1].m_Radius = 2.5f;
+            freelook.m_Orbits[2].m_Radius = 2f;
 
-        //if(m_elapsedTime <= 0 && !changed)
-        //{
-        //    changed = !changed;
-        //    ChangeToOrgan();
-        //    m_elapsedTime = 5.0f;
-        //}
-        //else if(m_elapsedTime <= 0 && changed)
-        //{
-        //    changed = !changed;
-        //    ChangeToFreelook();
-        //    m_elapsedTime = 5.0f;
-        //}
+            if (Input.GetJoystickNames().Length > 0)
+                freelook.m_XAxis.m_MaxSpeed = 150f;
+            else
+                freelook.m_XAxis.m_MaxSpeed = 200;
+            
+            topRig = freelook.GetRig(0);
+            middleRig = freelook.GetRig(1);
+            bottomRig = freelook.GetRig(2);
 
-        //Camera Raycast
-        RaycastHit hit;
-        if (Physics.SphereCast(cameraPivot.transform.position, 0.2f, freelook.transform.position - cameraPivot.transform.position, out hit, 3.5f, 15))
-        {
-            Debug.Log(hit.transform.gameObject);
-            if (hit.transform.gameObject != player )
-            {
-                topRigTransposer.m_Radius = 2f;
-                topRigTransposer.m_Radius = Mathf.Lerp(middleRigTransposer.m_Radius, 0.5f, Time.deltaTime * speed);
-                middleRigTransposer.m_Radius = Mathf.Lerp(middleRigTransposer.m_Radius, 0.8f, Time.deltaTime * speed);
-                //bottomRigTransposer.m_Radius = Mathf.Lerp(middleRigTransposer.m_Radius, 0.5f, Time.deltaTime * speed);
-            }
-        }
-        else
-        {
-            topRigTransposer.m_Radius = Mathf.Lerp(topRigTransposer.m_Radius, 2f, Time.deltaTime * speed);
-            middleRigTransposer.m_Radius = Mathf.Lerp(middleRigTransposer.m_Radius, 3.3f, Time.deltaTime * speed);
-            bottomRigTransposer.m_Radius = Mathf.Lerp(bottomRigTransposer.m_Radius, 2.3f, Time.deltaTime * speed);
+            topComposer = topRig.GetCinemachineComponent<CinemachineComposer>();
+            middleComposer = middleRig.GetCinemachineComponent<CinemachineComposer>();
+            bottomComposer = bottomRig.GetCinemachineComponent<CinemachineComposer>();
+
+            topComposer.m_DeadZoneHeight = 0;
+            middleComposer.m_DeadZoneHeight = 0;
+            bottomComposer.m_DeadZoneHeight = 0;
+
+            topComposer.m_DeadZoneWidth = 0;
+            middleComposer.m_DeadZoneWidth = 0;
+            bottomComposer.m_DeadZoneWidth = 0;
+            
+            topComposer.m_TrackedObjectOffset = new Vector3(0, 0, 0);
+            middleComposer.m_TrackedObjectOffset = new Vector3(0, -0.3f, 0);
+            bottomComposer.m_TrackedObjectOffset = new Vector3(0, 0, 0);
+
+            topRigTransposer = topRig.GetCinemachineComponent<CinemachineOrbitalTransposer>();
+            middleRigTransposer = middleRig.GetCinemachineComponent<CinemachineOrbitalTransposer>();
+            bottomRigTransposer = bottomRig.GetCinemachineComponent<CinemachineOrbitalTransposer>();
+
+            cC = freelook.gameObject.AddComponent<CinemachineCollider>();
+            cC.m_MinimumDistanceFromTarget = 0.1f;
+            cC.m_Strategy = CinemachineCollider.ResolutionStrategy.PullCameraForward;
         }
     }
 
-    public void ChangeToOrgan()
+    private void Update()
     {
-        freelook.enabled = false;
-        organVCam.enabled = true;
-        organVCam.Priority = 12;
-    }
-
-    public void ChangeToFreelook()
-    {
-        freelook.enabled = true;
-        organVCam.enabled = false;
-        organVCam.Priority = 10;
-    }
-
-    public void ResetFreelookDefaults()
-    {
-        // Setting Freelook
-        freelook.m_LookAt = cameraPivot.transform;
-        freelook.m_Follow = player.transform;
-        freelook.m_Priority = 11;
-
-        //Setting Freelook Rigs
-        topRig = freelook.GetRig(0);
-        middleRig = freelook.GetRig(1);
-        bottomRig = freelook.GetRig(2);
-
-        //Setting LookAt
-        topRig.LookAt = player.transform;
-        middleRig.LookAt = cameraPivot.transform;
-        bottomRig.LookAt = cameraPivot.transform;
-
-        //Setting FOV
-        topRig.m_Lens.FieldOfView = 50f;
-        middleRig.m_Lens.FieldOfView = 50f;
-        bottomRig.m_Lens.FieldOfView = 50f;
-
-        //Setting Aim Tracked Offset
-        topComposer.m_TrackedObjectOffset = new Vector3(0 ,2f ,0);
-        middleComposer.m_TrackedObjectOffset = new Vector3(0, -0.5f, 0);
-        bottomComposer.m_TrackedObjectOffset = new Vector3(0, -1f, 0);
-
-        //Setting Rig Transposer
-        topRigTransposer = topRig.GetCinemachineComponent<CinemachineOrbitalTransposer>();
-        middleRigTransposer = middleRig.GetCinemachineComponent<CinemachineOrbitalTransposer>();
-        bottomRigTransposer = bottomRig.GetCinemachineComponent<CinemachineOrbitalTransposer>();
-        
-        //Setting Rig
-        topRigTransposer.m_Radius = 2f;
-        topRigTransposer.m_HeightOffset = 3.95f;
-
-        middleRigTransposer.m_Radius = 3f;
-        middleRigTransposer.m_HeightOffset = 2f;
-
-        bottomRigTransposer.m_Radius = 2f;
-        middleRigTransposer.m_HeightOffset = 0.8f;
+        freelook.m_XAxis.Value += Input.GetAxisRaw("Horizontal");
     }
 }
