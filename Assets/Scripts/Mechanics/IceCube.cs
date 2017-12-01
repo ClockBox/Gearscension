@@ -61,7 +61,7 @@ public class IceCube : MonoBehaviour
             rb.isKinematic = false;
         else
         {
-            Collider[] cols = Physics.OverlapBox(transform.position, cubeBounds.bounds.extents + Vector3.one, Quaternion.identity, ~Physics.IgnoreRaycastLayer);
+            Collider[] cols = Physics.OverlapBox(transform.position, cubeBounds.bounds.extents, Quaternion.identity, ~6);
             for (int i = 0; i < cols.Length; i++)
             {
                 if (cols[i].transform.root != transform && !cols[i].isTrigger)

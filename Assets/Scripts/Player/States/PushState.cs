@@ -79,10 +79,10 @@ public class PushState : PlayerState
         else if (!grounded)
             stateManager.ChangeState(new UnequipedState(stateManager, false));
 
-        else if (!pushObject || pushObject.velocity.y < -0.5f)
+        else if (!pushObject || pushObject.velocity.y < -2f)
             stateManager.ChangeState(new UnequipedState(stateManager, true));
 
-        else if (Player.transform.InverseTransformDirection(rb.velocity).z < -0.1f)
+        else if (Player.transform.InverseTransformDirection(rb.velocity).z < -0.5f)
             yield return MoveBack();
 
         yield break;
@@ -97,7 +97,7 @@ public class PushState : PlayerState
         float time = 1f;
         float Pi = 3.14159f;
         elapsedTime = 0;
-        while (elapsedTime < time && Player.transform.InverseTransformDirection(rb.velocity).z < -0.1f)
+        while (elapsedTime < time && Player.transform.InverseTransformDirection(rb.velocity).z < -0.5f)
         {
             UpdateIK();
             float moveForce = -(distance / 2 * Mathf.Cos(Pi * elapsedTime / time)) + distance / 2;

@@ -23,34 +23,38 @@ public class BossAttacks
 }
 
 public class Grim : MonoBehaviour {
+	public Transform raypoint;
+	public float phaseOneRange;
+	[HideInInspector]
+	public bool isAttacking=false;
 
 	[SerializeField]
 	private BossAttacks[] attacks;
 
-	[SerializeField]
-	private float phaseOneRange;
-
-
 	private BossPhases currentPhase;
-
-
-	[HideInInspector]
-	public bool isAttacking;
-
-
-
-	void Start () {
-
-
-		isAttacking = false;
+	private GameObject currentPrefab;
 	
+	void Start () {
 		currentPhase = new BossPhaseOne(this);
-
 	}
 
-
 	void Update () {
-		currentPhase.HandleUpdate(this);
+		if (Input.GetKeyDown(KeyCode.X))
+		{
+			currentPhase.TogglePause();
+		}
+		RaycastHit hit;
+		Ray ray = new Ray(raypoint.transform.position, -transform.up);
+		if (Physics.Raycast(ray, out hit))
+		{
+			if (hit.collider.isTrigger)
+			{
+				if (hit.collider.tag == "Water")
+				{
+					Debug.Log("On water");
+				}
+			}
+		}
 	}
 
 
@@ -62,10 +66,17 @@ public class Grim : MonoBehaviour {
 
 	public void SpawnPrefab(int a)
 	{
-		GameObject prefab=Instantiate(attacks[a].AttackPrefab , attacks[a].AttackPoints.position, attacks[a].AttackPoints.rotation);
+		DestroyPrefab(0);
+		currentPrefab=Instantiate(attacks[a].AttackPrefab , attacks[a].AttackPoints.position, attacks[a].AttackPoints.rotation);
 	}
 
-	
+	public void DestroyPrefab(int a)
+	{
+		if (currentPrefab)
+			Destroy(currentPrefab, a);
+	}
+
+
 	//private void LaunchAttack(Collider c)
 	//{
 	//	Collider[] cols = Physics.OverlapBox(c.bounds.center, c.bounds.extents, c.transform.rotation, LayerMask.GetMask("Hitbox", "Character"));
@@ -104,7 +115,4 @@ public class Grim : MonoBehaviour {
 	//		col.SendMessageUpwards("TakeDamage", damage);
 	//	}
 	//}
-
-	
-	
 }
