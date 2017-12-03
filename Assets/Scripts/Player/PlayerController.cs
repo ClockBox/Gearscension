@@ -37,7 +37,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField, Range(-1,3)]
     private int gunUpgrade = -1;
     private int[] ammoAmounts = new int[4];
-    private int ammoType = 0;
+    private static int ammoType = 0;
 
     const int GUN = 0;
     const int SWORD = 1;
@@ -137,6 +137,7 @@ public class PlayerController : MonoBehaviour
     {
         GameManager.Player.weapons[0].gameObject.SetActive(true);
         GameManager.Player.gunUpgrade = upgrade;
+        ammoType = upgrade;
         GameManager.Hud.BulletUpgrade();
     }
 
@@ -257,8 +258,8 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha0))
             TakeDamage(10);
         RechargeArmor();
-        if(cC.freelook != null)
-            if (AimPoint) AimPoint.rotation = cC.freelook.transform.rotation * new Quaternion(0, 0.7071068f, 0, 0.7071068f);
+
+        if (AimPoint) AimPoint.rotation = CameraController.MainCamera.transform.rotation * new Quaternion(0, 0.7071068f, 0, 0.7071068f);
 
         //Switching Ammo Types
         if (Input.GetButtonDown("Ammo 1"))

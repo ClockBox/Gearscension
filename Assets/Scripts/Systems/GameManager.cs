@@ -143,7 +143,7 @@ public class GameManager : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.F7))
             LoadScene("Floor_3");
         else if (Input.GetKeyDown(KeyCode.F8))
-            LoadScene("Floor_4");
+            LoadScene("BossFloor");
 
         if(SceneManager.GetActiveScene().name == mainMenuScene)
         {
@@ -339,6 +339,9 @@ public class GameManager : MonoBehaviour
                 currentFloor = scene.buildIndex;
             PlayerPrefs.SetInt("ContinueScene", currentFloor);
             SceneManager.SetActiveScene(SceneManager.GetSceneByBuildIndex(currentFloor));
+
+            if (scene.buildIndex > 5)
+                AddScene(elevatorScene);
         }
         else
         {

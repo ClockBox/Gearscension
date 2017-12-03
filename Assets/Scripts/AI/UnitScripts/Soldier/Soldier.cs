@@ -53,6 +53,9 @@ public class Soldier : AIStateManager {
 
 		}
 
+        if (!player)
+            return;
+
 		if (attackFrequency >= attackInterval)
 		{
 			if (Vector3.Distance(transform.position, player.transform.position)>5f) 

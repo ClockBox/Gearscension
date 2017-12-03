@@ -29,7 +29,7 @@ public class PushState : PlayerState
         anim.SetBool("pushing", true);
 
         IceCube ice = pushNode.transform.parent.GetComponent<IceCube>();
-        if (ice) ice.pushing = true;
+        if (ice) ice.Pushing = true;
 
         rb.velocity = Vector3.zero;
         lookDirection = pushNode.transform.forward;
@@ -55,7 +55,7 @@ public class PushState : PlayerState
         anim.SetBool("pushing", false);
 
         IceCube ice = pushNode.transform.parent.GetComponent<IceCube>();
-        if (ice) ice.pushing = false;
+        if (ice) ice.Pushing = false;
 
         elapsedTime = 0;
         pushObject.isKinematic = true;

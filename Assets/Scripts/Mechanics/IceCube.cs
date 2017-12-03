@@ -6,12 +6,27 @@ public class IceCube : MonoBehaviour
 {
     public bool climbable;
     public bool pushable;
-    public bool pushing;
-
     public GameObject climbNodePrefab;
     public GameObject pushNodePrefab;
 
+    public Collider[] movementColliders;
+    public Collider[] staticColliders;
+
+    [SerializeField]
+    private bool pushing;
+    public bool Pushing
+    {
+        get { return pushing; }
+        set
+        {
+            pushing = value;
+            ToggleColliders();
+        }
+    }
+
     private Collider cubeBounds;
+
+    private List<Collider> cols = new List<Collider>();
     
     private Rigidbody rb;
 
@@ -55,6 +70,15 @@ public class IceCube : MonoBehaviour
         }
     }
 
+    private void ToggleColliders()
+    {
+        for (int i = 0; i < movementColliders.Length; i++)
+            movementColliders[i].enabled = pushing;
+
+        for (int i = 0; i < staticColliders.Length; i++)
+            staticColliders[i].enabled = !pushing;
+    }
+
     private void FixedUpdate()
     {
         if (pushing)
@@ -66,9 +90,11 @@ public class IceCube : MonoBehaviour
             {
                 if (cols[i].transform.root != transform && !cols[i].isTrigger)
                 {
+                    Debug.Log(cols[i].name + ": true");
                     rb.isKinematic = true;
                     return;
                 }
+                Debug.Log(cols[i].name + ": false");
             }
             rb.isKinematic = false;
         }

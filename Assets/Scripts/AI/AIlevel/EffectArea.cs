@@ -42,7 +42,7 @@ public class EffectArea : MonoBehaviour
                     if (TestObject.CompareTag("Enemy") || TestObject.CompareTag("Freezable"))
                     {
                         Freezable temp;
-                        if (temp = TestObject.GetComponent<Freezable>())
+                        if ((temp = TestObject.GetComponent<Freezable>()) && temp.enabled == true)
                             temp.Freeze = true;
                     }
                 }
