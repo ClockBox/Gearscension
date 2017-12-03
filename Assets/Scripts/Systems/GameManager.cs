@@ -272,7 +272,10 @@ public class GameManager : MonoBehaviour
 
     public void Continue()
     {
-        LoadScene(PlayerPrefs.GetInt("ContinueScene"));
+        int sceneIndex = PlayerPrefs.GetInt("ContinueScene");
+        LoadScene(sceneIndex);
+        if (sceneIndex > 5 && !SceneManager.GetSceneByName(elevatorScene).isLoaded)
+            AddScene(elevatorScene);
     }
 
     public void AddNextFloor()
@@ -292,7 +295,6 @@ public class GameManager : MonoBehaviour
 
     public void AddScene(string name)
     {
-        Debug.Log(name);
         SceneManager.LoadSceneAsync(name, LoadSceneMode.Additive);
     }
     public void AddScene(int index)
@@ -339,9 +341,6 @@ public class GameManager : MonoBehaviour
                 currentFloor = scene.buildIndex;
             PlayerPrefs.SetInt("ContinueScene", currentFloor);
             SceneManager.SetActiveScene(SceneManager.GetSceneByBuildIndex(currentFloor));
-
-            if (scene.buildIndex > 5)
-                AddScene(elevatorScene);
         }
         else
         {

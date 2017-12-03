@@ -90,11 +90,9 @@ public class IceCube : MonoBehaviour
             {
                 if (cols[i].transform.root != transform && !cols[i].isTrigger)
                 {
-                    Debug.Log(cols[i].name + ": true");
                     rb.isKinematic = true;
                     return;
                 }
-                Debug.Log(cols[i].name + ": false");
             }
             rb.isKinematic = false;
         }

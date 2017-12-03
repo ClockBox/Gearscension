@@ -2,21 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SoldierBullet : MonoBehaviour {
-
+public class SoldierWeapon : MonoBehaviour
+{
 	public float damage;
+    public bool destroyOnHit;
 	private void OnTriggerEnter(Collider collision)
 	{
 		if (collision.gameObject.tag == "Player")
 		{
-			Debug.Log("Hit By Soldier Bullet");
+            Debug.Log("Hit By Soldier Weapon", this);
 			collision.gameObject.SendMessage("TakeDamage", damage, SendMessageOptions.DontRequireReceiver);
-			Destroy(gameObject);
+            if(destroyOnHit)
+			    Destroy(gameObject);
 
 		}
 		else if (collision.gameObject.tag != "Enemy") 
 		{
-			Destroy(gameObject);
+            if (destroyOnHit)
+                Destroy(gameObject);
 		}
 	} 
 
