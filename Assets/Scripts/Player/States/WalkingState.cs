@@ -75,22 +75,10 @@ public class MoveState : PlayerState
     private IEnumerator ActivateLever(Lever lever)
     {
         Debug.Log("ActivateLever: Start");
+        InTransition = true;
         
         rb.isKinematic = true;
-        IK.HeadWeight = 0;
-
-        Quaternion startRot = Player.transform.rotation;
-        Vector3 startpos = Player.transform.position;
-
-        elapsedTime = 0;
-        while (elapsedTime < 0.5f)
-        {
-            Player.transform.position = Vector3.Lerp(startpos, lever.standPoint.position, elapsedTime);
-            Player.transform.rotation = Quaternion.Lerp(startRot, lever.standPoint.rotation, elapsedTime);
-            UpdateAnimator();
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
+        IK.useHeadWeight = false;
 
         Player.transform.position = lever.standPoint.position;
         Player.transform.rotation = lever.standPoint.rotation;
@@ -100,15 +88,18 @@ public class MoveState : PlayerState
         elapsedTime = 0;
         while (elapsedTime < 2f)
         {
-            UpdateAnimator();
+            IK.LeftHand.Set(lever.handPoint);
+            IK.LeftHand.weight = 1;
             elapsedTime += Time.deltaTime;
             yield return null;
         }
         lever.Activate();
 
+        IK.LeftHand.weight = 0;
+        anim.ResetTrigger("LeverPull");
         rb.isKinematic = false;
-        IK.HeadWeight = 1;
-        Debug.Log("ActivateLever: Done");
+        IK.useHeadWeight = true;
+        InTransition = true;
     }
 
     protected void Jump()
@@ -291,9 +282,7 @@ public class MoveState : PlayerState
 
     public override void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag("Levers"))
-           Debug.Log(other);
-        if (other.CompareTag("Levers") && Input.GetButtonDown("Action"))
+        if (other.CompareTag("Levers") && Input.GetButton("Action"))
         {
             Debug.Log("Lever Pulled");
             Player.StartCoroutine(ActivateLever(other.GetComponent<Lever>()));

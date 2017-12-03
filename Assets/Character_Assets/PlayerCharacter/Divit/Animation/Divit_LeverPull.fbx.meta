@@ -427,11 +427,18 @@ ModelImporter:
     resampleCurves: 1
     optimizeGameObjects: 0
     motionNodeName: 
-    rigImportErrors: "Copied Avatar Rig Configuration mis-match. Transform hierarchy
-      does not match:\n\tTransform 'transform1' not found in HumanDescription.\n"
+    rigImportErrors: 
     rigImportWarnings: 
     animationImportErrors: 
-    animationImportWarnings: 
+    animationImportWarnings: "\nClip 'Take 001' has import animation warnings that
+      might lower retargeting quality:\nNote: Activate translation DOF on avatar to
+      improve retargeting quality.\n\t'JNT_SpineC' has translation animation that
+      will be discarded.\n\t'JNT_NeckB' is inbetween humanoid transforms and has rotation
+      animation that will be discarded.\n\t'JNT_L_Hand' is inbetween humanoid transforms
+      and has rotation animation that will be discarded.\n\t'JNT_R_Hand' is inbetween
+      humanoid transforms and has rotation animation that will be discarded.\n\t'JNT_R_Foot'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'JNT_L_Foot'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n"
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     animationCompression: 3
@@ -446,7 +453,7 @@ ModelImporter:
       name: Divit_LeverPull
       takeName: Take 001
       firstFrame: 38
-      lastFrame: 114
+      lastFrame: 96
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -457,7 +464,7 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
+      loopBlendPositionXZ: 1
       keepOriginalOrientation: 0
       keepOriginalPositionY: 1
       keepOriginalPositionXZ: 0

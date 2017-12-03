@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class PointToPointPlatform : Platform
 {
+    #region Variables
+    [SerializeField]
+    private Animator anim;
+
     [SerializeField]
     private Transform[] nodes;
 
@@ -39,10 +43,7 @@ public class PointToPointPlatform : Platform
         set
         {
             move = value;
-            //if(move)
-            //    PlaySound(StartSound);
-            //else
-            //    PlaySound(StopSound);
+            UpdateState();
         }
     }
 
@@ -54,10 +55,7 @@ public class PointToPointPlatform : Platform
         set
         {
             rotate = value;
-            //if(move)
-            //    PlaySound(StartSound);
-            //else
-            //    PlaySound(StopSound);
+            UpdateState();
         }
     }
 
@@ -67,11 +65,7 @@ public class PointToPointPlatform : Platform
         {
             move = value;
             rotate = value;
-
-            //if(move || rotate)
-            //    PlaySound(StartSound);
-            //else
-            //    PlaySound(StopSound);
+            UpdateState();
         }
     }
 
@@ -89,18 +83,36 @@ public class PointToPointPlatform : Platform
         get { return rotationTime; }
         set { rotationTime = value; }
     }
+    #endregion
 
-    #region MyRegion
-
+    #region Audio
     private AudioSource SFX_Source;
+    private AudioSource ambient_Source;
     public AudioClip StartSound;
     public AudioClip StopSound;
-
+    
     public void PlaySound(string soundName)
     {
         GameManager.Instance.AudioManager.playAudio(SFX_Source, soundName);
     }
     #endregion
+
+    public void UpdateState()
+    {
+        if (move || rotate)
+        {
+            if (StartSound) PlaySound(StartSound.name);
+            if (ambient_Source) ambient_Source.UnPause();
+            if (anim) anim.enabled = true;
+        }
+        else
+        {
+            if (StopSound) PlaySound(StopSound.name);
+            if (ambient_Source) ambient_Source.Pause();
+            if (anim)
+                anim.enabled = false;
+        }
+    }
 
     private void Start()
     {
@@ -112,6 +124,7 @@ public class PointToPointPlatform : Platform
 
         transform.position = nodes[currentMoveNode].position;
         transform.rotation = nodes[currentRotationNode].rotation;
+        UpdateState();
     }
 
     private void FixedUpdate()

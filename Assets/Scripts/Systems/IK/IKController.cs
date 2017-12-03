@@ -14,6 +14,7 @@ public class IKController : MonoBehaviour
     protected Vector3 _lookAtPosition;
     protected float _headWeight = 1;
     protected float _headTrunSpeed = 1;
+    public bool useHeadWeight = true;
 
     protected Vector3 _RightElbow;
     protected Vector3 _LeftElbow;
@@ -40,7 +41,9 @@ public class IKController : MonoBehaviour
         CameraForward = Camera.main.transform.forward;
         CameraForward.y = 0;
 
-        _headWeight = Vector3.Dot(CameraForward, transform.forward);
+        if (useHeadWeight)
+            _headWeight = Vector3.Dot(CameraForward, transform.forward);
+        else _headWeight = 0;
 
         _lookAtPosition = Vector3.Lerp(_lookAtPosition, transform.position + CameraForward * 20 + Vector3.up * 1.8f, _headTrunSpeed / 10);
 
@@ -55,7 +58,7 @@ public class IKController : MonoBehaviour
             _LeftElbow = transform.position + transform.up - transform.right * 5.0f;
             _RightKnee = transform.position + transform.up * 5f + transform.forward * 2f + transform.right * 2f;
             _LeftKnee = transform.position + transform.up * 5f + transform.forward * 2f - transform.right * 2f;
-
+            
             anim.SetLookAtWeight(_headWeight, 1f, 1.0f, 1.0f, 1.0f);
             anim.SetLookAtPosition(_lookAtPosition);
 
@@ -154,7 +157,7 @@ public class IKController : MonoBehaviour
 
     // ---------------Getters/Setters---------------
     //Get/Set Look Position
-    public Vector3 lookAtPosition
+    public Vector3 LookAtPosition
     {
         set { _lookAtPosition = value; }
         get { return _lookAtPosition; }
