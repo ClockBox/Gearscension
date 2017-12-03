@@ -22,8 +22,8 @@ public class LightPuzzle : MonoBehaviour
     {
         randomPuzzleSelect = new int[boxPositioningLights.Length];
 
-        counterMax = Mathf.RoundToInt(boxPositioningLights.Length / 2) - 1;
-
+        counterMax = Mathf.RoundToInt(boxPositioningLights.Length / 2);
+        Debug.Log(counterMax);
         counter = 0;
 
         correctBlockCounter = 0;
