@@ -8,6 +8,9 @@ public class SoldierWeapon : MonoBehaviour
     public bool destroyOnHit;
 	private void OnTriggerEnter(Collider collision)
 	{
+        if (collision.isTrigger)
+            return;
+
 		if (collision.gameObject.tag == "Player")
 		{
             Debug.Log("Hit By Soldier Weapon", this);

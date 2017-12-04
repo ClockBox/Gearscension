@@ -25,9 +25,6 @@ public class IceCube : MonoBehaviour
     }
 
     private Collider cubeBounds;
-
-    private List<Collider> cols = new List<Collider>();
-    
     private Rigidbody rb;
 
     private void Awake()

@@ -30,13 +30,16 @@ public class PressurePlate : ElectricalSwitch
 
     private void OnTriggerEnter(Collider other)
     {
+        if (other.attachedRigidbody.gameObject == weightedObject)
+            return;
+
         if (other.CompareTag("Player"))
         {
             weightedObject = other.attachedRigidbody.gameObject;
             Active = true;
         }
 
-        else if (other.CompareTag("Enemy"))
+        else if (other.CompareTag("Freezable"))
         {
             weightedObject = other.attachedRigidbody.gameObject;
             Active = true;
@@ -46,7 +49,7 @@ public class PressurePlate : ElectricalSwitch
 
     private void OnTriggerExit(Collider other)
     {
-        if (!weightedObject || other.gameObject == weightedObject.gameObject)
+        if (!weightedObject || other.attachedRigidbody.gameObject == weightedObject.gameObject)
         {
             weightedObject = null;
             Active = false;

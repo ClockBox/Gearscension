@@ -22,7 +22,6 @@ public class MoveState : PlayerState
     //Transitions
     public override IEnumerator EnterState(PlayerState prevState)
     {
-        Debug.Log("MoveState : EnterState");
         moveDirection = moveDirection.magnitude * Player.transform.forward;
         if (canClimb == false)
             moveDirection = Vector3.zero;
