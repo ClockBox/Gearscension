@@ -2,11 +2,11 @@
 using System.Collections;
 using UnityEngine;
 
-public class Soldier : AIStateManager {
-
-
+public class Soldier : AIStateManager
+{
 	public Transform gunPoint;
-    public Collider HandCollider;
+    public Transform gunPivot;
+    public Collider handCollider;
 	public Rigidbody bulletPrefab;
 	public float bulletSpeed;
 	public float shotInterval;
@@ -19,6 +19,7 @@ public class Soldier : AIStateManager {
 	private Animator anim;
 	public float predictionMagnitude;
 	private Vector3 lastPlayerPosition;
+
 	public override void RangedAttack()
 	{
 		if (!callOnce)
@@ -29,23 +30,28 @@ public class Soldier : AIStateManager {
 			Destroy(smoke, 1f);
 			lastPlayerPosition = player.transform.position;
 			callOnce = true;
-
 		}
 		
 		if (shotFrequency >= shotInterval)
 		{
-			Rigidbody _bullet;
+            Vector3 bulletDirection = (PredictPosition(lastPlayerPosition, player.transform.position) - gunPoint.transform.position);
+            Aim(bulletDirection);
+
+            Rigidbody _bullet;
 			_bullet = Instantiate(bulletPrefab, gunPoint.transform.position, gunPoint.transform.rotation);
-			Vector3 bulletDirection = (PredictPosition(lastPlayerPosition, player.transform.position) - _bullet.transform.position).normalized;
-			_bullet.velocity =bulletDirection* bulletSpeed;
+            _bullet.velocity = bulletDirection.normalized * bulletSpeed;
 			Destroy(_bullet.gameObject, 5);
 			shotFrequency = 0;
 		}
 		shotFrequency += Time.deltaTime;
-
-
-
 	}
+
+    private void Aim(Vector3 direction)
+    {
+        Vector3 vertical = Vector3.ProjectOnPlane(direction, transform.right);
+        gunPivot.transform.LookAt(transform.position + vertical);
+    }
+
 	public override void MeleeAttack()
 	{
 		if (!callOnce)
@@ -64,13 +70,12 @@ public class Soldier : AIStateManager {
 				pathAgent.speed = 8;
 			}
 
-			pathAgent.destination=player.transform.position;
+            pathAgent.destination = player.transform.position;
 			if (Vector3.Distance(transform.position, player.transform.position) <= meleeRange)
 			{
 				anim.SetTrigger("Attack");
 				fireBurster.GetComponent<ParticleSystem>().Emit(2);
                 StartCoroutine(ToggleHandCollider(0.5f, true));
-                //player.gameObject.SendMessage("TakeDamage", meleeDamage, SendMessageOptions.DontRequireReceiver);
             }
 			attackFrequency = 0;
 		}
@@ -81,12 +86,12 @@ public class Soldier : AIStateManager {
     private IEnumerator ToggleHandCollider(float waitTime,bool enabled = false)
     {
         yield return new WaitForSeconds(waitTime);
-        HandCollider.enabled = enabled;
+        handCollider.enabled = enabled;
     } 
 	
 
-	public override void StartEvents() {
-		
+	public override void StartEvents()
+    {
 		fireBurster = Instantiate(firePrefab, transform.position, transform.rotation);
 		fireBurster.transform.parent = transform;
 		anim = GetComponent<Animator>();
@@ -96,8 +101,6 @@ public class Soldier : AIStateManager {
 	private Vector3 PredictPosition(Vector3 lastPos, Vector3 currentPos)
 	{
 		Vector3 target = (currentPos + (currentPos - lastPos).normalized * predictionMagnitude);
-		return target;
+        return target + Vector3.up * 1.5f;
 	}
-	
-
 }
