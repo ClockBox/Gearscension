@@ -238,10 +238,7 @@ public class PlayerHud : MonoBehaviour
         achivementText.text = "" + passedString;
 
         GameObject achivement = GameObject.Find("/Gear Hud/Achivements");
-        if (achivement != null)
-        {
-            achivement.GetComponent<Animator>().SetBool("Trigger", true);
-        }
+
     }
 
     public void RemoveDisplay()
