@@ -86,7 +86,7 @@ public class PointToPointPlatform : Platform
     #endregion
 
     #region Audio
-    private AudioSource SFX_Source;
+    public AudioSource SFX_Source;
     private AudioSource ambient_Source;
     public AudioClip StartSound;
     public AudioClip StopSound;

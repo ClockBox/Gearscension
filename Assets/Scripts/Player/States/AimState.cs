@@ -12,8 +12,6 @@ public class AimState : MoveState
     //Transitions
     public override IEnumerator EnterState(PlayerState prevState)
     {
-        Debug.Log("AimState : EnterState");
-
         lookDirection = Camera.main.transform.forward;
         lookDirection = Vector3.ProjectOnPlane(lookDirection, Player.transform.up);
         Player.AimPoint = Player.transform.GetChild(1);
@@ -29,8 +27,6 @@ public class AimState : MoveState
     }
     public override IEnumerator ExitState(PlayerState nextState)
     {
-        Debug.Log("AimState : ExitState");
-
         yield return base.ExitState(nextState);
 
         IK.HeadTrunSpeed = 1;
