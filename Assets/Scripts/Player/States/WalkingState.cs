@@ -98,7 +98,7 @@ public class MoveState : PlayerState
         anim.ResetTrigger("LeverPull");
         rb.isKinematic = false;
         IK.useHeadWeight = true;
-        InTransition = true;
+        InTransition = false;
     }
 
     protected void Jump()
