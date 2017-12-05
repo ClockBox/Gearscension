@@ -229,7 +229,8 @@ public class GameManager : MonoBehaviour
 
     #region Player Managment
     private void SpawnPlayer()
-    {   
+    {
+        Debug.Log("here");
         Player = Instantiate(playerPrefab, LevelSpawn.position, LevelSpawn.rotation).GetComponent<PlayerController>();
     }
 

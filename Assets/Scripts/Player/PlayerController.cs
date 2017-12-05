@@ -124,7 +124,7 @@ public class PlayerController : MonoBehaviour
         get { return gunUpgrade; }
     }
     
-    public InputAxis RightTrigger
+    public InputAxis RightTrigger 
     {
         get { return rightTriggerState; }
     }
