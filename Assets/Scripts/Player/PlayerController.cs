@@ -254,10 +254,10 @@ public class PlayerController : MonoBehaviour
     private void Start ()
     {
         cC = GetComponent<CinemachineController>();
-        //Initialize states
-        m_stateM.State = new UnequipedState(m_stateM, true);
 
-        //Start states
+        Debug.Log("Player Start", this);
+        //Initialize state Machine
+        m_stateM.State = new UnequipedState(m_stateM, true);
         m_stateM.StartState(m_stateM.State);
     }
 
