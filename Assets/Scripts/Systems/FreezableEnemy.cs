@@ -24,10 +24,6 @@ public class FreezableEnemy : Freezable
 
             if (animator)
                 animator.enabled = false;
-
-            CapsuleCollider temp = iceBlock.transform.GetChild(0).gameObject.AddComponent<CapsuleCollider>();
-            temp.height = 1.1f;
-            temp.radius = 0.5f;
                 
             for (int i = 0; i < scripts.Length; i++)
             {

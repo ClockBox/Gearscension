@@ -37,24 +37,29 @@ public class AmountCondition : AreaCondition
 
     public override bool CheckCondition()
     {
+        center = transform.position +
+               transform.right * triggerArea.center.x +
+               transform.up * triggerArea.center.y +
+               transform.forward * triggerArea.center.z;
+
         numOfObjects = 0;
 
         // - Find Types -
         if (typeOfFind == FindType.Tag)
         {
-            cols = Physics.OverlapBox(transform.position + triggerArea.center, triggerArea.extents, transform.rotation);
+            cols = Physics.OverlapBox(center, triggerArea.extents, transform.rotation);
             for (int i = 0; i < cols.Length; i++)
                 numOfObjects += cols[i].tag == checkTag ? 1 : 0;
         }
 
         else if (typeOfFind == FindType.Layer)
         {
-            cols = Physics.OverlapBox(transform.position + triggerArea.center, triggerArea.extents, Quaternion.identity, layer << 8);
+            cols = Physics.OverlapBox(center, triggerArea.extents, Quaternion.identity, layer << 8);
             numOfObjects = cols.Length;
         }
         else if (typeOfFind == FindType.ByType && typeTemplate != null)
         {
-            cols = Physics.OverlapBox(transform.position + triggerArea.center, triggerArea.extents, transform.rotation);
+            cols = Physics.OverlapBox(center, triggerArea.extents, transform.rotation);
             for (int i = 0; i < cols.Length; i++)
                 numOfObjects += cols[i].GetComponentsInChildren(typeTemplate.GetType()).Length;
         }

@@ -2,62 +2,94 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum ForceType
+{
+    Magnetic,
+    Explosive
+}
+
 public class ForceArea : MonoBehaviour
 {
-	public float pushRadius;
+    public ForceType type;
 	public float pushForce;
     public float lifeTime;
     public bool applyConstantForce;
 
-    private Rigidbody tempRB;
-    private float elapsedTime = 0.5f;
+    private SphereCollider AreaCheck;
 
-    private ChandelierTrap cT;
-
-    void Start()
+    void Awake()
     {
+        AreaCheck = GetComponent<SphereCollider>();
         Destroy(gameObject, lifeTime);
-
-        if (!applyConstantForce)
-            ApplyForce();
     }
 
-    void FixedUpdate()
+    void ApplyForce(Collider refObject)
     {
-        if (applyConstantForce && elapsedTime >= 0.5f)
-            ApplyForce();
-        else elapsedTime += Time.deltaTime;
+        Rigidbody tempRB;
+        tempRB = refObject.attachedRigidbody;
+        if (refObject.isTrigger && tempRB)
+            tempRB.AddExplosionForce(pushForce, transform.position, AreaCheck.radius);
     }
 
-    void ApplyForce()
+    private void AffectObject(Collider refObject)
     {
-        Collider[] cols;
-        cols = Physics.OverlapSphere(transform.position, pushRadius, LayerMask.GetMask("Debris", "Character"));
-        for (int i = 0; i < cols.Length; i++)
+        if (refObject.tag == ("Chandelier"))
         {
-            if (cols[i].tag == ("Chandelier"))
-            {
-                cT = cols[i].GetComponent<ChandelierTrap>();
+            ChandelierTrap cT;
+            if(cT = refObject.GetComponent<ChandelierTrap>())
                 cT.DropChandelier();
-            }
+        }
 
-            tempRB = cols[i].attachedRigidbody;
-            if (!cols[i].isTrigger && tempRB)
-            {
-                //tempRB.isKinematic = false;
-                tempRB.AddExplosionForce(pushForce, transform.position, pushRadius);
-            }
-            if (cols[i].gameObject == GameManager.Player)
-                PlayerState.grounded = false;
-
+        else if (refObject.tag == ("Enemy"))
+        {
             AIStateManager temp;
-            if (temp = cols[i].GetComponent<AIStateManager>())
-                temp.TakeDamage(5);
+            if (temp = refObject.GetComponent<AIStateManager>())
+            {
+                if (type == ForceType.Explosive)
+                    temp.TakeDamage(5);
+                else if (type == ForceType.Magnetic)
+                    temp.Magnitize();
+            }
         }
     }
+
+    private void UnaffectObject(Collider refObject)
+    {
+        if (refObject.tag == ("Enemy"))
+        {
+            AIStateManager temp;
+            if ((type == ForceType.Magnetic) && (temp = refObject.GetComponent<AIStateManager>()))
+                temp.Demagnitize();
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        AffectObject(other);
+        ApplyForce(other);
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if(applyConstantForce)
+            ApplyForce(other);
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        UnaffectObject(other);
+    }
+
+    private void OnDestroy()
+    {
+        Collider[] cols = Physics.OverlapSphere(AreaCheck.bounds.center, AreaCheck.radius);
+        for (int i = 0; i < cols.Length; i++)
+            UnaffectObject(cols[i]);
+    }
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, pushRadius);
+        Gizmos.DrawWireSphere(transform.position, AreaCheck.radius);
     } 
 }

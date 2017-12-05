@@ -21,8 +21,8 @@ public class Grenadier : AIStateManager {
 
 	public override void RangedAttack()
 	{
-		
-		if (!callOnce) {
+		if (!callOnce)
+        {
 			choice = UnityEngine.Random.Range(0, 3);
 			shotFrequency = shotInterval;
 			switch (choice) {
@@ -47,7 +47,6 @@ public class Grenadier : AIStateManager {
 			shotFrequency = 0;
 		}
 		shotFrequency += Time.deltaTime;
-
 	}
 	public override void MeleeAttack()
 	{
@@ -56,7 +55,6 @@ public class Grenadier : AIStateManager {
 			pathAgent.enabled = false;
 			GetComponent<Rigidbody>().isKinematic = false;
 			GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation;
-
 
 			LayerMask mask = LayerMask.GetMask("Character");
 			mask = ~mask;
@@ -71,12 +69,11 @@ public class Grenadier : AIStateManager {
 			RaycastHit hit2;
 			if (Physics.Raycast(gunPoint.position, transform.TransformDirection(Vector3.back), out hit2, Mathf.Infinity, mask))
 			{
-				if (Vector3.Distance(hit2.transform.position, transform.position) > Vector3.Distance(hit.transform.position, transform.position))
+				if (Vector3.Distance(hit2.transform.position, transform.position) > Vector3.Distance(hopTarget, transform.position))
 				{
 					hopDirection = transform.forward * -1;
 					hopTarget = hit2.transform.position;
 				}
-				
 			}
 
 			RaycastHit hit3;
@@ -87,7 +84,6 @@ public class Grenadier : AIStateManager {
 					hopDirection = transform.right;
 					hopTarget = hit3.transform.position;
 				}
-
 			}
 
 			RaycastHit hit4;
@@ -98,18 +94,12 @@ public class Grenadier : AIStateManager {
 					hopDirection = transform.right*-1;
 					hopTarget = hit3.transform.position;
 				}
-
 			}
 			GetComponent<Rigidbody>().AddForce(hopDirection * 450);
 			GetComponent<Rigidbody>().AddForce(transform.up * 550);
 			callOnce = true;
 		}
-		
-
 	}
-
-
-	
 
 	private Vector3 CalculateVelocityArc(float angle, Vector3 displacement)
 	{
@@ -121,9 +111,5 @@ public class Grenadier : AIStateManager {
 		horizontalDistance += height / Mathf.Tan(angleRad);
 		float velocityStart = Mathf.Sqrt(horizontalDistance * Physics.gravity.magnitude / Mathf.Sin(2 * angleRad));
 		return velocityStart * displacement.normalized;
-
 	}
-
-
-
 }

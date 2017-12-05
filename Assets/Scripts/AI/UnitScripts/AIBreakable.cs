@@ -22,7 +22,6 @@ public class AIBreakable : MonoBehaviour
 			{
 				if (gameObject.transform.parent.GetComponent<AIStateManager>())
 					gameObject.transform.parent.GetComponent<AIStateManager>().Stun();
-
 				Breaks();
 			}
 		}
@@ -54,15 +53,21 @@ public class AIBreakable : MonoBehaviour
             {
                 Collider[] temp = BreakingPieces[i].GetComponents<Collider>();
                 if (temp.Length > 0)
+                {
                     for (int t = 0; t < temp.Length; t++)
-                        temp[t].enabled = false;
+                        temp[t].enabled = true;
+                }
                 else BreakingPieces[i].AddComponent<BoxCollider>();
 
-                if (!BreakingPieces[i].GetComponent<Rigidbody>())
-                    BreakingPieces[i].AddComponent<Rigidbody>();
+                Rigidbody tempRB;
+                if ((tempRB = BreakingPieces[i].GetComponent<Rigidbody>()))
+                    tempRB.isKinematic = false;
+                else BreakingPieces[i].AddComponent<Rigidbody>();
 
-                BreakingPieces[i].transform.parent = null;
-                Destroy(BreakingPieces[i].gameObject, Random.Range(8, 10));
+                BreakingPieces[i].gameObject.SetActive(false);
+                //this Breaks the soldier
+                //BreakingPieces[i].transform.parent = null;
+                //Destroy(BreakingPieces[i].gameObject, Random.Range(8, 10));
             }
 
             for (int i = 0; i < DestroyPieces.Length; i++)
@@ -71,14 +76,8 @@ public class AIBreakable : MonoBehaviour
             transform.parent = null;
             for (int i = 0; i < transform.childCount; i++)
                 transform.GetChild(i).parent = null;
-
-            GetComponent<BoxCollider>().enabled = true;
-			GetComponent<Rigidbody>().useGravity = true;
-			GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
-			GetComponent<Rigidbody>().AddForce(new Vector3(1,5,0), ForceMode.Impulse);
+            
 			destroyed = true;
-            Destroy(gameObject, Random.Range(8, 10));
 		}
-
 	}
 }

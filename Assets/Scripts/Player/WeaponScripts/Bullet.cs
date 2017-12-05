@@ -31,8 +31,6 @@ public class Bullet : MonoBehaviour
 
     GameObject SpawnEffectArea()
     {
-        GameObject newEffect = Instantiate(effectPrefab, transform.position, transform.rotation);
-        newEffect.transform.localScale = transform.localScale;
-        return newEffect;
+        return Instantiate(effectPrefab, transform.position, transform.rotation);
     }
 }

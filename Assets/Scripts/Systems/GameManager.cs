@@ -99,8 +99,6 @@ public class GameManager : MonoBehaviour
 
         if (!Player && SceneManager.GetActiveScene().buildIndex > 3)
             SpawnPlayer();
-
-
     }
 
     private void Start()
@@ -143,7 +141,7 @@ public class GameManager : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.F7))
             LoadScene("Floor_3");
         else if (Input.GetKeyDown(KeyCode.F8))
-            LoadScene("Floor_4");
+            LoadScene("BossFloor");
 
         if(SceneManager.GetActiveScene().name == mainMenuScene)
         {
@@ -229,8 +227,9 @@ public class GameManager : MonoBehaviour
 
     #region Player Managment
     private void SpawnPlayer()
-    {   
+    {
         Player = Instantiate(playerPrefab, LevelSpawn.position, LevelSpawn.rotation).GetComponent<PlayerController>();
+        Debug.Log("SpawnPlayer", Player);
     }
 
     public void RespawnPlayer()
@@ -272,7 +271,10 @@ public class GameManager : MonoBehaviour
 
     public void Continue()
     {
-        LoadScene(PlayerPrefs.GetInt("ContinueScene"));
+        int sceneIndex = PlayerPrefs.GetInt("ContinueScene");
+        LoadScene(sceneIndex);
+        if (sceneIndex > 5 && !SceneManager.GetSceneByName(elevatorScene).isLoaded)
+            AddScene(elevatorScene);
     }
 
     public void AddNextFloor()
@@ -292,7 +294,7 @@ public class GameManager : MonoBehaviour
 
     public void AddScene(string name)
     {
-        Debug.Log(name);
+        Debug.Log("GameManager:AddScene", this);
         SceneManager.LoadSceneAsync(name, LoadSceneMode.Additive);
     }
     public void AddScene(int index)
@@ -345,6 +347,7 @@ public class GameManager : MonoBehaviour
             pause = false;
             ToggleCursor(true);
             Time.timeScale = 1;
+            Debug.Log("Hud Destroy");
             if(player) Destroy(player.gameObject);
         }
     }
