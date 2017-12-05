@@ -235,6 +235,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
+            Debug.Log("Here");
             StopAllCoroutines();
             DestroyImmediate(gameObject);
         }
@@ -249,6 +250,11 @@ public class PlayerController : MonoBehaviour
 
         m_SFX = transform.GetChild(2).GetComponent<AudioSource>();
         m_Voice = transform.GetChild(3).GetComponent<AudioSource>();
+    }
+
+    private void OnDestroy()
+    {
+        Debug.Log("Player Destroyed");
     }
 
     private void Start ()

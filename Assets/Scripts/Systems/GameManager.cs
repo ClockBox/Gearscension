@@ -347,6 +347,7 @@ public class GameManager : MonoBehaviour
             pause = false;
             ToggleCursor(true);
             Time.timeScale = 1;
+            Debug.Log("Hud Destroy");
             if(player) Destroy(player.gameObject);
         }
     }
