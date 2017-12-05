@@ -86,26 +86,15 @@ public class ClimbState : PlayerState
             Player.transform.localEulerAngles = new Vector3(0, Player.transform.localEulerAngles.y, Player.transform.localEulerAngles.z);
             elapsedTime = 0;
             anim.SetBool("climbing", false);
-            
-            elapsedTime = 1;
-            while (elapsedTime >= 0)
-            {
-                elapsedTime -= Time.deltaTime * 8;
 
-                IK.RightHand.weight = elapsedTime;
-                IK.LeftHand.weight = elapsedTime;
-                IK.RightFoot.weight = elapsedTime * braced;
-                IK.LeftFoot.weight = elapsedTime * braced;
-
-                yield return null;
-            }
+            IK.GlobalWeight = 0;
         }
     }
 
     //State Behaviour
     protected override IEnumerator HandleInput()
     {
-        if (!currentNodes[0].Active && !currentNodes[1].Active)
+        if ((!currentNodes[0] && !currentNodes[1]) || (!currentNodes[0].Active && !currentNodes[1].Active))
             stateManager.ChangeState(new UnequipedState(stateManager, false));
 
         //Jump Input - While Stationary
@@ -114,9 +103,6 @@ public class ClimbState : PlayerState
 
         else if (currentNodes[0] == currentNodes[1] && (Input.GetButtonDown("Equip") || Input.GetButtonDown("Attack") || Player.RightTrigger.Down))
             stateManager.ChangeState(new HookState(stateManager, currentNodes[0]));
-
-        else if (!currentNodes[0] && !currentNodes[1])
-            stateManager.ChangeState(new UnequipedState(stateManager, false));
 
         else
         {

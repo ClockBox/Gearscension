@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour
 
     private float elapsedTime = 0;
     private float HookRange = 15;
-
+    private CinemachineController cC;
     // Audio
     private AudioSource m_SFX;
     private AudioSource m_Voice;
@@ -37,7 +37,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField, Range(-1,3)]
     private int gunUpgrade = -1;
     private int[] ammoAmounts = new int[4];
-    private int ammoType = 0;
+    private static int ammoType = 0;
 
     const int GUN = 0;
     const int SWORD = 1;
@@ -137,6 +137,7 @@ public class PlayerController : MonoBehaviour
     {
         GameManager.Player.weapons[0].gameObject.SetActive(true);
         GameManager.Player.gunUpgrade = upgrade;
+        ammoType = upgrade;
         GameManager.Hud.BulletUpgrade();
     }
 
@@ -233,18 +234,21 @@ public class PlayerController : MonoBehaviour
 
     private void Start ()
     {
+        cC = GetComponent<CinemachineController>();
         //Initialize states
         m_stateM.State = new UnequipedState(m_stateM, true);
 
         //Start states
         m_stateM.StartState(m_stateM.State);
     }
+
     private void Update()
     {
         if (Input.GetButtonDown("Cowbell"))
         {
             GameManager.Instance.AudioManager.AudioPlayer = SFX;
             GameManager.Instance.AudioManager.playAudio("sfxcowbell");
+            GameManager.Hud.Achivement("Ring The Bell");
         }
 
         if (_damageImmune > 0)
@@ -285,5 +289,16 @@ public class PlayerController : MonoBehaviour
             ammoType = (ammoType + ammoAxis.RawValue) % 4;
             if (ammoType < 0) ammoType += 4;
         }
+    }
+
+    public void PausePlayer()
+    {
+        RB.velocity = Vector3.zero;
+        StateM.State.InTransition = true;
+    }
+
+    public void UnPausePlayer()
+    {
+        StateM.State.InTransition = false;
     }
 }

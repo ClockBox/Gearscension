@@ -9,6 +9,7 @@ public class EnemySpawner : MonoBehaviour
     public Transform spawnPoint;
 
     public float spawnforce;
+    public float spawnDelay;
     public float activationDelay;
 
     private Animator anim;
@@ -21,20 +22,23 @@ public class EnemySpawner : MonoBehaviour
 
     public void SpawnEnemy()
     {
-        if (canSpawn)
-        {
-            canSpawn = false;
-            anim.SetTrigger("Open");
-            var temp = Instantiate(enemyPrefab, spawnPoint.transform.position, spawnPoint.transform.rotation);
-            Debug.Log(temp.name, temp);
-            temp.tag = "Enemy";
-            var enemy = new ComponentContainer(temp);
-            enemy.Deactivate();
-            enemy.rb.isKinematic = false;
-            enemy.rb.AddForce(enemy.rb.mass * spawnPoint.transform.forward * spawnforce, ForceMode.Impulse);
+        if (canSpawn) StartCoroutine(SpawnAfterDelay());
+    }
 
-            StartCoroutine(TurnOnEnemy(enemy));
-        }
+    private IEnumerator SpawnAfterDelay()
+    {
+        canSpawn = false;
+        yield return new WaitForSeconds(spawnDelay);
+
+        anim.SetTrigger("Open");
+        var temp = Instantiate(enemyPrefab, spawnPoint.transform.position, spawnPoint.transform.rotation);
+        temp.tag = "Enemy";
+        var enemy = new ComponentContainer(temp);
+        enemy.Deactivate();
+        enemy.rb.isKinematic = false;
+        enemy.rb.AddForce(enemy.rb.mass * spawnPoint.transform.forward * spawnforce, ForceMode.Impulse);
+
+        StartCoroutine(TurnOnEnemy(enemy));
     }
 
     private IEnumerator TurnOnEnemy(ComponentContainer enemy)

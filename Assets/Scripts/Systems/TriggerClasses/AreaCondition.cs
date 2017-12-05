@@ -12,7 +12,7 @@ public class AreaCondition : Condition
     public Bounds triggerArea = new Bounds(Vector3.zero, Vector3.one * 2);
     protected Collider[] cols;
 
-    private Vector3 center;
+    protected Vector3 center;
 
     public override bool CheckCondition()
     {
@@ -23,7 +23,6 @@ public class AreaCondition : Condition
 
         if (UsePlayer && GameManager.Player)
             checkObject = GameManager.Player.gameObject;
-        else return false;
 
         if (checkObject)
         {

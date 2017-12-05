@@ -10,7 +10,7 @@ public class CinemachineController : MonoBehaviour
     private float radius;
     [SerializeField]
     private GameObject cameraPivot;
-    private CinemachineFreeLook freelook;
+    public CinemachineFreeLook freelook;
     private CinemachineVirtualCamera topRig;
     private CinemachineVirtualCamera middleRig;
     private CinemachineVirtualCamera bottomRig;
@@ -39,57 +39,62 @@ public class CinemachineController : MonoBehaviour
         if (freelook == null)
         {
             freelook = new GameObject("Freelook").AddComponent<CinemachineFreeLook>();
-            freelook.m_LookAt = GameManager.Player.transform;
+            freelook.m_LookAt = cameraPivot.transform;
             freelook.m_Follow = GameManager.Player.transform;
             freelook.m_Priority = 11;
+
+            freelook.m_Lens.FieldOfView = 50;
+            freelook.m_Lens.NearClipPlane = 0.01f;
+
+            freelook.m_YAxis.m_MaxSpeed = 3;
+            freelook.m_YAxis.m_AccelTime = 1;
+            freelook.m_YAxis.m_DecelTime = 1;
+
+            freelook.m_Orbits[0].m_Height = 3.5f;
+            freelook.m_Orbits[1].m_Height = 2.4f;
+            freelook.m_Orbits[2].m_Height = 0.7f;
+
+            freelook.m_Orbits[0].m_Radius = 1.75f;
+            freelook.m_Orbits[1].m_Radius = 2.5f;
+            freelook.m_Orbits[2].m_Radius = 2f;
+
+            if (Input.GetJoystickNames().Length > 0)
+                freelook.m_XAxis.m_MaxSpeed = 150f;
+            else
+                freelook.m_XAxis.m_MaxSpeed = 200;
+            
+            topRig = freelook.GetRig(0);
+            middleRig = freelook.GetRig(1);
+            bottomRig = freelook.GetRig(2);
+
+            topComposer = topRig.GetCinemachineComponent<CinemachineComposer>();
+            middleComposer = middleRig.GetCinemachineComponent<CinemachineComposer>();
+            bottomComposer = bottomRig.GetCinemachineComponent<CinemachineComposer>();
+
+            topComposer.m_DeadZoneHeight = 0;
+            middleComposer.m_DeadZoneHeight = 0;
+            bottomComposer.m_DeadZoneHeight = 0;
+
+            topComposer.m_DeadZoneWidth = 0;
+            middleComposer.m_DeadZoneWidth = 0;
+            bottomComposer.m_DeadZoneWidth = 0;
+            
+            topComposer.m_TrackedObjectOffset = new Vector3(0, 0, 0);
+            middleComposer.m_TrackedObjectOffset = new Vector3(0, -0.3f, 0);
+            bottomComposer.m_TrackedObjectOffset = new Vector3(0, 0, 0);
+
+            topRigTransposer = topRig.GetCinemachineComponent<CinemachineOrbitalTransposer>();
+            middleRigTransposer = middleRig.GetCinemachineComponent<CinemachineOrbitalTransposer>();
+            bottomRigTransposer = bottomRig.GetCinemachineComponent<CinemachineOrbitalTransposer>();
+
+            cC = freelook.gameObject.AddComponent<CinemachineCollider>();
+            cC.m_MinimumDistanceFromTarget = 0.1f;
+            cC.m_Strategy = CinemachineCollider.ResolutionStrategy.PullCameraForward;
         }
+    }
 
-        freelook.m_YAxis.m_MaxSpeed = 4;
-        freelook.m_YAxis.m_AccelTime = 1;
-        freelook.m_YAxis.m_DecelTime = 1;
-
-        if (Input.GetJoystickNames().Length > 0)
-            freelook.m_XAxis.m_MaxSpeed = 15000f;
-        else
-            freelook.m_XAxis.m_MaxSpeed = 500;
-       
-        freelook.m_LookAt = cameraPivot.transform;
-        freelook.m_Follow = GameManager.Player.transform;
-        freelook.m_Priority = 11;
-        
-        topRig = freelook.GetRig(0);
-        middleRig = freelook.GetRig(1);
-        bottomRig = freelook.GetRig(2);
-
-        topRig.LookAt = GameManager.Player.transform;
-        middleRig.LookAt = cameraPivot.transform;
-        bottomRig.LookAt = cameraPivot.transform;
-
-        topRig.m_Lens.FieldOfView = 50f;
-        middleRig.m_Lens.FieldOfView = 50f;
-        bottomRig.m_Lens.FieldOfView = 50f;
-
-        topComposer = topRig.GetCinemachineComponent<CinemachineComposer>();
-        middleComposer = middleRig.GetCinemachineComponent<CinemachineComposer>();
-        bottomComposer = bottomRig.GetCinemachineComponent<CinemachineComposer>();
-
-        topComposer.m_TrackedObjectOffset = new Vector3(0, 2f, 0);
-        middleComposer.m_TrackedObjectOffset = new Vector3(0, -0.5f, 0);
-        bottomComposer.m_TrackedObjectOffset = new Vector3(0, -1f, 0);
-
-        topRigTransposer = topRig.GetCinemachineComponent<CinemachineOrbitalTransposer>();
-        middleRigTransposer = middleRig.GetCinemachineComponent<CinemachineOrbitalTransposer>();
-        bottomRigTransposer = bottomRig.GetCinemachineComponent<CinemachineOrbitalTransposer>();
-        
-        //topRigTransposer.m_Radius = 1.8f;
-        //middleRigTransposer.m_Radius = 3.4f;
-        //bottomRigTransposer.m_Radius = 1.8f;
-
-        //topRigTransposer.m_HeightOffset = 3.95f;
-        //middleRigTransposer.m_HeightOffset = 2.4f;
-        //bottomRigTransposer.m_HeightOffset = 0.4f;
-        
-        cC = freelook.gameObject.AddComponent<CinemachineCollider>();
-        cC.m_MinimumDistanceFromTarget = 0.5f;
+    private void Update()
+    {
+        freelook.m_XAxis.Value += Input.GetAxisRaw("Horizontal");
     }
 }

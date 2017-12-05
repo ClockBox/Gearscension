@@ -1,0 +1,156 @@
+fileFormatVersion: 2
+guid: 0428599dd5c94174d974f53e2785c9fc
+timeCreated: 1511998092
+licenseType: Pro
+ModelImporter:
+  serializedVersion: 21
+  fileIDToRecycleName:
+    100000: Distilling_a_low
+    100002: Distilling_b_low
+    100004: Distilling_c_low
+    100006: Distilling_d_low
+    100008: //RootNode
+    100010: gear_A
+    100012: gear_B
+    100014: gear_C
+    100016: gear_D
+    100018: gear_E
+    100020: gear_F
+    100022: gear_G
+    100024: gear_H
+    100026: gear_I
+    100028: gear_J
+    400000: Distilling_a_low
+    400002: Distilling_b_low
+    400004: Distilling_c_low
+    400006: Distilling_d_low
+    400008: //RootNode
+    400010: gear_A
+    400012: gear_B
+    400014: gear_C
+    400016: gear_D
+    400018: gear_E
+    400020: gear_F
+    400022: gear_G
+    400024: gear_H
+    400026: gear_I
+    400028: gear_J
+    2300000: Distilling_a_low
+    2300002: Distilling_b_low
+    2300004: Distilling_c_low
+    2300006: Distilling_d_low
+    2300008: gear_A
+    2300010: gear_B
+    2300012: gear_C
+    2300014: gear_D
+    2300016: gear_E
+    2300018: gear_F
+    2300020: gear_G
+    2300022: gear_H
+    2300024: gear_I
+    2300026: gear_J
+    3300000: Distilling_a_low
+    3300002: Distilling_b_low
+    3300004: Distilling_c_low
+    3300006: Distilling_d_low
+    3300008: gear_A
+    3300010: gear_B
+    3300012: gear_C
+    3300014: gear_D
+    3300016: gear_E
+    3300018: gear_F
+    3300020: gear_G
+    3300022: gear_H
+    3300024: gear_I
+    3300026: gear_J
+    4300000: Distilling_a_low
+    4300002: gear_A
+    4300004: gear_D
+    4300006: gear_B
+    4300008: gear_C
+    4300010: gear_E
+    4300012: gear_F
+    4300014: gear_G
+    4300016: gear_H
+    4300018: Distilling_b_low
+    4300020: Distilling_c_low
+    4300022: Distilling_d_low
+    4300024: gear_I
+    4300026: gear_J
+    7400000: Take 001
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

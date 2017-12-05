@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 
 public class Soldier : AIStateManager {
 
 
 	public Transform gunPoint;
+    public Collider HandCollider;
 	public Rigidbody bulletPrefab;
 	public float bulletSpeed;
 	public float shotInterval;
@@ -50,29 +52,37 @@ public class Soldier : AIStateManager {
 		{
 			attackFrequency = attackInterval;
 			callOnce = true;
-
 		}
+
+        if (!player)
+            return;
 
 		if (attackFrequency >= attackInterval)
 		{
 			if (Vector3.Distance(transform.position, player.transform.position)>5f) 
-				{
-					pathAgent.speed = 8;
-				}
+			{
+				pathAgent.speed = 8;
+			}
 
-				pathAgent.destination=player.transform.position;
+			pathAgent.destination=player.transform.position;
 			if (Vector3.Distance(transform.position, player.transform.position) <= meleeRange)
 			{
 				anim.SetTrigger("Attack");
 				fireBurster.GetComponent<ParticleSystem>().Emit(2);
-				player.gameObject.SendMessage("TakeDamage", meleeDamage, SendMessageOptions.DontRequireReceiver);
-			}
+                StartCoroutine(ToggleHandCollider(0.5f, true));
+                //player.gameObject.SendMessage("TakeDamage", meleeDamage, SendMessageOptions.DontRequireReceiver);
+            }
 			attackFrequency = 0;
 		}
 		attackFrequency += Time.deltaTime;
+        StartCoroutine(ToggleHandCollider(3));
+    }
 
-	}
-
+    private IEnumerator ToggleHandCollider(float waitTime,bool enabled = false)
+    {
+        yield return new WaitForSeconds(waitTime);
+        HandCollider.enabled = enabled;
+    } 
 	
 
 	public override void StartEvents() {

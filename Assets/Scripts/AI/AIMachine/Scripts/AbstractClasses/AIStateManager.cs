@@ -105,7 +105,7 @@ public abstract class AIStateManager : MonoBehaviour  {
 					temp[i].constraints = RigidbodyConstraints.None;
 					temp[i].transform.parent = null;
 					temp[i].GetComponent<Collider>().enabled = true;
-
+                    Destroy(temp[i], UnityEngine.Random.Range(8, 10));
 				}
 			}
 
