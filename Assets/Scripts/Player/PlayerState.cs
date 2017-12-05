@@ -56,11 +56,14 @@ public class PlayerState
             while (GameManager.Instance.Pause)
                 yield return null;
 
-            UpdateMovement();
-            UpdateAnimator();
-            UpdateIK();
+            if (!Player.Paused)
+            {
+                UpdateMovement();
+                UpdateAnimator();
+                UpdateIK();
+            }
 
-            if (!inTransition)
+            if (!inTransition || Player.Paused)
                 yield return stateManager.StartCoroutine(HandleInput());
             else
                 yield return null;

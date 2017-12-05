@@ -99,8 +99,6 @@ public class GameManager : MonoBehaviour
 
         if (!Player && SceneManager.GetActiveScene().buildIndex > 3)
             SpawnPlayer();
-
-
     }
 
     private void Start()
@@ -229,8 +227,9 @@ public class GameManager : MonoBehaviour
 
     #region Player Managment
     private void SpawnPlayer()
-    {   
+    {
         Player = Instantiate(playerPrefab, LevelSpawn.position, LevelSpawn.rotation).GetComponent<PlayerController>();
+        Debug.Log("SpawnPlayer", Player);
     }
 
     public void RespawnPlayer()
@@ -295,6 +294,7 @@ public class GameManager : MonoBehaviour
 
     public void AddScene(string name)
     {
+        Debug.Log("GameManager:AddScene", this);
         SceneManager.LoadSceneAsync(name, LoadSceneMode.Additive);
     }
     public void AddScene(int index)

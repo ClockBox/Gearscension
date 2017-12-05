@@ -41,8 +41,13 @@ public class HookState : ClimbState
         else if (Input.GetButtonDown("Jump"))
             Jump();
 
-        else if (!currentNodes[0] && !currentNodes[1])
+        else if ((!currentNodes[0] && !currentNodes[1])
+            || (!currentNodes[0].Active && !currentNodes[1].Active)
+            || (!currentNodes[0].gameObject.activeInHierarchy && !currentNodes[1].gameObject.activeInHierarchy))
+        {
+            InTransition = true;
             stateManager.ChangeState(new UnequipedState(stateManager, false));
+        }
 
         else if (Input.GetButtonDown("Equip"))
         {
@@ -131,7 +136,9 @@ public class HookState : ClimbState
         elapsedTime = 0;
         while (elapsedTime < 0.5f)
         {
-            if (!currentNodes[0] && !currentNodes[1])
+            if ((!currentNodes[0] && !currentNodes[1])
+            || (!currentNodes[0].Active && !currentNodes[1].Active)
+            || (!currentNodes[0].gameObject.activeInHierarchy && !currentNodes[1].gameObject.activeInHierarchy))
                 break;
             UpdateIK();
             UpdateMovement();

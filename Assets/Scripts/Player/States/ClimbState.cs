@@ -94,7 +94,9 @@ public class ClimbState : PlayerState
     //State Behaviour
     protected override IEnumerator HandleInput()
     {
-        if ((!currentNodes[0] && !currentNodes[1]) || (!currentNodes[0].Active && !currentNodes[1].Active))
+        if ((!currentNodes[0] && !currentNodes[1]) 
+            || (!currentNodes[0].Active && !currentNodes[1].Active) 
+            || (!currentNodes[0].gameObject.activeInHierarchy && !currentNodes[1].gameObject.activeInHierarchy))
             stateManager.ChangeState(new UnequipedState(stateManager, false));
 
         //Jump Input - While Stationary

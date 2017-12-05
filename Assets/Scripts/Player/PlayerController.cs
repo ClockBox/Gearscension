@@ -14,6 +14,8 @@ public class PlayerController : MonoBehaviour
     private static Animator m_anim;
     private static Rigidbody m_rb;
 
+    private static bool m_paused;
+
     public GameObject Ragdoll;
 
     private float elapsedTime = 0;
@@ -73,6 +75,20 @@ public class PlayerController : MonoBehaviour
         set { m_anim = value; }
     }
 
+    public bool Paused
+    {
+        get { return m_paused; }
+    }
+    public void PausePlayer()
+    {
+        RB.velocity = Vector3.zero;
+        m_paused = true;
+    }
+    public void UnPausePlayer()
+    {
+        m_paused = false;
+    }
+
     public AudioSource SFX
     {
         get { return m_SFX; }
@@ -108,7 +124,7 @@ public class PlayerController : MonoBehaviour
         get { return gunUpgrade; }
     }
     
-    public InputAxis RightTrigger
+    public InputAxis RightTrigger 
     {
         get { return rightTriggerState; }
     }
@@ -169,6 +185,7 @@ public class PlayerController : MonoBehaviour
         if (_damageImmune <= 0)
         {
             _damageImmune = 0.5f;
+            elapsedTime = 0;
 
             if (_currentArmor > 0)
                 _currentArmor--;
@@ -177,6 +194,7 @@ public class PlayerController : MonoBehaviour
 
             if (Health <= 0)
                 Die();
+            Debug.Log("Health: " + _currentHealth + "  Armour: " + _currentArmor);
         }
     }
     private void RechargeArmor()
@@ -188,6 +206,7 @@ public class PlayerController : MonoBehaviour
             {
                 _currentArmor++;
                 elapsedTime = 0;
+                Debug.Log("ArmourRegen: " + _currentArmor);
             }
         }
     }
@@ -235,10 +254,10 @@ public class PlayerController : MonoBehaviour
     private void Start ()
     {
         cC = GetComponent<CinemachineController>();
-        //Initialize states
-        m_stateM.State = new UnequipedState(m_stateM, true);
 
-        //Start states
+        Debug.Log("Player Start", this);
+        //Initialize state Machine
+        m_stateM.State = new UnequipedState(m_stateM, true);
         m_stateM.StartState(m_stateM.State);
     }
 
@@ -289,16 +308,5 @@ public class PlayerController : MonoBehaviour
             ammoType = (ammoType + ammoAxis.RawValue) % 4;
             if (ammoType < 0) ammoType += 4;
         }
-    }
-
-    public void PausePlayer()
-    {
-        RB.velocity = Vector3.zero;
-        StateM.State.InTransition = true;
-    }
-
-    public void UnPausePlayer()
-    {
-        StateM.State.InTransition = false;
     }
 }
