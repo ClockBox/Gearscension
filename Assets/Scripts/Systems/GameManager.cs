@@ -279,8 +279,13 @@ public class GameManager : MonoBehaviour
 
     public void AddNextFloor()
     {
-        UnloadScene(SceneManager.GetSceneByBuildIndex(currentFloor));
-        AddScene(currentFloor + 1);
+        StartCoroutine(NextFloor());
+    }
+
+    private IEnumerator NextFloor()
+    {
+        yield return SceneManager.UnloadSceneAsync(currentFloor);
+        yield return SceneManager.LoadSceneAsync(currentFloor + 1, LoadSceneMode.Additive);
     }
 
     public void LoadScene(string name)
