@@ -12,7 +12,13 @@ public class RangedAction : AIActions {
 
 	private void Ranged(AIStateManager manager)
 	{
-		manager.transform.LookAt(manager.player.transform);
+        if (!manager.player)
+            return;
+
+        Vector3 flatLookDirection = manager.player.transform.position;
+        flatLookDirection.y = manager.transform.position.y;
+
+        manager.transform.LookAt(flatLookDirection);
 		manager.RangedAttack();
 	}
 }

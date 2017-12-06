@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AICrystal : MonoBehaviour {
+public class AICrystal : MonoBehaviour
+{
 	private bool destroyed = false;
+
 	public void TakeDamage(float damage)
 	{
 		if (damage > 0 && !destroyed)
@@ -11,6 +13,7 @@ public class AICrystal : MonoBehaviour {
 			Debug.Log("crystal damaged");
 			gameObject.GetComponentInParent <AIStateManager>().Die();
 			destroyed = true;
+            Destroy(gameObject);
 		}
 	}
 
@@ -18,7 +21,6 @@ public class AICrystal : MonoBehaviour {
 	{
 		if (other.CompareTag("Sword"))
 		{
-			
 			TakeDamage(5f);
 		}
 	}

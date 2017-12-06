@@ -5,7 +5,8 @@ using UnityEngine.AI;
 using UnityEngine;
 
 
-public abstract class AIStateManager : MonoBehaviour  {
+public abstract class AIStateManager : MonoBehaviour
+{
 	public Transform[] patrolPoints;
 	public Transform[] visionPoints;
 	public AIStates currentState;
@@ -16,7 +17,10 @@ public abstract class AIStateManager : MonoBehaviour  {
 	public GameObject firePrefab;
 	public Transform exhaust;
 
-	[HideInInspector]
+    public GameObject[] BreakingPieces;
+    public GameObject[] DestroyPieces;
+
+    [HideInInspector]
 	public float setFrequency;
 	[HideInInspector]
 	public Transform searchPosition;
@@ -39,16 +43,17 @@ public abstract class AIStateManager : MonoBehaviour  {
 
 	private bool isAttacked = false;
 
-
-
 	public void Start()
 	{
-		player = GameObject.FindGameObjectWithTag("Player");
+        player = GameManager.Player.gameObject;
 		stats = GetComponent<AIStats>();
 		pathAgent = GetComponent<NavMeshAgent>();
 		pathIndex = 0;
-		pathTarget = patrolPoints[pathIndex];
-		pathAgent.destination = pathTarget.position;
+        if (patrolPoints.Length > 0)
+        {
+            pathTarget = patrolPoints[pathIndex];
+            pathAgent.destination = pathTarget.position;
+        }
 		setFrequency = stats.attackFrequency;
 		isAlive = true;
 		StartEvents();
@@ -92,27 +97,43 @@ public abstract class AIStateManager : MonoBehaviour  {
 		if (isAlive)
 		{
 			GetComponent<CapsuleCollider>().enabled = false;
-			Rigidbody[] temp = GetComponentsInChildren<Rigidbody>();
-			if (temp.Length > 0)
-			{
-				for (int i = 0; i < temp.Length; i++)
-				{
-					temp[i].mass = 80;
-					temp[i].useGravity = true;
-					temp[i].constraints = RigidbodyConstraints.None;
-					temp[i].transform.parent = null;
-					temp[i].GetComponent<Collider>().enabled = true;
-
-				}
-			}
-
-			Destroy(gameObject, 1f);
+            Break();
+            Destroy(gameObject, 1f);
 			isAlive = false;
 		}
 	}
 
+    public void Break()
+    {
+        for (int i = 0; i < BreakingPieces.Length; i++)
+        {
+            Collider[] temp = BreakingPieces[i].GetComponents<Collider>();
+            if (temp.Length > 0)
+            {
+                for (int t = 0; t < temp.Length; t++)
+                    temp[t].enabled = true;
+            }
+            else BreakingPieces[i].AddComponent<BoxCollider>();
 
-	public void Alerted() {
+            Rigidbody tempRB;
+            if ((tempRB = BreakingPieces[i].GetComponent<Rigidbody>()))
+                tempRB.isKinematic = false;
+            else BreakingPieces[i].AddComponent<Rigidbody>();
+
+            BreakingPieces[i].transform.parent = null;
+            Destroy(BreakingPieces[i].gameObject, UnityEngine.Random.Range(8, 10));
+        }
+
+        for (int i = 0; i < DestroyPieces.Length; i++)
+            Destroy(DestroyPieces[i]);
+
+        transform.parent = null;
+        for (int i = 0; i < transform.childCount; i++)
+            transform.GetChild(i).parent = null;
+    }
+
+
+    public void Alerted() {
 		TransitionToState(alertedState);
 	}
 	public void OnDrawGizmos()
@@ -149,7 +170,7 @@ public abstract class AIStateManager : MonoBehaviour  {
 
 	public void Stun()
 	{
-		Debug.Log("Stunned");
+		Debug.Log(this + " was Stunned");
 		stats.armour = 0;
 		if (pathAgent.enabled)
 		{
@@ -161,7 +182,17 @@ public abstract class AIStateManager : MonoBehaviour  {
 		TransitionToState(stunState);
 	}
 
-	private void OnTriggerEnter(Collider other)
+    public void Magnitize()
+    {
+        Debug.Log(this + " was Magnitized");
+    }
+
+    public void Demagnitize()
+    {
+        Debug.Log(this + " was Demagnitize");
+    }
+
+    private void OnTriggerEnter(Collider other)
 	{
 		if (other.CompareTag("Sword")&&isAttacked==false)
 		{

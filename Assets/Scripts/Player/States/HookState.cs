@@ -41,6 +41,14 @@ public class HookState : ClimbState
         else if (Input.GetButtonDown("Jump"))
             Jump();
 
+        else if ((!currentNodes[0] && !currentNodes[1])
+            || (!currentNodes[0].Active && !currentNodes[1].Active)
+            || (!currentNodes[0].gameObject.activeInHierarchy && !currentNodes[1].gameObject.activeInHierarchy))
+        {
+            InTransition = true;
+            stateManager.ChangeState(new UnequipedState(stateManager, false));
+        }
+
         else if (Input.GetButtonDown("Equip"))
         {
             IK.RightHand.weight = 0;
@@ -63,22 +71,25 @@ public class HookState : ClimbState
     //State Actions
     private void Jump()
     {
-        anim.SetBool("climbing", false);
-        anim.SetBool("isGrounded", false);
-
-        //Wall Eject
-        if (Vector3.Dot(currentNodes[0].transform.transform.forward, lookDirection) < 0)
+        if (currentNodes[0])
         {
-            Player.transform.LookAt(Player.transform.position + lookDirection);
-            rb.velocity = Vector3.ProjectOnPlane(lookDirection.normalized, Vector3.up) * 2.5f + Player.transform.up * 2;
-        }
-        //Drop/Move allong wall
-        else
-            rb.velocity = (Player.transform.right * moveX / 2 + Vector3.up * moveY) * 5 + Vector3.up;
+            anim.SetBool("climbing", false);
+            anim.SetBool("isGrounded", false);
 
-        Player.transform.localEulerAngles = new Vector3(0, Player.transform.localEulerAngles.y, Player.transform.localEulerAngles.z);
-        canClimb = false;
-        stateManager.ChangeState(new CombatState(stateManager, false));
+            //Wall Eject
+            if (Vector3.Dot(currentNodes[0].transform.transform.forward, lookDirection) < 0)
+            {
+                Player.transform.LookAt(Player.transform.position + lookDirection);
+                rb.velocity = Vector3.ProjectOnPlane(lookDirection.normalized, Vector3.up) * 2.5f + Player.transform.up * 2;
+            }
+            //Drop/Move allong wall
+            else
+                rb.velocity = (Player.transform.right * moveX / 2 + Vector3.up * moveY) * 5 + Vector3.up;
+
+            Player.transform.localEulerAngles = new Vector3(0, Player.transform.localEulerAngles.y, Player.transform.localEulerAngles.z);
+            canClimb = false;
+            stateManager.ChangeState(new CombatState(stateManager, false));
+        }
     }
 
     private IEnumerator ToggleSword(bool Equiped)
@@ -125,6 +136,10 @@ public class HookState : ClimbState
         elapsedTime = 0;
         while (elapsedTime < 0.5f)
         {
+            if ((!currentNodes[0] && !currentNodes[1])
+            || (!currentNodes[0].Active && !currentNodes[1].Active)
+            || (!currentNodes[0].gameObject.activeInHierarchy && !currentNodes[1].gameObject.activeInHierarchy))
+                break;
             UpdateIK();
             UpdateMovement();
             UpdateAnimator();

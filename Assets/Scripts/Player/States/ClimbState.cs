@@ -86,26 +86,17 @@ public class ClimbState : PlayerState
             Player.transform.localEulerAngles = new Vector3(0, Player.transform.localEulerAngles.y, Player.transform.localEulerAngles.z);
             elapsedTime = 0;
             anim.SetBool("climbing", false);
-            
-            elapsedTime = 1;
-            while (elapsedTime >= 0)
-            {
-                elapsedTime -= Time.deltaTime * 8;
 
-                IK.RightHand.weight = elapsedTime;
-                IK.LeftHand.weight = elapsedTime;
-                IK.RightFoot.weight = elapsedTime * braced;
-                IK.LeftFoot.weight = elapsedTime * braced;
-
-                yield return null;
-            }
+            IK.GlobalWeight = 0;
         }
     }
 
     //State Behaviour
     protected override IEnumerator HandleInput()
     {
-        if (!currentNodes[0].Active && !currentNodes[1].Active)
+        if ((!currentNodes[0] && !currentNodes[1]) 
+            || (!currentNodes[0].Active && !currentNodes[1].Active) 
+            || (!currentNodes[0].gameObject.activeInHierarchy && !currentNodes[1].gameObject.activeInHierarchy))
             stateManager.ChangeState(new UnequipedState(stateManager, false));
 
         //Jump Input - While Stationary
@@ -401,16 +392,19 @@ public class ClimbState : PlayerState
     //State Updates
     protected override void UpdateMovement()
     {
-        lookDirection = Camera.main.transform.forward;
-        lookDirection = Vector3.ProjectOnPlane(lookDirection, Player.transform.up);
+        if (currentNodes[0] && currentNodes[1])
+        {
+            lookDirection = Camera.main.transform.forward;
+            lookDirection = Vector3.ProjectOnPlane(lookDirection, Player.transform.up);
 
-        //Root Position - While Stationary
-        Player.transform.position = (currentNodes[1].PlayerPosition + currentNodes[0].PlayerPosition) / 2;
+            //Root Position - While Stationary
+            Player.transform.position = (currentNodes[1].PlayerPosition + currentNodes[0].PlayerPosition) / 2;
 
-        //Root Rotation - While Stationary
-        Player.transform.rotation = Quaternion.Lerp(currentNodes[1].transform.rotation, currentNodes[0].transform.rotation, 0.5f);
-        if (braced < 0.5f)
-            Player.transform.localEulerAngles = new Vector3(0, Player.transform.localEulerAngles.y, Player.transform.localEulerAngles.z);
+            //Root Rotation - While Stationary
+            Player.transform.rotation = Quaternion.Lerp(currentNodes[1].transform.rotation, currentNodes[0].transform.rotation, 0.5f);
+            if (braced < 0.5f)
+                Player.transform.localEulerAngles = new Vector3(0, Player.transform.localEulerAngles.y, Player.transform.localEulerAngles.z);
+        }
     }
     protected override void UpdateIK()
     {

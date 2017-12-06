@@ -2,49 +2,49 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu (menuName ="AIMachine/ScriptableObjects/AIStates/AIState")]
+[CreateAssetMenu(menuName = "AIMachine/ScriptableObjects/AIStates/AIState")]
 
-public class AIStates : ScriptableObject {
+public class AIStates : ScriptableObject
+{
 
-	public AIActions[] actions;
-	public AITransitions[] transitions;
+    public AIActions[] actions;
+    public AITransitions[] transitions;
 
-	public Color sceneGizmo = Color.grey;
-
-
-	public void UpdateState(AIStateManager manager) {
-		DoActions(manager);
-		CheckTransitions(manager);
-
-	}
-
-	private void DoActions(AIStateManager manager)
-	{
-		for (int i = 0; i < actions.Length; i++)
-		{
-			actions[i].Act(manager);
-		}
-	}
-
-	private void CheckTransitions(AIStateManager manager)
-	{
-
-		for (int i = 0; i < transitions.Length; i++)
-		{
-
-			bool decisionSucceeded = transitions[i].decision.Decide(manager);
-
-			if (decisionSucceeded)
-			{
-				manager.TransitionToState(transitions[i].trueState);
-			}
-			else
-			{
-				manager.TransitionToState(transitions[i].falseState);
-			}
-		}
-
-	}
+    public Color sceneGizmo = Color.grey;
 
 
+    public void UpdateState(AIStateManager manager)
+    {
+        DoActions(manager);
+        CheckTransitions(manager);
+
+    }
+
+    private void DoActions(AIStateManager manager)
+    {
+        for (int i = 0; i < actions.Length; i++)
+        {
+            actions[i].Act(manager);
+        }
+    }
+
+    private void CheckTransitions(AIStateManager manager)
+    {
+
+        for (int i = 0; i < transitions.Length; i++)
+        {
+
+            bool decisionSucceeded = transitions[i].decision.Decide(manager);
+
+            if (decisionSucceeded)
+            {
+                manager.TransitionToState(transitions[i].trueState);
+            }
+            else
+            {
+                manager.TransitionToState(transitions[i].falseState);
+            }
+        }
+
+    }
 }

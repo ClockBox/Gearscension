@@ -24,10 +24,6 @@ public class FreezableEnemy : Freezable
 
             if (animator)
                 animator.enabled = false;
-
-            CapsuleCollider temp = iceBlock.transform.GetChild(0).gameObject.AddComponent<CapsuleCollider>();
-            temp.height = 1.1f;
-            temp.radius = 0.5f;
                 
             for (int i = 0; i < scripts.Length; i++)
             {
@@ -40,6 +36,8 @@ public class FreezableEnemy : Freezable
                 colliderBounds.attachedRigidbody.isKinematic = false;
                 colliderBounds.attachedRigidbody.velocity = Vector3.zero;
             }
+            colliderBounds.enabled = true;
+            colliderBounds.isTrigger = true;
 
             transform.parent = iceBlock.transform;
         }
@@ -50,6 +48,8 @@ public class FreezableEnemy : Freezable
         base.OnThaw();
         if (colliderBounds)
         {
+            colliderBounds.isTrigger = false;
+
             NavMeshAgent agent;
             if (agent = GetComponent<NavMeshAgent>())
                 agent.enabled = true;

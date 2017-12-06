@@ -47,7 +47,9 @@ public class CameraController : MonoBehaviour
             return;
 
         if (!camPivot)
-            camPivot = GameManager.Player.transform.GetChild(0);
+        {
+            camPivot = GameObject.FindGameObjectWithTag("Player").transform.GetChild(0);
+        }
         else
         {
             //Mouse Input

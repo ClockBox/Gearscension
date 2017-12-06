@@ -13,8 +13,8 @@ public class PlayerState
     public static bool grounded = true;
 
     private bool stopState = false;
-    private bool inTransition = false;
     protected float elapsedTime;
+    private bool inTransition = false;
     public bool InTransition
     {
         get {return inTransition; }
@@ -56,11 +56,14 @@ public class PlayerState
             while (GameManager.Instance.Pause)
                 yield return null;
 
-            UpdateMovement();
-            UpdateAnimator();
-            UpdateIK();
+            if (!Player.Paused)
+            {
+                UpdateMovement();
+                UpdateAnimator();
+                UpdateIK();
+            }
 
-            if (!inTransition)
+            if (!inTransition || Player.Paused)
                 yield return stateManager.StartCoroutine(HandleInput());
             else
                 yield return null;
@@ -79,7 +82,7 @@ public class PlayerState
 
             if (this != stateManager.State)
             {
-                Debug.LogWarning("RogueState: " + this + "\tCurrent State:" + stateManager.State);
+                Debug.LogWarning("RogueState: " + this + "\t\tCurrent State:" + stateManager.State);
                 stopState = true;
                 yield break;
             }

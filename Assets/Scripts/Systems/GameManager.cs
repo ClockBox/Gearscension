@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -17,7 +18,33 @@ public class GameManager : MonoBehaviour
 
     public GameObject playerPrefab;
     public Transform LevelSpawn;
-    private static int currentFloor;
+    private static int currentFloor = 4;
+
+    private static bool bell = false;
+    public bool bellAchivement
+    {
+        get { return bell; }
+        set { bell = value; }
+    }
+    private static bool sword = false;
+    public bool swordAchivement
+    {
+        get { return sword; }
+        set { sword = value; }
+    }
+    private static bool freeze = false;
+    public bool freezeAchivement
+    {
+        get { return freeze; }
+        set { freeze = value; }
+    }
+    private static bool sin = false;
+    public bool sinAchivement
+    {
+        get { return sin; }
+        set { sin = value; }
+    }
+    public Sprite complete;
 
     private AudioDictonary audioManager;
     public AudioDictonary AudioManager
@@ -70,7 +97,7 @@ public class GameManager : MonoBehaviour
         }
         else transform.GetChild(0).gameObject.SetActive(false);
 
-        if (!Player && SceneManager.GetActiveScene().buildIndex > 4)
+        if (!Player && SceneManager.GetActiveScene().buildIndex > 3)
             SpawnPlayer();
     }
 
@@ -114,7 +141,32 @@ public class GameManager : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.F7))
             LoadScene("Floor_3");
         else if (Input.GetKeyDown(KeyCode.F8))
-            LoadScene("Floor_4");
+            LoadScene("BossFloor");
+
+        if(SceneManager.GetActiveScene().name == mainMenuScene)
+        {
+            if(bell == true)
+            {
+                GameObject achivement = GameObject.Find("Main Menu/Background/Menu Buttons/Bonus/Bonus Panel/Ring The Bell");
+                achivement.GetComponent<Image>().sprite = complete;
+            }
+            if (sword == true)
+            {
+                GameObject achivement = GameObject.Find("Main Menu/Background/Menu Buttons/Bonus/Bonus Panel/Extended Blade");
+                achivement.GetComponent<Image>().sprite = complete;
+            }
+            if (sin == true)
+            {
+                GameObject achivement = GameObject.Find("Main Menu/Background/Menu Buttons/Bonus/Bonus Panel/Saint or Sinner");
+                achivement.GetComponent<Image>().sprite = complete;
+            }
+            if (freeze == true)
+            {
+                GameObject achivement = GameObject.Find("Main Menu/Background/Menu Buttons/Bonus/Bonus Panel/Freeze em!!");
+                achivement.GetComponent<Image>().sprite = complete;
+            }
+            else return;
+        }
     }
 
     public void OnApplicationFocus(bool focus)
@@ -122,8 +174,11 @@ public class GameManager : MonoBehaviour
         if (this != Instance)
             return;
 
-        if (!focus && !pause && !Application.isEditor)
-            AddScene(pauseMenuScene);
+        if (SceneManager.GetActiveScene().buildIndex > 4)
+        {
+            if (!focus && !pause && !Application.isEditor)
+                AddScene(pauseMenuScene);
+        }
     }
 
     public void TogglePause()
@@ -165,10 +220,16 @@ public class GameManager : MonoBehaviour
         Destroy(referenceObject);
     }
 
+    public void Achivement(string passedString)
+    {
+        hud.Achivement(passedString);
+    }
+
     #region Player Managment
     private void SpawnPlayer()
-    {   
+    {
         Player = Instantiate(playerPrefab, LevelSpawn.position, LevelSpawn.rotation).GetComponent<PlayerController>();
+        Debug.Log("SpawnPlayer", Player);
     }
 
     public void RespawnPlayer()
@@ -210,13 +271,21 @@ public class GameManager : MonoBehaviour
 
     public void Continue()
     {
-        LoadScene(PlayerPrefs.GetInt("ContinueScene"));
+        int sceneIndex = PlayerPrefs.GetInt("ContinueScene");
+        LoadScene(sceneIndex);
+        if (sceneIndex > 5 && !SceneManager.GetSceneByName(elevatorScene).isLoaded)
+            AddScene(elevatorScene);
     }
 
     public void AddNextFloor()
     {
-        UnloadScene(SceneManager.GetSceneByBuildIndex(currentFloor));
-        AddScene(currentFloor + 1);
+        StartCoroutine(NextFloor());
+    }
+
+    private IEnumerator NextFloor()
+    {
+        yield return SceneManager.UnloadSceneAsync(currentFloor);
+        yield return SceneManager.LoadSceneAsync(currentFloor + 1, LoadSceneMode.Additive);
     }
 
     public void LoadScene(string name)
@@ -230,7 +299,7 @@ public class GameManager : MonoBehaviour
 
     public void AddScene(string name)
     {
-        Debug.Log(name);
+        Debug.Log("GameManager:AddScene", this);
         SceneManager.LoadSceneAsync(name, LoadSceneMode.Additive);
     }
     public void AddScene(int index)
@@ -266,14 +335,15 @@ public class GameManager : MonoBehaviour
         {
             ToggleCursor(pause);
         }
-        else if (scene.buildIndex > 4)
+        else if (scene.buildIndex > 3)
         {
             ToggleCursor(false);
 
             if (!SceneManager.GetSceneByName(hudScene).isLoaded)
                 SceneManager.LoadScene(hudScene, LoadSceneMode.Additive);
 
-            currentFloor = scene.buildIndex;
+            if(scene.name != elevatorScene)
+                currentFloor = scene.buildIndex;
             PlayerPrefs.SetInt("ContinueScene", currentFloor);
             SceneManager.SetActiveScene(SceneManager.GetSceneByBuildIndex(currentFloor));
         }
@@ -282,6 +352,7 @@ public class GameManager : MonoBehaviour
             pause = false;
             ToggleCursor(true);
             Time.timeScale = 1;
+            Debug.Log("Hud Destroy");
             if(player) Destroy(player.gameObject);
         }
     }

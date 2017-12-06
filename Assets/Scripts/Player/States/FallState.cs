@@ -42,6 +42,7 @@ public class FallState : PlayerState
     }
     protected override void UpdatePhysics()
     {
+        rb.velocity = Vector3.up * rb.velocity.y;
         rb.AddForce(Player.transform.up * -9.81f * rb.mass);
 
         if (Physics.Raycast(Player.transform.position + (Player.transform.up * 0.5f) - (Player.transform.forward * 0.3f) - (Player.transform.right * 0.3f), -Player.transform.up, 0.6f) ||

@@ -14,11 +14,13 @@ public class PlayerController : MonoBehaviour
     private static Animator m_anim;
     private static Rigidbody m_rb;
 
+    private static bool m_paused;
+
     public GameObject Ragdoll;
 
     private float elapsedTime = 0;
     private float HookRange = 15;
-
+    private CinemachineController cC;
     // Audio
     private AudioSource m_SFX;
     private AudioSource m_Voice;
@@ -37,7 +39,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField, Range(-1,3)]
     private int gunUpgrade = -1;
     private int[] ammoAmounts = new int[4];
-    private int ammoType = 0;
+    private static int ammoType = 0;
 
     const int GUN = 0;
     const int SWORD = 1;
@@ -71,6 +73,20 @@ public class PlayerController : MonoBehaviour
     {
         get { return m_anim; }
         set { m_anim = value; }
+    }
+
+    public bool Paused
+    {
+        get { return m_paused; }
+    }
+    public void PausePlayer()
+    {
+        RB.velocity = Vector3.zero;
+        m_paused = true;
+    }
+    public void UnPausePlayer()
+    {
+        m_paused = false;
     }
 
     public AudioSource SFX
@@ -108,7 +124,7 @@ public class PlayerController : MonoBehaviour
         get { return gunUpgrade; }
     }
     
-    public InputAxis RightTrigger
+    public InputAxis RightTrigger 
     {
         get { return rightTriggerState; }
     }
@@ -137,6 +153,7 @@ public class PlayerController : MonoBehaviour
     {
         GameManager.Player.weapons[0].gameObject.SetActive(true);
         GameManager.Player.gunUpgrade = upgrade;
+        ammoType = upgrade;
         GameManager.Hud.BulletUpgrade();
     }
 
@@ -168,16 +185,16 @@ public class PlayerController : MonoBehaviour
         if (_damageImmune <= 0)
         {
             _damageImmune = 0.5f;
+            elapsedTime = 0;
 
             if (_currentArmor > 0)
                 _currentArmor--;
             else
                 _currentHealth -= damage;
 
-            Debug.Log("Health: " + _currentHealth + ",  \tArmor: " + _currentArmor);
-
             if (Health <= 0)
-                Die();
+                GameManager.Instance.StartCoroutine(Die());
+            Debug.Log("Health: " + _currentHealth + "  Armour: " + _currentArmor);
         }
     }
     private void RechargeArmor()
@@ -189,15 +206,21 @@ public class PlayerController : MonoBehaviour
             {
                 _currentArmor++;
                 elapsedTime = 0;
+                Debug.Log("ArmourRegen: " + _currentArmor);
             }
         }
     }
-    private void Die()
+    private IEnumerator Die()
     {
+        Debug.Log("Here");
         _isDead = true;
         DropWeapons();
         Instantiate(Ragdoll, transform.position, transform.rotation);
         Destroy(transform.gameObject);
+        yield return new WaitForSeconds(3.5f);
+
+        Debug.Log("Here");
+        GameManager.Instance.Continue();
     }
     #endregion
 
@@ -217,6 +240,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
+            Debug.Log("Here");
             StopAllCoroutines();
             DestroyImmediate(gameObject);
         }
@@ -233,20 +257,28 @@ public class PlayerController : MonoBehaviour
         m_Voice = transform.GetChild(3).GetComponent<AudioSource>();
     }
 
+    private void OnDestroy()
+    {
+        Debug.Log("Player Destroyed");
+    }
+
     private void Start ()
     {
-        //Initialize states
-        m_stateM.State = new UnequipedState(m_stateM, true);
+        cC = GetComponent<CinemachineController>();
 
-        //Start states
+        Debug.Log("Player Start", this);
+        //Initialize state Machine
+        m_stateM.State = new UnequipedState(m_stateM, true);
         m_stateM.StartState(m_stateM.State);
     }
+
     private void Update()
     {
         if (Input.GetButtonDown("Cowbell"))
         {
             GameManager.Instance.AudioManager.AudioPlayer = SFX;
             GameManager.Instance.AudioManager.playAudio("sfxcowbell");
+            GameManager.Hud.Achivement("Ring The Bell");
         }
 
         if (_damageImmune > 0)

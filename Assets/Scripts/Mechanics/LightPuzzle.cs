@@ -22,8 +22,8 @@ public class LightPuzzle : MonoBehaviour
     {
         randomPuzzleSelect = new int[boxPositioningLights.Length];
 
-        counterMax = Mathf.RoundToInt(boxPositioningLights.Length / 2) - 1;
-
+        counterMax = Mathf.RoundToInt(boxPositioningLights.Length / 2);
+        Debug.Log(counterMax);
         counter = 0;
 
         correctBlockCounter = 0;
@@ -172,7 +172,7 @@ public class LightPuzzle : MonoBehaviour
         // Randomized puzzle select
         for (int i = 0; i < randomPuzzleSelect.Length; i++)
         {
-            if (counter >= counterMax)
+            if (counter >= counterMax - 1)
                 randomPuzzleSelect[i] = 0;
             else
             {
@@ -188,7 +188,7 @@ public class LightPuzzle : MonoBehaviour
         {
             for (int i = randomPuzzleSelect.Length - 1; i > 0; i--)
             {
-                if (counter >= counterMax + 1)
+                if (counter >= counterMax)
                     break;
                 if (randomPuzzleSelect[i] == 0)
                 {
@@ -245,14 +245,14 @@ public class LightPuzzle : MonoBehaviour
 
     public void CheckPuzzlePiece(GameObject goToCheck)
     {
-        Debug.Log("CheckPuzzlePiece1");
+        Debug.LogWarning("CheckPuzzlePiece1");
         for (int i = 0; i < pressurePlates.Length; i++)
         {
             if (goToCheck.name == pressurePlates[i].name && randomPuzzleSelect[i] == 1)
             {
-                Debug.Log("CheckPuzzlePiece2");
+                Debug.LogWarning("CheckPuzzlePiece2");
                 correctBlockCounter++;
-                Debug.Log(correctBlockCounter);
+                Debug.LogWarning("Correct Block Counter: " + correctBlockCounter);
                 CheckPuzzle();
             }
         }
@@ -260,21 +260,21 @@ public class LightPuzzle : MonoBehaviour
 
     public void DisengagePuzzlePiece(GameObject goToCheck)
     {
-        Debug.Log("CheckPuzzlePiece1");
+        Debug.LogWarning("CheckPuzzlePieceDisengage");
         for (int i = 0; i < pressurePlates.Length; i++)
         {
             if (goToCheck.name == pressurePlates[i].name && randomPuzzleSelect[i] == 1)
             {
                 Debug.Log("Piece removed");
                 correctBlockCounter--;
-                Debug.Log(correctBlockCounter);
+                Debug.Log("Correct Block Counter: " + correctBlockCounter);
             }
         }
     }
 
     public void CheckPuzzle()
     {
-        if (correctBlockCounter >= counterMax + 1)
+        if (correctBlockCounter >= counterMax)
         {
             myEvent.Invoke();
             counterMax = 0;

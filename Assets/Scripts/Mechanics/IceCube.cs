@@ -6,11 +6,31 @@ public class IceCube : MonoBehaviour
 {
     public bool climbable;
     public bool pushable;
-
     public GameObject climbNodePrefab;
     public GameObject pushNodePrefab;
 
+    public Collider[] movementColliders;
+    public Collider[] staticColliders;
+
+    [SerializeField]
+    private bool pushing;
+    public bool Pushing
+    {
+        get { return pushing; }
+        set
+        {
+            pushing = value;
+            ToggleColliders();
+        }
+    }
+
     private Collider cubeBounds;
+    private Rigidbody rb;
+
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
 
     void Start ()
     {
@@ -44,6 +64,34 @@ public class IceCube : MonoBehaviour
                     rotation * Quaternion.Euler(0, -90, 0),
                     transform);
             }
+        }
+    }
+
+    private void ToggleColliders()
+    {
+        for (int i = 0; i < movementColliders.Length; i++)
+            movementColliders[i].enabled = pushing;
+
+        for (int i = 0; i < staticColliders.Length; i++)
+            staticColliders[i].enabled = !pushing;
+    }
+
+    private void FixedUpdate()
+    {
+        if (pushing)
+            rb.isKinematic = false;
+        else
+        {
+            Collider[] cols = Physics.OverlapBox(transform.position, cubeBounds.bounds.extents, Quaternion.identity, ~6);
+            for (int i = 0; i < cols.Length; i++)
+            {
+                if (cols[i].transform.root != transform && !cols[i].isTrigger)
+                {
+                    rb.isKinematic = true;
+                    return;
+                }
+            }
+            rb.isKinematic = false;
         }
     }
 }
