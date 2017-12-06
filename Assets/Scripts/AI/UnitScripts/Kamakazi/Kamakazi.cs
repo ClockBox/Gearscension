@@ -14,12 +14,17 @@ public class Kamakazi : AIStateManager {
 	private bool heightReached;
 	private GameObject smoker;
 
-	public override void StartEvents() {
+    private Animator anim;
 
-		smoker = Instantiate(smokePrefab, exhaust.transform.position, transform.rotation);
-		smoker.transform.parent = transform;
+	public override void StartEvents()
+    {
+        anim = GetComponent<Animator>();
+        if (smoker)
+        {
+            smoker = Instantiate(smokePrefab, exhaust.transform.position, transform.rotation);
+            smoker.transform.parent = transform;
+        }
 	}
-
 
 	public override void MeleeAttack()
 	{
@@ -35,42 +40,36 @@ public class Kamakazi : AIStateManager {
 			callOnce = true;
 			exploded = false;
 			heightReached = false;
-			smoker.GetComponent<ParticleSystem>().Play();
-
+            if (smoker) smoker.GetComponent<ParticleSystem>().Play();
 		}
 		StartCoroutine(LaunchExplode(2f));
 
 	}
 	IEnumerator LaunchExplode(float delayTimer)
-	{
-		yield return new WaitForSeconds(delayTimer);
+    {
+        anim.SetTrigger("Jump");
+        anim.SetBool("Grounded", false);
 
+        yield return new WaitForSeconds(delayTimer);
 
-
-		rb.constraints = RigidbodyConstraints.FreezeRotation;
+        rb.constraints = RigidbodyConstraints.FreezeRotation;
 		if (transform.position.y <= maxHeight && !heightReached)
-		{
 			rb.AddForce(transform.up * force/10, ForceMode.Impulse);
-
-		}
 		else if (transform.position.y > maxHeight)
 		{
 			playerPos = player.transform.position;
 			playerPos = new Vector3(playerPos.x, playerPos.y - 2, playerPos.z);
-			smoker.GetComponent<ParticleSystem>().Play();
+            if (smoker) smoker.GetComponent<ParticleSystem>().Play();
 
 			heightReached = true;
 		}
 
 		if(heightReached)
-
 		{
-			
 			Vector3 target = playerPos - transform.position;
 			target.Normalize();
 			rb.AddForce(target *force, ForceMode.Impulse);
 			//rb.AddForce(transform.up * -force, ForceMode.Impulse);
-
 		}
 
 		//if (Vector3.Distance(transform.position, player.transform.position) <= proximity)
@@ -78,13 +77,10 @@ public class Kamakazi : AIStateManager {
 		//	if(!exploded)
 		//	Explode();
 		//}
-
 	}
 
 	private void OnCollisionEnter(Collision collision)
-
 	{
-
 		if (callOnce)
 		{
 			Explode().transform.parent = collision.transform;
@@ -99,8 +95,5 @@ public class Kamakazi : AIStateManager {
 		newEffect.transform.localScale = transform.localScale;
 		exploded = true;
 		return newEffect;
-		
 	}
-	
-
 }
