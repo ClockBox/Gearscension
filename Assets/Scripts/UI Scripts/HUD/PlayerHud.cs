@@ -29,8 +29,6 @@ public class PlayerHud : MonoBehaviour
 
     [SerializeField] private GameObject textBox;
     [SerializeField] private Text whiteText;
-    [SerializeField] private GameObject achivementBox;
-    [SerializeField] private Text achivementText;
 
     [Header("Ammo Hud")]
     [SerializeField]
@@ -231,14 +229,6 @@ public class PlayerHud : MonoBehaviour
     {
         whiteText.text = "" + passedString;
         textBox.SetActive(true);
-    }
-
-    public void Achivement(string passedString)
-    {
-        achivementText.text = "" + passedString;
-
-        GameObject achivement = GameObject.Find("/Gear Hud/Achivements");
-
     }
 
     public void RemoveDisplay()

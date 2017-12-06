@@ -273,7 +273,6 @@ public class PlayerController : MonoBehaviour
         {
             GameManager.Instance.AudioManager.AudioPlayer = SFX;
             GameManager.Instance.AudioManager.playAudio("sfxcowbell");
-            GameManager.Hud.Achivement("Ring The Bell");
         }
 
         if (_damageImmune > 0)
