@@ -5,17 +5,18 @@ using UnityEngine;
 public class ElectricalObject : MonoBehaviour
 {
     public AudioSource SFXSource;
-    public AudioSource AmbientSource;
+    public AudioClip activationSound;
+    public AudioClip deactivationSound;
+
+    [Space(10)]
     public ParticleSystem runningParticle;
+    public ParticleSystem activationParticle;
+    public ParticleSystem deactivationParticle;
+
+    [Space(10)]
     public GameObject[] lights;
 
-    [Space(20)]
-    public ParticleSystem activationParticle;
-    public AudioClip[] activationSounds;
-
-    [Space(20)]
-    public ParticleSystem deactivationParticle;
-    public AudioClip[] deactivationSounds;
+    public Animator anim;
 
     #region Activation
     protected bool active = false;
@@ -34,40 +35,30 @@ public class ElectricalObject : MonoBehaviour
         Debug.Log("Activate", this);
         active = true;
         ToggleLights(true);
+
+        if (anim) anim.SetBool("Activated", true);
+        if (activationParticle) activationParticle.Play();
+        if (runningParticle) runningParticle.Play();
         if (SFXSource)
         {
-            if (activationSounds.Length > 0)
-            {
-                for (int i = 0; i < activationSounds.Length; i++)
-                {
-                    SFXSource.clip = activationSounds[i];
-                    SFXSource.Play();
-                }
-            }
-            else SFXSource.Play();
+            SFXSource.Play();
+            SFXSource.PlayOneShot(activationSound);
         }
-        if (AmbientSource) AmbientSource.Play();
-        if (activationParticle) activationParticle.Play();
     }
     public virtual void Deactivate()
     {
         Debug.Log("Deactivate", this);
         active = false;
         ToggleLights(false);
+
+        if (anim) anim.SetBool("Activated", false);
+        if (deactivationParticle) deactivationParticle.Play();
+        if (runningParticle) runningParticle.Stop();
         if (SFXSource)
         {
-            if (deactivationSounds.Length > 0)
-            {
-                for (int i = 0; i < deactivationSounds.Length; i++)
-                {
-                    SFXSource.clip = deactivationSounds[i];
-                    SFXSource.Play();
-                }
-            }
-            else SFXSource.Play();
+            SFXSource.Stop();
+            SFXSource.PlayOneShot(deactivationSound);
         }
-        if (AmbientSource) AmbientSource.Stop();
-        if (activationParticle) activationParticle.Stop();
     }
     public virtual void Invert()
     {

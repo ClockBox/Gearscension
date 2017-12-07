@@ -16,6 +16,20 @@ public class AudioDictonary : MonoBehaviour {
         set { audioPlayer = value; }
     }
 
+    private AudioSource playerSFX;
+    public AudioSource PlayerSFX
+    {
+        get { return playerSFX; }
+        set { playerSFX = value; }
+    }
+
+    private AudioSource playerVoice;
+    public AudioSource PlayerVoice
+    {
+        get { return playerVoice; }
+        set { playerVoice = value; }
+    }
+
     void Start()
     {
         GameManager.Instance.AudioManager = this;
@@ -35,6 +49,13 @@ public class AudioDictonary : MonoBehaviour {
         ap.PlayOneShot(AudioClipDictionary[name]);
     }
 
+    public void playAudioPlayerSFX(string name)
+    {
+
+    }
+
+
+    //function for remaning the audio file name for the dictionary
     private string Rename(string n)
     {
         string name = "";

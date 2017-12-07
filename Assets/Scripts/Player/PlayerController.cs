@@ -193,7 +193,7 @@ public class PlayerController : MonoBehaviour
                 _currentHealth -= damage;
 
             if (Health <= 0)
-                Die();
+                GameManager.Instance.StartCoroutine(Die());
             Debug.Log("Health: " + _currentHealth + "  Armour: " + _currentArmor);
         }
     }
@@ -210,12 +210,17 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-    private void Die()
+    private IEnumerator Die()
     {
+        Debug.Log("Here");
         _isDead = true;
         DropWeapons();
         Instantiate(Ragdoll, transform.position, transform.rotation);
         Destroy(transform.gameObject);
+        yield return new WaitForSeconds(3.5f);
+
+        Debug.Log("Here");
+        GameManager.Instance.Continue();
     }
     #endregion
 
