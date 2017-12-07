@@ -46,7 +46,7 @@ public class PileDriverBehaviour : MonoBehaviour
         {
             Debug.Log("Stop");
             stop = true;
-            //pistonRB.isKinematic = true;
+            pistonRB.isKinematic = true;
             pistonRB.velocity = Vector3.zero;
         }
     }
