@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Platform : MonoBehaviour
+public class Platform : ElectricalObject
 {
     protected void OnTriggerStay(Collider col)
     {
@@ -14,6 +14,9 @@ public class Platform : MonoBehaviour
     {
         GameObject temp = col.attachedRigidbody.gameObject;
         if (temp && (temp.CompareTag("Player") || temp.CompareTag("Freezable")))
+        {
             col.attachedRigidbody.gameObject.transform.parent = null;
+            DontDestroyOnLoad(col.gameObject);
+        }
     }
 }

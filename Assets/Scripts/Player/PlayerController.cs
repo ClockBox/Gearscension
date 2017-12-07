@@ -193,7 +193,7 @@ public class PlayerController : MonoBehaviour
                 _currentHealth -= damage;
 
             if (Health <= 0)
-                Die();
+                GameManager.Instance.StartCoroutine(Die());
             Debug.Log("Health: " + _currentHealth + "  Armour: " + _currentArmor);
         }
     }
@@ -210,12 +210,17 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-    private void Die()
+    private IEnumerator Die()
     {
+        Debug.Log("Here");
         _isDead = true;
         DropWeapons();
         Instantiate(Ragdoll, transform.position, transform.rotation);
         Destroy(transform.gameObject);
+        yield return new WaitForSeconds(3.5f);
+
+        Debug.Log("Here");
+        GameManager.Instance.Continue();
     }
     #endregion
 
@@ -235,6 +240,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
+            Debug.Log("Here");
             StopAllCoroutines();
             DestroyImmediate(gameObject);
         }
@@ -249,6 +255,11 @@ public class PlayerController : MonoBehaviour
 
         m_SFX = transform.GetChild(2).GetComponent<AudioSource>();
         m_Voice = transform.GetChild(3).GetComponent<AudioSource>();
+    }
+
+    private void OnDestroy()
+    {
+        Debug.Log("Player Destroyed");
     }
 
     private void Start ()
@@ -267,7 +278,6 @@ public class PlayerController : MonoBehaviour
         {
             GameManager.Instance.AudioManager.AudioPlayer = SFX;
             GameManager.Instance.AudioManager.playAudio("sfxcowbell");
-            GameManager.Hud.Achivement("Ring The Bell");
         }
 
         if (_damageImmune > 0)

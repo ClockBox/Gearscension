@@ -1,0 +1,597 @@
+fileFormatVersion: 2
+guid: bbefaf576e3b5214e9a778602454a37f
+timeCreated: 1512521188
+licenseType: Free
+ModelImporter:
+  serializedVersion: 21
+  fileIDToRecycleName:
+    100000: curve3
+    100002: joint1
+    100004: joint1 1
+    100006: joint1 2
+    100008: joint1 3
+    100010: joint1 4
+    100012: joint1 5
+    100014: joint2
+    100016: joint2 1
+    100018: joint3
+    100020: joint3 1
+    100022: joint3 2
+    100024: joint3 3
+    100026: joint3 4
+    100028: joint4
+    100030: joint4 1
+    100032: joint4 2
+    100034: joint4 3
+    100036: joint4 4
+    100038: joint5
+    100040: joint5 1
+    100042: joint5 2
+    100044: joint5 3
+    100046: joint5 4
+    100048: joint6
+    100050: joint6 1
+    100052: joint6 2
+    100054: joint6 3
+    100056: joint6 4
+    100058: joint7
+    100060: joint7 1
+    100062: joint8
+    100064: //RootNode
+    100066: KamaRig05:Body_low
+    100068: KamaRig05:Bulb_low
+    100070: KamaRig05:joint1
+    100072: KamaRig05:joint2
+    100074: KamaRig05:joint3
+    100076: KamaRig05:joint4
+    100078: KamaRig05:joint5
+    100080: KamaRig05:joint6
+    100082: KamaRig05:L_ArmA
+    100084: KamaRig05:L_ArmB
+    100086: KamaRig05:L_ArmC
+    100088: KamaRig05:L_CouplingLow_001
+    100090: KamaRig05:L_CouplingLow_002
+    100092: KamaRig05:L_CouplingLow_003
+    100094: KamaRig05:L_CouplingLow_004
+    100096: KamaRig05:L_CouplingTop_001
+    100098: KamaRig05:L_CouplingTop_002
+    100100: KamaRig05:L_CouplingTop_003
+    100102: KamaRig05:L_CouplingTop_004
+    100104: KamaRig05:L_FingerA
+    100106: KamaRig05:L_FingerB
+    100108: KamaRig05:L_FingerC
+    100110: KamaRig05:L_JointA_001
+    100112: KamaRig05:L_JointA_002
+    100114: KamaRig05:L_JointA_003
+    100116: KamaRig05:L_JointA_004
+    100118: KamaRig05:L_JointB_001
+    100120: KamaRig05:L_JointB_002
+    100122: KamaRig05:L_JointB_003
+    100124: KamaRig05:L_JointB_004
+    100126: KamaRig05:L_JointC_001
+    100128: KamaRig05:L_JointC_002
+    100130: KamaRig05:L_JointC_003
+    100132: KamaRig05:L_JointC_004
+    100134: KamaRig05:L_LegA_001
+    100136: KamaRig05:L_LegA_002
+    100138: KamaRig05:L_LegA_003
+    100140: KamaRig05:L_LegB_001
+    100142: KamaRig05:L_LegB_002
+    100144: KamaRig05:L_LegB_003
+    100146: KamaRig05:L_LegC_001
+    100148: KamaRig05:L_LegC_002
+    100150: KamaRig05:L_LegC_003
+    100152: KamaRig05:L_LegD_001
+    100154: KamaRig05:L_LegD_002
+    100156: KamaRig05:L_LegD_003
+    100158: KamaRig05:L_Wire_001
+    100160: KamaRig05:L_Wire_002
+    100162: KamaRig05:L_Wire_003
+    100164: KamaRig05:L_Wire_004
+    100166: KamaRig05:Piston_low
+    100168: KamaRig05:R_ArmA
+    100170: KamaRig05:R_ArmB
+    100172: KamaRig05:R_ArmC
+    100174: KamaRig05:R_CouplingLow_001
+    100176: KamaRig05:R_CouplingLow_002
+    100178: KamaRig05:R_CouplingLow_003
+    100180: KamaRig05:R_CouplingLow_004
+    100182: KamaRig05:R_CouplingTop_001
+    100184: KamaRig05:R_CouplingTop_002
+    100186: KamaRig05:R_CouplingTop_003
+    100188: KamaRig05:R_CouplingTop_004
+    100190: KamaRig05:R_FingerA
+    100192: KamaRig05:R_FingerB
+    100194: KamaRig05:R_FingerC
+    100196: KamaRig05:R_JointA_001
+    100198: KamaRig05:R_JointA_002
+    100200: KamaRig05:R_JointA_003
+    100202: KamaRig05:R_JointA_004
+    100204: KamaRig05:R_JointB_001
+    100206: KamaRig05:R_JointB_002
+    100208: KamaRig05:R_JointB_003
+    100210: KamaRig05:R_JointB_004
+    100212: KamaRig05:R_JointC_001
+    100214: KamaRig05:R_JointC_002
+    100216: KamaRig05:R_JointC_003
+    100218: KamaRig05:R_JointC_004
+    100220: KamaRig05:R_LegA_001
+    100222: KamaRig05:R_LegA_002
+    100224: KamaRig05:R_LegA_003
+    100226: KamaRig05:R_LegB_001
+    100228: KamaRig05:R_LegB_002
+    100230: KamaRig05:R_LegB_003
+    100232: KamaRig05:R_LegC_001
+    100234: KamaRig05:R_LegC_002
+    100236: KamaRig05:R_LegC_003
+    100238: KamaRig05:R_LegC_004
+    100240: KamaRig05:R_LegD_002
+    100242: KamaRig05:R_LegD_003
+    100244: KamaRig05:R_Wire_001
+    100246: KamaRig05:R_Wire_002
+    100248: KamaRig05:R_Wire_003
+    100250: KamaRig05:R_Wire_004
+    100252: KamaRig05:Top_low
+    100254: transform2
+    100256: transform4
+    100258: transform5
+    100260: transform6
+    400000: curve3
+    400002: joint1
+    400004: joint1 1
+    400006: joint1 2
+    400008: joint1 3
+    400010: joint1 4
+    400012: joint1 5
+    400014: joint2
+    400016: joint2 1
+    400018: joint3
+    400020: joint3 1
+    400022: joint3 2
+    400024: joint3 3
+    400026: joint3 4
+    400028: joint4
+    400030: joint4 1
+    400032: joint4 2
+    400034: joint4 3
+    400036: joint4 4
+    400038: joint5
+    400040: joint5 1
+    400042: joint5 2
+    400044: joint5 3
+    400046: joint5 4
+    400048: joint6
+    400050: joint6 1
+    400052: joint6 2
+    400054: joint6 3
+    400056: joint6 4
+    400058: joint7
+    400060: joint7 1
+    400062: joint8
+    400064: //RootNode
+    400066: KamaRig05:Body_low
+    400068: KamaRig05:Bulb_low
+    400070: KamaRig05:joint1
+    400072: KamaRig05:joint2
+    400074: KamaRig05:joint3
+    400076: KamaRig05:joint4
+    400078: KamaRig05:joint5
+    400080: KamaRig05:joint6
+    400082: KamaRig05:L_ArmA
+    400084: KamaRig05:L_ArmB
+    400086: KamaRig05:L_ArmC
+    400088: KamaRig05:L_CouplingLow_001
+    400090: KamaRig05:L_CouplingLow_002
+    400092: KamaRig05:L_CouplingLow_003
+    400094: KamaRig05:L_CouplingLow_004
+    400096: KamaRig05:L_CouplingTop_001
+    400098: KamaRig05:L_CouplingTop_002
+    400100: KamaRig05:L_CouplingTop_003
+    400102: KamaRig05:L_CouplingTop_004
+    400104: KamaRig05:L_FingerA
+    400106: KamaRig05:L_FingerB
+    400108: KamaRig05:L_FingerC
+    400110: KamaRig05:L_JointA_001
+    400112: KamaRig05:L_JointA_002
+    400114: KamaRig05:L_JointA_003
+    400116: KamaRig05:L_JointA_004
+    400118: KamaRig05:L_JointB_001
+    400120: KamaRig05:L_JointB_002
+    400122: KamaRig05:L_JointB_003
+    400124: KamaRig05:L_JointB_004
+    400126: KamaRig05:L_JointC_001
+    400128: KamaRig05:L_JointC_002
+    400130: KamaRig05:L_JointC_003
+    400132: KamaRig05:L_JointC_004
+    400134: KamaRig05:L_LegA_001
+    400136: KamaRig05:L_LegA_002
+    400138: KamaRig05:L_LegA_003
+    400140: KamaRig05:L_LegB_001
+    400142: KamaRig05:L_LegB_002
+    400144: KamaRig05:L_LegB_003
+    400146: KamaRig05:L_LegC_001
+    400148: KamaRig05:L_LegC_002
+    400150: KamaRig05:L_LegC_003
+    400152: KamaRig05:L_LegD_001
+    400154: KamaRig05:L_LegD_002
+    400156: KamaRig05:L_LegD_003
+    400158: KamaRig05:L_Wire_001
+    400160: KamaRig05:L_Wire_002
+    400162: KamaRig05:L_Wire_003
+    400164: KamaRig05:L_Wire_004
+    400166: KamaRig05:Piston_low
+    400168: KamaRig05:R_ArmA
+    400170: KamaRig05:R_ArmB
+    400172: KamaRig05:R_ArmC
+    400174: KamaRig05:R_CouplingLow_001
+    400176: KamaRig05:R_CouplingLow_002
+    400178: KamaRig05:R_CouplingLow_003
+    400180: KamaRig05:R_CouplingLow_004
+    400182: KamaRig05:R_CouplingTop_001
+    400184: KamaRig05:R_CouplingTop_002
+    400186: KamaRig05:R_CouplingTop_003
+    400188: KamaRig05:R_CouplingTop_004
+    400190: KamaRig05:R_FingerA
+    400192: KamaRig05:R_FingerB
+    400194: KamaRig05:R_FingerC
+    400196: KamaRig05:R_JointA_001
+    400198: KamaRig05:R_JointA_002
+    400200: KamaRig05:R_JointA_003
+    400202: KamaRig05:R_JointA_004
+    400204: KamaRig05:R_JointB_001
+    400206: KamaRig05:R_JointB_002
+    400208: KamaRig05:R_JointB_003
+    400210: KamaRig05:R_JointB_004
+    400212: KamaRig05:R_JointC_001
+    400214: KamaRig05:R_JointC_002
+    400216: KamaRig05:R_JointC_003
+    400218: KamaRig05:R_JointC_004
+    400220: KamaRig05:R_LegA_001
+    400222: KamaRig05:R_LegA_002
+    400224: KamaRig05:R_LegA_003
+    400226: KamaRig05:R_LegB_001
+    400228: KamaRig05:R_LegB_002
+    400230: KamaRig05:R_LegB_003
+    400232: KamaRig05:R_LegC_001
+    400234: KamaRig05:R_LegC_002
+    400236: KamaRig05:R_LegC_003
+    400238: KamaRig05:R_LegC_004
+    400240: KamaRig05:R_LegD_002
+    400242: KamaRig05:R_LegD_003
+    400244: KamaRig05:R_Wire_001
+    400246: KamaRig05:R_Wire_002
+    400248: KamaRig05:R_Wire_003
+    400250: KamaRig05:R_Wire_004
+    400252: KamaRig05:Top_low
+    400254: transform2
+    400256: transform4
+    400258: transform5
+    400260: transform6
+    2300000: KamaRig05:Body_low
+    2300002: KamaRig05:Bulb_low
+    2300004: KamaRig05:L_ArmA
+    2300006: KamaRig05:L_ArmB
+    2300008: KamaRig05:L_ArmC
+    2300010: KamaRig05:L_CouplingLow_001
+    2300012: KamaRig05:L_CouplingLow_002
+    2300014: KamaRig05:L_CouplingLow_003
+    2300016: KamaRig05:L_CouplingLow_004
+    2300018: KamaRig05:L_CouplingTop_001
+    2300020: KamaRig05:L_CouplingTop_002
+    2300022: KamaRig05:L_CouplingTop_003
+    2300024: KamaRig05:L_CouplingTop_004
+    2300026: KamaRig05:L_FingerA
+    2300028: KamaRig05:L_FingerB
+    2300030: KamaRig05:L_FingerC
+    2300032: KamaRig05:L_JointA_004
+    2300034: KamaRig05:L_JointB_004
+    2300036: KamaRig05:L_JointC_004
+    2300038: KamaRig05:L_Wire_001
+    2300040: KamaRig05:L_Wire_002
+    2300042: KamaRig05:L_Wire_003
+    2300044: KamaRig05:L_Wire_004
+    2300046: KamaRig05:Piston_low
+    2300048: KamaRig05:R_ArmA
+    2300050: KamaRig05:R_ArmB
+    2300052: KamaRig05:R_ArmC
+    2300054: KamaRig05:R_CouplingLow_001
+    2300056: KamaRig05:R_CouplingLow_002
+    2300058: KamaRig05:R_CouplingLow_003
+    2300060: KamaRig05:R_CouplingLow_004
+    2300062: KamaRig05:R_CouplingTop_001
+    2300064: KamaRig05:R_CouplingTop_002
+    2300066: KamaRig05:R_CouplingTop_003
+    2300068: KamaRig05:R_CouplingTop_004
+    2300070: KamaRig05:R_FingerA
+    2300072: KamaRig05:R_FingerB
+    2300074: KamaRig05:R_FingerC
+    2300076: KamaRig05:R_JointA_004
+    2300078: KamaRig05:R_JointB_004
+    2300080: KamaRig05:R_JointC_004
+    2300082: KamaRig05:R_Wire_001
+    2300084: KamaRig05:R_Wire_002
+    2300086: KamaRig05:R_Wire_003
+    2300088: KamaRig05:R_Wire_004
+    2300090: KamaRig05:Top_low
+    3300000: KamaRig05:Body_low
+    3300002: KamaRig05:Bulb_low
+    3300004: KamaRig05:L_ArmA
+    3300006: KamaRig05:L_ArmB
+    3300008: KamaRig05:L_ArmC
+    3300010: KamaRig05:L_CouplingLow_001
+    3300012: KamaRig05:L_CouplingLow_002
+    3300014: KamaRig05:L_CouplingLow_003
+    3300016: KamaRig05:L_CouplingLow_004
+    3300018: KamaRig05:L_CouplingTop_001
+    3300020: KamaRig05:L_CouplingTop_002
+    3300022: KamaRig05:L_CouplingTop_003
+    3300024: KamaRig05:L_CouplingTop_004
+    3300026: KamaRig05:L_FingerA
+    3300028: KamaRig05:L_FingerB
+    3300030: KamaRig05:L_FingerC
+    3300032: KamaRig05:L_JointA_004
+    3300034: KamaRig05:L_JointB_004
+    3300036: KamaRig05:L_JointC_004
+    3300038: KamaRig05:L_Wire_001
+    3300040: KamaRig05:L_Wire_002
+    3300042: KamaRig05:L_Wire_003
+    3300044: KamaRig05:L_Wire_004
+    3300046: KamaRig05:Piston_low
+    3300048: KamaRig05:R_ArmA
+    3300050: KamaRig05:R_ArmB
+    3300052: KamaRig05:R_ArmC
+    3300054: KamaRig05:R_CouplingLow_001
+    3300056: KamaRig05:R_CouplingLow_002
+    3300058: KamaRig05:R_CouplingLow_003
+    3300060: KamaRig05:R_CouplingLow_004
+    3300062: KamaRig05:R_CouplingTop_001
+    3300064: KamaRig05:R_CouplingTop_002
+    3300066: KamaRig05:R_CouplingTop_003
+    3300068: KamaRig05:R_CouplingTop_004
+    3300070: KamaRig05:R_FingerA
+    3300072: KamaRig05:R_FingerB
+    3300074: KamaRig05:R_FingerC
+    3300076: KamaRig05:R_JointA_004
+    3300078: KamaRig05:R_JointB_004
+    3300080: KamaRig05:R_JointC_004
+    3300082: KamaRig05:R_Wire_001
+    3300084: KamaRig05:R_Wire_002
+    3300086: KamaRig05:R_Wire_003
+    3300088: KamaRig05:R_Wire_004
+    3300090: KamaRig05:Top_low
+    4300000: KamaRig05:Body_low
+    4300002: KamaRig05:Top_low
+    4300004: KamaRig05:Bulb_low
+    4300006: KamaRig05:Piston_low
+    4300008: KamaRig05:R_Wire_004
+    4300010: KamaRig05:R_Wire_003
+    4300012: KamaRig05:R_Wire_002
+    4300014: KamaRig05:R_Wire_001
+    4300016: KamaRig05:R_CouplingTop_004
+    4300018: KamaRig05:R_CouplingTop_003
+    4300020: KamaRig05:R_CouplingTop_002
+    4300022: KamaRig05:R_CouplingTop_001
+    4300024: KamaRig05:R_CouplingLow_004
+    4300026: KamaRig05:R_CouplingLow_003
+    4300028: KamaRig05:R_CouplingLow_002
+    4300030: KamaRig05:R_CouplingLow_001
+    4300032: KamaRig05:L_CouplingTop_004
+    4300034: KamaRig05:L_CouplingTop_003
+    4300036: KamaRig05:L_CouplingTop_002
+    4300038: KamaRig05:L_CouplingTop_001
+    4300040: KamaRig05:L_CouplingLow_004
+    4300042: KamaRig05:L_CouplingLow_003
+    4300044: KamaRig05:L_CouplingLow_002
+    4300046: KamaRig05:L_CouplingLow_001
+    4300048: KamaRig05:L_Wire_004
+    4300050: KamaRig05:L_Wire_003
+    4300052: KamaRig05:L_Wire_002
+    4300054: KamaRig05:L_Wire_001
+    4300056: KamaRig05:R_ArmA
+    4300058: KamaRig05:R_JointA_004
+    4300060: KamaRig05:R_ArmB
+    4300062: KamaRig05:R_JointB_004
+    4300064: KamaRig05:R_ArmC
+    4300066: KamaRig05:R_JointC_004
+    4300068: KamaRig05:R_FingerA
+    4300070: KamaRig05:R_FingerB
+    4300072: KamaRig05:R_FingerC
+    4300074: KamaRig05:L_ArmA
+    4300076: KamaRig05:L_JointA_004
+    4300078: KamaRig05:L_ArmB
+    4300080: KamaRig05:L_JointB_004
+    4300082: KamaRig05:L_ArmC
+    4300084: KamaRig05:L_JointC_004
+    4300086: KamaRig05:L_FingerA
+    4300088: KamaRig05:L_FingerB
+    4300090: KamaRig05:L_FingerC
+    4300092: KamaRig05:R_LegA_003
+    4300094: KamaRig05:R_JointA_003
+    4300096: KamaRig05:R_LegB_003
+    4300098: KamaRig05:R_JointB_003
+    4300100: KamaRig05:R_LegC_004
+    4300102: KamaRig05:R_JointC_003
+    4300104: KamaRig05:R_LegD_003
+    4300106: KamaRig05:R_LegA_002
+    4300108: KamaRig05:R_JointA_002
+    4300110: KamaRig05:R_LegB_002
+    4300112: KamaRig05:R_JointB_002
+    4300114: KamaRig05:R_LegC_003
+    4300116: KamaRig05:R_JointC_002
+    4300118: KamaRig05:R_LegD_002
+    4300120: KamaRig05:R_LegA_001
+    4300122: KamaRig05:R_JointA_001
+    4300124: KamaRig05:R_LegB_001
+    4300126: KamaRig05:R_JointB_001
+    4300128: KamaRig05:R_LegC_001
+    4300130: KamaRig05:R_JointC_001
+    4300132: KamaRig05:R_LegC_002
+    4300134: KamaRig05:L_LegA_003
+    4300136: KamaRig05:L_JointA_003
+    4300138: KamaRig05:L_LegB_003
+    4300140: KamaRig05:L_JointB_003
+    4300142: KamaRig05:L_LegC_003
+    4300144: KamaRig05:L_JointC_003
+    4300146: KamaRig05:L_LegD_003
+    4300148: KamaRig05:L_LegA_002
+    4300150: KamaRig05:L_JointA_002
+    4300152: KamaRig05:L_LegB_002
+    4300154: KamaRig05:L_JointB_002
+    4300156: KamaRig05:L_LegC_002
+    4300158: KamaRig05:L_JointC_002
+    4300160: KamaRig05:L_LegD_002
+    4300162: KamaRig05:L_LegA_001
+    4300164: KamaRig05:L_JointA_001
+    4300166: KamaRig05:L_LegB_001
+    4300168: KamaRig05:L_JointB_001
+    4300170: KamaRig05:L_LegC_001
+    4300172: KamaRig05:L_JointC_001
+    4300174: KamaRig05:L_LegD_001
+    7400000: Kamakaze_Idle
+    9500000: //RootNode
+    13700000: KamaRig05:L_JointA_001
+    13700002: KamaRig05:L_JointA_002
+    13700004: KamaRig05:L_JointA_003
+    13700006: KamaRig05:L_JointB_001
+    13700008: KamaRig05:L_JointB_002
+    13700010: KamaRig05:L_JointB_003
+    13700012: KamaRig05:L_JointC_001
+    13700014: KamaRig05:L_JointC_002
+    13700016: KamaRig05:L_JointC_003
+    13700018: KamaRig05:L_LegA_001
+    13700020: KamaRig05:L_LegA_002
+    13700022: KamaRig05:L_LegA_003
+    13700024: KamaRig05:L_LegB_001
+    13700026: KamaRig05:L_LegB_002
+    13700028: KamaRig05:L_LegB_003
+    13700030: KamaRig05:L_LegC_001
+    13700032: KamaRig05:L_LegC_002
+    13700034: KamaRig05:L_LegC_003
+    13700036: KamaRig05:L_LegD_001
+    13700038: KamaRig05:L_LegD_002
+    13700040: KamaRig05:L_LegD_003
+    13700042: KamaRig05:R_JointA_001
+    13700044: KamaRig05:R_JointA_002
+    13700046: KamaRig05:R_JointA_003
+    13700048: KamaRig05:R_JointB_001
+    13700050: KamaRig05:R_JointB_002
+    13700052: KamaRig05:R_JointB_003
+    13700054: KamaRig05:R_JointC_001
+    13700056: KamaRig05:R_JointC_002
+    13700058: KamaRig05:R_JointC_003
+    13700060: KamaRig05:R_LegA_001
+    13700062: KamaRig05:R_LegA_002
+    13700064: KamaRig05:R_LegA_003
+    13700066: KamaRig05:R_LegB_001
+    13700068: KamaRig05:R_LegB_002
+    13700070: KamaRig05:R_LegB_003
+    13700072: KamaRig05:R_LegC_001
+    13700074: KamaRig05:R_LegC_002
+    13700076: KamaRig05:R_LegC_003
+    13700078: KamaRig05:R_LegC_004
+    13700080: KamaRig05:R_LegD_002
+    13700082: KamaRig05:R_LegD_003
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 3
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Kamakaze_Idle
+      takeName: Take 001
+      firstFrame: 1
+      lastFrame: 56
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 1
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 0
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 1
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 01a56b9235ff4064c9c38cefcde8ebaf,
+    type: 3}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

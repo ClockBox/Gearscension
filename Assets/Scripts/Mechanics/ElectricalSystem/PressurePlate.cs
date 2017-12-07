@@ -6,12 +6,12 @@ using UnityEngine.Events;
 [RequireComponent(typeof(Collider))]
 public class PressurePlate : ElectricalSwitch
 {
-    public GameObject weightedObject;
+    private List<GameObject> weightedObject = new List<GameObject>();
     public UnityEvent OnActiveStay;
     
     private LightPuzzle lp;
 
-    private void Awake()
+    public virtual void Awake()
     {
         lp = FindObjectOfType<LightPuzzle>();
     }
@@ -30,46 +30,53 @@ public class PressurePlate : ElectricalSwitch
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.attachedRigidbody.gameObject == weightedObject)
+        GameObject refObject = other.attachedRigidbody.gameObject;
+
+        if (weightedObject.Contains(refObject))
             return;
 
         if (other.CompareTag("Player"))
-        {
-            weightedObject = other.attachedRigidbody.gameObject;
-            Active = true;
-        }
+            weightedObject.Add(refObject);
 
         else if (other.CompareTag("Freezable"))
         {
-            weightedObject = other.attachedRigidbody.gameObject;
-            Active = true;
-            StartCoroutine(MoveOverTime(other.transform.position, transform.position));
+            weightedObject.Add(refObject);
+            StartCoroutine(MoveOverTime(refObject, refObject.transform.position, transform.position));
         }
+
+        if(weightedObject.Count == 1)
+            Active = true;
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (!weightedObject || other.attachedRigidbody.gameObject == weightedObject.gameObject)
-        {
-            weightedObject = null;
+        GameObject refObject = other.attachedRigidbody.gameObject;
+
+        if (weightedObject.Contains(refObject))
+            weightedObject.Remove(refObject);
+
+        if(weightedObject.Count == 0)
             Active = false;
-        }
     }
 
-    private IEnumerator MoveOverTime(Vector3 fromPoint, Vector3 toPoint)
+    private IEnumerator MoveOverTime(GameObject refObject,Vector3 fromPoint, Vector3 toPoint)
     {
-        float startY = fromPoint.y;
-        float moveSpeed = 1;
-        float elapsedTime = 0;
-
-        fromPoint.y = 0;
-        toPoint.y = 0;
-
-        while (elapsedTime < moveSpeed && weightedObject)
+        PlayerController.StateM.ChangeState(new UnequipedState(PlayerController.StateM, true));
+        if (!active)
         {
-            weightedObject.transform.position = Vector3.Lerp(fromPoint, toPoint, elapsedTime) + Vector3.up * startY;
-            elapsedTime += Time.deltaTime;
-            yield return null;
+            float startY = fromPoint.y;
+            float moveSpeed = 1;
+            float elapsedTime = 0;
+
+            fromPoint.y = 0;
+            toPoint.y = 0;
+
+            while (elapsedTime < moveSpeed && refObject)
+            {
+                refObject.transform.position = Vector3.Lerp(fromPoint, toPoint, elapsedTime) + Vector3.up * startY;
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
         }
     }
 }

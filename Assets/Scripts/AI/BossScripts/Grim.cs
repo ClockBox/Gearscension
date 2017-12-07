@@ -5,7 +5,7 @@ using UnityEngine;
 
 [System.Serializable ]
 public class BossAttacks
-{
+{	
 	[SerializeField]
 	protected Transform attackPoints;
 	public Transform AttackPoints
@@ -20,99 +20,161 @@ public class BossAttacks
 		get { return attackPrefab; }
 	}
 
+	[SerializeField]
+	protected Collider attackTrigger;
+	public Collider AttackTrigger
+	{
+		get { return attackTrigger; }
+	}
+
 }
 
 public class Grim : MonoBehaviour {
 	public Transform raypoint;
+	public float rotationSpeed;
 	public float phaseOneRange;
 	[HideInInspector]
-	public bool isAttacking=false;
-
+	public bool isAttacking = false;
+	public BossCrystals[] setCrystals;
+	public List<BossCrystals> crystals;
 	[SerializeField]
 	private BossAttacks[] attacks;
 
+
+	public float fountainFreezeDuration;
 	private BossPhases currentPhase;
 	private GameObject currentPrefab;
-	
-	void Start () {
+	private Collider currentAttackTrigger;
+
+	public bool leftFrozen;
+	public bool rightFrozen;
+
+	void Start() {
 		currentPhase = new BossPhaseOne(this);
 	}
 
-	void Update () {
-		if (Input.GetKeyDown(KeyCode.X))
+
+
+
+	public void IfAttacking()
+	{
+		isAttacking = !isAttacking;
+		EndAttack();
+	}
+
+
+	public void StartAttack(int a)
+	{
+		EndAttack();
+		//currentPrefab = Instantiate(attacks[a].AttackPrefab, attacks[a].AttackPoints.position, attacks[a].AttackPoints.rotation);
+		currentAttackTrigger = attacks[a].AttackTrigger;
+		currentAttackTrigger.enabled = true;
+	}
+
+	public void EndAttack()
+	{
+		if (currentAttackTrigger)
 		{
-			currentPhase.TogglePause();
+			currentAttackTrigger.enabled = false;
 		}
+		//if (currentPrefab)
+		//	Destroy(currentPrefab, delayTimer);
+	}
+	
+	public void CrystalHit()
+	{
+		BulletType current = crystals[0].effectState;
+		if (current == BulletType.Electric || current == BulletType.Ice)
+		{
+			for (int i = 0; i < crystals.Count; i++)
+			{
+				if (crystals[i].effectState != current)
+					break;
+				if (i == crystals.Count - 1)
+				{
+					Impair(current);
+				}
+			}
+		}
+	}
+
+	private void Impair(BulletType a) {
+		if (a == BulletType.Electric)
+			currentPhase.Stun();
+		else
+			currentPhase.Slow();
+	}
+
+	private void ResetStun()
+	{
+		currentPhase.UnStun();
+	}
+	private void ResetSlow()
+	{
+		currentPhase.UnSlow();
+	}
+
+	public void ChangeState(int a)
+	{
+		if (a == 1)
+			currentPhase = new BossPhaseTwo(this);
+
+		else
+			currentPhase = new BossPhaseThree(this);
+	} 
+
+
+	public void freeze(int a)
+	{
 		RaycastHit hit;
 		Ray ray = new Ray(raypoint.transform.position, -transform.up);
 		if (Physics.Raycast(ray, out hit))
 		{
 			if (hit.collider.isTrigger)
 			{
-				if (hit.collider.tag == "Water")
+				if (hit.collider.tag == "Water"&&!leftFrozen&&!rightFrozen)
 				{
-					Debug.Log("On water");
+					currentPhase.TogglePause(true);
+					Invoke("Unfreeze", fountainFreezeDuration);
+					if (a == 0)
+					{
+						GetComponent<Animator>().SetTrigger("LeftFreeze");
+						leftFrozen = true;
+					}
+					else
+					{
+						GetComponent<Animator>().SetTrigger("RightFreeze");
+						rightFrozen = true;
+					}
 				}
 			}
 		}
+		
 	}
 
-
-	public void IfAttacking()
+	private void Unfreeze()
 	{
-		isAttacking = !isAttacking;
+		leftFrozen = false;
+		rightFrozen = false;
+		currentPhase.TogglePause(false);
+		GetComponent<Animator>().SetTrigger("Unfreeze");
+
 	}
 
+	public void CrystalDestroy(BossCrystals a) {
 
-	public void SpawnPrefab(int a)
-	{
-		DestroyPrefab(0);
-		currentPrefab=Instantiate(attacks[a].AttackPrefab , attacks[a].AttackPoints.position, attacks[a].AttackPoints.rotation);
+		if (crystals.Contains(a))
+		{
+			crystals.Remove(a);
+			Destroy(a.gameObject);
+
+		}
+		if (crystals.Count <= 0)
+		{
+			GetComponent<Animator>().SetTrigger("Transition1");
+			currentPhase.EndState();
+		}
+
 	}
 
-	public void DestroyPrefab(int a)
-	{
-		if (currentPrefab)
-			Destroy(currentPrefab, a);
-	}
-
-
-	//private void LaunchAttack(Collider c)
-	//{
-	//	Collider[] cols = Physics.OverlapBox(c.bounds.center, c.bounds.extents, c.transform.rotation, LayerMask.GetMask("Hitbox", "Character"));
-	//	Debug.Log(c.name);
-	//	foreach (Collider col in cols)
-	//	{
-	//		if (col.transform.root == transform)
-	//			continue;
-
-
-	//		Debug.Log(col.name);
-
-	//		float damage = 0;
-	//		switch (c.name)
-	//		{
-	//			case "rLegHitBox":
-	//				damage = 50;
-	//				break;
-	//			case "LeftFootHitbox":
-	//				damage = 50;
-	//				break;
-	//			case "RightFootHitbox":
-	//				damage = 50;
-	//				break;
-	//			case "lHandHitBox":
-	//				damage = 50;
-	//				break;
-	//			case "rHandHitBox":
-	//				damage = 50;
-	//				break;
-	//			default:
-	//				Debug.Log("Unable to identify hitbox name");
-	//				break;
-
-	//		}
-	//		col.SendMessageUpwards("TakeDamage", damage);
-	//	}
-	//}
 }

@@ -5,9 +5,7 @@ using UnityEngine;
 public class PointToPointPlatform : Platform
 {
     #region Variables
-    [SerializeField]
-    private Animator anim;
-
+    [Space(10)]
     [SerializeField]
     private Transform[] nodes;
 
@@ -43,7 +41,7 @@ public class PointToPointPlatform : Platform
         set
         {
             move = value;
-            UpdateState();
+            active = move || rotate;
         }
     }
 
@@ -55,7 +53,7 @@ public class PointToPointPlatform : Platform
         set
         {
             rotate = value;
-            UpdateState();
+            active = move || rotate;
         }
     }
 
@@ -65,7 +63,7 @@ public class PointToPointPlatform : Platform
         {
             move = value;
             rotate = value;
-            UpdateState();
+            active = move || rotate;
         }
     }
 
@@ -85,33 +83,16 @@ public class PointToPointPlatform : Platform
     }
     #endregion
 
-    #region Audio
-    public AudioSource SFX_Source;
-    private AudioSource ambient_Source;
-    public AudioClip StartSound;
-    public AudioClip StopSound;
-    
-    public void PlaySound(string soundName)
+    public override void Activate()
     {
-        GameManager.Instance.AudioManager.playAudio(SFX_Source, soundName);
+        base.Activate();
+        if (anim) anim.enabled = true;
     }
-    #endregion
 
-    public void UpdateState()
+    public override void Deactivate()
     {
-        if (move || rotate)
-        {
-            if (StartSound) PlaySound(StartSound.name);
-            if (ambient_Source) ambient_Source.UnPause();
-            if (anim) anim.enabled = true;
-        }
-        else
-        {
-            if (StopSound) PlaySound(StopSound.name);
-            if (ambient_Source) ambient_Source.Pause();
-            if (anim)
-                anim.enabled = false;
-        }
+        base.Deactivate();
+        if (anim) anim.enabled = false;
     }
 
     private void Start()
@@ -124,7 +105,6 @@ public class PointToPointPlatform : Platform
 
         transform.position = nodes[currentMoveNode].position;
         transform.rotation = nodes[currentRotationNode].rotation;
-        UpdateState();
     }
 
     private void FixedUpdate()

@@ -20,32 +20,6 @@ public class GameManager : MonoBehaviour
     public Transform LevelSpawn;
     private static int currentFloor = 4;
 
-    private static bool bell = false;
-    public bool bellAchivement
-    {
-        get { return bell; }
-        set { bell = value; }
-    }
-    private static bool sword = false;
-    public bool swordAchivement
-    {
-        get { return sword; }
-        set { sword = value; }
-    }
-    private static bool freeze = false;
-    public bool freezeAchivement
-    {
-        get { return freeze; }
-        set { freeze = value; }
-    }
-    private static bool sin = false;
-    public bool sinAchivement
-    {
-        get { return sin; }
-        set { sin = value; }
-    }
-    public Sprite complete;
-
     private AudioDictonary audioManager;
     public AudioDictonary AudioManager
     {
@@ -142,31 +116,6 @@ public class GameManager : MonoBehaviour
             LoadScene("Floor_3");
         else if (Input.GetKeyDown(KeyCode.F8))
             LoadScene("BossFloor");
-
-        if(SceneManager.GetActiveScene().name == mainMenuScene)
-        {
-            if(bell == true)
-            {
-                GameObject achivement = GameObject.Find("Main Menu/Background/Menu Buttons/Bonus/Bonus Panel/Ring The Bell");
-                achivement.GetComponent<Image>().sprite = complete;
-            }
-            if (sword == true)
-            {
-                GameObject achivement = GameObject.Find("Main Menu/Background/Menu Buttons/Bonus/Bonus Panel/Extended Blade");
-                achivement.GetComponent<Image>().sprite = complete;
-            }
-            if (sin == true)
-            {
-                GameObject achivement = GameObject.Find("Main Menu/Background/Menu Buttons/Bonus/Bonus Panel/Saint or Sinner");
-                achivement.GetComponent<Image>().sprite = complete;
-            }
-            if (freeze == true)
-            {
-                GameObject achivement = GameObject.Find("Main Menu/Background/Menu Buttons/Bonus/Bonus Panel/Freeze em!!");
-                achivement.GetComponent<Image>().sprite = complete;
-            }
-            else return;
-        }
     }
 
     public void OnApplicationFocus(bool focus)
@@ -220,16 +169,10 @@ public class GameManager : MonoBehaviour
         Destroy(referenceObject);
     }
 
-    public void Achivement(string passedString)
-    {
-        hud.Achivement(passedString);
-    }
-
     #region Player Managment
     private void SpawnPlayer()
     {
         Player = Instantiate(playerPrefab, LevelSpawn.position, LevelSpawn.rotation).GetComponent<PlayerController>();
-        Debug.Log("SpawnPlayer", Player);
     }
 
     public void RespawnPlayer()
@@ -279,8 +222,13 @@ public class GameManager : MonoBehaviour
 
     public void AddNextFloor()
     {
-        UnloadScene(SceneManager.GetSceneByBuildIndex(currentFloor));
-        AddScene(currentFloor + 1);
+        StartCoroutine(NextFloor());
+    }
+
+    private IEnumerator NextFloor()
+    {
+        yield return SceneManager.UnloadSceneAsync(currentFloor);
+        yield return SceneManager.LoadSceneAsync(currentFloor + 1, LoadSceneMode.Additive);
     }
 
     public void LoadScene(string name)

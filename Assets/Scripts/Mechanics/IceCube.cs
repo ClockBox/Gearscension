@@ -40,8 +40,9 @@ public class IceCube : MonoBehaviour
             extents.x = extents.z;
         else
             extents.z = extents.x;
+
         transform.GetChild(0).localScale = extents * 2;
-        
+
         for (int r = 0; r < 4; r++)
         {
             Quaternion rotation = transform.rotation * Quaternion.Euler(0, 90 * r, 0);
