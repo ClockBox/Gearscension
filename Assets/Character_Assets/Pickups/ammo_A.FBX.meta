@@ -1,9 +1,9 @@
 fileFormatVersion: 2
-guid: b956c4b1e369d1448b5cfca188ecc7b8
-timeCreated: 1511465686
-licenseType: Pro
+guid: 93e696130e2b0eb4d88758b859c20f0d
+timeCreated: 1512512662
+licenseType: Free
 ModelImporter:
-  serializedVersion: 21
+  serializedVersion: 22
   fileIDToRecycleName:
     100000: //RootNode
     400000: //RootNode
@@ -12,10 +12,17 @@ ModelImporter:
     4300000: ammo_A
     7400000: Take 001
     9500000: //RootNode
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ammo_A
+    second: {fileID: 2100000, guid: 41b59adfdc589f34dbfdd6fe8e56596c, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
     materialSearch: 1
+    materialLocation: 0
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
@@ -28,6 +35,7 @@ ModelImporter:
     animationImportWarnings: 
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
     animationCompression: 1
     animationRotationError: 0.5
     animationPositionError: 0.5
@@ -39,7 +47,7 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 3
+    globalScale: 1
     meshCompression: 0
     addColliders: 0
     importVisibility: 1
