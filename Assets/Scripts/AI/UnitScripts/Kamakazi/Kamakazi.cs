@@ -47,10 +47,10 @@ public class Kamakazi : AIStateManager {
 	}
 	IEnumerator LaunchExplode(float delayTimer)
     {
+        yield return new WaitForSeconds(delayTimer);
+
         anim.SetTrigger("Jump");
         anim.SetBool("Grounded", false);
-
-        yield return new WaitForSeconds(delayTimer);
 
         rb.constraints = RigidbodyConstraints.FreezeRotation;
 		if (transform.position.y <= maxHeight && !heightReached)
