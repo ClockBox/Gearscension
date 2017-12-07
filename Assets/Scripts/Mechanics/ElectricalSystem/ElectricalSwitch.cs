@@ -7,7 +7,7 @@ public class ElectricalSwitch : ElectricalObject
 {
     public UnityEvent OnActivate;
     public UnityEvent OnDeactivate;
-    
+
     public override void Activate()
     {
         base.Activate();

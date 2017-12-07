@@ -16,6 +16,8 @@ public class ElectricalObject : MonoBehaviour
     [Space(10)]
     public GameObject[] lights;
 
+    public Animator anim;
+
     #region Activation
     protected bool active = false;
     public bool Active
@@ -34,11 +36,13 @@ public class ElectricalObject : MonoBehaviour
         active = true;
         ToggleLights(true);
 
+        if (anim) anim.SetBool("Activated", true);
         if (activationParticle) activationParticle.Play();
+        if (runningParticle) runningParticle.Play();
         if (SFXSource)
         {
-            SFXSource.PlayOneShot(activationSound);
             SFXSource.Play();
+            SFXSource.PlayOneShot(activationSound);
         }
     }
     public virtual void Deactivate()
@@ -47,7 +51,9 @@ public class ElectricalObject : MonoBehaviour
         active = false;
         ToggleLights(false);
 
-        if (activationParticle) activationParticle.Stop();
+        if (anim) anim.SetBool("Activated", false);
+        if (deactivationParticle) deactivationParticle.Play();
+        if (runningParticle) runningParticle.Stop();
         if (SFXSource)
         {
             SFXSource.Stop();

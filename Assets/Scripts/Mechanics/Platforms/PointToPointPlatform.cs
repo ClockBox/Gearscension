@@ -5,11 +5,9 @@ using UnityEngine;
 public class PointToPointPlatform : Platform
 {
     #region Variables
-    private Animator anim;
-    
+    [Space(10)]
     [SerializeField]
     private Transform[] nodes;
-    [Space(10)]
 
     private int currentMoveNode;
     private int nextMoveNode;
@@ -95,11 +93,6 @@ public class PointToPointPlatform : Platform
     {
         base.Deactivate();
         if (anim) anim.enabled = false;
-    }
-
-    private void Awake()
-    {
-        anim = GetComponent<Animator>();
     }
 
     private void Start()
