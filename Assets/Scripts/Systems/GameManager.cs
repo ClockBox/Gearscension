@@ -173,7 +173,6 @@ public class GameManager : MonoBehaviour
     private void SpawnPlayer()
     {
         Player = Instantiate(playerPrefab, LevelSpawn.position, LevelSpawn.rotation).GetComponent<PlayerController>();
-        Debug.Log("SpawnPlayer", Player);
     }
 
     public void RespawnPlayer()
@@ -296,7 +295,6 @@ public class GameManager : MonoBehaviour
             pause = false;
             ToggleCursor(true);
             Time.timeScale = 1;
-            Debug.Log("Hud Destroy");
             if(player) Destroy(player.gameObject);
         }
     }
