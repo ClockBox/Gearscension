@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class BossCrystals : MonoBehaviour {
+	public GameObject _crystal;
 	[SerializeField]
 	private Grim boss;
 	public bool isExposed = false;
@@ -16,35 +17,23 @@ public class BossCrystals : MonoBehaviour {
 	private void Start()
 	{
 		elapsed = resetTimer;
-	} 
-	//private void OnTriggerEnter(Collider other)
-	//{
-	//	if (!isExposed)
-	//	{
-	//		if (other.gameObject.GetComponent<Bullet>())
-	//		{
-	//			effectState = other.gameObject.GetComponent<Bullet>().type;
-	//			boss.CrystalHit();
-	//			StopAllCoroutines();
-	//			elapsed = resetTimer;
-	//			StartCoroutine(Reset());
-	//		}
+	}
+	private void OnTriggerEnter(Collider other)
+	{
+		if (isExposed)
+		{
+			if (other.gameObject.CompareTag("Sword"))
+			{
+				boss.CrystalDestroy(this);
+			}
 
-	//	}
-	//	else
-	//	{
-	//		if (other.gameObject.CompareTag("Projectile"))
-	//		{
-	//			boss.CrystalDestroy(this);
-	//		}
+		}
 
-	//	}
 
-	//}
+	}
 	private void OnCollisionEnter(Collision collision)
 	{
-		if (!isExposed)
-		{
+		
 			if (collision.gameObject.GetComponent<Bullet>())
 			{
 				effectState = collision.gameObject.GetComponent<Bullet>().type;
@@ -54,15 +43,8 @@ public class BossCrystals : MonoBehaviour {
 				StartCoroutine(Reset());
 			}
 
-		}
-		else
-		{
-			if (collision.gameObject.CompareTag("Projectile"))
-			{
-				boss.CrystalDestroy(this);
-			}
-
-		}
+		
+	
 
 	}
 

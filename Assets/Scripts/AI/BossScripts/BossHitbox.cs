@@ -30,6 +30,7 @@ public class BossHitbox : MonoBehaviour {
 	{
 		if (collisionTag == "Freeze")
 		{
+			Debug.Log("freeze leg");
 			if (other.gameObject.GetComponent<Bullet>() && other.gameObject.GetComponent<Bullet>().type == BulletType.Ice)
 			{
 				if (isLeft)
@@ -43,6 +44,7 @@ public class BossHitbox : MonoBehaviour {
 		else if (collisionTag == other.gameObject.tag)
 		{
 			Debug.Log("Hit by " + collisionTag);
+			boss.GetComponent<Animator>().SetTrigger("Damage");
 			if (breakable)
 			{
 				Destroy(breakable.gameObject);

@@ -32,25 +32,34 @@ public class BossAttacks
 public class Grim : MonoBehaviour {
 	public Transform raypoint;
 	public float rotationSpeed;
+	public float rotationSpeed2;
 	public float phaseOneRange;
-	[HideInInspector]
-	public bool isAttacking = false;
+	public float fountainFreezeDuration;
 	public BossCrystals[] setCrystals;
-	public List<BossCrystals> crystals;
+
 	[SerializeField]
 	private BossAttacks[] attacks;
+	[SerializeField]
+	private GameObject[] phase1Colliders;
+	[SerializeField]
+	private GameObject[] phase2Colliders;
+	[SerializeField]
+	private GameObject[] phase3Colliders;
 
-
-	public float fountainFreezeDuration;
 	private BossPhases currentPhase;
 	private GameObject currentPrefab;
 	private Collider currentAttackTrigger;
+	private bool leftFrozen;
+	private bool rightFrozen;
 
-	public bool leftFrozen;
-	public bool rightFrozen;
+	[HideInInspector]
+	public bool isAttacking = false;
+	[HideInInspector]
+	public List<BossCrystals> crystals;
 
 	void Start() {
 		currentPhase = new BossPhaseOne(this);
+		ToggleHitbox(phase1Colliders,true);
 	}
 
 
@@ -117,10 +126,17 @@ public class Grim : MonoBehaviour {
 	public void ChangeState(int a)
 	{
 		if (a == 1)
+		{
 			currentPhase = new BossPhaseTwo(this);
-
+			ToggleHitbox(phase1Colliders,false);
+			ToggleHitbox(phase2Colliders,true);
+		}
 		else
+		{
 			currentPhase = new BossPhaseThree(this);
+			ToggleHitbox(phase2Colliders,false);
+			ToggleHitbox(phase3Colliders,true);
+		}
 	} 
 
 
@@ -132,13 +148,12 @@ public class Grim : MonoBehaviour {
 		{
 			if (hit.collider.isTrigger)
 			{
-				if (hit.collider.tag == "Water"&&!leftFrozen&&!rightFrozen)
+				if (hit.collider.tag == "Freezable"&&!leftFrozen&&!rightFrozen)
 				{
 					currentPhase.TogglePause(true);
-					Invoke("Unfreeze", fountainFreezeDuration);
 					if (a == 0)
 					{
-						GetComponent<Animator>().SetTrigger("LeftFreeze");
+						GetComponent<Animator>().SetTrigger("RightFreeze");
 						leftFrozen = true;
 					}
 					else
@@ -146,18 +161,24 @@ public class Grim : MonoBehaviour {
 						GetComponent<Animator>().SetTrigger("RightFreeze");
 						rightFrozen = true;
 					}
+					StartCoroutine(Unfreeze());
+
 				}
 			}
 		}
 		
 	}
 
-	private void Unfreeze()
+	private IEnumerator Unfreeze()
 	{
+		yield return new WaitForSeconds(fountainFreezeDuration);
+		if(leftFrozen)
 		leftFrozen = false;
+		else 
 		rightFrozen = false;
-		currentPhase.TogglePause(false);
 		GetComponent<Animator>().SetTrigger("Unfreeze");
+		yield return new WaitForSeconds(2.8f);
+		currentPhase.TogglePause(false);
 
 	}
 
@@ -166,7 +187,7 @@ public class Grim : MonoBehaviour {
 		if (crystals.Contains(a))
 		{
 			crystals.Remove(a);
-			Destroy(a.gameObject);
+			Destroy(a._crystal.gameObject);
 
 		}
 		if (crystals.Count <= 0)
@@ -175,6 +196,14 @@ public class Grim : MonoBehaviour {
 			currentPhase.EndState();
 		}
 
+	}
+
+	private void ToggleHitbox(GameObject[] c,bool a)
+	{
+		for (int i = 0; i < c.Length; i++)
+		{
+			c[i].SetActive(a);
+		}
 	}
 
 }

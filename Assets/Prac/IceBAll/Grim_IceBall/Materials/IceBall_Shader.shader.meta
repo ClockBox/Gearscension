@@ -1,0 +1,20 @@
+fileFormatVersion: 2
+guid: c1c7cc5b24fb32140bbd587286c0989b
+timeCreated: 1512412567
+licenseType: Free
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures:
+  - _iceball_iceball_Normal: {fileID: 2800000, guid: 9067c9cfa3ec3934faf5abcaf92124a5,
+      type: 3}
+  - _IceBallTexture_normal: {fileID: 2800000, guid: 8e22b67c60e18b2449e183a20eed60da,
+      type: 3}
+  - _iceball_iceball_AlbedoTransparency: {fileID: 2800000, guid: 575a77613838be74395e15fd65975a48,
+      type: 3}
+  - _IceBallTexture_basecolor: {fileID: 2800000, guid: 5da8175766bdd474d99de56ca7c68ebb,
+      type: 3}
+  - _iceball_iceball_MetallicSmoothness: {fileID: 2800000, guid: af612471ae428c045884c8afc1ea592d,
+      type: 3}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
