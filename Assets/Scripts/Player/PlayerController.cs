@@ -329,11 +329,5 @@ public class PlayerController : MonoBehaviour
             if (gunUpgrade >= (int)BulletType.Magnetic)
                 ammoType = (int)BulletType.Magnetic;
         }
-
-        //if (ammoAxis.Down)
-        //{
-        //    ammoType = (ammoType + ammoAxis.RawValue) % 4;
-        //    if (ammoType < 0) ammoType += 4;
-        //}
     }
 }

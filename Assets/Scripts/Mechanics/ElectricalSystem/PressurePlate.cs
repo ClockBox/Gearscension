@@ -31,6 +31,7 @@ public class PressurePlate : ElectricalSwitch
     private void OnTriggerEnter(Collider other)
     {
         GameObject refObject = other.attachedRigidbody.gameObject;
+        Debug.Log(refObject);
 
         if (weightedObject.Contains(refObject))
             return;

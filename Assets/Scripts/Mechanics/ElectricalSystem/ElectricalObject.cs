@@ -47,7 +47,7 @@ public class ElectricalObject : MonoBehaviour
     }
     public virtual void Deactivate()
     {
-        Debug.Log("Deactivate", this);
+        Debug.Log(this + " :Deactivate", this);
         active = false;
         ToggleLights(false);
 

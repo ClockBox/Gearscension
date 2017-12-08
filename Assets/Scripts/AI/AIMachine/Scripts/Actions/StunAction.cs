@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 [CreateAssetMenu(menuName = "AIMachine/ScriptableObjects/AIActions/Stun")]
 
-public class StunAction : AIActions {
-
+public class StunAction : AIActions
+{
 	public override void Act(AIStateManager manager)
 	{
 		Stun(manager);
@@ -13,8 +13,6 @@ public class StunAction : AIActions {
 	private void Stun(AIStateManager manager)
 	{
 		if (manager.pathAgent.enabled&& !manager.pathAgent.isStopped)
-		{
-				manager.pathAgent.isStopped = true;
-		}
+		    manager.pathAgent.isStopped = true;
 	}
 }

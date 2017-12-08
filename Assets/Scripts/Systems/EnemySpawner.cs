@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemySpawner : MonoBehaviour
+public class EnemySpawner : ElectricalObject
 {
     public GameObject enemyPrefab;
     public Transform spawnPoint;
@@ -11,14 +11,8 @@ public class EnemySpawner : MonoBehaviour
     public float spawnforce;
     public float spawnDelay;
     public float activationDelay;
-
-    private Animator anim;
+    
     private bool canSpawn = true;
-
-    private void Awake()
-    {
-        anim = GetComponent<Animator>();    
-    }
 
     public void SpawnEnemy()
     {
