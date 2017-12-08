@@ -113,9 +113,9 @@ public class GameManager : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.F6))
             LoadScene("Floor_2");
         else if (Input.GetKeyDown(KeyCode.F7))
-            LoadScene("Floor_3");
+            LoadScene("Floor_5");
         else if (Input.GetKeyDown(KeyCode.F8))
-            LoadScene("BossFloor");
+            LoadScene("BossFloor1");
     }
 
     public void OnApplicationFocus(bool focus)

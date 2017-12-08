@@ -31,21 +31,25 @@ public class PressurePlate : ElectricalSwitch
     private void OnTriggerEnter(Collider other)
     {
         GameObject refObject = other.attachedRigidbody.gameObject;
+        Debug.Log(refObject + ":" + refObject.tag);
 
         if (weightedObject.Contains(refObject))
             return;
 
-        if (other.CompareTag("Player"))
+        if (refObject.CompareTag("Player"))
+        {
             weightedObject.Add(refObject);
+            if (weightedObject.Count == 1)
+                Active = true;
+        }
 
-        else if (other.CompareTag("Freezable"))
+        else if (refObject.CompareTag("Freezable"))
         {
             weightedObject.Add(refObject);
             StartCoroutine(MoveOverTime(refObject, refObject.transform.position, transform.position));
+            if (weightedObject.Count == 1)
+                Active = true;
         }
-
-        if(weightedObject.Count == 1)
-            Active = true;
     }
 
     private void OnTriggerExit(Collider other)
@@ -53,10 +57,11 @@ public class PressurePlate : ElectricalSwitch
         GameObject refObject = other.attachedRigidbody.gameObject;
 
         if (weightedObject.Contains(refObject))
+        {
             weightedObject.Remove(refObject);
-
-        if(weightedObject.Count == 0)
-            Active = false;
+            if (weightedObject.Count == 0)
+                Active = false;
+        }
     }
 
     private IEnumerator MoveOverTime(GameObject refObject,Vector3 fromPoint, Vector3 toPoint)

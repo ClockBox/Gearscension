@@ -11,6 +11,7 @@ public class LightPuzzle : MonoBehaviour
     public Material greyMat, greenMat, blueMat, redMat;
     public Light greenLight, blueLight, redLight;
     public UnityEvent myEvent;
+    public UnityEvent eventTwo;
 
     private bool allowChange;
     private int counter;
@@ -35,66 +36,19 @@ public class LightPuzzle : MonoBehaviour
         InitializePuzzle();
 
         allowChange = true;
+
+        for (int i = 0; i < randomPuzzleSelect.Length; i++)
+        {
+            if (randomPuzzleSelect[i] == 1)
+                TurnOnGreenLight(boxPositioningLights[i]);
+            else
+                TurnOnRedLight(boxPositioningLights[i]);
+        }
     }
 
     private void Update()
     {
-        if (greenLight.enabled && blueLight.enabled && redLight.enabled)
-        {
-            for (int i = 0; i < randomPuzzleSelect.Length; i++)
-            {
-                if (randomPuzzleSelect[i] == 1)
-                    TurnOnGreenLight(boxPositioningLights[i]);
-                else
-                    TurnOnRedLight(boxPositioningLights[i]);
-            }
-        }
-        else if (greenLight.enabled && blueLight.enabled)
-        {
-            //for (int i = 0; i < randomPuzzleSelect.Length; i++)
-            //{
-            //    if(boxPositioningLights[i].GetComponentInChildren<Light>().name == "RedLight")
-            //        boxPositioningLights[i].GetComponentInChildren<Renderer>().material = redMat;
-            //    else if(boxPositioningLights[i].GetComponentInChildren<Light>().name == "GreenLight")
-            //        boxPositioningLights[i].GetComponentInChildren<Renderer>().material = greenMat;
 
-            //    boxPositioningLights[i].GetComponentInChildren<Light>().enabled = true;
-            //}
-            for (int i = 0; i < randomPuzzleSelect.Length; i++)
-            {
-                if (group1[i] == 1)
-                    TurnOnGreenLight(boxPositioningLights[i]);
-                else
-                    TurnOnRedLight(boxPositioningLights[i]);
-            }
-        }
-        else if (greenLight.enabled && redLight.enabled)
-        {
-            for (int i = 0; i < randomPuzzleSelect.Length; i++)
-            {
-                if (group2[i] == 1)
-                    TurnOnGreenLight(boxPositioningLights[i]);
-                else
-                    TurnOnRedLight(boxPositioningLights[i]);
-            }
-        }
-        else if (blueLight.enabled && redLight.enabled)
-        {
-            for (int i = 0; i < randomPuzzleSelect.Length; i++)
-            {
-                if (group3[i] == 1)
-                    TurnOnGreenLight(boxPositioningLights[i]);
-                else
-                    TurnOnRedLight(boxPositioningLights[i]);
-            }
-        }
-        else
-        {
-            for (int i = 0; i < randomPuzzleSelect.Length; i++)
-            {
-                TurnOffLights(boxPositioningLights[i]);
-            }
-        }
     }
 
 
@@ -267,6 +221,7 @@ public class LightPuzzle : MonoBehaviour
             {
                 Debug.Log("Piece removed");
                 correctBlockCounter--;
+                CheckPuzzleOnExit();
                 Debug.Log("Correct Block Counter: " + correctBlockCounter);
             }
         }
@@ -277,8 +232,13 @@ public class LightPuzzle : MonoBehaviour
         if (correctBlockCounter >= counterMax)
         {
             myEvent.Invoke();
-            counterMax = 0;
         }
+    }
+
+    public void CheckPuzzleOnExit()
+    {
+        if (correctBlockCounter < counterMax)
+            eventTwo.Invoke();
     }
 
     public IEnumerator WaitForLight()

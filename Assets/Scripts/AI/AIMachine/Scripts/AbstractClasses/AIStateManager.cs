@@ -184,11 +184,17 @@ public abstract class AIStateManager : MonoBehaviour
 
     public void Magnitize()
     {
+        TransitionToState(stunState);
         Debug.Log(this + " was Magnitized");
+        pathAgent.enabled = false;
+        GetComponent<Rigidbody>().isKinematic = false;
     }
 
     public void Demagnitize()
     {
+        GetComponent<Rigidbody>().isKinematic = true;
+        pathAgent.enabled = true;
+        TransitionToState(alertedState);
         Debug.Log(this + " was Demagnitize");
     }
 
