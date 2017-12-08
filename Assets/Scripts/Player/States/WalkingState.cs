@@ -73,7 +73,6 @@ public class MoveState : PlayerState
 
     private IEnumerator ActivateLever(Lever lever)
     {
-        Debug.Log("ActivateLever: Start");
         InTransition = true;
         
         rb.isKinematic = true;

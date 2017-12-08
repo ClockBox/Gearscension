@@ -212,14 +212,11 @@ public class PlayerController : MonoBehaviour
     }
     private IEnumerator Die()
     {
-        Debug.Log("Here");
         _isDead = true;
         DropWeapons();
         Instantiate(Ragdoll, transform.position, transform.rotation);
         Destroy(transform.gameObject);
         yield return new WaitForSeconds(3.5f);
-
-        Debug.Log("Here");
         GameManager.Instance.Continue();
     }
     #endregion
@@ -240,7 +237,6 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            Debug.Log("Here");
             StopAllCoroutines();
             DestroyImmediate(gameObject);
         }
@@ -257,16 +253,10 @@ public class PlayerController : MonoBehaviour
         m_Voice = transform.GetChild(3).GetComponent<AudioSource>();
     }
 
-    private void OnDestroy()
-    {
-        Debug.Log("Player Destroyed");
-    }
-
     private void Start ()
     {
         cC = GetComponent<CinemachineController>();
-
-        Debug.Log("Player Start", this);
+        
         //Initialize state Machine
         m_stateM.State = new UnequipedState(m_stateM, true);
         m_stateM.StartState(m_stateM.State);
@@ -285,7 +275,7 @@ public class PlayerController : MonoBehaviour
 
         //testing armor and health
         if (Input.GetKeyDown(KeyCode.Alpha0))
-            TakeDamage(10);
+            TakeDamage(10);  
         RechargeArmor();
 
         if (AimPoint) AimPoint.rotation = CameraController.MainCamera.transform.rotation * new Quaternion(0, 0.7071068f, 0, 0.7071068f);
@@ -313,10 +303,10 @@ public class PlayerController : MonoBehaviour
                 ammoType = (int)BulletType.Magnetic;
         }
 
-        if (ammoAxis.Down)
-        {
-            ammoType = (ammoType + ammoAxis.RawValue) % 4;
-            if (ammoType < 0) ammoType += 4;
-        }
+        //if (ammoAxis.Down)
+        //{
+        //    ammoType = (ammoType + ammoAxis.RawValue) % 4;
+        //    if (ammoType < 0) ammoType += 4;
+        //}
     }
 }
