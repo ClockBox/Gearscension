@@ -78,3 +78,5 @@ Assets/Scenes/Levels/Floor_1/LightingData.asset
 Assets/Character_Assets/Kamikazi_2/Animations/Materials/UV_Grid.mat
 Assets/Character_Assets/Kamikazi_2/Animations/Materials/UV_Grid.mat.meta
 Assets/Character_Assets/Kamikazi_2/Animations/Materials.meta
+Assets/Scripts/AI/BossScripts/BlueTrigger.cs
+Assets/Scripts/AI/BossScripts/BlueTrigger.cs.meta

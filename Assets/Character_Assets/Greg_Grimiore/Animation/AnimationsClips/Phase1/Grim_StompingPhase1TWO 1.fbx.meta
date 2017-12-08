@@ -864,7 +864,7 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 1
+      - time: 0.9268293
         functionName: IfAttacking
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 14f28f72f96f85c40995a58cb8ec7da7,

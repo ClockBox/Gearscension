@@ -59,7 +59,7 @@ public class Grim : MonoBehaviour {
 
 	void Start() {
 		currentPhase = new BossPhaseOne(this);
-		ToggleHitbox(phase1Colliders,true);
+		ToggleHitbox(phase1Colliders, true);
 	}
 
 
@@ -75,7 +75,12 @@ public class Grim : MonoBehaviour {
 	public void StartAttack(int a)
 	{
 		EndAttack();
-		//currentPrefab = Instantiate(attacks[a].AttackPrefab, attacks[a].AttackPoints.position, attacks[a].AttackPoints.rotation);
+		if (attacks[a].AttackPrefab)
+			currentPrefab = Instantiate(attacks[a].AttackPrefab, attacks[a].AttackPoints.position, attacks[a].AttackPoints.rotation);
+		if (a == 4 || a == 5)
+		{
+			currentPrefab.transform.parent = attacks[a].AttackPoints;
+		}
 		currentAttackTrigger = attacks[a].AttackTrigger;
 		currentAttackTrigger.enabled = true;
 	}
@@ -86,8 +91,8 @@ public class Grim : MonoBehaviour {
 		{
 			currentAttackTrigger.enabled = false;
 		}
-		//if (currentPrefab)
-		//	Destroy(currentPrefab, delayTimer);
+		if (currentPrefab)
+			Destroy(currentPrefab);
 	}
 	
 	public void CrystalHit()
