@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(StateManager))]
 [RequireComponent(typeof(IKController))]
@@ -43,6 +44,11 @@ public class PlayerController : MonoBehaviour
 
     const int GUN = 0;
     const int SWORD = 1;
+
+    // HookShot
+    private GameObject[] hookTargets;
+    [HideInInspector]
+    public GameObject selectedHook;
 
     //HUD data
     private bool _isDead;
@@ -157,25 +163,33 @@ public class PlayerController : MonoBehaviour
         GameManager.Hud.BulletUpgrade();
     }
 
-    public GameObject FindHookTarget(string tag)
+    public void UpdateHooks()
     {
-        GameObject[] targets = GameObject.FindGameObjectsWithTag(tag);
+        hookTargets = GameObject.FindGameObjectsWithTag("HookNode");
+    }
+    public GameObject FindHookTarget()
+    {
         GameObject temp = null;
         float closestAngle = 0.8f;
-        for (int i = 0; i < targets.Length; i++)
+        for (int i = 0; i < hookTargets.Length; i++)
         {
-            Vector3 checkDistance = targets[i].transform.position - transform.position;
-            if (checkDistance.magnitude < HookRange && Vector3.Dot(targets[i].transform.forward, Camera.main.transform.forward) > 0.5f)
+            Vector3 checkDistance = hookTargets[i].transform.position - transform.position;
+            if (checkDistance.magnitude < HookRange && Vector3.Dot(hookTargets[i].transform.forward, Camera.main.transform.forward) > 0.5f)
             {
-                float checkAngle = Vector3.Dot((targets[i].transform.position - transform.position).normalized, Camera.main.transform.forward);
+                float checkAngle = Vector3.Dot((hookTargets[i].transform.position - transform.position).normalized, Camera.main.transform.forward);
                 if (checkAngle > closestAngle)
                 {
                     closestAngle = checkAngle;
-                    temp = targets[i];
+                    temp = hookTargets[i];
                 }
             }
         }
-        return temp;
+        if (temp != selectedHook)
+        {
+            if (selectedHook) selectedHook.transform.parent.GetChild(0).GetComponent<Light>().enabled = false;
+            if (temp) temp.transform.parent.GetChild(0).GetComponent<Light>().enabled = true;
+        }
+        return selectedHook = temp;
     }
     #endregion
 
@@ -212,14 +226,11 @@ public class PlayerController : MonoBehaviour
     }
     private IEnumerator Die()
     {
-        Debug.Log("Here");
         _isDead = true;
         DropWeapons();
         Instantiate(Ragdoll, transform.position, transform.rotation);
         Destroy(transform.gameObject);
         yield return new WaitForSeconds(3.5f);
-
-        Debug.Log("Here");
         GameManager.Instance.Continue();
     }
     #endregion
@@ -240,7 +251,6 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            Debug.Log("Here");
             StopAllCoroutines();
             DestroyImmediate(gameObject);
         }
@@ -257,16 +267,23 @@ public class PlayerController : MonoBehaviour
         m_Voice = transform.GetChild(3).GetComponent<AudioSource>();
     }
 
-    private void OnDestroy()
+    private void OnEnable()
     {
-        Debug.Log("Player Destroyed");
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        UpdateHooks();
     }
 
     private void Start ()
     {
         cC = GetComponent<CinemachineController>();
-
-        Debug.Log("Player Start", this);
+        
         //Initialize state Machine
         m_stateM.State = new UnequipedState(m_stateM, true);
         m_stateM.StartState(m_stateM.State);
@@ -285,7 +302,7 @@ public class PlayerController : MonoBehaviour
 
         //testing armor and health
         if (Input.GetKeyDown(KeyCode.Alpha0))
-            TakeDamage(10);
+            TakeDamage(10);  
         RechargeArmor();
 
         if (AimPoint) AimPoint.rotation = CameraController.MainCamera.transform.rotation * new Quaternion(0, 0.7071068f, 0, 0.7071068f);
@@ -313,10 +330,10 @@ public class PlayerController : MonoBehaviour
                 ammoType = (int)BulletType.Magnetic;
         }
 
-        if (ammoAxis.Down)
-        {
-            ammoType = (ammoType + ammoAxis.RawValue) % 4;
-            if (ammoType < 0) ammoType += 4;
-        }
+        //if (ammoAxis.Down)
+        //{
+        //    ammoType = (ammoType + ammoAxis.RawValue) % 4;
+        //    if (ammoType < 0) ammoType += 4;
+        //}
     }
 }

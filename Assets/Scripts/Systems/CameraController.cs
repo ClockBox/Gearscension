@@ -78,10 +78,6 @@ public class CameraController : MonoBehaviour
                 if (hit.transform.gameObject != camPivot.parent.gameObject)
                     transform.position = hit.point + hit.normal * 0.2f;
             }
-
-            //Check distance to player, move camera if to close
-            if ((transform.position - camPivot.position).magnitude < 1f)
-                currentY -= 5f;
         }
     }
 

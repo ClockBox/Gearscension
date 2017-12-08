@@ -24,6 +24,7 @@ public class BreakablePillar : MonoBehaviour
                 meshCol.inflateMesh = true;
                 temp.constraints = RigidbodyConstraints.None;
                 temp.useGravity = true;
+                temp.mass = 3000.0f;
 
                 breakablePart[i].transform.parent = null;
             }
