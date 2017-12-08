@@ -88,7 +88,7 @@ public class BossTriggers : MonoBehaviour {
 		while (explodeTimer >= 0)
 		{
 			Vector3 direction = (playerPos-pos).normalized;
-			direction = new Vector3(direction.x, Mathf.Abs(direction.y), direction.z );
+			direction = new Vector3(direction.x*2, Mathf.Abs(direction.y)*0.3f, direction.z*2 );
 			if (player)
 			{
 				player.GetComponent<Rigidbody>().AddForce(direction * force * Time.fixedDeltaTime);

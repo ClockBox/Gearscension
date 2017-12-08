@@ -33,8 +33,7 @@ public class BossCrystals : MonoBehaviour {
 	}
 	private void OnCollisionEnter(Collision collision)
 	{
-		if (!isExposed)
-		{
+		
 			if (collision.gameObject.GetComponent<Bullet>())
 			{
 				effectState = collision.gameObject.GetComponent<Bullet>().type;
@@ -44,7 +43,7 @@ public class BossCrystals : MonoBehaviour {
 				StartCoroutine(Reset());
 			}
 
-		}
+		
 	
 
 	}

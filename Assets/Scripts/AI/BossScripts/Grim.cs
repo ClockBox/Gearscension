@@ -177,7 +177,7 @@ public class Grim : MonoBehaviour {
 		else 
 		rightFrozen = false;
 		GetComponent<Animator>().SetTrigger("Unfreeze");
-		yield return new WaitForSeconds(4.2f);
+		yield return new WaitForSeconds(2.8f);
 		currentPhase.TogglePause(false);
 
 	}

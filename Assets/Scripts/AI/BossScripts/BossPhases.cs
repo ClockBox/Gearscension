@@ -177,12 +177,15 @@ public class BossPhaseTwo : BossPhases
 		boss.crystals.Clear();
 		boss.crystals.Add(boss.setCrystals[2]);
 		boss.crystals.Add(boss.setCrystals[3]);
-		nmAgent.isStopped = true;
+		nmAgent.speed = 2;
+		nmAgent.isStopped = false;
+		nmAgent.angularSpeed = 0;
 		turnLimit = 0;
 	}
 
 	public override IEnumerator UpdateAction()
 	{
+		nmAgent.SetDestination(player.transform.position);
 		
 		Quaternion wantedRotation =
 			Quaternion.LookRotation
@@ -202,6 +205,8 @@ public class BossPhaseTwo : BossPhases
 
 	public override void PauseFunctions(bool a)
 	{
+		Debug.Log(nmAgent.isStopped);
+		nmAgent.isStopped = a;
 	}
 
 	private IEnumerator ChooseAttack()

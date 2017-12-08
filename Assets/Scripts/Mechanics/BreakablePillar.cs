@@ -12,9 +12,11 @@ public class BreakablePillar : MonoBehaviour
     
     void OnTriggerEnter(Collider col)
     {
-        if(col.gameObject.tag == "Boss")
+        if(col.tag == "Boss")
         {
-            for(int i = 0; i < breakablePart.Length; i++)
+			Debug.Log("HI");
+
+			for (int i = 0; i < breakablePart.Length; i++)
             {
                 if(breakablePart[i].GetComponent<Rigidbody>() == null)
                     temp = breakablePart[i].AddComponent<Rigidbody>();

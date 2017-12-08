@@ -30,6 +30,7 @@ public class BossHitbox : MonoBehaviour {
 	{
 		if (collisionTag == "Freeze")
 		{
+			Debug.Log("freeze leg");
 			if (other.gameObject.GetComponent<Bullet>() && other.gameObject.GetComponent<Bullet>().type == BulletType.Ice)
 			{
 				if (isLeft)
