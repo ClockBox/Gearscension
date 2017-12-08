@@ -47,10 +47,10 @@ public class Kamakazi : AIStateManager {
 	}
 	IEnumerator LaunchExplode(float delayTimer)
     {
+        yield return new WaitForSeconds(delayTimer);
+
         anim.SetTrigger("Jump");
         anim.SetBool("Grounded", false);
-
-        yield return new WaitForSeconds(delayTimer);
 
         rb.constraints = RigidbodyConstraints.FreezeRotation;
 		if (transform.position.y <= maxHeight && !heightReached)
@@ -60,12 +60,12 @@ public class Kamakazi : AIStateManager {
 			playerPos = player.transform.position;
 			playerPos = new Vector3(playerPos.x, playerPos.y - 2, playerPos.z);
             if (smoker) smoker.GetComponent<ParticleSystem>().Play();
-
 			heightReached = true;
 		}
 
 		if(heightReached)
 		{
+            Debug.Log("here");
 			Vector3 target = playerPos - transform.position;
 			target.Normalize();
 			rb.AddForce(target *force, ForceMode.Impulse);
@@ -85,7 +85,6 @@ public class Kamakazi : AIStateManager {
 		{
 			Explode().transform.parent = collision.transform;
 			Die();
-
 		}
 	} 
 

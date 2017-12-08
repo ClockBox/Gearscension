@@ -19,6 +19,9 @@ public class PileDriverBehaviour : MonoBehaviour
     private Vector3 startPos;
     private Vector3 inTransitPos;
 
+    private bool stop;
+
+
     private void Awake()
     {
         Physics.IgnoreCollision(pistonRB.GetComponent<Collider>(), colliderToIgnore); 
@@ -41,6 +44,8 @@ public class PileDriverBehaviour : MonoBehaviour
     {
         if(collision.gameObject.tag == "Boss")
         {
+            Debug.Log("Stop");
+            stop = true;
             pistonRB.isKinematic = true;
             pistonRB.velocity = Vector3.zero;
         }
@@ -56,11 +61,12 @@ public class PileDriverBehaviour : MonoBehaviour
         float elapsedTime = 0;
         while (elapsedTime < time)
         {
+            if (stop)
+                break;
             elapsedTime += Time.deltaTime;
             pistonRB.transform.position = Vector3.MoveTowards(pistonRB.transform.position, extendedPos.transform.position, moveSpeed * Time.deltaTime);
             yield return null;
         }
-        pistonRB.isKinematic = false;
         pistonRB.velocity = Vector3.zero;
 
         yield return new WaitForSeconds(1.0f);
@@ -77,6 +83,7 @@ public class PileDriverBehaviour : MonoBehaviour
             pistonRB.transform.position = Vector3.MoveTowards(pistonRB.transform.position, startPos, (moveSpeed / 5) * Time.deltaTime);
             yield return null;
         }
+        stop = false;
         yield return null;
     }
 }
