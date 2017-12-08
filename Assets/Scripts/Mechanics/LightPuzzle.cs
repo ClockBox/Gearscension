@@ -11,6 +11,7 @@ public class LightPuzzle : MonoBehaviour
     public Material greyMat, greenMat, blueMat, redMat;
     public Light greenLight, blueLight, redLight;
     public UnityEvent myEvent;
+    public UnityEvent eventTwo;
 
     private bool allowChange;
     private int counter;
@@ -267,6 +268,7 @@ public class LightPuzzle : MonoBehaviour
             {
                 Debug.Log("Piece removed");
                 correctBlockCounter--;
+                CheckPuzzleOnExit();
                 Debug.Log("Correct Block Counter: " + correctBlockCounter);
             }
         }
@@ -277,8 +279,13 @@ public class LightPuzzle : MonoBehaviour
         if (correctBlockCounter >= counterMax)
         {
             myEvent.Invoke();
-            counterMax = 0;
         }
+    }
+
+    public void CheckPuzzleOnExit()
+    {
+        if (correctBlockCounter < counterMax)
+            eventTwo.Invoke();
     }
 
     public IEnumerator WaitForLight()
