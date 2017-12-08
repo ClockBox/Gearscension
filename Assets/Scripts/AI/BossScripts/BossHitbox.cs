@@ -43,6 +43,7 @@ public class BossHitbox : MonoBehaviour {
 		else if (collisionTag == other.gameObject.tag)
 		{
 			Debug.Log("Hit by " + collisionTag);
+			boss.GetComponent<Animator>().SetTrigger("Damage");
 			if (breakable)
 			{
 				Destroy(breakable.gameObject);

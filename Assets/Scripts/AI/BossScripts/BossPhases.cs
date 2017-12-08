@@ -17,6 +17,7 @@ public abstract class BossPhases {
 		paused = false;
 		isActive = true;
 		boss = _boss;
+		boss.isAttacking = false;
 		anim = boss.GetComponent<Animator>();
 		nmAgent = boss.GetComponentInParent<NavMeshAgent>();
 		player = GameObject.FindGameObjectWithTag("Player");
@@ -63,11 +64,12 @@ public abstract class BossPhases {
 		{
 			PauseFunctions(true);
 			paused = true;
+			boss.EndAttack();
 		}
 		else
 		{
 			PauseFunctions(false);
-
+			boss.isAttacking = false;
 			paused = false;
 		}
 	}
@@ -89,6 +91,11 @@ public abstract class BossPhases {
 		Debug.Log("Phase ended");
 	}
 
+	protected float getDot()
+	{
+		float dot = Vector3.Dot(boss.transform.right, player.transform.position - boss.transform.position);
+		return dot;
+	}
 	public abstract void Initialize();
 	public abstract IEnumerator UpdateAction();
 	public abstract void PauseFunctions(bool a);
@@ -134,7 +141,9 @@ public class BossPhaseOne : BossPhases
 	}
 
 	public override void PauseFunctions(bool a)
+
 	{
+		Debug.Log(nmAgent.isStopped);
 		nmAgent.isStopped = a;
 	}
 
@@ -226,7 +235,7 @@ public class BossPhaseTwo : BossPhases
 			else
 				anim.SetTrigger("LeftAttack");
 		}
-		yield return null;
+		yield break;
 	}
 
 	private IEnumerator FlameThrower()
@@ -239,7 +248,7 @@ public class BossPhaseTwo : BossPhases
 		{
 			anim.SetTrigger("LeftFlame");
 		}
-		yield return null;
+		yield break;
 	}
 
 	private IEnumerator Turn(Quaternion target)
@@ -268,15 +277,11 @@ public class BossPhaseTwo : BossPhases
 		yield return boss.StartCoroutine(ChooseAttack());
 	}
 
-	private float getDot()
-	{
-		float dot = Vector3.Dot(boss.transform.right, player.transform.position - boss.transform.position);
-		return dot;
-	}
 }
 
 public class BossPhaseThree : BossPhases
 {
+	private int attackCounter;
 	public BossPhaseThree(Grim boss) : base(boss)
 	{
 	}
@@ -284,15 +289,90 @@ public class BossPhaseThree : BossPhases
 	public override void Initialize()
 	{
 		Debug.Log("PhaseThree initialized");
+		attackCounter = 0;
 		boss.crystals.Clear();
 
 	}
 	public override IEnumerator UpdateAction()
 	{
-		yield return null;
+		Quaternion wantedRotation =
+			Quaternion.LookRotation
+			(new Vector3(player.transform.position.x, boss.transform.position.y, player.transform.position.z)
+				- boss.transform.position);
+		//Check Angle
+		if (attackCounter >= 3)
+		{
+			attackCounter = 0;
+			yield return boss.StartCoroutine(Special());
+		}
+		if (Quaternion.Angle(boss.transform.rotation, wantedRotation) > 15)
+		{
+			boss.isAttacking = true;
+			attackCounter++;
+			yield return boss.StartCoroutine(Swipe(wantedRotation));
+		}
+		else
+		{
+			boss.isAttacking = true;
+			float distance = Vector3.Distance(boss.transform.position, player.transform.position);
+			//Check Distance
+			if (distance > 30)
+			{
+				attackCounter++;
+				yield return boss.StartCoroutine(FlameThrower());
+			}
+			else
+			{
+				attackCounter++;
+				yield return boss.StartCoroutine(Attack());
+			}
+
+		}
 	}
 	public override void PauseFunctions(bool a)
 	{
 	}
 
+	private IEnumerator Swipe(Quaternion target)
+	{
+		anim.SetTrigger("Sweep");
+		while (Quaternion.Angle(boss.transform.rotation, target) > 5)
+		{
+			boss.transform.rotation = Quaternion.RotateTowards(boss.transform.rotation, target, Time.deltaTime * boss.rotationSpeed2);
+			yield return null;
+		}
+		yield break;
+	}
+
+	private IEnumerator FlameThrower()
+	{
+		if (getDot() > 0)
+		{
+			anim.SetTrigger("RightFlame");
+		}
+		else
+		{
+			anim.SetTrigger("LeftFlame");
+		}
+		yield break;
+	}
+
+	private IEnumerator Attack()
+	{
+		if (getDot() > 0)
+		{
+			anim.SetTrigger("RightAttack");
+
+		}
+		else
+		{
+			anim.SetTrigger("LeftAttack");
+		}
+		yield break;
+	}
+	private IEnumerator Special()
+	{
+		anim.SetTrigger("Special");
+		yield break;
+	}
 }

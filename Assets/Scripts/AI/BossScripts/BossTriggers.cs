@@ -89,8 +89,11 @@ public class BossTriggers : MonoBehaviour {
 		{
 			Vector3 direction = (playerPos-pos).normalized;
 			direction = new Vector3(direction.x, Mathf.Abs(direction.y), direction.z );
-			player.GetComponent<Rigidbody>().AddForce(direction*force*Time.fixedDeltaTime);
-			PlayerState.grounded = false;
+			if (player)
+			{
+				player.GetComponent<Rigidbody>().AddForce(direction * force * Time.fixedDeltaTime);
+				PlayerState.grounded = false;
+			}
 			explodeTimer -= Time.fixedDeltaTime;
 			yield return new WaitForFixedUpdate();
 
@@ -103,8 +106,11 @@ public class BossTriggers : MonoBehaviour {
 	{
 		while (magnetTimer >= 0)
 		{
-			player.GetComponent<Rigidbody>().AddForce((transform.position-player.transform.position) * force* Time.fixedDeltaTime );
-			PlayerState.grounded = false;
+			if (player)
+			{
+				player.GetComponent<Rigidbody>().AddForce((transform.position - player.transform.position) * force * Time.fixedDeltaTime);
+				PlayerState.grounded = false;
+			}
 			magnetTimer -= Time.fixedDeltaTime;
 			yield return new WaitForFixedUpdate();
 		}
