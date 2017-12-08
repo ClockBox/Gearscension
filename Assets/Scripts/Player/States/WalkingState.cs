@@ -32,8 +32,10 @@ public class MoveState : PlayerState
     //State Behaviour
     protected override IEnumerator HandleInput()
     {
-        if (Input.GetButtonDown("Hook"))
-            Player.StartCoroutine(ThrowHook(Player.FindHookTarget("HookNode")));
+        if (Input.GetButton("Hook"))
+            Player.FindHookTarget();
+        else if (Input.GetButtonUp("Hook"))
+            Player.StartCoroutine(ThrowHook(Player.selectedHook));
 
         if (grounded)
         {
@@ -111,6 +113,12 @@ public class MoveState : PlayerState
     //State Updates
     protected override void UpdateMovement()
     {
+        if (Player.Paused)
+        {
+            moveDirection = Player.transform.position;
+            return;
+        }
+
         moveX = Input.GetAxis("Horizontal");
         moveY = Input.GetAxis("Vertical");
 

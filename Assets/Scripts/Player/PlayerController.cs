@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(StateManager))]
 [RequireComponent(typeof(IKController))]
@@ -43,6 +44,11 @@ public class PlayerController : MonoBehaviour
 
     const int GUN = 0;
     const int SWORD = 1;
+
+    // HookShot
+    private GameObject[] hookTargets;
+    [HideInInspector]
+    public GameObject selectedHook;
 
     //HUD data
     private bool _isDead;
@@ -157,25 +163,33 @@ public class PlayerController : MonoBehaviour
         GameManager.Hud.BulletUpgrade();
     }
 
-    public GameObject FindHookTarget(string tag)
+    public void UpdateHooks()
     {
-        GameObject[] targets = GameObject.FindGameObjectsWithTag(tag);
+        hookTargets = GameObject.FindGameObjectsWithTag("HookNode");
+    }
+    public GameObject FindHookTarget()
+    {
         GameObject temp = null;
         float closestAngle = 0.8f;
-        for (int i = 0; i < targets.Length; i++)
+        for (int i = 0; i < hookTargets.Length; i++)
         {
-            Vector3 checkDistance = targets[i].transform.position - transform.position;
-            if (checkDistance.magnitude < HookRange && Vector3.Dot(targets[i].transform.forward, Camera.main.transform.forward) > 0.5f)
+            Vector3 checkDistance = hookTargets[i].transform.position - transform.position;
+            if (checkDistance.magnitude < HookRange && Vector3.Dot(hookTargets[i].transform.forward, Camera.main.transform.forward) > 0.5f)
             {
-                float checkAngle = Vector3.Dot((targets[i].transform.position - transform.position).normalized, Camera.main.transform.forward);
+                float checkAngle = Vector3.Dot((hookTargets[i].transform.position - transform.position).normalized, Camera.main.transform.forward);
                 if (checkAngle > closestAngle)
                 {
                     closestAngle = checkAngle;
-                    temp = targets[i];
+                    temp = hookTargets[i];
                 }
             }
         }
-        return temp;
+        if (temp != selectedHook)
+        {
+            if (selectedHook) selectedHook.transform.parent.GetChild(0).GetComponent<Light>().enabled = false;
+            if (temp) temp.transform.parent.GetChild(0).GetComponent<Light>().enabled = true;
+        }
+        return selectedHook = temp;
     }
     #endregion
 
@@ -251,6 +265,19 @@ public class PlayerController : MonoBehaviour
 
         m_SFX = transform.GetChild(2).GetComponent<AudioSource>();
         m_Voice = transform.GetChild(3).GetComponent<AudioSource>();
+    }
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        UpdateHooks();
     }
 
     private void Start ()

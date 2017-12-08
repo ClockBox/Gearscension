@@ -32,7 +32,7 @@ public class ElectricalObject : MonoBehaviour
     }
     public virtual void Activate()
     {
-        Debug.Log("Activate", this);
+        Debug.Log(this + ":Activate", this);
         active = true;
         ToggleLights(true);
 
