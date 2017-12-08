@@ -18,7 +18,6 @@ public class Sword : Weapon
 	{
 		if (other.CompareTag("Enemy"))
 			other.gameObject.SendMessage("TakeDamage", SendMessageOptions.DontRequireReceiver);
-	
 	}
 
     public Collider Blade

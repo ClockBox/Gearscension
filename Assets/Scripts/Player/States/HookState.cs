@@ -24,6 +24,11 @@ public class HookState : ClimbState
     }
     public override IEnumerator ExitState(PlayerState nextState)
     {
+        if (Player.selectedHook)
+        {
+            Player.selectedHook.transform.parent.GetChild(0).GetComponent<Light>().enabled = false;
+            Player.selectedHook = null;
+        }
         if (nextState as CombatState == null)
             yield return ToggleSword(false);
         yield return base.ExitState(nextState);
@@ -32,8 +37,10 @@ public class HookState : ClimbState
     //State Behaviour
     protected override IEnumerator HandleInput()
     {
-        if (Input.GetButtonDown("Hook"))
-            Player.StartCoroutine(ThrowHook(Player.FindHookTarget("HookNode")));
+        if (Input.GetButton("Hook"))
+            Player.FindHookTarget();
+        else if (Input.GetButtonUp("Hook"))
+            Player.StartCoroutine(ThrowHook(Player.selectedHook));
 
         if (Input.GetButtonDown("Attack") || Player.RightTrigger.Down)
             yield return Attack();
