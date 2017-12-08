@@ -45,13 +45,7 @@ public class LightPuzzle : MonoBehaviour
                 TurnOnRedLight(boxPositioningLights[i]);
         }
     }
-
-    private void Update()
-    {
-
-    }
-
-
+    
     public void GreenTrigger()
     {
         if (allowChange)

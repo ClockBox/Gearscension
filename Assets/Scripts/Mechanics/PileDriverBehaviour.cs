@@ -20,11 +20,11 @@ public class PileDriverBehaviour : MonoBehaviour
     private Vector3 inTransitPos;
 
     private bool stop;
-
+    private bool rotate;
 
     private void Awake()
     {
-        Physics.IgnoreCollision(pistonRB.GetComponent<Collider>(), colliderToIgnore); 
+        Physics.IgnoreCollision(pistonRB.GetComponent<Collider>(), colliderToIgnore);
     }
 
     private void Start()
@@ -34,21 +34,35 @@ public class PileDriverBehaviour : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.P))
+        if(rotate)
+        {
+            pistonRB.transform.Rotate(0, 0, 1f);
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.tag == "Boss")
         {
             StartCoroutine(Extend());
+            rotate = false;
         }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.tag == "Boss")
+        if (collision.gameObject.tag == "Boss")
         {
             Debug.Log("Stop");
             stop = true;
             pistonRB.isKinematic = true;
             pistonRB.velocity = Vector3.zero;
         }
+    }
+
+    public void StartRotate()
+    {
+        rotate = true;
     }
 
     public void StartExtend()
@@ -68,22 +82,7 @@ public class PileDriverBehaviour : MonoBehaviour
             yield return null;
         }
         pistonRB.velocity = Vector3.zero;
-
-        yield return new WaitForSeconds(1.0f);
-        StartCoroutine(Retract());
-
-        yield return null;
-    }
-    IEnumerator Retract()
-    {
-        float elapsedTime = 0;
-        while (elapsedTime < (time * 5))
-        {
-            elapsedTime += Time.deltaTime;
-            pistonRB.transform.position = Vector3.MoveTowards(pistonRB.transform.position, startPos, (moveSpeed / 5) * Time.deltaTime);
-            yield return null;
-        }
-        stop = false;
+        
         yield return null;
     }
 }
