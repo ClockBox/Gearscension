@@ -12,7 +12,6 @@ public class GameManager : MonoBehaviour
     private static string mainMenuScene = "Main Menu";
     private static string pauseMenuScene = "Pause Menu";
     private static string levelCompleteScene = "Completed Level";
-    private static string gameOverScene = "Game Over";
     private static string hudScene = "Hud";
     private static string elevatorScene = "Elevator";
 
@@ -305,13 +304,7 @@ public class GameManager : MonoBehaviour
             TogglePause();
     }
 
-    private void EndGame()
-    {
-        SceneManager.LoadScene(gameOverScene, LoadSceneMode.Additive);
-        gameOver = true;
-    }
-
-    private void WinLevel()
+    public void WinLevel()
     {
         SceneManager.LoadScene(levelCompleteScene, LoadSceneMode.Additive);
         gameOver = true;

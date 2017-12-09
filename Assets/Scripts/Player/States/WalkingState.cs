@@ -44,9 +44,6 @@ public class MoveState : PlayerState
                 jumpForce = 7;
                 Jump();
             }
-
-            else if (Input.GetButtonDown("Roll"))
-                yield return Dodge();
         }
         else
         {
@@ -56,6 +53,7 @@ public class MoveState : PlayerState
             if (fallTimer > 3.0f)
                 stateManager.ChangeState(new FallState(stateManager));
         }
+        yield return null;
     }
 
     //State Actions
