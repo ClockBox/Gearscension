@@ -99,22 +99,25 @@ public class GameManager : MonoBehaviour
         }
 
         // - DevCodes
-        else if (Input.GetKeyDown(KeyCode.F1))
-        {
-            Instance.checkpoint = null;
-            Instance.respawnPoint = player.transform.position;
-        }
-        else if (Input.GetKeyDown(KeyCode.F2))
-            RespawnPlayer();
+        if (Application.isEditor)
+        { 
+            if (Input.GetKeyDown(KeyCode.F1))
+            {
+                Instance.checkpoint = null;
+                Instance.respawnPoint = player.transform.position;
+            }
+            else if (Input.GetKeyDown(KeyCode.F2))
+                RespawnPlayer();
 
-        else if (Input.GetKeyDown(KeyCode.F5))
-            LoadScene("Floor_1");
-        else if (Input.GetKeyDown(KeyCode.F6))
-            LoadScene("Floor_2");
-        else if (Input.GetKeyDown(KeyCode.F7))
-            LoadScene("Floor_5");
-        else if (Input.GetKeyDown(KeyCode.F8))
-            LoadScene("BossFloor1");
+            else if (Input.GetKeyDown(KeyCode.F5))
+                LoadScene("Floor_1");
+            else if (Input.GetKeyDown(KeyCode.F6))
+                LoadScene("Floor_2");
+            else if (Input.GetKeyDown(KeyCode.F7))
+                LoadScene("Floor_5");
+            else if (Input.GetKeyDown(KeyCode.F8))
+                LoadScene("BossFloor1");
+        }
     }
 
     public void OnApplicationFocus(bool focus)
@@ -213,9 +216,10 @@ public class GameManager : MonoBehaviour
 
     public void Continue()
     {
+        Debug.Log("here");
         int sceneIndex = PlayerPrefs.GetInt("ContinueScene");
         LoadScene(sceneIndex);
-        if (sceneIndex > 5 && !SceneManager.GetSceneByName(elevatorScene).isLoaded)
+        if (sceneIndex > 6 && !SceneManager.GetSceneByName(elevatorScene).isLoaded)
             AddScene(elevatorScene);
     }
 
@@ -277,17 +281,19 @@ public class GameManager : MonoBehaviour
         {
             ToggleCursor(pause);
         }
-        else if (scene.buildIndex > 3)
+        else if (scene.buildIndex > 4)
         {
             ToggleCursor(false);
 
             if (!SceneManager.GetSceneByName(hudScene).isLoaded)
                 SceneManager.LoadScene(hudScene, LoadSceneMode.Additive);
 
-            if(scene.name != elevatorScene)
+            if (scene.name != elevatorScene)
+            {
                 currentFloor = scene.buildIndex;
-            PlayerPrefs.SetInt("ContinueScene", currentFloor);
-            SceneManager.SetActiveScene(SceneManager.GetSceneByBuildIndex(currentFloor));
+                PlayerPrefs.SetInt("ContinueScene", currentFloor);
+                SceneManager.SetActiveScene(SceneManager.GetSceneByBuildIndex(currentFloor));
+            }
         }
         else
         {
@@ -306,6 +312,7 @@ public class GameManager : MonoBehaviour
 
     public void WinLevel()
     {
+        TogglePause(true);
         SceneManager.LoadScene(levelCompleteScene, LoadSceneMode.Additive);
         gameOver = true;
     }

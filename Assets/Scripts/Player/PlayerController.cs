@@ -291,11 +291,11 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetButtonDown("Cowbell"))
-        {
-            GameManager.Instance.AudioManager.AudioPlayer = SFX;
-            GameManager.Instance.AudioManager.playAudio("sfxcowbell");
-        }
+        //if (Input.GetButtonDown("Cowbell"))
+        //{
+        //    GameManager.Instance.AudioManager.AudioPlayer = SFX;
+        //    GameManager.Instance.AudioManager.playAudio("sfxcowbell");
+        //}
 
         if (_damageImmune > 0)
             _damageImmune -= Time.deltaTime;
@@ -328,6 +328,12 @@ public class PlayerController : MonoBehaviour
         {
             if (gunUpgrade >= (int)BulletType.Magnetic)
                 ammoType = (int)BulletType.Magnetic;
+        }
+
+        else if (Input.GetAxis("AmmoAxis") != 0)
+        {
+            if (gunUpgrade >= (int)BulletType.Magnetic)
+                ammoType += (int)BulletType.Magnetic;
         }
     }
 }
