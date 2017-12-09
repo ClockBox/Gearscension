@@ -133,7 +133,8 @@ public abstract class AIStateManager : MonoBehaviour
     }
 
 
-    public void Alerted() {
+    public void Alerted()
+    {
 		TransitionToState(alertedState);
 	}
 	public void OnDrawGizmos()
@@ -142,7 +143,6 @@ public abstract class AIStateManager : MonoBehaviour
 		{
 			Gizmos.color = currentState.sceneGizmo;
 			Gizmos.DrawWireSphere(this.gameObject.transform.position, 2);
-
 		}
 	}
 
@@ -153,12 +153,14 @@ public abstract class AIStateManager : MonoBehaviour
 		
 	}
 
-	void OnStateExit() {
+	void OnStateExit()
+    {
 		stateTimeElapsed = 0;
 		callOnce = false;
 	}
 
-	public void TakeDamage(float damage) {
+	public void TakeDamage(float damage)
+    {
 		if (stats.armour > 0){
 			stats.armour--;
 		if (stats.armour <= 0)

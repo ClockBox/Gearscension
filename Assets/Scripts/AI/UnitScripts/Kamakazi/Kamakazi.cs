@@ -41,10 +41,11 @@ public class Kamakazi : AIStateManager {
 			exploded = false;
 			heightReached = false;
             if (smoker) smoker.GetComponent<ParticleSystem>().Play();
-		}
+            pathAgent.enabled = false;
+        }
 		StartCoroutine(LaunchExplode(2f));
-
 	}
+
 	IEnumerator LaunchExplode(float delayTimer)
     {
         yield return new WaitForSeconds(delayTimer);
@@ -52,31 +53,28 @@ public class Kamakazi : AIStateManager {
         anim.SetTrigger("Jump");
         anim.SetBool("Grounded", false);
 
+        float startHeight = transform.position.y;
+
         rb.constraints = RigidbodyConstraints.FreezeRotation;
-		if (transform.position.y <= maxHeight && !heightReached)
-			rb.AddForce(transform.up * force/10, ForceMode.Impulse);
-		else if (transform.position.y > maxHeight)
-		{
-			playerPos = player.transform.position;
-			playerPos = new Vector3(playerPos.x, playerPos.y - 2, playerPos.z);
+        if (transform.position.y <= startHeight + maxHeight && !heightReached)
+        {
+            Debug.Log(transform.position.y <= startHeight + maxHeight);
+            rb.AddForce(transform.up * force / 10, ForceMode.Impulse);
+        }
+        else if (transform.position.y > startHeight + maxHeight)
+        {
+            playerPos = player.transform.position;
+            playerPos = new Vector3(playerPos.x, playerPos.y - 2, playerPos.z);
             if (smoker) smoker.GetComponent<ParticleSystem>().Play();
-			heightReached = true;
-		}
+            heightReached = true;
+        }
 
 		if(heightReached)
 		{
-            Debug.Log("here");
 			Vector3 target = playerPos - transform.position;
 			target.Normalize();
 			rb.AddForce(target *force, ForceMode.Impulse);
-			//rb.AddForce(transform.up * -force, ForceMode.Impulse);
 		}
-
-		//if (Vector3.Distance(transform.position, player.transform.position) <= proximity)
-		//{
-		//	if(!exploded)
-		//	Explode();
-		//}
 	}
 
 	private void OnCollisionEnter(Collision collision)
