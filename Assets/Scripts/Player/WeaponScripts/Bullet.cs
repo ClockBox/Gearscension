@@ -24,13 +24,14 @@ public class Bullet : MonoBehaviour
             if (other.collider.attachedRigidbody.gameObject.CompareTag("Enemy"))
                 SpawnEffectArea();
         }
-        else
-            SpawnEffectArea().transform.parent = other.transform;
+        else SpawnEffectArea(other.transform);
         Destroy(gameObject);
     }
 
-    GameObject SpawnEffectArea()
+    void SpawnEffectArea(Transform parent = null)
     {
-        return Instantiate(effectPrefab, transform.position, transform.rotation);
+        GameObject temp = Instantiate(effectPrefab, transform.position, transform.rotation);
+        temp.transform.localScale = Vector3.one;
+        if (parent) temp.transform.parent = parent;
     }
 }

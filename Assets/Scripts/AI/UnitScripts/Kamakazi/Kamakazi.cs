@@ -3,9 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Kamakazi : AIStateManager {
-	Rigidbody rb;
-	public GameObject effectPrefab;
+public class Kamakazi : AIStateManager
+{
+    private Animator anim;
+
+    public GameObject effectPrefab;
+    public GameObject BrokenPrefab;
+
 	public float maxHeight;
 	public float force;
 	public float proximity;
@@ -14,10 +18,9 @@ public class Kamakazi : AIStateManager {
 	private bool heightReached;
 	private GameObject smoker;
 
-    private Animator anim;
-
 	public override void StartEvents()
     {
+        rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
         if (smoker)
         {
@@ -36,61 +39,64 @@ public class Kamakazi : AIStateManager {
 		{
 			pathAgent.angularSpeed = 0;
 			pathAgent.enabled = false;
-			rb = GetComponent<Rigidbody>();
 			callOnce = true;
 			exploded = false;
 			heightReached = false;
             if (smoker) smoker.GetComponent<ParticleSystem>().Play();
             pathAgent.enabled = false;
+            StartCoroutine(LaunchExplode(1f));
         }
-		StartCoroutine(LaunchExplode(2f));
 	}
 
-	IEnumerator LaunchExplode(float delayTimer)
+    public override void Update()
     {
-        yield return new WaitForSeconds(delayTimer);
+        base.Update();
+        anim.SetFloat("Speed", (rb.velocity.magnitude > 0.1f || rb.angularVelocity.magnitude > 0.1f) ? 1 : 0);
+    }
 
+    IEnumerator LaunchExplode(float delayTimer)
+    {
         anim.SetTrigger("Jump");
         anim.SetBool("Grounded", false);
 
         float startHeight = transform.position.y;
-
         rb.constraints = RigidbodyConstraints.FreezeRotation;
-        if (transform.position.y <= startHeight + maxHeight && !heightReached)
+
+        while (transform.position.y <= startHeight + maxHeight)
         {
-            Debug.Log(transform.position.y <= startHeight + maxHeight);
-            rb.AddForce(transform.up * force / 10, ForceMode.Impulse);
-        }
-        else if (transform.position.y > startHeight + maxHeight)
-        {
-            playerPos = player.transform.position;
-            playerPos = new Vector3(playerPos.x, playerPos.y - 2, playerPos.z);
-            if (smoker) smoker.GetComponent<ParticleSystem>().Play();
-            heightReached = true;
+            rb.AddForce(transform.up * force);
+            yield return null;
         }
 
-		if(heightReached)
-		{
-			Vector3 target = playerPos - transform.position;
-			target.Normalize();
-			rb.AddForce(target *force, ForceMode.Impulse);
-		}
-	}
+        yield return new WaitForSeconds(delayTimer);
+
+        rb.velocity = Vector3.zero;
+        playerPos = player.transform.position;
+        playerPos = new Vector3(playerPos.x, playerPos.y - 2, playerPos.z);
+        if (smoker) smoker.GetComponent<ParticleSystem>().Play();
+        Vector3 target = playerPos - transform.position + Vector3.up * 1.5f;
+		rb.AddForce(target, ForceMode.Impulse);
+    }
 
 	private void OnCollisionEnter(Collision collision)
 	{
-		if (callOnce)
-		{
-			Explode().transform.parent = collision.transform;
-			Die();
-		}
-	} 
+        if (callOnce && collision.collider.CompareTag("Player"))
+        {
+            Explode();
+            Destroy(gameObject);
+        }
+        else if (Vector3.Dot(collision.contacts[0].normal, Vector3.up) > 0.5f)
+        {
+            anim.SetBool("Grounded", true);
+            pathAgent.enabled = true;
+        }
+	}
 
-	GameObject Explode()
-	{
-		GameObject newEffect = Instantiate(effectPrefab, transform.position, transform.rotation);
-		newEffect.transform.localScale = transform.localScale;
+	public void Explode()
+    {
+        Instantiate(BrokenPrefab, transform.position, transform.rotation);
+        GameObject newEffect = Instantiate(effectPrefab, transform.position, transform.rotation);
+        newEffect.transform.localScale = transform.localScale;
 		exploded = true;
-		return newEffect;
 	}
 }

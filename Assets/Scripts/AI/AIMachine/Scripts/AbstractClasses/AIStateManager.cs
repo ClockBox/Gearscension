@@ -41,12 +41,15 @@ public abstract class AIStateManager : MonoBehaviour
 	[HideInInspector]
 	public bool isAlive;
 
+    protected Rigidbody rb; 
+
 	private bool isAttacked = false;
 
 	public void Start()
 	{
         player = GameManager.Player.gameObject;
-		stats = GetComponent<AIStats>();
+        rb = GetComponent<Rigidbody>();
+        stats = GetComponent<AIStats>();
 		pathAgent = GetComponent<NavMeshAgent>();
 		pathIndex = 0;
         if (patrolPoints.Length > 0)
@@ -59,7 +62,7 @@ public abstract class AIStateManager : MonoBehaviour
 		StartEvents();
 
 	}
-	public void Update()
+	public virtual void Update()
 	{
 		currentState.UpdateState(this);
 		setFrequency += Time.deltaTime;
@@ -92,13 +95,13 @@ public abstract class AIStateManager : MonoBehaviour
 		}
 	}
 
-	public void Die()
+	public void Die(float delay)
 	{
 		if (isAlive)
 		{
-			GetComponent<CapsuleCollider>().enabled = false;
+			GetComponent<Collider>().enabled = false;
             Break();
-            Destroy(gameObject, 1f);
+            Destroy(gameObject, delay);
 			isAlive = false;
 		}
 	}
@@ -111,7 +114,9 @@ public abstract class AIStateManager : MonoBehaviour
             if (temp.Length > 0)
             {
                 for (int t = 0; t < temp.Length; t++)
+                {
                     temp[t].enabled = true;
+                }
             }
             else BreakingPieces[i].AddComponent<BoxCollider>();
 
@@ -128,8 +133,6 @@ public abstract class AIStateManager : MonoBehaviour
             Destroy(DestroyPieces[i]);
 
         transform.parent = null;
-        for (int i = 0; i < transform.childCount; i++)
-            transform.GetChild(i).parent = null;
     }
 
 
@@ -214,6 +217,4 @@ public abstract class AIStateManager : MonoBehaviour
 	{
 		isAttacked = false;
 	}
-
-
 }

@@ -26,7 +26,7 @@ public class ChandelierBehaviour : MonoBehaviour
         if(other.gameObject.tag == "Enemy")
         {
             aiSM = other.GetComponent<AIStateManager>();
-            aiSM.Die();
+            aiSM.Die(1);
         }
 
         if(other.gameObject.tag != "Projectile" && other.gameObject.tag != "Chandelier")

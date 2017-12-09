@@ -46,7 +46,7 @@ public class AIBreakable : MonoBehaviour
 			{
 				AICrystal crystal = Instantiate(crystalPrefab, crystalSpawn.position, crystalSpawn.rotation);
 				crystal.gameObject.transform.parent = ownerUnit.transform;
-				crystal.gameObject.GetComponent<BoxCollider>().enabled = true;
+				crystal.gameObject.GetComponent<Collider>().enabled = true;
 			}
 
             for (int i = 0; i < BreakingPieces.Length; i++)

@@ -25,7 +25,8 @@ public class Grenadier : AIStateManager {
         {
 			choice = UnityEngine.Random.Range(0, 3);
 			shotFrequency = shotInterval;
-			switch (choice) {
+			switch (choice)
+            {
 				case 0:
 					grenadePrefab = explosionPrefab;
 					break;
@@ -53,8 +54,8 @@ public class Grenadier : AIStateManager {
 		if (!callOnce)
 		{
 			pathAgent.enabled = false;
-			GetComponent<Rigidbody>().isKinematic = false;
-			GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation;
+			rb.isKinematic = false;
+			rb.constraints = RigidbodyConstraints.FreezeRotation;
 
 			LayerMask mask = LayerMask.GetMask("Character");
 			mask = ~mask;

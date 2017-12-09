@@ -13,10 +13,13 @@ public class StunDecision : AIDecisions {
 	{
 		if (manager.checkTimeElapsed(manager.stats.stunDuration))
 		{
-			manager.pathAgent.isStopped = false;
-			manager.pathAgent.speed = manager.stats.engageSpeed;
-			manager.pathAgent.angularSpeed = manager.stats.turnSpeed;
-			manager.stats.armour =5;
+            if (manager.pathAgent.isOnNavMesh)
+            {
+                manager.pathAgent.isStopped = false;
+                manager.pathAgent.speed = manager.stats.engageSpeed;
+                manager.pathAgent.angularSpeed = manager.stats.turnSpeed;
+                manager.stats.armour = 5;
+            }
 			return true;
 		}
 		else

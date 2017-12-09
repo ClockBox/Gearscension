@@ -11,7 +11,7 @@ public class AICrystal : MonoBehaviour
 		if (damage > 0 && !destroyed)
 		{
 			Debug.Log("crystal damaged");
-			gameObject.GetComponentInParent <AIStateManager>().Die();
+			gameObject.GetComponentInParent <AIStateManager>().Die(1);
 			destroyed = true;
             Destroy(gameObject);
 		}
