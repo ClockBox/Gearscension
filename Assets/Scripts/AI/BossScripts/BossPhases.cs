@@ -180,6 +180,7 @@ public class BossPhaseTwo : BossPhases
 		nmAgent.speed = 2;
 		nmAgent.isStopped = false;
 		nmAgent.angularSpeed = 0;
+		nmAgent.radius = 25f;
 		turnLimit = 0;
 	}
 

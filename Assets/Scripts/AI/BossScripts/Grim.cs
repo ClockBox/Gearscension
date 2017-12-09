@@ -77,7 +77,7 @@ public class Grim : MonoBehaviour {
 		EndAttack();
 		if (attacks[a].AttackPrefab)
 			currentPrefab = Instantiate(attacks[a].AttackPrefab, attacks[a].AttackPoints.position, attacks[a].AttackPoints.rotation);
-		if (a == 4 || a == 5)
+		if (a == 4 || a ==6 )
 		{
 			currentPrefab.transform.parent = attacks[a].AttackPoints;
 		}
