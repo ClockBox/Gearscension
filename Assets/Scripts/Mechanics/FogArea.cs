@@ -6,7 +6,10 @@ public class FogArea : MonoBehaviour
 {
     public ParticleSystem[] fogLayers;
 
+    public bool fall;
     public bool hasBottom;
+
+    private float speed; 
 
 	void Awake ()
     {
@@ -26,4 +29,14 @@ public class FogArea : MonoBehaviour
             newMain.maxParticles = (int)(bounds.x * bounds.z / 32 * 30);
         }
 	}
+
+    private void Update()
+    {
+        speed = fall ? 5 : 1;
+        for (int i = 0; i < fogLayers.Length; i++)
+        {
+            var newMain = fogLayers[i].main;
+            newMain.simulationSpeed = speed;
+        }
+    }
 }

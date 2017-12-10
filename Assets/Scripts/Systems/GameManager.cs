@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
 
     public GameObject playerPrefab;
     public Transform LevelSpawn;
-    private static int currentFloor = 4;
+    private static int currentFloor = 5;
 
     private AudioDictonary audioManager;
     public AudioDictonary AudioManager
