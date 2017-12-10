@@ -11,8 +11,7 @@ public class IceCube : MonoBehaviour
 
     public Collider[] movementColliders;
     public Collider[] staticColliders;
-
-    private bool grounded;
+    
     private List<IKPositionNode> ikNodes;
 
     [SerializeField]
@@ -81,40 +80,21 @@ public class IceCube : MonoBehaviour
         for (int i = 0; i < staticColliders.Length; i++)
             staticColliders[i].enabled = !pushing;
     }
-
-    private void UpdateGrounded()
-    {
-        grounded = !rb.isKinematic;
-        for(int i= 0;i<ikNodes.Count;i++)
-        {
-            ikNodes[i].enabled = grounded;
-        }
-    }
     
     private void FixedUpdate()
     {
-        if (pushing)
+        Collider[] cols = Physics.OverlapBox(transform.position, cubeBounds.bounds.extents - new Vector3(0.25f, 0, 0.25f), Quaternion.identity, ~6);
+        for (int i = 0; i < cols.Length; i++)
         {
-            rb.isKinematic = false;
-        }
-        else
-        {
-            Collider[] cols = Physics.OverlapBox(transform.position, cubeBounds.bounds.extents - new Vector3(0.25f, 0, 0.25f), Quaternion.identity, ~6);
-            for (int i = 0; i < cols.Length; i++)
+            if (cols[i].transform.root != transform && !cols[i].isTrigger)
             {
-                if (cols[i].transform.root != transform && !cols[i].isTrigger)
-                {
-                    rb.isKinematic = true;
-                    return;
-                }
+                Debug.Log(cols[i].gameObject.name, cols[i].gameObject);
+                rb.isKinematic = true;
+                return;
             }
-            rb.isKinematic = false;
         }
-
-        if (grounded == rb.isKinematic)
-            for (int i = 0; i < ikNodes.Count; i++)
-            {
-                UpdateGrounded();
-            }
+        rb.isKinematic = false;
+        for (int i = 0; i < ikNodes.Count; i++)
+            ikNodes[i].gameObject.SetActive(rb.isKinematic);
     }
 }

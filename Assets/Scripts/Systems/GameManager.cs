@@ -222,7 +222,6 @@ public class GameManager : MonoBehaviour
 
     public void Continue()
     {
-        Debug.Log("here");
         int sceneIndex = PlayerPrefs.GetInt("ContinueScene");
         LoadScene(sceneIndex);
         if (sceneIndex > 6 && !SceneManager.GetSceneByName(elevatorScene).isLoaded)

@@ -5,6 +5,7 @@ public class PushState : PlayerState
 {
     HandNode pushNode;
     Rigidbody pushObject;
+    IceCube ice;
 
     Vector3 desiredDirection;
     Vector3 lookDirection;
@@ -21,6 +22,7 @@ public class PushState : PlayerState
     {
         this.pushNode = pushNode;
         this.pushObject = pushNode.rb;
+        this.ice = pushObject.GetComponent<IceCube>();
     }
     
     //Transitions
@@ -53,8 +55,7 @@ public class PushState : PlayerState
     {
         yield return base.ExitState(nextState);
         anim.SetBool("pushing", false);
-
-        IceCube ice = pushNode.transform.parent.GetComponent<IceCube>();
+        
         if (ice) ice.Pushing = false;
 
         elapsedTime = 0;
@@ -79,7 +80,7 @@ public class PushState : PlayerState
         else if (!grounded)
             stateManager.ChangeState(new UnequipedState(stateManager, false));
 
-        else if (!pushObject || pushObject.velocity.y < -2f)
+        else if (!pushObject || pushObject.velocity.y < -2)
             stateManager.ChangeState(new UnequipedState(stateManager, true));
 
         else if (Player.transform.InverseTransformDirection(rb.velocity).z < -0.5f)

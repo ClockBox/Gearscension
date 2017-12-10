@@ -4,7 +4,12 @@ using UnityEngine;
 
 public class KillBox : MonoBehaviour
 {
-    private GameManager gM = FindObjectOfType<GameManager>();
+    private GameManager gM;
+
+    private void Awake()
+    {
+        gM = FindObjectOfType<GameManager>();
+    }
 
     private void OnTriggerEnter(Collider other)
     {
