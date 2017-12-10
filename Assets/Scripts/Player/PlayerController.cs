@@ -211,6 +211,23 @@ public class PlayerController : MonoBehaviour
             Debug.Log("Health: " + _currentHealth + "  Armour: " + _currentArmor);
         }
     }
+
+    public void TakeDamageDirect(float damage)
+    {
+        if (_damageImmune <= 0)
+        {
+            _damageImmune = 0.5f;
+            elapsedTime = 0;
+            
+            _currentArmor = 0;
+            _currentHealth -= damage;
+
+            if (Health <= 0)
+                GameManager.Instance.StartCoroutine(Die());
+            Debug.Log("Health: " + _currentHealth + "  Armour: " + _currentArmor);
+        }
+    }
+
     private void RechargeArmor()
     {
         if (_currentArmor < _maxArmor && !_isDead)

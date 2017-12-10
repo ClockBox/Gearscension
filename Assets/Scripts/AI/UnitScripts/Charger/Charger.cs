@@ -12,8 +12,6 @@ public class Charger : AIStateManager
     public float shieldForce;
     public float shieldTime;
 
-    private bool hitSomthing = false;
-
 	public override void StartEvents() { }
 
 	public override void MeleeAttack()
@@ -36,7 +34,7 @@ public class Charger : AIStateManager
 	{
         chargeShield.enabled = true;
         Vector3 dir = (target - transform.position).normalized;
-        dir.y = transform.position.y;
+        dir.y = 0;
 
         float elapsedTime = 0;
         while (elapsedTime <= delayTime)

@@ -13,14 +13,11 @@ public class Kamakazi : AIStateManager
 	public float maxHeight;
 	public float force;
 	public float proximity;
-	private bool exploded;
 	private Vector3 playerPos;
-	private bool heightReached;
 	private GameObject smoker;
 
 	public override void StartEvents()
     {
-        rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
         if (smoker)
         {
@@ -40,8 +37,6 @@ public class Kamakazi : AIStateManager
 			pathAgent.angularSpeed = 0;
 			pathAgent.enabled = false;
 			callOnce = true;
-			exploded = false;
-			heightReached = false;
             if (smoker) smoker.GetComponent<ParticleSystem>().Play();
             pathAgent.enabled = false;
             StartCoroutine(LaunchExplode(1f));
@@ -50,8 +45,11 @@ public class Kamakazi : AIStateManager
 
     public override void Update()
     {
-        base.Update();
-        anim.SetFloat("Speed", (rb.velocity.magnitude > 0.1f || rb.angularVelocity.magnitude > 0.1f) ? 1 : 0);
+        if (pathAgent)
+        {
+            base.Update();
+            anim.SetFloat("Speed", (rb.velocity.magnitude > 0.1f || rb.angularVelocity.magnitude > 0.1f) ? 1 : 0);
+        }
     }
 
     IEnumerator LaunchExplode(float delayTimer)
@@ -82,6 +80,12 @@ public class Kamakazi : AIStateManager
 	{
         if (callOnce && collision.collider.CompareTag("Player"))
         {
+            GameManager.Player.TakeDamageDirect(20);
+            Explode();
+            Destroy(gameObject);
+        }
+        else if(callOnce && collision.collider.CompareTag("Breakable"))
+        {
             Explode();
             Destroy(gameObject);
         }
@@ -97,6 +101,5 @@ public class Kamakazi : AIStateManager
         Instantiate(BrokenPrefab, transform.position, transform.rotation);
         GameObject newEffect = Instantiate(effectPrefab, transform.position, transform.rotation);
         newEffect.transform.localScale = transform.localScale;
-		exploded = true;
 	}
 }

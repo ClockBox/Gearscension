@@ -83,18 +83,6 @@ public class PointToPointPlatform : Platform
     }
     #endregion
 
-    public override void Activate()
-    {
-        base.Activate();
-        if (anim) anim.enabled = true;
-    }
-
-    public override void Deactivate()
-    {
-        base.Deactivate();
-        if (anim) anim.enabled = false;
-    }
-
     private void Start()
     {
         currentMoveNode = 0;
@@ -105,6 +93,8 @@ public class PointToPointPlatform : Platform
 
         transform.position = nodes[currentMoveNode].position;
         transform.rotation = nodes[currentRotationNode].rotation;
+
+        if(move || rotate) Activate();
     }
 
     private void FixedUpdate()

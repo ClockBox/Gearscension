@@ -26,11 +26,11 @@ public class EnemySpawner : ElectricalObject
 
         anim.SetTrigger("Open");
         var temp = Instantiate(enemyPrefab, spawnPoint.transform.position, spawnPoint.transform.rotation);
-        temp.tag = "Enemy";
         var enemy = new ComponentContainer(temp);
-        enemy.Deactivate();
+        enemy.Deactivate(); 
         enemy.rb.isKinematic = false;
         enemy.rb.AddForce(enemy.rb.mass * spawnPoint.transform.forward * spawnforce, ForceMode.Impulse);
+        temp.tag = "Enemy";
 
         StartCoroutine(TurnOnEnemy(enemy));
     }

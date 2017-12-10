@@ -50,9 +50,10 @@ public abstract class AIStateManager : MonoBehaviour
         player = GameManager.Player.gameObject;
         rb = GetComponent<Rigidbody>();
         stats = GetComponent<AIStats>();
-		pathAgent = GetComponent<NavMeshAgent>();
+        pathAgent = GetComponent<NavMeshAgent>();
+
 		pathIndex = 0;
-        if (patrolPoints.Length > 0)
+        if (patrolPoints.Length > 0 && patrolPoints[pathIndex])
         {
             pathTarget = patrolPoints[pathIndex];
             pathAgent.destination = pathTarget.position;
@@ -67,7 +68,8 @@ public abstract class AIStateManager : MonoBehaviour
 		currentState.UpdateState(this);
 		setFrequency += Time.deltaTime;
 	}
-	public void TransitionToState(AIStates nextState) {
+	public void TransitionToState(AIStates nextState)
+    {
 		if (nextState != remainState)
 		{
 			currentState = nextState;
