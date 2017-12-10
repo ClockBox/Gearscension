@@ -12,6 +12,9 @@ public class IceCube : MonoBehaviour
     public Collider[] movementColliders;
     public Collider[] staticColliders;
 
+    private bool grounded;
+    private List<IKPositionNode> ikNodes;
+
     [SerializeField]
     private bool pushing;
     public bool Pushing
@@ -34,6 +37,7 @@ public class IceCube : MonoBehaviour
 
     void Start ()
     {
+        ikNodes = new List<IKPositionNode>();
         cubeBounds = transform.GetChild(0).GetComponent<Collider>();
         Vector3 extents = cubeBounds.bounds.extents;
         if (extents.x > extents.z)
@@ -55,6 +59,7 @@ public class IceCube : MonoBehaviour
                         rotation * Quaternion.Euler(0, -90, 0),
                         transform).GetComponent<IKPositionNode>();
                     node.siblingNodes = true;
+                    ikNodes.Add(node);
                 }
             }
 
@@ -77,13 +82,24 @@ public class IceCube : MonoBehaviour
             staticColliders[i].enabled = !pushing;
     }
 
+    private void UpdateGrounded()
+    {
+        grounded = !rb.isKinematic;
+        for(int i= 0;i<ikNodes.Count;i++)
+        {
+            ikNodes[i].enabled = grounded;
+        }
+    }
+    
     private void FixedUpdate()
     {
         if (pushing)
+        {
             rb.isKinematic = false;
+        }
         else
         {
-            Collider[] cols = Physics.OverlapBox(transform.position, cubeBounds.bounds.extents, Quaternion.identity, ~6);
+            Collider[] cols = Physics.OverlapBox(transform.position, cubeBounds.bounds.extents - new Vector3(0.25f, 0, 0.25f), Quaternion.identity, ~6);
             for (int i = 0; i < cols.Length; i++)
             {
                 if (cols[i].transform.root != transform && !cols[i].isTrigger)
@@ -94,5 +110,11 @@ public class IceCube : MonoBehaviour
             }
             rb.isKinematic = false;
         }
+
+        if (grounded == rb.isKinematic)
+            for (int i = 0; i < ikNodes.Count; i++)
+            {
+                UpdateGrounded();
+            }
     }
 }
