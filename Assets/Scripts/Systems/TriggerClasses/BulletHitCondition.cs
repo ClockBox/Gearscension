@@ -32,6 +32,9 @@ public class BulletHitCondition : Condition
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Projectile"))
-            conditionIsMet = true;
+        {
+            if(collision.gameObject.GetComponent<Bullet>().type == type)
+                conditionIsMet = true;
+        }
     }
 }

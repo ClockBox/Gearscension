@@ -3,104 +3,66 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Grenadier : AIStateManager {
-
-	public Transform gunPoint;
+public class Grenadier : AIStateManager
+{
+	public Transform[] gunPoints;
 	public float launchAngle;
-	public Rigidbody icePrefab;
-	public Rigidbody magnetPrefab;
 	public Rigidbody explosionPrefab;
 	public float shotInterval;
 	private float shotFrequency;
-	private int choice;
-	private Rigidbody grenadePrefab;
+
 	private Vector3 hopDirection;
-	private Vector3 hopTarget;
+    public Transform[] hopTargets;
 
 	public override void StartEvents() { }
 
 	public override void RangedAttack()
-	{
-		if (!callOnce)
+    {
+        int choice = UnityEngine.Random.Range(0, 2);
+        if (!callOnce)
         {
-			choice = UnityEngine.Random.Range(0, 3);
 			shotFrequency = shotInterval;
-			switch (choice)
-            {
-				case 0:
-					grenadePrefab = explosionPrefab;
-					break;
-				case 1:
-					grenadePrefab = icePrefab;
-					break;
-				case 2:
-					grenadePrefab = magnetPrefab;
-					break;
-			}
 			callOnce = true;
 		}
 		if (shotFrequency >= shotInterval)
-		{
-			Vector3 displacement = player.transform.position - transform.position;
-			Rigidbody rb = Instantiate(grenadePrefab, gunPoint.position, gunPoint.rotation) as Rigidbody;
-			rb.velocity = CalculateVelocityArc(launchAngle, displacement);
+        {
+            Vector3 displacement = player.transform.position - transform.position;
+			Rigidbody bulletRb = Instantiate(explosionPrefab, gunPoints[choice].position, gunPoints[choice].rotation) as Rigidbody;
+            bulletRb.velocity = CalculateVelocityArc(launchAngle, displacement);
 
 			shotFrequency = 0;
-		}
-		shotFrequency += Time.deltaTime;
+        }
+        shotFrequency += Time.deltaTime;
 	}
 	public override void MeleeAttack()
 	{
 		if (!callOnce)
 		{
 			pathAgent.enabled = false;
-			rb.isKinematic = false;
-			rb.constraints = RigidbodyConstraints.FreezeRotation;
+            rb.isKinematic = false;
+            rb.constraints = RigidbodyConstraints.FreezeRotation;
 
-			LayerMask mask = LayerMask.GetMask("Character");
-			mask = ~mask;
-			hopTarget = transform.position;
-			RaycastHit hit;
-			if (Physics.Raycast(gunPoint.position, transform.TransformDirection(Vector3.forward), out hit, Mathf.Infinity, mask))
-			{
-				hopDirection = transform.forward;
-				hopTarget = hit.transform.position;
-			}
+            hopDirection = transform.position - player.transform.position;
+            float closetAngle = 45;
+            Vector3 hopNode = transform.forward * 10;
 
-			RaycastHit hit2;
-			if (Physics.Raycast(gunPoint.position, transform.TransformDirection(Vector3.back), out hit2, Mathf.Infinity, mask))
-			{
-				if (Vector3.Distance(hit2.transform.position, transform.position) > Vector3.Distance(hopTarget, transform.position))
-				{
-					hopDirection = transform.forward * -1;
-					hopTarget = hit2.transform.position;
-				}
-			}
+            for (int i = 0; i < hopTargets.Length; i++)
+            {
+                Vector3 targetDirection = hopTargets[i].position - transform.position;
+                float temp = Vector3.Angle(hopDirection.normalized, targetDirection.normalized);
+                if (temp < closetAngle && targetDirection.magnitude > 5)
+                {
+                    closetAngle = temp;
+                    hopNode = hopTargets[i].position - transform.position;
+                }
+            }
 
-			RaycastHit hit3;
-			if (Physics.Raycast(gunPoint.position, transform.TransformDirection(Vector3.right), out hit3, Mathf.Infinity, mask))
-			{
-				if (Vector3.Distance(hit3.transform.position, transform.position) > Vector3.Distance(hopTarget, transform.position))
-				{
-					hopDirection = transform.right;
-					hopTarget = hit3.transform.position;
-				}
-			}
+            hopDirection = hopNode;
+            callOnce = true;
 
-			RaycastHit hit4;
-			if (Physics.Raycast(gunPoint.position, transform.TransformDirection(Vector3.right), out hit4, Mathf.Infinity, mask))
-			{
-				if (Vector3.Distance(hit4.transform.position, transform.position) > Vector3.Distance(hopTarget, transform.position))
-				{
-					hopDirection = transform.right*-1;
-					hopTarget = hit3.transform.position;
-				}
-			}
-			GetComponent<Rigidbody>().AddForce(hopDirection * 450);
-			GetComponent<Rigidbody>().AddForce(transform.up * 550);
-			callOnce = true;
-		}
-	}
+            rb.velocity = CalculateVelocityArc(45, hopDirection);
+        }
+    }
 
 	private Vector3 CalculateVelocityArc(float angle, Vector3 displacement)
 	{

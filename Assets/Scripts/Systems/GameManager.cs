@@ -19,6 +19,12 @@ public class GameManager : MonoBehaviour
     public Transform LevelSpawn;
     private static int currentFloor = 5;
 
+    private static bool levelComplete = false;
+    public bool LevelComplete
+    {
+        get { return levelComplete; }
+        set { levelComplete = value; }
+    }
     private AudioDictonary audioManager;
     public AudioDictonary AudioManager
     {
@@ -225,7 +231,11 @@ public class GameManager : MonoBehaviour
 
     public void AddNextFloor()
     {
-        StartCoroutine(NextFloor());
+        if (levelComplete)
+        {
+            levelComplete = false;
+            StartCoroutine(NextFloor());
+        }
     }
 
     private IEnumerator NextFloor()
@@ -308,13 +318,6 @@ public class GameManager : MonoBehaviour
     {
         if (scene.name == pauseMenuScene)
             TogglePause();
-    }
-
-    public void WinLevel()
-    {
-        TogglePause(true);
-        SceneManager.LoadScene(levelCompleteScene, LoadSceneMode.Additive);
-        gameOver = true;
     }
     #endregion  
 }

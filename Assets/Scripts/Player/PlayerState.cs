@@ -56,12 +56,20 @@ public class PlayerState
             while (GameManager.Instance.Pause)
                 yield return null;
 
+            if (this != stateManager.State)
+            {
+                Debug.LogWarning("RogueState: " + this + "\t\tCurrent State:" + stateManager.State);
+                stopState = true;
+                yield break;
+            }
+
             if (!Player.Paused)
             {
                 UpdateMovement();
                 UpdateAnimator();
                 UpdateIK();
             }
+            else UpdatePaused();
 
             if (!inTransition || Player.Paused)
                 yield return stateManager.StartCoroutine(HandleInput());
@@ -87,7 +95,8 @@ public class PlayerState
                 yield break;
             }
             yield return new WaitForFixedUpdate();
-            UpdatePhysics();
+            if (!Player.Paused)
+                UpdatePhysics();
         }
     }
 
@@ -97,6 +106,12 @@ public class PlayerState
     protected virtual void UpdateAnimator() { }
     protected virtual void UpdateIK() { }
     protected virtual void UpdatePhysics() { }
+
+    protected virtual void UpdatePaused()
+    {
+        anim.SetFloat("Speed", 0);
+        rb.velocity = Vector3.zero;
+    }
 
     //Trigger Functions
     public virtual void OnTriggerEnter(Collider collider) { }

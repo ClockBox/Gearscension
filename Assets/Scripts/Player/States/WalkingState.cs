@@ -56,21 +56,6 @@ public class MoveState : PlayerState
         yield return null;
     }
 
-    //State Actions
-    private IEnumerator Dodge()
-    {
-        anim.SetTrigger("roll");
-        elapsedTime = 0;
-        while (elapsedTime <= 1.3f)
-        {
-            moveDirection = moveDirection.normalized * anim.velocity.magnitude * 3f;
-            UpdateIK();
-            movementSpeed = 10f;
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-    }
-
     private IEnumerator ActivateLever(Lever lever)
     {
         InTransition = true;
@@ -111,12 +96,6 @@ public class MoveState : PlayerState
     //State Updates
     protected override void UpdateMovement()
     {
-        if (Player.Paused)
-        {
-            moveDirection = Player.transform.position;
-            return;
-        }
-
         moveX = Input.GetAxis("Horizontal");
         moveY = Input.GetAxis("Vertical");
 

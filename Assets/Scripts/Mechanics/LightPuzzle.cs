@@ -97,7 +97,7 @@ public class LightPuzzle : MonoBehaviour
         lightCube.transform.GetChild(1).gameObject.SetActive(true);
         lightCube.transform.GetChild(0).gameObject.GetComponent<Light>().enabled = false;
         lightCube.transform.GetChild(1).gameObject.GetComponent<Light>().enabled = true;
-        lightCube.GetComponent<Renderer>().material = redMat;
+        //lightCube.GetComponent<Renderer>().material = redMat;
     }
 
     public void TurnOnGreenLight(GameObject lightCube)
@@ -106,13 +106,13 @@ public class LightPuzzle : MonoBehaviour
         lightCube.transform.GetChild(1).gameObject.SetActive(false);
         lightCube.transform.GetChild(0).gameObject.GetComponent<Light>().enabled = true;
         lightCube.transform.GetChild(1).gameObject.GetComponent<Light>().enabled = false;
-        lightCube.GetComponent<Renderer>().material = greenMat;
+        //lightCube.GetComponent<Renderer>().material = greenMat;
     }
 
     public void TurnOffLights(GameObject lightCube)
     {
         lightCube.GetComponentInChildren<Light>().enabled = false;
-        lightCube.GetComponent<Renderer>().material = greyMat;
+        //lightCube.GetComponent<Renderer>().material = greyMat;
     }
 
     private void InitializePuzzle()

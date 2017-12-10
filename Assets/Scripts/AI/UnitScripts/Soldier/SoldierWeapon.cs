@@ -13,7 +13,6 @@ public class SoldierWeapon : MonoBehaviour
 
 		if (collision.gameObject.tag == "Player")
 		{
-            Debug.Log("Hit By Soldier Weapon", this);
 			collision.gameObject.SendMessage("TakeDamage", damage, SendMessageOptions.DontRequireReceiver);
             if(destroyOnHit)
 			    Destroy(gameObject);

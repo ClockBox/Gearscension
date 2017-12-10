@@ -17,7 +17,7 @@ public class CameraController : MonoBehaviour
     private float normal = 75;
     private float currentX;
     private float currentY;
-    private float sensitivity = 3.0f;
+    public float sensitivity = 3.0f;
 
     private static float m_zoomed = 0;
     private static bool shake = false;
@@ -43,13 +43,10 @@ public class CameraController : MonoBehaviour
         if (!MainCamera)
             MainCamera = GetComponent<Camera>();
 
-        if (GameManager.Instance.Pause)
+        if (GameManager.Instance.Pause || GameManager.Player.Paused)
             return;
 
-        if (!camPivot)
-        {
-            camPivot = GameObject.FindGameObjectWithTag("Player").transform.GetChild(0);
-        }
+        if (!camPivot) camPivot = GameManager.Player.transform.GetChild(0);
         else
         {
             //Mouse Input
@@ -66,7 +63,6 @@ public class CameraController : MonoBehaviour
 
             //Set Position and Rotation
             Vector3 moveDirection = new Vector3(0, 0, distance);
-            if (shake) moveDirection += shakeOffset;
             Quaternion rotation = Quaternion.Euler(currentY, currentX, 0);
             transform.position = camPivot.position + rotation * moveDirection;
             transform.LookAt(camPivot.position);
@@ -85,18 +81,5 @@ public class CameraController : MonoBehaviour
     {
         get { return m_zoomed; }
         set { m_zoomed = value; }
-    }
-
-    public IEnumerator ShakeCamera(float shakeTime,float intensity)
-    {
-        shake = true;
-        float elapstedTime = 0;
-        while (elapstedTime < shakeTime)
-        {
-            shakeOffset = new Vector3(Mathf.Cos(elapstedTime), 0, -Mathf.Cos(elapstedTime));
-            elapstedTime += Time.deltaTime;
-            yield return null;
-        }
-        shake = false;
     }
 }

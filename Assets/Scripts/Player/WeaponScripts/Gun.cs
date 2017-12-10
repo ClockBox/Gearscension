@@ -2,7 +2,7 @@
 
 public class Gun : Weapon
 {
-    public GameObject[] Bullet = new GameObject[4];
+    public Rigidbody[] Bullet = new Rigidbody[4];
 
     Transform bulletSpawn;
     PlayerController player;
@@ -18,7 +18,7 @@ public class Gun : Weapon
 	
 	public void Shoot ()
     {
-        GameObject bullet = Instantiate(Bullet[player.AmmoType], bulletSpawn.position, bulletSpawn.rotation) as GameObject;
-        bullet.GetComponent<Rigidbody>().AddForce((bullet.transform.forward * 100), ForceMode.Impulse);
+        Rigidbody bullet = Instantiate(Bullet[player.AmmoType], bulletSpawn.position, bulletSpawn.rotation);
+        bullet.AddForce(bullet.transform.forward * 100 * bullet.mass, ForceMode.Impulse);
     }
 }

@@ -96,7 +96,7 @@ public class AimState : MoveState
             IK.LeftHand.weight = Mathf.Lerp(start, end, elapsedTime);
             CameraController.Zoom = Mathf.Lerp(start, end, elapsedTime);
 
-            elapsedTime += Time.deltaTime * 4;
+            elapsedTime += Time.deltaTime * 5;
             yield return null;
         }
     }
@@ -114,7 +114,7 @@ public class AimState : MoveState
             base.UpdatePhysics();
             UpdateIK();
 
-            elapsedTime += Time.deltaTime * 4;
+            elapsedTime += Time.deltaTime * 5;
             yield return null;
         }
         gun.position = end.position;
