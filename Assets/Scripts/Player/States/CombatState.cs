@@ -10,16 +10,12 @@ public class CombatState : MoveState
     //Transitions
     public override IEnumerator EnterState(PlayerState prevState)
     {
-        Debug.Log("CombatState : EnterState");
-
         if (prevState as HookState == null)
             yield return ToggleSword(true);
         yield return base.EnterState(prevState);
     }
     public override IEnumerator ExitState(PlayerState nextState)
     {
-        Debug.Log("CombatState : ExitState");
-
         yield return base.ExitState(nextState);
         if (nextState as HookState == null)
             yield return ToggleSword(false);

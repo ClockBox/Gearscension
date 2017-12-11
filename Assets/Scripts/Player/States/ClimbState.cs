@@ -43,10 +43,9 @@ public class ClimbState : PlayerState
     //Transitions
     public override IEnumerator EnterState(PlayerState prevState)
     {
-        if ((prevState as ClimbState) == null)
+        if ((prevState as ClimbState) == null && (this as ClimbState) == null)
         {
-            if (Edge)
-                yield return ClimbDown(Edge);
+            if (Edge) yield return ClimbDown(Edge);
 
             rb.velocity = Vector3.zero;
             anim.SetBool("climbing", true);

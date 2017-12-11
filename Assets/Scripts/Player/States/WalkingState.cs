@@ -158,21 +158,25 @@ public class MoveState : PlayerState
         InTransition = true;
         anim.SetBool("hook", true);
 
+        desiredDirection = node.transform.position - Player.transform.position;
+        desiredDirection.y = Player.transform.position.y;
+        Player.transform.LookAt(desiredDirection);
+
+        yield return new WaitForSeconds(0.5f);
+
         Transform sword = Player.weapons[1].transform;
         sword.parent = null;
 
-        desiredDirection = node.transform.position - Player.transform.position;
-
         elapsedTime = 0;
-        while (elapsedTime < 1.5f)
+        while (elapsedTime < 1f)
         {
             sword.position = Vector3.Lerp(sword.position, node.transform.position - node.transform.forward * 0.3f + node.transform.right * 0.1f, elapsedTime);
             sword.rotation = Quaternion.Lerp(sword.rotation, node.transform.rotation * new Quaternion(0, -1, 0, 1), elapsedTime);
-            elapsedTime += Time.deltaTime;
             
             base.UpdateAnimator();
             base.UpdateIK();
 
+            elapsedTime += Time.deltaTime * 2;
             yield return null;
         }
         sword.parent = node.transform;
@@ -201,8 +205,6 @@ public class MoveState : PlayerState
             
             IK.GlobalWeight = elapsedTime;
             IK.SetIKPositions(Player.weapons[1].transform, hook.leftHand, hook.rightFoot, hook.leftFoot);
-            IK.RightFoot.weight = 0;
-            IK.LeftFoot.weight = 0;
             IK.HeadWeight = 0;
 
             elapsedTime += Time.deltaTime;

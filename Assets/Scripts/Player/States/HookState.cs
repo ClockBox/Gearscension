@@ -15,9 +15,15 @@ public class HookState : ClimbState
         yield return base.EnterState(prevState);
 
         sword = (Sword)Player.weapons[1];
-        IK.LeftHand.position = sword.Grip(0).position;
-        IK.LeftHand.rotation = sword.Grip(0).rotation;
-        IK.GlobalWeight = 1;
+
+        if ((prevState as ClimbState) != null)
+            IK.RightHand.weight = 0;
+        else
+        {
+            IK.RightHand.position = sword.Grip(0).position;
+            IK.RightHand.rotation = sword.Grip(0).rotation;
+            IK.GlobalWeight = 1;
+        }
 
         if (sword.transform.parent == Player.SwordSheath)
             yield return ToggleSword(true);
@@ -26,7 +32,9 @@ public class HookState : ClimbState
     {
         if (Player.selectedHook)
         {
-            Player.selectedHook.transform.parent.GetChild(0).GetComponent<Light>().enabled = false;
+            Light tempLight;
+            if(tempLight = Player.selectedHook.transform.parent.GetChild(0).GetComponent<Light>())
+                tempLight.enabled = false;
             Player.selectedHook = null;
         }
         if (nextState as CombatState == null)
@@ -167,13 +175,13 @@ public class HookState : ClimbState
     protected override void UpdateIK()
     {
         IK.SetIKPositions(currentNodes[0].rightHand, currentNodes[0].leftHand, currentNodes[0].rightFoot, currentNodes[0].leftFoot);
+        IK.RightElbow = Player.transform.position + Player.transform.right + Player.transform.up;
 
-        if (!sword)
-            sword = (Sword)Player.weapons[1];
+        if (!sword) sword = (Sword)Player.weapons[1];
 
         if (sword.transform.parent != anim.GetBoneTransform(HumanBodyBones.RightHand))
         {
-            IK.RightHand.Set(sword.transform);
+            IK.RightHand.Set(sword.Grip(0).transform);
             IK.RightHand.weight = 1;
         }
         else IK.RightHand.weight = 0;

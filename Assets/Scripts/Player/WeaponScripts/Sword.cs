@@ -4,14 +4,23 @@ using UnityEngine;
 
 public class Sword : Weapon
 {
-    Collider _Collider;
+    private LineRenderer Link;
+    public Vector3 bladeOffset;
+
+    private Collider blade;
+    public Collider Blade
+    {
+        get { return blade; }
+    }
 
     public override void Start ()
     {
         base.Start();
-        _Collider = GetComponentInChildren<Collider>();
-        if (!_Collider)
-            Debug.LogWarning(transform.root.gameObject.name + ": " + name + ": cannot find blade Collider");
+
+        Link = GetComponent<LineRenderer>();
+        blade = GetComponentInChildren<Collider>();
+
+        if (!blade) Debug.LogWarning(transform.root.gameObject.name + ": " + name + ": cannot find blade Collider");
     }
 
 	private void OnTriggerEnter(Collider other)
@@ -20,8 +29,13 @@ public class Sword : Weapon
 			other.gameObject.SendMessage("TakeDamage", SendMessageOptions.DontRequireReceiver);
 	}
 
-    public Collider Blade
+    private void Update()
     {
-        get { return _Collider; }
+        if ((transform.position - blade.transform.position).magnitude > 0.1f)
+        {
+            Link.enabled = true;
+            Link.SetPositions(new Vector3[] { bladeOffset, blade.transform.localPosition + bladeOffset });
+        }
+        else Link.enabled = false;
     }
 }

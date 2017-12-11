@@ -186,8 +186,9 @@ public class PlayerController : MonoBehaviour
         }
         if (temp != selectedHook)
         {
-            if (selectedHook) selectedHook.transform.parent.GetChild(0).GetComponent<Light>().enabled = false;
-            if (temp) temp.transform.parent.GetChild(0).GetComponent<Light>().enabled = true;
+            Light tempLight;
+            if (selectedHook && (tempLight = selectedHook.transform.parent.GetChild(0).GetComponent<Light>())) tempLight.enabled = false;
+            if (temp && (tempLight = temp.transform.parent.GetChild(0).GetComponent<Light>())) tempLight.enabled = true;
         }
         return selectedHook = temp;
     }
