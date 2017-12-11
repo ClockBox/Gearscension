@@ -15,6 +15,8 @@ enum PuzzleState
 public class OrganPuzzle : TimelineController
 {
     private bool completed;
+    private bool puzzleStarted;
+    private bool controlsLocked;
     private PuzzleState state;
 
     private AudioDictonary aD;
@@ -27,8 +29,9 @@ public class OrganPuzzle : TimelineController
     private CinemachineVirtualCamera organVCam;
 
     private PlayerController playerController;
+    [SerializeField]
+    private GameObject playerStandingPos;
 
-    public int noteCounter;
     private List<int> notes;
     private int noteIndex;
     private static int[] noteOrder = new int[7] {2,3,0,2,3,0,1};
@@ -58,10 +61,13 @@ public class OrganPuzzle : TimelineController
             case PuzzleState.Idle:
                 break;
             case PuzzleState.Intro:
+                if (Input.GetButtonDown("Pause"))
+                {
+                    ExitPuzzle();
+                }
                 if (count)
                     counter += Time.deltaTime;
 
-                LockPlayerControls();
                 WaitForHint();
                 break;
             case PuzzleState.MainPuzzle:
@@ -84,25 +90,25 @@ public class OrganPuzzle : TimelineController
                     count = true;
                 }
 
-                if (Input.GetKeyDown(KeyCode.H))
+                if (Input.GetButtonDown("Note1"))
                 {
                     PlayE();
-                    noteCounter++;
                 }
-                else if (Input.GetKeyDown(KeyCode.J))
+                else if (Input.GetButtonDown("Note2"))
                 {
                     PlayF();
-                    noteCounter++;
                 }
-                else if (Input.GetKeyDown(KeyCode.K))
+                else if (Input.GetButtonDown("Note3"))
                 {
                     PlayB();
-                    noteCounter++;
                 }
-                else if (Input.GetKeyDown(KeyCode.L))
+                else if (Input.GetButtonDown("Note4"))
                 {
                     PlayC();
-                    noteCounter++;
+                }
+                else if (Input.GetButtonDown("Pause"))
+                {
+                    ExitPuzzle();
                 }
 
                 if (notes.Count == noteOrder.Length)
@@ -135,13 +141,15 @@ public class OrganPuzzle : TimelineController
 
     private void OnTriggerStay(Collider other)
     {
-        if(other.gameObject.tag == "Player" && Input.GetButtonDown("Action") && !completed)
+        if(other.gameObject.tag == "Player" && Input.GetButtonDown("Action") && !completed && !puzzleStarted)
         {
             organCam.enabled = true;
             organVCam.Priority = 12;
             count = true;
             Play();
             state = PuzzleState.Intro;
+            puzzleStarted = true;
+            StartCoroutine(MovePlayer());
         }
     }
 
@@ -161,12 +169,15 @@ public class OrganPuzzle : TimelineController
     public void LockPlayerControls()
     {
         playerController.PausePlayer();
+        controlsLocked = true;
     }
 
     public void ExitPuzzle()
     {
         playerController.UnPausePlayer();
         organCam.enabled = false;
+        controlsLocked = false;
+        puzzleStarted = false;
     }
 
     public void PlayHint()
@@ -245,6 +256,21 @@ public class OrganPuzzle : TimelineController
     {
         yield return new WaitForSeconds(0.5f);
         aD.playAudio(audioSource, "organoncompletion");
+    }
+
+    public IEnumerator MovePlayer()
+    {
+        Vector3 endPos = (GameManager.Player.transform.position - playerStandingPos.transform.position);
+        Debug.Log(endPos.magnitude);
+
+        while (endPos.magnitude > 0.2f)
+        {
+            Debug.Log("Moving: " + endPos.magnitude);
+            GameManager.Player.transform.Translate(endPos * Time.deltaTime * 2f);
+            endPos = (GameManager.Player.transform.position - playerStandingPos.transform.position);
+            yield return null;
+        }
+        LockPlayerControls();
     }
 
     public void DebugMessage()
