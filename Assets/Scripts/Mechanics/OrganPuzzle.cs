@@ -201,7 +201,7 @@ public class OrganPuzzle : TimelineController
             notes.Clear();
             noteIndex = 0;
         }
-        particles[0].Play();
+        particles[2].Play();
         aD.playAudio(audioSource, "organb36");
     }
 
@@ -218,7 +218,7 @@ public class OrganPuzzle : TimelineController
             notes.Clear();
             noteIndex = 0;
         }
-        particles[1].Play();
+        particles[3].Play();
         aD.playAudio(audioSource, "organc7");
     }
 
@@ -235,7 +235,7 @@ public class OrganPuzzle : TimelineController
             notes.Clear();
             noteIndex = 0;
         }
-        particles[2].Play();
+        particles[0].Play();
         aD.playAudio(audioSource, "organe14");
     }
     
@@ -252,7 +252,7 @@ public class OrganPuzzle : TimelineController
             notes.Clear();
             noteIndex = 0;
         }
-        particles[3].Play();
+        particles[1].Play();
         aD.playAudio(audioSource, "organf25");
     }
 
@@ -283,7 +283,10 @@ public class OrganPuzzle : TimelineController
     public IEnumerator PlayOnComplete()
     {
         yield return new WaitForSeconds(0.5f);
-        StartCoroutine(HintParticles());
+        for(int i =0; i < particles.Length; i++)
+        {
+            particles[i].Play();
+        }
         aD.playAudio(audioSource, "organoncompletion");
     }
     
