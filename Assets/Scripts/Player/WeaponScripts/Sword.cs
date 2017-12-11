@@ -28,14 +28,4 @@ public class Sword : Weapon
 		if (other.CompareTag("Enemy"))
 			other.gameObject.SendMessage("TakeDamage", SendMessageOptions.DontRequireReceiver);
 	}
-
-    private void Update()
-    {
-        if ((transform.position - blade.transform.position).magnitude > 0.1f)
-        {
-            Link.enabled = true;
-            Link.SetPositions(new Vector3[] { bladeOffset, blade.transform.localPosition + bladeOffset });
-        }
-        else Link.enabled = false;
-    }
 }
