@@ -291,6 +291,9 @@ public class GameManager : MonoBehaviour
         if (scene.name == pauseMenuScene)
             TogglePause();
 
+        else if (scene.name == levelCompleteScene)
+            ToggleCursor(true);
+
         else if (scene.name == hudScene || scene.name == elevatorScene)
         {
             ToggleCursor(pause);
@@ -314,7 +317,7 @@ public class GameManager : MonoBehaviour
             pause = false;
             ToggleCursor(true);
             Time.timeScale = 1;
-            if(player) Destroy(player.gameObject);
+            if (player) Destroy(player.gameObject);
         }
     }
 
