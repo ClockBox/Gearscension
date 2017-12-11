@@ -71,7 +71,7 @@ public class PlayerState
             }
             else UpdatePaused();
 
-            if (!inTransition || Player.Paused)
+            if (!inTransition && !Player.Paused)
                 yield return stateManager.StartCoroutine(HandleInput());
             else
                 yield return null;
