@@ -13,6 +13,7 @@ public class ExitRangedDecision : AIDecisions{
 	private bool Exit (AIStateManager manager) {
 		if (manager.checkTimeElapsed(manager.stats.rangedAttackDuration))
 		{
+			manager.GetComponent<Rigidbody>().isKinematic = true;
 			manager.pathAgent.enabled = true;
 			manager.pathAgent.speed = manager.stats.engageSpeed;
 			manager.pathAgent.angularSpeed = manager.stats.turnSpeed;
