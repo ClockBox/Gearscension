@@ -70,7 +70,7 @@ public class OrganPuzzle : TimelineController
                 break;
             case PuzzleState.MainPuzzle:
                 if (count)
-                    counter += Time.deltaTime;
+                    counter -= Time.deltaTime;
 
                 if (clip.length + 1 < counter)
                 {
@@ -79,16 +79,17 @@ public class OrganPuzzle : TimelineController
                 else
                 {
                     count = false;
-                    counter = 0;
                 }
+
+                Debug.Log("Counter: " + counter);
 
                 if (Input.GetButtonDown("Cowbell"))
                 {
                     PlayHint();
                     count = true;
+                    counter = clip.length * 2;
                 }
-
-                if (Input.GetButtonDown("Note1"))
+                else if (Input.GetButtonDown("Note1"))
                 {
                     PlayE();
                 }
@@ -104,7 +105,7 @@ public class OrganPuzzle : TimelineController
                 {
                     PlayC();
                 }
-                else if (Input.GetButtonDown("Pause"))
+                else if (Input.GetButtonDown("Action"))
                 {
                     ExitPuzzle();
                 }
