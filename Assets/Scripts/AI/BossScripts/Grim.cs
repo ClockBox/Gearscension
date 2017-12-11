@@ -22,6 +22,8 @@ public class BossAttacks
 
 	[SerializeField]
 	protected Collider attackTrigger;
+
+	
 	public Collider AttackTrigger
 	{
 		get { return attackTrigger; }
@@ -30,13 +32,10 @@ public class BossAttacks
 }
 
 public class Grim : MonoBehaviour {
-	public Transform raypoint;
 	public float rotationSpeed;
 	public float rotationSpeed2;
 	public float phaseOneRange;
-	public float fountainFreezeDuration;
-	public BossCrystals[] setCrystals;
-
+	public Transform phase2Place;
 	[SerializeField]
 	private BossAttacks[] attacks;
 	[SerializeField]
@@ -44,19 +43,15 @@ public class Grim : MonoBehaviour {
 	[SerializeField]
 	private GameObject[] phase2Colliders;
 	[SerializeField]
-	private GameObject[] phase3Colliders;
+	private BossLevelManager lvlMn;
 
 	private BossPhases currentPhase;
 	private GameObject currentPrefab;
 	private Collider currentAttackTrigger;
-	private bool leftFrozen;
-	private bool rightFrozen;
 
 	[HideInInspector]
 	public bool isAttacking = false;
-	[HideInInspector]
-	public List<BossCrystals> crystals;
-
+	private int gemCount=0;
 	void Start() {
 		currentPhase = new BossPhaseOne(this);
 		ToggleHitbox(phase1Colliders, true);
@@ -95,110 +90,109 @@ public class Grim : MonoBehaviour {
 			Destroy(currentPrefab);
 	}
 	
-	public void CrystalHit()
-	{
-		BulletType current = crystals[0].effectState;
-		if (current == BulletType.Electric || current == BulletType.Ice)
-		{
-			for (int i = 0; i < crystals.Count; i++)
-			{
-				if (crystals[i].effectState != current)
-					break;
-				if (i == crystals.Count - 1)
-				{
-					Impair(current);
-				}
-			}
-		}
-	}
+	//public void CrystalHit()
+	//{
+	//	BulletType current = crystals[0].effectState;
+	//	if (current == BulletType.Electric || current == BulletType.Ice)
+	//	{
+	//		for (int i = 0; i < crystals.Count; i++)
+	//		{
+	//			if (crystals[i].effectState != current)
+	//				break;
+	//			if (i == crystals.Count - 1)
+	//			{
+	//				Impair(current);
+	//			}
+	//		}
+	//	}
+	//}
 
-	private void Impair(BulletType a) {
-		if (a == BulletType.Electric)
-			currentPhase.Stun();
-		else
-			currentPhase.Slow();
-	}
+	//private void Impair(BulletType a) {
+	//	if (a == BulletType.Electric)
+	//		currentPhase.Stun();
+	//	else
+	//		currentPhase.Slow();
+	//}
 
-	private void ResetStun()
-	{
-		currentPhase.UnStun();
-	}
-	private void ResetSlow()
-	{
-		currentPhase.UnSlow();
-	}
+	//private void ResetStun()
+	//{
+	//	currentPhase.UnStun();
+	//}
+	//private void ResetSlow()
+	//{
+	//	currentPhase.UnSlow();
+	//}
 
 	public void ChangeState(int a)
 	{
 		if (a == 1)
 		{
 			currentPhase = new BossPhaseTwo(this);
-			ToggleHitbox(phase1Colliders,false);
-			ToggleHitbox(phase2Colliders,true);
+			ToggleHitbox(phase1Colliders, false);
+			ToggleHitbox(phase2Colliders, true);
 		}
-		else
-		{
-			currentPhase = new BossPhaseThree(this);
-			ToggleHitbox(phase2Colliders,false);
-			ToggleHitbox(phase3Colliders,true);
-		}
+	
 	} 
 
 
-	public void freeze(int a)
-	{
-		RaycastHit hit;
-		Ray ray = new Ray(raypoint.transform.position, -transform.up);
-		if (Physics.Raycast(ray, out hit))
-		{
-			if (hit.collider.isTrigger)
-			{
-				if (hit.collider.tag == "Freezable"&&!leftFrozen&&!rightFrozen)
-				{
-					currentPhase.TogglePause(true);
-					if (a == 0)
-					{
-						GetComponent<Animator>().SetTrigger("RightFreeze");
-						leftFrozen = true;
-					}
-					else
-					{
-						GetComponent<Animator>().SetTrigger("RightFreeze");
-						rightFrozen = true;
-					}
-					StartCoroutine(Unfreeze());
+	//public void freeze(int a)
+	//{
+	//	RaycastHit hit;
+	//	Ray ray = new Ray(raypoint.transform.position, -transform.up);
+	//	if (Physics.Raycast(ray, out hit))
+	//	{
+	//		if (hit.collider.isTrigger)
+	//		{
+	//			if (hit.collider.tag == "Freezable"&&!leftFrozen&&!rightFrozen)
+	//			{
+	//				currentPhase.TogglePause(true);
+	//				if (a == 0)
+	//				{
+	//					GetComponent<Animator>().SetTrigger("RightFreeze");
+	//					leftFrozen = true;
+	//				}
+	//				else
+	//				{
+	//					GetComponent<Animator>().SetTrigger("RightFreeze");
+	//					rightFrozen = true;
+	//				}
+	//				StartCoroutine(Unfreeze());
 
-				}
-			}
-		}
+	//			}
+	//		}
+	//	}
 		
-	}
+	//}
 
-	private IEnumerator Unfreeze()
-	{
-		yield return new WaitForSeconds(fountainFreezeDuration);
-		if(leftFrozen)
-		leftFrozen = false;
-		else 
-		rightFrozen = false;
-		GetComponent<Animator>().SetTrigger("Unfreeze");
-		yield return new WaitForSeconds(2.8f);
-		currentPhase.TogglePause(false);
+	//private IEnumerator Unfreeze()
+	//{
+	//	yield return new WaitForSeconds(fountainFreezeDuration);
+	//	if(leftFrozen)
+	//	leftFrozen = false;
+	//	else 
+	//	rightFrozen = false;
+	//	GetComponent<Animator>().SetTrigger("Unfreeze");
+	//	yield return new WaitForSeconds(2.8f);
+	//	currentPhase.TogglePause(false);
 
-	}
+	//}
 
-	public void CrystalDestroy(BossCrystals a) {
-
-		if (crystals.Contains(a))
-		{
-			crystals.Remove(a);
-			Destroy(a._crystal.gameObject);
-
-		}
-		if (crystals.Count <= 0)
+	public void CrystalDestroy(int a) {
+		if (a == 0)
 		{
 			GetComponent<Animator>().SetTrigger("Transition1");
+			lvlMn.Transition();
 			currentPhase.EndState();
+		}
+		else if (a == 1)
+		{
+			gemCount++;
+			if (gemCount >= 2)
+			{
+				GetComponent<Animator>().SetTrigger("Die");
+
+				currentPhase.EndState();
+			}
 		}
 
 	}
