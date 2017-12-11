@@ -156,11 +156,12 @@ public class MoveState : PlayerState
             yield break;
 
         InTransition = true;
+
         anim.SetBool("hook", true);
 
         desiredDirection = node.transform.position - Player.transform.position;
         desiredDirection.y = Player.transform.position.y;
-        Player.transform.LookAt(desiredDirection);
+        Player.transform.LookAt(Player.transform.position + desiredDirection);
 
         yield return new WaitForSeconds(0.5f);
 
@@ -172,7 +173,8 @@ public class MoveState : PlayerState
         {
             sword.position = Vector3.Lerp(sword.position, node.transform.position - node.transform.forward * 0.3f + node.transform.right * 0.1f, elapsedTime);
             sword.rotation = Quaternion.Lerp(sword.rotation, node.transform.rotation * new Quaternion(0, -1, 0, 1), elapsedTime);
-            
+
+            rb.velocity = Vector3.zero;
             base.UpdateAnimator();
             base.UpdateIK();
 
@@ -200,18 +202,18 @@ public class MoveState : PlayerState
         elapsedTime = 0;
         while (elapsedTime < 1)
         {
+            rb.velocity = Vector3.zero;
             Player.transform.position = Vector3.Lerp(Player.transform.position, hook.PlayerPosition, elapsedTime);
             Player.transform.rotation = Quaternion.Lerp(Player.transform.rotation, hook.transform.rotation, elapsedTime);
             
-            IK.GlobalWeight = elapsedTime;
-            IK.SetIKPositions(Player.weapons[1].transform, hook.leftHand, hook.rightFoot, hook.leftFoot);
             IK.HeadWeight = 0;
 
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-        if (hook.FreeHang)
-            Player.transform.localEulerAngles = new Vector3(0, Player.transform.localEulerAngles.y, Player.transform.localEulerAngles.z);
+        IK.SetIKPositions(Player.weapons[1].transform, hook.leftHand, hook.rightFoot, hook.leftFoot);
+
+        if (hook.FreeHang) Player.transform.localEulerAngles = new Vector3(0, Player.transform.localEulerAngles.y, Player.transform.localEulerAngles.z);
 
         rb.velocity = Vector3.zero;
         stateManager.ChangeState(new HookState(stateManager, hook));

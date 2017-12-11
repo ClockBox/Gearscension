@@ -5,30 +5,55 @@ using UnityEngine;
 public class BreakObject : MonoBehaviour
 {
     [SerializeField]
-    private string checkTag;
+    private string[] checkTags;
     [SerializeField]
     private GameObject[] breakablePart;
+    [SerializeField]
+    private GameObject[] DestroyObjects;
 
     private Rigidbody temp;
-    private MeshCollider meshCol;
+    private Collider[] Cols;
 
+    private void Awake()
+    {
+        Cols = GetComponents<Collider>();
+    }
 
     void OnTriggerEnter(Collider col)
     {
-        if (col.gameObject.tag == checkTag)
+        for (int t = 0; t < checkTags.Length; t++)
         {
-            for (int i = 0; i < breakablePart.Length; i++)
+            if (col.gameObject.tag == checkTags[t])
             {
-                if (breakablePart[i].GetComponent<Rigidbody>() == null)
-                    breakablePart[i].AddComponent<Rigidbody>();
-                if (breakablePart[i].GetComponent<BoxCollider>() == null)
-                    breakablePart[i].AddComponent<BoxCollider>();
-                breakablePart[i].layer = LayerMask.NameToLayer("Debris");
-                breakablePart[i].transform.parent = null;
-                Destroy(breakablePart[i].gameObject, 5);
+                for (int i = 0; i < Cols.Length; i++)
+                    Cols[i].enabled = false;
+
+                for (int i = 0; i < breakablePart.Length; i++)
+                {
+                    Collider[] temp = breakablePart[i].GetComponents<Collider>();
+                    if (temp.Length > 0)
+                    {
+                        for (int z = 0; z < temp.Length; z++)
+                            temp[z].enabled = true;
+                    }
+                    else breakablePart[i].AddComponent<BoxCollider>();
+
+                    Rigidbody tempRB;
+                    if ((tempRB = breakablePart[i].GetComponent<Rigidbody>()))
+                        tempRB.isKinematic = false;
+                    else breakablePart[i].AddComponent<Rigidbody>();
+
+                    breakablePart[i].transform.parent = null;
+                    Destroy(breakablePart[i].gameObject, Random.Range(8, 10));
+                }
+
+                for (int i = 0; i < DestroyObjects.Length; i++)
+                    Destroy(DestroyObjects[i]);
+
+                Destroy(this);
+
+                break;
             }
-            GetComponent<Collider>().enabled = false;
         }
-        
     }
 }

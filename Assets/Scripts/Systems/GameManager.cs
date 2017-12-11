@@ -76,7 +76,7 @@ public class GameManager : MonoBehaviour
         }
         else transform.GetChild(0).gameObject.SetActive(false);
 
-        if (!Player && SceneManager.GetActiveScene().buildIndex > 3)
+        if (!Player && SceneManager.GetActiveScene().buildIndex > 4)
             SpawnPlayer();
     }
 
@@ -98,7 +98,7 @@ public class GameManager : MonoBehaviour
         if (this != Instance || gameOver)
             return;
 
-        if (Input.GetButtonDown("Pause"))
+        if (Input.GetButtonDown("Pause") && SceneManager.GetActiveScene().buildIndex > 5)
         {
             if (pause) UnloadScene(pauseMenuScene);
             else AddScene(pauseMenuScene);
@@ -206,6 +206,11 @@ public class GameManager : MonoBehaviour
     public void MainMenu()
     {
         SceneManager.LoadScene(mainMenuScene);
+    }
+
+    public void EndCredits()
+    {
+        SceneManager.LoadScene(levelCompleteScene);
     }
 
     private void OnEnable()
