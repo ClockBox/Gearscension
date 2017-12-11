@@ -83,7 +83,12 @@ public class IceCube : MonoBehaviour
     
     private void FixedUpdate()
     {
+        Debug.Log("here");
         Collider[] cols = Physics.OverlapBox(transform.position, cubeBounds.bounds.extents - new Vector3(0.25f, 0, 0.25f), Quaternion.identity, ~6);
+
+        for (int i = 0; i < ikNodes.Count; i++)
+            ikNodes[i].gameObject.SetActive(rb.isKinematic);
+
         for (int i = 0; i < cols.Length; i++)
         {
             if (cols[i].transform.root != transform && !cols[i].isTrigger)
@@ -94,7 +99,5 @@ public class IceCube : MonoBehaviour
             }
         }
         rb.isKinematic = false;
-        for (int i = 0; i < ikNodes.Count; i++)
-            ikNodes[i].gameObject.SetActive(rb.isKinematic);
     }
 }
