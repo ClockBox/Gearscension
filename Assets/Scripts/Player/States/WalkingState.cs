@@ -200,7 +200,7 @@ public class MoveState : PlayerState
         anim.SetBool("climbing", true);
 
         elapsedTime = 0;
-        while (elapsedTime < 1)
+        while (elapsedTime < 1 && hook)
         {
             rb.velocity = Vector3.zero;
             Player.transform.position = Vector3.Lerp(Player.transform.position, hook.PlayerPosition, elapsedTime);
