@@ -34,11 +34,11 @@ public class Kamakazi : AIStateManager
 	{
 		if (!callOnce)
 		{
+			rb.isKinematic=false;
 			pathAgent.angularSpeed = 0;
 			pathAgent.enabled = false;
 			callOnce = true;
             if (smoker) smoker.GetComponent<ParticleSystem>().Play();
-            pathAgent.enabled = false;
             StartCoroutine(LaunchExplode(1f));
         }
 	}
@@ -50,6 +50,8 @@ public class Kamakazi : AIStateManager
             base.Update();
             anim.SetFloat("Speed", (rb.velocity.magnitude > 0.1f || rb.angularVelocity.magnitude > 0.1f) ? 1 : 0);
         }
+
+
     }
 
     IEnumerator LaunchExplode(float delayTimer)
@@ -70,9 +72,9 @@ public class Kamakazi : AIStateManager
 
         rb.velocity = Vector3.zero;
         playerPos = player.transform.position;
-        playerPos = new Vector3(playerPos.x, playerPos.y - 2, playerPos.z);
+        playerPos = new Vector3(playerPos.x, playerPos.y-2 , playerPos.z);
         if (smoker) smoker.GetComponent<ParticleSystem>().Play();
-        Vector3 target = playerPos - transform.position + Vector3.up * 1.5f;
+		Vector3 target = (playerPos - transform.position)*1.5f;
 		rb.AddForce(target, ForceMode.Impulse);
     }
 
@@ -93,7 +95,8 @@ public class Kamakazi : AIStateManager
         {
             anim.SetBool("Grounded", true);
             pathAgent.enabled = true;
-        }
+			rb.isKinematic = false;
+		}
 	}
 
 	public void Explode()
