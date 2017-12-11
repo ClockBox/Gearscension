@@ -61,13 +61,9 @@ public class OrganPuzzle : TimelineController
             case PuzzleState.Idle:
                 break;
             case PuzzleState.Intro:
-                if (Input.GetButtonDown("Pause"))
-                {
-                    ExitPuzzle();
-                }
                 if (count)
                     counter += Time.deltaTime;
-
+                
                 WaitForHint();
                 break;
             case PuzzleState.MainPuzzle:
@@ -144,19 +140,21 @@ public class OrganPuzzle : TimelineController
         if(other.gameObject.tag == "Player" && Input.GetButtonDown("Action") && !completed && !puzzleStarted)
         {
             organCam.enabled = true;
+            LockPlayerControls();
+            GameManager.Player.transform.position = playerStandingPos.transform.position;
+            GameManager.Player.transform.rotation = playerStandingPos.transform.rotation;
             organVCam.Priority = 12;
             count = true;
             Play();
             state = PuzzleState.Intro;
             puzzleStarted = true;
-            StartCoroutine(MovePlayer());
         }
     }
 
     public void WaitForHint()
     {
         if (playableDirector != null)
-            if (playableDirector.duration + 1.0f <= counter)
+            if ((playableDirector.duration / 2) <= counter)
             {
                 aD.playAudio(audioSource, "organhint");
                 count = false;
@@ -252,27 +250,22 @@ public class OrganPuzzle : TimelineController
         aD.playAudio(audioSource, "organf25");
     }
 
+    public IEnumerator HintParticles()
+    {
+        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.1f);
+    }
+
     public IEnumerator PlayOnComplete()
     {
         yield return new WaitForSeconds(0.5f);
         aD.playAudio(audioSource, "organoncompletion");
     }
-
-    public IEnumerator MovePlayer()
-    {
-        Vector3 endPos = (GameManager.Player.transform.position - playerStandingPos.transform.position);
-        Debug.Log(endPos.magnitude);
-
-        while (endPos.magnitude > 0.2f)
-        {
-            Debug.Log("Moving: " + endPos.magnitude);
-            GameManager.Player.transform.Translate(endPos * Time.deltaTime * 2f);
-            endPos = (GameManager.Player.transform.position - playerStandingPos.transform.position);
-            yield return null;
-        }
-        LockPlayerControls();
-    }
-
+    
     public void DebugMessage()
     {
         Debug.Log("Working");
