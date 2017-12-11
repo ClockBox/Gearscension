@@ -31,6 +31,8 @@ public class OrganPuzzle : TimelineController
     private PlayerController playerController;
     [SerializeField]
     private GameObject playerStandingPos;
+    [SerializeField]
+    private ParticleSystem[] particles;
 
     private List<int> notes;
     private int noteIndex;
@@ -156,6 +158,7 @@ public class OrganPuzzle : TimelineController
         if (playableDirector != null)
             if ((playableDirector.duration / 2) <= counter)
             {
+                StartCoroutine(HintParticles());
                 aD.playAudio(audioSource, "organhint");
                 count = false;
                 counter = 0;
@@ -180,6 +183,7 @@ public class OrganPuzzle : TimelineController
 
     public void PlayHint()
     {
+        StartCoroutine(HintParticles());
         aD.playAudio(audioSource, "organhint");
         notes.Clear();
     }
@@ -197,6 +201,7 @@ public class OrganPuzzle : TimelineController
             notes.Clear();
             noteIndex = 0;
         }
+        particles[0].Play();
         aD.playAudio(audioSource, "organb36");
     }
 
@@ -213,7 +218,7 @@ public class OrganPuzzle : TimelineController
             notes.Clear();
             noteIndex = 0;
         }
-
+        particles[1].Play();
         aD.playAudio(audioSource, "organc7");
     }
 
@@ -230,7 +235,7 @@ public class OrganPuzzle : TimelineController
             notes.Clear();
             noteIndex = 0;
         }
-
+        particles[2].Play();
         aD.playAudio(audioSource, "organe14");
     }
     
@@ -247,22 +252,38 @@ public class OrganPuzzle : TimelineController
             notes.Clear();
             noteIndex = 0;
         }
+        particles[3].Play();
         aD.playAudio(audioSource, "organf25");
     }
 
     public IEnumerator HintParticles()
     {
-        yield return new WaitForSeconds(0.1f);
-        yield return new WaitForSeconds(0.1f);
-        yield return new WaitForSeconds(0.1f);
-        yield return new WaitForSeconds(0.1f);
-        yield return new WaitForSeconds(0.1f);
-        yield return new WaitForSeconds(0.1f);
+        int index = 0;
+        particles[index].Play();
+        yield return new WaitForSeconds(0.25f);
+        index = 1;
+        particles[index].Play();
+        yield return new WaitForSeconds(0.3f);
+        index = 2;
+        particles[index].Play();
+        yield return new WaitForSeconds(0.35f);
+        index = 0;
+        particles[index].Play();
+        yield return new WaitForSeconds(0.25f);
+        index = 1;
+        particles[index].Play();
+        yield return new WaitForSeconds(0.3f);
+        index = 2;
+        particles[index].Play();
+        yield return new WaitForSeconds(0.35f);
+        index = 3;
+        particles[index].Play();
     }
 
     public IEnumerator PlayOnComplete()
     {
         yield return new WaitForSeconds(0.5f);
+        StartCoroutine(HintParticles());
         aD.playAudio(audioSource, "organoncompletion");
     }
     
