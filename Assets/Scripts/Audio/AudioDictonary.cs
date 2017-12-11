@@ -37,6 +37,9 @@ public class AudioDictonary : MonoBehaviour {
         {
             AudioClipDictionary.Add(Rename(AudioClips[i].name), AudioClips[i]);
         }
+
+        playerSFX = GameManager.Player.SFX;
+        playerVoice = GameManager.Player.Voice;
     }
 
     public void playAudio(string name)
@@ -48,10 +51,27 @@ public class AudioDictonary : MonoBehaviour {
     {
         ap.PlayOneShot(AudioClipDictionary[name]);
     }
+    public void playAudio(AudioSource ap, AudioClip clip)
+    {
+        ap.PlayOneShot(clip);
+    }
 
     public void playAudioPlayerSFX(string name)
     {
+        playAudio(playerSFX, name);
+    }
+    public void playAudioPlayerSFX(AudioClip clip)
+    {
+        playAudio(playerSFX, clip);
+    }
 
+    public void playAudioPlayerVoice(string name)
+    {
+        playAudio(playerVoice, name);
+    }
+    public void playAudioPlayerVoice(AudioClip clip)
+    {
+        playAudio(playerVoice, clip);
     }
 
 

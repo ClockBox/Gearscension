@@ -23,7 +23,9 @@ public class PlayerController : MonoBehaviour
     private float HookRange = 15;
     private CinemachineController cC;
     // Audio
+    [SerializeField]
     private AudioSource m_SFX;
+    [SerializeField]
     private AudioSource m_Voice;
 
     // trigger inputs variables
