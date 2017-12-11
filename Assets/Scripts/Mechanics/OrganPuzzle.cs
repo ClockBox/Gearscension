@@ -33,6 +33,8 @@ public class OrganPuzzle : TimelineController
     private GameObject playerStandingPos;
     [SerializeField]
     private ParticleSystem[] particles;
+    [SerializeField]
+    private Canvas canvas;
 
     private List<int> notes;
     private int noteIndex;
@@ -43,6 +45,7 @@ public class OrganPuzzle : TimelineController
 
     private void Start()
     {
+        canvas.enabled = false;
         notes = new List<int>();
         aD = FindObjectOfType<AudioDictonary>();
         audioSource = GetComponent<AudioSource>();
@@ -69,8 +72,9 @@ public class OrganPuzzle : TimelineController
                 WaitForHint();
                 break;
             case PuzzleState.MainPuzzle:
+                canvas.enabled = true;
                 if (count)
-                    counter += Time.deltaTime;
+                    counter -= Time.deltaTime;
 
                 if (clip.length + 1 < counter)
                 {
@@ -79,16 +83,17 @@ public class OrganPuzzle : TimelineController
                 else
                 {
                     count = false;
-                    counter = 0;
                 }
+
+                Debug.Log("Counter: " + counter);
 
                 if (Input.GetButtonDown("Cowbell"))
                 {
                     PlayHint();
                     count = true;
+                    counter = clip.length * 2;
                 }
-
-                if (Input.GetButtonDown("Note1"))
+                else if (Input.GetButtonDown("Note1"))
                 {
                     PlayE();
                 }
@@ -104,7 +109,7 @@ public class OrganPuzzle : TimelineController
                 {
                     PlayC();
                 }
-                else if (Input.GetButtonDown("Pause"))
+                else if (Input.GetButtonDown("Action"))
                 {
                     ExitPuzzle();
                 }
@@ -133,6 +138,7 @@ public class OrganPuzzle : TimelineController
             case PuzzleState.Exit:
                 state = PuzzleState.Idle;
                 ExitPuzzle();
+                canvas.enabled = false;
                 break;
         }
     }
