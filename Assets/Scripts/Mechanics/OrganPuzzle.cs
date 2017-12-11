@@ -33,6 +33,8 @@ public class OrganPuzzle : TimelineController
     private GameObject playerStandingPos;
     [SerializeField]
     private ParticleSystem[] particles;
+    [SerializeField]
+    private Canvas canvas;
 
     private List<int> notes;
     private int noteIndex;
@@ -43,6 +45,7 @@ public class OrganPuzzle : TimelineController
 
     private void Start()
     {
+        canvas.enabled = false;
         notes = new List<int>();
         aD = FindObjectOfType<AudioDictonary>();
         audioSource = GetComponent<AudioSource>();
@@ -69,6 +72,7 @@ public class OrganPuzzle : TimelineController
                 WaitForHint();
                 break;
             case PuzzleState.MainPuzzle:
+                canvas.enabled = true;
                 if (count)
                     counter -= Time.deltaTime;
 
@@ -134,6 +138,7 @@ public class OrganPuzzle : TimelineController
             case PuzzleState.Exit:
                 state = PuzzleState.Idle;
                 ExitPuzzle();
+                canvas.enabled = false;
                 break;
         }
     }
