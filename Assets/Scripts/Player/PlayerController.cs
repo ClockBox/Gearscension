@@ -89,11 +89,13 @@ public class PlayerController : MonoBehaviour
     }
     public void PausePlayer()
     {
+        StateM.State.InTransition = true;
         RB.velocity = Vector3.zero;
         m_paused = true;
     }
     public void UnPausePlayer()
     {
+        StateM.State.InTransition = false;
         m_paused = false;
     }
 
