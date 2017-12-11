@@ -13,18 +13,21 @@ public class Fireball : MonoBehaviour {
 
     }
 
-    private void OnCollisionEnter(Collision collision)
+	private void OnCollisionEnter(Collision collision)
 	{
-		if (collision.gameObject.CompareTag("Player"))
-		{
-			collision.gameObject.SendMessage("TakeDamage", 50f);
-		}
 		if (collision.gameObject.tag != "Boss")
-        {
-            GameObject fr= Instantiate(fireRing, transform.position, new Quaternion (0,0,0,0));
-            Destroy(fr.gameObject, 2.1f);
-        }
-		Destroy(this.gameObject);
-		
-	} 
+		{
+
+			if (collision.gameObject.CompareTag("Player"))
+			{
+				collision.gameObject.SendMessage("TakeDamage", 50f);
+			}
+
+			GameObject fr = Instantiate(fireRing, transform.position, new Quaternion(0, 0, 0, 0));
+			Destroy(fr.gameObject, 2.1f);
+			Destroy(this.gameObject);
+
+		}
+	}
+		 
 }

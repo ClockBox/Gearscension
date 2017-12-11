@@ -6,8 +6,6 @@ public class BossHitbox : MonoBehaviour {
 
 	[SerializeField]
 	private Grim boss;
-	[SerializeField]
-	private bool isLeft;
 
 	[SerializeField]
 	private string collisionTag;
@@ -16,32 +14,16 @@ public class BossHitbox : MonoBehaviour {
 	private GameObject breakable;
 
 	[SerializeField]
-	private BossCrystals crystal;
-	void Start () {
+	private GameObject crystal;
+
+	[SerializeField]
+	private GameObject pileDriver;
 
 
-		
-	}
-	void Update () {
-		
-	}
-	
 	private void OnTriggerEnter(Collider other)
 	{
-		if (collisionTag == "Freeze")
-		{
-			Debug.Log("freeze leg");
-			if (other.gameObject.GetComponent<Bullet>() && other.gameObject.GetComponent<Bullet>().type == BulletType.Ice)
-			{
-				if (isLeft)
-					boss.freeze(0);
-				else
-					boss.freeze(1);
-			}
-
-		}
-
-		else if (collisionTag == other.gameObject.tag)
+		
+		 if (collisionTag == other.gameObject.tag)
 		{
 			Debug.Log("Hit by " + collisionTag);
 			boss.GetComponent<Animator>().SetTrigger("Damage");
@@ -52,8 +34,15 @@ public class BossHitbox : MonoBehaviour {
 
 			if (crystal)
 			{
-				crystal.isExposed = true;
+				Destroy(crystal);
 			}
+			if (pileDriver)
+			{
+				Destroy(pileDriver);
+				boss.CrystalDestroy(0);
+			}
+			else
+				boss.CrystalDestroy(1);
 		}
 
 	} 
