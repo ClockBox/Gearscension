@@ -109,7 +109,7 @@ public class OrganPuzzle : TimelineController
                 {
                     PlayC();
                 }
-                else if (Input.GetButtonDown("Action"))
+                else if (Input.GetKeyDown(KeyCode.E) || Input.GetButtonDown("Back"))
                 {
                     ExitPuzzle();
                 }
