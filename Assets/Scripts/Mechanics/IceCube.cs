@@ -92,7 +92,6 @@ public class IceCube : MonoBehaviour
         {
             if (cols[i].transform.parent != transform && !cols[i].isTrigger)
             {
-                Debug.Log(cols[i].gameObject.name, cols[i].gameObject);
                 rb.isKinematic = true;
                 return;
             }

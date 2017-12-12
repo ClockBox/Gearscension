@@ -217,7 +217,10 @@ public class PlayerController : MonoBehaviour
             if (_currentArmor > 0)
                 _currentArmor--;
             else
+            {
                 _currentHealth -= damage;
+                GameManager.Instance.AudioManager.DivitGrunt();
+            }
 
             if (Health <= 0)
                 GameManager.Instance.StartCoroutine(Die());

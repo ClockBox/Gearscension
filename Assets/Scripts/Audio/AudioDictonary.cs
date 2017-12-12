@@ -77,6 +77,11 @@ public class AudioDictonary : MonoBehaviour {
         playAudio(playerVoice, clip);
     }
 
+    public void DivitGrunt()
+    {
+        int rnd = Mathf.RoundToInt(Random.Range(1.0f, 3.0f));
+        playAudio(playerSFX, "divitgrunt"+rnd);
+    }
 
     public void AudioChance(AudioSource ap, AudioClip ac, float chance)
     {
