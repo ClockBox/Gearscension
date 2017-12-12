@@ -84,13 +84,9 @@ public class Kamakazi : AIStateManager
         {
             GameManager.Player.TakeDamageDirect(20);
             Explode();
-            Destroy(gameObject);
         }
         else if(callOnce && collision.collider.CompareTag("Breakable"))
-        {
             Explode();
-            Destroy(gameObject);
-        }
         else if (Vector3.Dot(collision.contacts[0].normal, Vector3.up) > 0.5f)
         {
             anim.SetBool("Grounded", true);
@@ -99,10 +95,16 @@ public class Kamakazi : AIStateManager
 		}
 	}
 
+    private void TakeDamage()
+    {
+        Explode();
+    } 
+
 	public void Explode()
     {
         Instantiate(BrokenPrefab, transform.position, transform.rotation);
         GameObject newEffect = Instantiate(effectPrefab, transform.position, transform.rotation);
         newEffect.transform.localScale = transform.localScale;
-	}
+        Destroy(gameObject);
+    }
 }
