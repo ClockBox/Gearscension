@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class AudioDictonary : MonoBehaviour {
 
@@ -32,13 +33,14 @@ public class AudioDictonary : MonoBehaviour {
 
     #region MusicIntensityVars
 
-    private int curIntensity;
+    public int curIntensity;
 
     private AudioSource int1;
     private AudioSource int2;
     private AudioSource int3;
     private AudioSource int4;
     private AudioSource int5;
+    private AudioSource bossroom;
 
     #endregion
 
@@ -46,18 +48,45 @@ public class AudioDictonary : MonoBehaviour {
     {
 
         #region IntensityStuff
-        curIntensity = 1;
-        int1 = transform.GetChild(0).GetComponent<AudioSource>();
-        int2 = transform.GetChild(1).GetComponent<AudioSource>();
-        int3 = transform.GetChild(2).GetComponent<AudioSource>();
-        int4 = transform.GetChild(3).GetComponent<AudioSource>();
-        int5 = transform.GetChild(4).GetComponent<AudioSource>();
+        if (gameObject.scene.name != "Elevator" && gameObject.scene.name != "Main Menu" && gameObject.scene.name != "BossFloor")
+        {
+            int1 = transform.GetChild(0).GetComponent<AudioSource>();
+            int2 = transform.GetChild(1).GetComponent<AudioSource>();
+            int3 = transform.GetChild(2).GetComponent<AudioSource>();
+            int4 = transform.GetChild(3).GetComponent<AudioSource>();
+            int5 = transform.GetChild(4).GetComponent<AudioSource>();
 
-        int1.Play();
-        int2.Play();
-        int3.Play();
-        int4.Play();
-        int5.Play();
+            int1.Play();
+            int2.Play();
+            int3.Play();
+            int4.Play();
+            int5.Play();
+        }
+
+
+        if (gameObject.scene.name == "Floor_1")
+        {
+            curIntensity = 1;
+        }
+        else if (gameObject.scene.name == "Floor_2")
+        {
+            int1.volume = 0.0f;
+            int2.volume = 0.25f;
+            curIntensity = 2;
+        }
+        else if (gameObject.scene.name == "Floor_3")
+        {
+            int1.volume = 0.0f;
+            int3.volume = 0.25f;
+            curIntensity = 3;
+        }
+        else if (gameObject.scene.name == "BossFloor")
+        {
+            bossroom = transform.GetChild(5).GetComponent<AudioSource>();
+            bossroom.Play();
+            StartCoroutine(ChangeBossLevelVolume(bossroom, 0.0002f));
+        }
+
         #endregion
 
         GameManager.Instance.AudioManager = this;
@@ -166,6 +195,18 @@ public class AudioDictonary : MonoBehaviour {
             multplier += Time.deltaTime;
         }
         a.Stop();
+    }
+    private IEnumerator ChangeBossLevelVolume(AudioSource a, float delay)
+    {
+        float multplier = 0.005f;
+        while (a.volume <= 0.25f)
+        {
+            a.volume += multplier * Time.deltaTime;
+            yield return new WaitForSeconds(delay*100);
+            multplier += Time.deltaTime * delay;
+        }
+        //playAudio(a, "cathedraltuneint02leviverpaelst");
+
     }
 
 
