@@ -47,12 +47,23 @@ public class AudioDictonary : MonoBehaviour {
 
     public void playAudio(string name)
     {
-        audioPlayer.PlayOneShot(AudioClipDictionary[name]);
+        AudioClip clip;
+        if (AudioClipDictionary.TryGetValue(name, out clip))
+            audioPlayer.PlayOneShot(clip);
+        else Debug.Log("Audio Dictionary does not contain:" + name);
+    }
+
+    public void playAudio(AudioClip clip)
+    {
+        audioPlayer.PlayOneShot(clip);
     }
 
     public void playAudio(AudioSource ap, string name)
     {
-        ap.PlayOneShot(AudioClipDictionary[name]);
+        AudioClip sound;
+        if (AudioClipDictionary.TryGetValue(name, out sound))
+            ap.PlayOneShot(AudioClipDictionary[name]);
+        else Debug.Log("Audio Dictionary does not contain:" + name);
     }
     public void playAudio(AudioSource ap, AudioClip clip)
     {
