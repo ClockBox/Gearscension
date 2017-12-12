@@ -54,6 +54,7 @@ public class PlayerController : MonoBehaviour
 
     //HUD data
     private bool _isDead;
+    private bool _hasSword;
     private static float _maxHealth = 100;
     private static float _maxArmor = 2;
     private float _currentHealth = _maxHealth;
@@ -97,6 +98,12 @@ public class PlayerController : MonoBehaviour
     {
         StateM.State.InTransition = false;
         m_paused = false;
+    }
+
+    public bool HasSword
+    {
+        get { return _hasSword; }
+        set { _hasSword = value; }
     }
 
     public AudioSource SFX
@@ -184,7 +191,6 @@ public class PlayerController : MonoBehaviour
                 if (checkAngle > closestAngle)
                 {
                     closestAngle = checkAngle;
-                    Debug.Log(closestAngle);
                     temp = hookTargets[i];
                 }
             }
@@ -195,7 +201,6 @@ public class PlayerController : MonoBehaviour
             if (selectedHook && (tempLight = selectedHook.transform.parent.GetChild(0).GetComponent<Light>())) tempLight.enabled = false;
             if (temp && (tempLight = temp.transform.parent.GetChild(0).GetComponent<Light>())) tempLight.enabled = true;
         }
-        Debug.Log(temp);
 
         return selectedHook = temp;
     }
