@@ -30,8 +30,36 @@ public class AudioDictonary : MonoBehaviour {
         set { playerVoice = value; }
     }
 
+    #region MusicIntensityVars
+
+    private int curIntensity;
+
+    private AudioSource int1;
+    private AudioSource int2;
+    private AudioSource int3;
+    private AudioSource int4;
+    private AudioSource int5;
+
+    #endregion
+
     void Start()
     {
+
+        #region IntensityStuff
+        curIntensity = 1;
+        int1 = transform.GetChild(0).GetComponent<AudioSource>();
+        int2 = transform.GetChild(1).GetComponent<AudioSource>();
+        int3 = transform.GetChild(2).GetComponent<AudioSource>();
+        int4 = transform.GetChild(3).GetComponent<AudioSource>();
+        int5 = transform.GetChild(4).GetComponent<AudioSource>();
+
+        int1.Play();
+        int2.Play();
+        int3.Play();
+        int4.Play();
+        int5.Play();
+        #endregion
+
         GameManager.Instance.AudioManager = this;
         for (int i = 0; i < AudioClips.Count; i++)
         {
@@ -88,6 +116,60 @@ public class AudioDictonary : MonoBehaviour {
         if (chance < Random.Range(0.0f, 100.0f))
             playAudio(ap, ac);
     }
+
+    /* Just here for future testing
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            IncreaseIntensity();
+        }
+    }
+    */
+
+    #region MusicIntensityChanging
+    public void IncreaseIntensity()
+    {
+        if (curIntensity == 1)
+        {
+            StartCoroutine(ChangeVolume(int1, int2));
+            curIntensity++;
+        }
+        else if (curIntensity == 2)
+        {
+            StartCoroutine(ChangeVolume(int2, int3));
+            curIntensity++;
+        }
+        else if (curIntensity == 3)
+        {
+            StartCoroutine(ChangeVolume(int3, int4));
+            curIntensity++;
+        }
+        else if (curIntensity == 4)
+        {
+            StartCoroutine(ChangeVolume(int4, int5));
+            curIntensity++;
+        }
+        else
+            Debug.Log("Already at max Intensity.");
+
+    }
+
+    private IEnumerator ChangeVolume(AudioSource a, AudioSource b)
+    {
+        float multplier = 0.005f;
+        while (a.volume > 0)
+        {
+            a.volume -= multplier * Time.deltaTime;
+            b.volume += multplier * Time.deltaTime;
+            yield return new WaitForSeconds(0.5f);
+            multplier += Time.deltaTime;
+        }
+        a.Stop();
+    }
+
+
+    #endregion
 
     //function for remaning the audio file name for the dictionary
     private string Rename(string n)
