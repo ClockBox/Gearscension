@@ -146,15 +146,14 @@ public class AudioDictonary : MonoBehaviour {
             playAudio(ap, ac);
     }
 
-    /* Just here for future testing
+    
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.P) && gameObject.scene.name != "BossFloor")
         {
-            IncreaseIntensity();
+            playAudioPlayerSFX("sfxcowbell");
         }
     }
-    */
 
     #region MusicIntensityChanging
     public void IncreaseIntensity()
