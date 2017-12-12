@@ -47,23 +47,12 @@ public class AudioDictonary : MonoBehaviour {
 
     public void playAudio(string name)
     {
-        AudioClip clip;
-        if (AudioClipDictionary.TryGetValue(name, out clip))
-            audioPlayer.PlayOneShot(clip);
-        else Debug.Log("Audio Dictionary does not contain:" + name);
-    }
-
-    public void playAudio(AudioClip clip)
-    {
-        audioPlayer.PlayOneShot(clip);
+        audioPlayer.PlayOneShot(AudioClipDictionary[name]);
     }
 
     public void playAudio(AudioSource ap, string name)
     {
-        AudioClip sound;
-        if (AudioClipDictionary.TryGetValue(name, out sound))
-            ap.PlayOneShot(AudioClipDictionary[name]);
-        else Debug.Log("Audio Dictionary does not contain:" + name);
+        ap.PlayOneShot(AudioClipDictionary[name]);
     }
     public void playAudio(AudioSource ap, AudioClip clip)
     {
@@ -88,6 +77,12 @@ public class AudioDictonary : MonoBehaviour {
         playAudio(playerVoice, clip);
     }
 
+
+    public void AudioChance(AudioSource ap, AudioClip ac, float chance)
+    {
+        if (chance < Random.Range(0.0f, 100.0f))
+            playAudio(ap, ac);
+    }
 
     //function for remaning the audio file name for the dictionary
     private string Rename(string n)
