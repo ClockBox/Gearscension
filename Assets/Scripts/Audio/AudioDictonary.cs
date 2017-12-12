@@ -38,8 +38,11 @@ public class AudioDictonary : MonoBehaviour {
             AudioClipDictionary.Add(Rename(AudioClips[i].name), AudioClips[i]);
         }
 
-        playerSFX = GameManager.Player.SFX;
-        playerVoice = GameManager.Player.Voice;
+        if (GameManager.Player)
+        {
+            playerSFX = GameManager.Player.SFX;
+            playerVoice = GameManager.Player.Voice;
+        }
     }
 
     public void playAudio(string name)

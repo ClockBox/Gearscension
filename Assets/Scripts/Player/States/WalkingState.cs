@@ -34,7 +34,7 @@ public class MoveState : PlayerState
     {
         if (Input.GetButton("Hook"))
             Player.FindHookTarget();
-        else if (Input.GetButtonUp("Hook"))
+        else if (Input.GetButtonUp("Hook") && Player.selectedHook)
             Player.StartCoroutine(ThrowHook(Player.selectedHook));
 
         if (grounded)
@@ -195,29 +195,29 @@ public class MoveState : PlayerState
         {
             IK.RightHand.position = hook.rightHand.position;
             IK.RightHand.rotation = hook.rightHand.rotation;
-        }
 
-        anim.SetBool("climbing", true);
+            anim.SetBool("climbing", true);
 
-        elapsedTime = 0;
-        while (elapsedTime < 1 && hook)
-        {
+            elapsedTime = 0;
+            while (elapsedTime < 1)
+            {
+                rb.velocity = Vector3.zero;
+                Player.transform.position = Vector3.Lerp(Player.transform.position, hook.PlayerPosition, elapsedTime);
+                Player.transform.rotation = Quaternion.Lerp(Player.transform.rotation, hook.transform.rotation, elapsedTime);
+
+                IK.HeadWeight = 0;
+
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+            IK.SetIKPositions(Player.weapons[1].transform, hook.leftHand, hook.rightFoot, hook.leftFoot);
+
+            if (hook.FreeHang) Player.transform.localEulerAngles = new Vector3(0, Player.transform.localEulerAngles.y, Player.transform.localEulerAngles.z);
+
             rb.velocity = Vector3.zero;
-            Player.transform.position = Vector3.Lerp(Player.transform.position, hook.PlayerPosition, elapsedTime);
-            Player.transform.rotation = Quaternion.Lerp(Player.transform.rotation, hook.transform.rotation, elapsedTime);
-            
-            IK.HeadWeight = 0;
-
-            elapsedTime += Time.deltaTime;
-            yield return null;
+            stateManager.ChangeState(new HookState(stateManager, hook));
+            InTransition = false;
         }
-        IK.SetIKPositions(Player.weapons[1].transform, hook.leftHand, hook.rightFoot, hook.leftFoot);
-
-        if (hook.FreeHang) Player.transform.localEulerAngles = new Vector3(0, Player.transform.localEulerAngles.y, Player.transform.localEulerAngles.z);
-
-        rb.velocity = Vector3.zero;
-        stateManager.ChangeState(new HookState(stateManager, hook));
-        InTransition = false;
     }
 
     protected IEnumerator HookPull(HandNode pulledObject)
