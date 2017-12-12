@@ -20,6 +20,8 @@ public abstract class AIStateManager : MonoBehaviour
     public GameObject[] BreakingPieces;
     public GameObject[] DestroyPieces;
 
+    protected AudioSource SFXSource;
+
     [HideInInspector]
 	public float setFrequency;
 	[HideInInspector]
@@ -51,8 +53,9 @@ public abstract class AIStateManager : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         stats = GetComponent<AIStats>();
         pathAgent = GetComponent<NavMeshAgent>();
+        SFXSource = GetComponent<AudioSource>();
 
-		pathIndex = 0;
+        pathIndex = 0;
         if (patrolPoints.Length > 0 && patrolPoints[pathIndex])
         {
             pathTarget = patrolPoints[pathIndex];
@@ -61,7 +64,6 @@ public abstract class AIStateManager : MonoBehaviour
 		setFrequency = stats.attackFrequency;
 		isAlive = true;
 		StartEvents();
-
 	}
 	public virtual void Update()
 	{
@@ -85,14 +87,13 @@ public abstract class AIStateManager : MonoBehaviour
 	public abstract void StartEvents();
 
 
-	public void AlertOthers() {
-
+	public void AlertOthers()
+    {
 		Collider[] cols;
 		cols = Physics.OverlapSphere(transform.position, stats.alertRadius);
 		for (int i = 0; i < cols.Length; i++)
 		{
 			if (cols[i].gameObject.tag == "Enemy")
-
 				cols[i].GetComponent<AIStateManager>().Alerted();
 		}
 	}
@@ -101,6 +102,8 @@ public abstract class AIStateManager : MonoBehaviour
 	{
 		if (isAlive)
 		{
+            GameManager.Instance.AudioManager.playAudio(SFXSource, "sfxkamakaziattack");
+
 			GetComponent<Collider>().enabled = false;
             Break();
             Destroy(gameObject, delay);

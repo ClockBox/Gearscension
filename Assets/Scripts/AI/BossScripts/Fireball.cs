@@ -9,23 +9,20 @@ public class Fireball : MonoBehaviour
     private void Update()
     {
         Vector3 direction = GetComponent<Rigidbody>().velocity.normalized;
-        transform.LookAt(direction);
+        transform.LookAt(transform.position + direction);
     }
 
 	private void OnCollisionEnter(Collision collision)
 	{
-		if (collision.gameObject.tag != "Boss")
-		{
+        if (collision.gameObject == GameManager.Player)
+            GameManager.Player.TakeDamage(20);
 
-			if (collision.gameObject.CompareTag("Player"))
-			{
-				collision.gameObject.SendMessage("TakeDamage", 50f);
-			}
 
-			GameObject fr = Instantiate(fireRing, transform.position, new Quaternion(0, 0, 0, 0));
-			Destroy(fr.gameObject, 2.1f);
-			Destroy(this.gameObject);
+		GameObject fr = Instantiate(fireRing, transform.position, new Quaternion(0, 0, 0, 0));
 
-		}
+        GameManager.Instance.AudioManager.playAudio(fr.GetComponent<AudioSource>(), "sfxgunimpactexplosion");
+
+        Destroy(fr.gameObject, 2.1f);
+		Destroy(gameObject);
 	}	 
 }
