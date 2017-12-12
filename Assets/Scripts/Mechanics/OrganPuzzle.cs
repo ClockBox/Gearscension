@@ -59,7 +59,7 @@ public class OrganPuzzle : TimelineController
         clip = aD.AudioClips[13];
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         switch(state)
         {
@@ -111,7 +111,9 @@ public class OrganPuzzle : TimelineController
                 }
                 else if (Input.GetKeyDown(KeyCode.E) || Input.GetButtonDown("Back"))
                 {
+                    canvas.enabled = false;
                     ExitPuzzle();
+                    state = PuzzleState.Exit;
                 }
 
                 if (notes.Count == noteOrder.Length)
@@ -136,9 +138,10 @@ public class OrganPuzzle : TimelineController
                 }
                 break;
             case PuzzleState.Exit:
-                state = PuzzleState.Idle;
                 ExitPuzzle();
                 canvas.enabled = false;
+                state = PuzzleState.Idle;
+                Debug.Log("ExitState");
                 break;
         }
     }

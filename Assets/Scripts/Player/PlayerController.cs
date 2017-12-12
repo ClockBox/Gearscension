@@ -177,13 +177,14 @@ public class PlayerController : MonoBehaviour
         float closestAngle = 0.8f;
         for (int i = 0; i < hookTargets.Length; i++)
         {
-            Vector3 checkDistance = hookTargets[i].transform.position - transform.position;
-            if (checkDistance.magnitude < HookRange && Vector3.Dot(hookTargets[i].transform.forward, Camera.main.transform.forward) > 0.5f)
+            Vector3 checkDirection = hookTargets[i].transform.position - transform.position;
+            if (checkDirection.magnitude < HookRange && Vector3.Dot(hookTargets[i].transform.forward, Camera.main.transform.forward) > 0.5f)
             {
-                float checkAngle = Vector3.Dot((hookTargets[i].transform.position - transform.position).normalized, Camera.main.transform.forward);
+                float checkAngle = Vector3.Dot(checkDirection.normalized, Camera.main.transform.forward);
                 if (checkAngle > closestAngle)
                 {
                     closestAngle = checkAngle;
+                    Debug.Log(closestAngle);
                     temp = hookTargets[i];
                 }
             }
@@ -194,6 +195,8 @@ public class PlayerController : MonoBehaviour
             if (selectedHook && (tempLight = selectedHook.transform.parent.GetChild(0).GetComponent<Light>())) tempLight.enabled = false;
             if (temp && (tempLight = temp.transform.parent.GetChild(0).GetComponent<Light>())) tempLight.enabled = true;
         }
+        Debug.Log(temp);
+
         return selectedHook = temp;
     }
     #endregion
