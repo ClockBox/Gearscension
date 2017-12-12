@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
 
     private static string mainMenuScene = "Main Menu";
     private static string pauseMenuScene = "Pause Menu";
-    private static string levelCompleteScene = "Completed Level";
+    private static string levelCompleteScene = "Completed Scene";
     private static string hudScene = "Hud";
     private static string elevatorScene = "Elevator";
 
@@ -290,9 +290,6 @@ public class GameManager : MonoBehaviour
 
         if (scene.name == pauseMenuScene)
             TogglePause();
-
-        else if (scene.name == levelCompleteScene)
-            ToggleCursor(true);
 
         else if (scene.name == hudScene || scene.name == elevatorScene)
         {
