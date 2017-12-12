@@ -25,7 +25,13 @@ public class Sword : Weapon
 
 	private void OnTriggerEnter(Collider other)
 	{
-		if (other.CompareTag("Enemy"))
-			other.gameObject.SendMessage("TakeDamage", SendMessageOptions.DontRequireReceiver);
+        if (other.CompareTag("Enemy"))
+        {
+            other.gameObject.SendMessage("TakeDamage", SendMessageOptions.DontRequireReceiver);
+            GameManager.Instance.AudioManager.playAudioPlayerSFX("sfxswordhit1");
+        }
+        else
+            GameManager.Instance.AudioManager.playAudioPlayerSFX("sfxswordhit4");
+			
 	}
 }
