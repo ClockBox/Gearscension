@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Fireball : MonoBehaviour {
+public class Fireball : MonoBehaviour 
+{
     [SerializeField]
     private GameObject fireRing;
     private void Update()
     {
         Vector3 direction = GetComponent<Rigidbody>().velocity.normalized;
-
-        transform.parent.transform.LookAt(direction);
-
+        transform.LookAt(direction);
     }
 
 	private void OnCollisionEnter(Collision collision)
