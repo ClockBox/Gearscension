@@ -12,14 +12,16 @@ public class Bullet : MonoBehaviour
 {
     public BulletType type;
     public GameObject effectPrefab;
+    public AudioClip OnHitClip;
 
-	void Start ()
+    void Start ()
     {
         Destroy(gameObject, 4);
 	}
     private void OnCollisionEnter(Collision other)
     {
-        Instantiate(effectPrefab, transform.position, transform.rotation);
+        GameObject temp = Instantiate(effectPrefab, transform.position, transform.rotation);
+        GameManager.Instance.AudioManager.playAudio(temp.GetComponent<AudioSource>(), OnHitClip);
         Destroy(gameObject);
     }
 }

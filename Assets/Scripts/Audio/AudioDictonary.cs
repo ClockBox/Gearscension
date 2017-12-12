@@ -113,6 +113,7 @@ public class AudioDictonary : MonoBehaviour {
     }
     public void playAudio(AudioSource ap, AudioClip clip)
     {
+        Debug.Log(clip);
         ap.PlayOneShot(clip);
     }
 

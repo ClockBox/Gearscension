@@ -48,7 +48,7 @@ public class PlayerController : MonoBehaviour
     const int SWORD = 1;
 
     // HookShot
-    private GameObject[] hookTargets;
+    private static GameObject[] hookTargets;
     [HideInInspector]
     public GameObject selectedHook;
 
