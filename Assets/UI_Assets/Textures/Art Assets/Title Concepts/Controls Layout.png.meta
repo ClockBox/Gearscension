@@ -1,12 +1,9 @@
 fileFormatVersion: 2
-guid: f042e2b3d328db54e950728d2b493613
-timeCreated: 1513037395
+guid: de197c738a27058409de26022cef23ed
+timeCreated: 1512603798
 licenseType: Free
 TextureImporter:
-  fileIDToRecycleName:
-    21300000: OrganInstructNEW_0
-    21300002: OrganInstructNEW_1
-    21300004: OrganInstructNEW_2
+  fileIDToRecycleName: {}
   externalObjects: {}
   serializedVersion: 4
   mipmaps:
@@ -38,12 +35,12 @@ TextureImporter:
     aniso: -1
     mipBias: -1
     wrapU: 1
-    wrapV: 1
+    wrapV: -1
     wrapW: -1
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -88,49 +85,7 @@ TextureImporter:
     overridden: 0
   spriteSheet:
     serializedVersion: 2
-    sprites:
-    - serializedVersion: 2
-      name: OrganInstructNEW_0
-      rect:
-        serializedVersion: 2
-        x: 229
-        y: 747
-        width: 781
-        height: 389
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: OrganInstructNEW_1
-      rect:
-        serializedVersion: 2
-        x: 1179
-        y: 741
-        width: 631
-        height: 397
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: OrganInstructNEW_2
-      rect:
-        serializedVersion: 2
-        x: 276
-        y: 1301
-        width: 1531
-        height: 156
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
+    sprites: []
     outline: []
     physicsShape: []
   spritePackingTag: 
