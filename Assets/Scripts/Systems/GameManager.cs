@@ -11,19 +11,29 @@ public class GameManager : MonoBehaviour
 
     private static string mainMenuScene = "Main Menu";
     private static string pauseMenuScene = "Pause Menu";
+<<<<<<< HEAD
     private static string levelCompleteScene = "Completed Level";
+=======
+    private static string GameCompleteScene = "Completed Scene";
+>>>>>>> Ben_Branch
     private static string hudScene = "Hud";
     private static string elevatorScene = "Elevator";
 
     public GameObject playerPrefab;
     public Transform LevelSpawn;
+    public AudioClip LevelCompletionSound;
+
     private static int currentFloor = 5;
 
     private static bool levelComplete = false;
     public bool LevelComplete
     {
         get { return levelComplete; }
-        set { levelComplete = value; }
+        set
+        {
+            levelComplete = value;
+            if (levelComplete) audioManager.playAudioPlayerSFX(LevelCompletionSound);
+        }
     }
     private AudioDictonary audioManager;
     public AudioDictonary AudioManager
@@ -131,7 +141,7 @@ public class GameManager : MonoBehaviour
         if (this != Instance)
             return;
 
-        if (SceneManager.GetActiveScene().buildIndex > 4)
+        if (SceneManager.GetActiveScene().buildIndex > 5)
         {
             if (!focus && !pause && !Application.isEditor)
                 AddScene(pauseMenuScene);
@@ -210,7 +220,7 @@ public class GameManager : MonoBehaviour
 
     public void EndCredits()
     {
-        SceneManager.LoadScene(levelCompleteScene);
+        SceneManager.LoadScene(GameCompleteScene);
     }
 
     private void OnEnable()
@@ -229,8 +239,7 @@ public class GameManager : MonoBehaviour
     {
         int sceneIndex = PlayerPrefs.GetInt("ContinueScene");
         LoadScene(sceneIndex);
-        if (sceneIndex > 6 && !SceneManager.GetSceneByName(elevatorScene).isLoaded)
-            AddScene(elevatorScene);
+        if (sceneIndex > 6) AddScene(elevatorScene);
     }
 
     public void AddNextFloor()

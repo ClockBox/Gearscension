@@ -21,7 +21,8 @@ public class Grenadier : AIStateManager
         int choice = UnityEngine.Random.Range(0, 2);
         if (!callOnce)
         {
-			shotFrequency = shotInterval;
+            GameManager.Instance.AudioManager.playAudio(SFXSource, "sfxgunimpactexplosion");
+            shotFrequency = shotInterval;
 			callOnce = true;
 		}
 		if (shotFrequency >= shotInterval)
@@ -44,7 +45,7 @@ public class Grenadier : AIStateManager
 
             hopDirection = transform.position - player.transform.position;
             float closetAngle = 45;
-            Vector3 hopNode = transform.forward * 10;
+            Vector3 hopNode = Vector3.zero;
 
             for (int i = 0; i < hopTargets.Length; i++)
             {
@@ -55,6 +56,13 @@ public class Grenadier : AIStateManager
                     closetAngle = temp;
                     hopNode = hopTargets[i].position - transform.position;
                 }
+            }
+            if (hopNode == Vector3.zero)
+            {
+                if (hopTargets.Length > 0)
+                    hopNode = hopTargets[UnityEngine.Random.Range(0, hopTargets.Length)].position - transform.position;
+                else
+                    hopNode = transform.forward * 10;
             }
 
             hopDirection = hopNode;

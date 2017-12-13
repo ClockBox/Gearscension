@@ -40,8 +40,8 @@ public class PointToPointPlatform : Platform
         get { return move; }
         set
         {
+            Active = value && !(move || rotate);
             move = value;
-            active = move || rotate;
         }
     }
 
@@ -52,8 +52,8 @@ public class PointToPointPlatform : Platform
         get { return rotate; }
         set
         {
+            Active = value && !(move || rotate);
             rotate = value;
-            active = move || rotate;
         }
     }
 
@@ -61,9 +61,9 @@ public class PointToPointPlatform : Platform
     {
         set
         {
+            Active = value && !(move || rotate);
             move = value;
             rotate = value;
-            active = move || rotate;
         }
     }
 
@@ -109,7 +109,10 @@ public class PointToPointPlatform : Platform
             nextMoveNode = (currentMoveNode + 1) % nodes.Length;
 
             if (!loopMovement)
+            {
                 Move = false;
+                Deactivate();
+            }
             elapsedMoveTime = 0;
         }
         else if (elapsedMoveTime > 0)
@@ -127,7 +130,10 @@ public class PointToPointPlatform : Platform
             nextRotationNode = (currentRotationNode + 1) % nodes.Length;
 
             if (!loopRotation)
+            {
                 Rotate = false;
+                Deactivate();
+            }
             elapsedRotationTime = 0;
         }
         else if(elapsedRotationTime > 0)

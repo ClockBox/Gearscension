@@ -48,12 +48,13 @@ public class PlayerController : MonoBehaviour
     const int SWORD = 1;
 
     // HookShot
-    private GameObject[] hookTargets;
+    private static GameObject[] hookTargets;
     [HideInInspector]
     public GameObject selectedHook;
 
     //HUD data
     private bool _isDead;
+    private bool _hasSword;
     private static float _maxHealth = 100;
     private static float _maxArmor = 2;
     private float _currentHealth = _maxHealth;
@@ -97,6 +98,12 @@ public class PlayerController : MonoBehaviour
     {
         StateM.State.InTransition = false;
         m_paused = false;
+    }
+
+    public bool HasSword
+    {
+        get { return _hasSword; }
+        set { _hasSword = value; }
     }
 
     public AudioSource SFX
@@ -154,8 +161,11 @@ public class PlayerController : MonoBehaviour
         for (int i = 0; i < weapons.Length; i++)
         {
             weapons[i].gameObject.GetComponentInChildren<BoxCollider>().enabled = true;
-            weapons[i].gameObject.AddComponent<Rigidbody>();
+            Rigidbody temp = weapons[i].gameObject.GetComponent<Rigidbody>();
+            if (temp) temp.isKinematic = false;
+            else temp = weapons[i].gameObject.AddComponent<Rigidbody>();
             weapons[i].transform.parent = null;
+            Destroy(weapons[i], 2);
         }
     }
 
@@ -177,10 +187,10 @@ public class PlayerController : MonoBehaviour
         float closestAngle = 0.8f;
         for (int i = 0; i < hookTargets.Length; i++)
         {
-            Vector3 checkDistance = hookTargets[i].transform.position - transform.position;
-            if (checkDistance.magnitude < HookRange && Vector3.Dot(hookTargets[i].transform.forward, Camera.main.transform.forward) > 0.5f)
+            Vector3 checkDirection = hookTargets[i].transform.position - transform.position;
+            if (checkDirection.magnitude < HookRange && Vector3.Dot(hookTargets[i].transform.forward, Camera.main.transform.forward) > 0.5f)
             {
-                float checkAngle = Vector3.Dot((hookTargets[i].transform.position - transform.position).normalized, Camera.main.transform.forward);
+                float checkAngle = Vector3.Dot(checkDirection.normalized, Camera.main.transform.forward);
                 if (checkAngle > closestAngle)
                 {
                     closestAngle = checkAngle;
@@ -194,6 +204,7 @@ public class PlayerController : MonoBehaviour
             if (selectedHook && (tempLight = selectedHook.transform.parent.GetChild(0).GetComponent<Light>())) tempLight.enabled = false;
             if (temp && (tempLight = temp.transform.parent.GetChild(0).GetComponent<Light>())) tempLight.enabled = true;
         }
+
         return selectedHook = temp;
     }
     #endregion
@@ -209,7 +220,10 @@ public class PlayerController : MonoBehaviour
             if (_currentArmor > 0)
                 _currentArmor--;
             else
+            {
                 _currentHealth -= damage;
+                GameManager.Instance.AudioManager.DivitGrunt();
+            }
 
             if (Health <= 0)
                 GameManager.Instance.StartCoroutine(Die());
@@ -313,12 +327,6 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        //if (Input.GetButtonDown("Cowbell"))
-        //{
-        //    GameManager.Instance.AudioManager.AudioPlayer = SFX;
-        //    GameManager.Instance.AudioManager.playAudio("sfxcowbell");
-        //}
-
         if (_damageImmune > 0)
             _damageImmune -= Time.deltaTime;
 

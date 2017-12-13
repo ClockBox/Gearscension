@@ -30,10 +30,10 @@ public class AimState : MoveState
         yield return base.ExitState(nextState);
 
         IK.HeadTrunSpeed = 1;
-        IK.LeftHand.weight = 0;
         
         Player.transform.GetChild(0).position += Player.transform.right * 0.23f + Player.transform.up * 0.15f;
         yield return ToggleEquip(false);
+        IK.LeftHand.weight = 0;
     }
 
     //State Behaviour

@@ -23,26 +23,5 @@ public class SoldierWeapon : MonoBehaviour
             if (destroyOnHit)
                 Destroy(gameObject);
 		}
-	} 
-
-
-
-	//{
-	//	if (other.gameObject.tag == "Player")
-	//	{
-	//		Debug.Log("Damage");
-	//		other.gameObject.SendMessage("TakeDamage", damage, SendMessageOptions.DontRequireReceiver);
-	//	}
-
-	//} 
-	//private void OnTrigger(Collision collision)
-	//{
-	//	if (collision.gameObject.tag == "Player")
-	//	{
-	//		Debug.Log("Damage");
-	//		collision.gameObject.SendMessage("TakeDamage",damage, SendMessageOptions.DontRequireReceiver);
-	//	}
-
-	//}
-
+	}
 }

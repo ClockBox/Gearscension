@@ -42,8 +42,10 @@ public class CameraController : MonoBehaviour
     {
         if (!MainCamera)
             MainCamera = GetComponent<Camera>();
-
-        if (GameManager.Instance.Pause || GameManager.Player.Paused)
+        
+        if (!GameManager.Instance || GameManager.Instance.Pause)
+            return;
+        if (!GameManager.Player || GameManager.Player.Paused)
             return;
 
         if (!camPivot) camPivot = GameManager.Player.transform.GetChild(0);

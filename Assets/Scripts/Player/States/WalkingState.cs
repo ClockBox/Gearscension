@@ -191,6 +191,7 @@ public class MoveState : PlayerState
     }
     protected IEnumerator HookTravel(ClimbingNode hook)
     {
+<<<<<<< HEAD
         if (hook)
         {
             IK.RightHand.position = hook.rightHand.position;
@@ -215,6 +216,32 @@ public class MoveState : PlayerState
 
         if (hook.FreeHang) Player.transform.localEulerAngles = new Vector3(0, Player.transform.localEulerAngles.y, Player.transform.localEulerAngles.z);
 
+=======
+        if (!hook)
+            yield break;
+
+        IK.RightHand.position = hook.rightHand.position;
+        IK.RightHand.rotation = hook.rightHand.rotation;
+
+        anim.SetBool("climbing", true);
+
+        elapsedTime = 0;
+        while (elapsedTime < 1)
+        {
+            rb.velocity = Vector3.zero;
+            Player.transform.position = Vector3.Lerp(Player.transform.position, hook.PlayerPosition, elapsedTime);
+            Player.transform.rotation = Quaternion.Lerp(Player.transform.rotation, hook.transform.rotation, elapsedTime);
+
+            IK.HeadWeight = 0;
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        IK.SetIKPositions(Player.weapons[1].transform, hook.leftHand, hook.rightFoot, hook.leftFoot);
+
+        if (hook.FreeHang) Player.transform.localEulerAngles = new Vector3(0, Player.transform.localEulerAngles.y, Player.transform.localEulerAngles.z);
+
+>>>>>>> Ben_Branch
         rb.velocity = Vector3.zero;
         stateManager.ChangeState(new HookState(stateManager, hook));
         InTransition = false;
