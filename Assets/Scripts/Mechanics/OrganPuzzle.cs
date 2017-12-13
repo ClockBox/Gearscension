@@ -296,7 +296,7 @@ public class OrganPuzzle : TimelineController
         {
             particles[i].Play();
         }
-        aD.playAudio(audioSource, "organoncompletion");
+        GameManager.Instance.LevelComplete = true;
     }
     
     public void DebugMessage()

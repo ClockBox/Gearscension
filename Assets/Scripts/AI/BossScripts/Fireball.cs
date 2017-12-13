@@ -17,9 +17,7 @@ public class Fireball : MonoBehaviour
         if (collision.gameObject == GameManager.Player)
             GameManager.Player.TakeDamage(20);
 
-
 		GameObject fr = Instantiate(fireRing, transform.position, new Quaternion(0, 0, 0, 0));
-
         GameManager.Instance.AudioManager.playAudio(fr.GetComponent<AudioSource>(), "sfxgunimpactexplosion");
 
         Destroy(fr.gameObject, 2.1f);

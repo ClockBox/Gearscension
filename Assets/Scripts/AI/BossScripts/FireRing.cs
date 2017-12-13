@@ -7,6 +7,6 @@ public class FireRing : MonoBehaviour
     private void OnTriggerStay(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
-            other.gameObject.SendMessage("TakeDamage", 5f * Time.deltaTime);
+            other.gameObject.SendMessage("TakeDamage", 5f);
     }
 }

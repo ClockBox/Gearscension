@@ -109,12 +109,11 @@ public class AudioDictonary : MonoBehaviour {
 
     public void playAudio(AudioSource ap, string name)
     {
-        ap.PlayOneShot(AudioClipDictionary[name]);
+        if(ap) ap.PlayOneShot(AudioClipDictionary[name]);
     }
     public void playAudio(AudioSource ap, AudioClip clip)
     {
-        Debug.Log(clip);
-        ap.PlayOneShot(clip);
+        if (ap) ap.PlayOneShot(clip);
     }
 
     public void playAudioPlayerSFX(string name)

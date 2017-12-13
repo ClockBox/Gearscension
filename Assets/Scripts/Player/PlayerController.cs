@@ -161,8 +161,11 @@ public class PlayerController : MonoBehaviour
         for (int i = 0; i < weapons.Length; i++)
         {
             weapons[i].gameObject.GetComponentInChildren<BoxCollider>().enabled = true;
-            weapons[i].gameObject.AddComponent<Rigidbody>();
+            Rigidbody temp = weapons[i].gameObject.GetComponent<Rigidbody>();
+            if (temp) temp.isKinematic = false;
+            else temp = weapons[i].gameObject.AddComponent<Rigidbody>();
             weapons[i].transform.parent = null;
+            Destroy(weapons[i], 2);
         }
     }
 
@@ -324,12 +327,6 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        //if (Input.GetButtonDown("Cowbell"))
-        //{
-        //    GameManager.Instance.AudioManager.AudioPlayer = SFX;
-        //    GameManager.Instance.AudioManager.playAudio("sfxcowbell");
-        //}
-
         if (_damageImmune > 0)
             _damageImmune -= Time.deltaTime;
 
